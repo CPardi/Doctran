@@ -1,0 +1,48 @@
+.List table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+.List table, .List caption, .List tbody, .List tfoot, .List thead, .List tr, .List th, .List td
+{
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font: inherit;
+    vertical-align: baseline;
+}
+
+.List {
+    width:100%;
+    border-collapse:collapse;
+}
+
+.List .Heading a
+{	
+	font-size:1.0em;
+	padding-right: 1.5em;
+}
+
+.List .Row a
+{
+    outline:none;
+    text-decoration:none;
+    color:black;
+    display: block;
+    margin: -6em 0;
+    padding: 6em 0.25em;
+	font-size:0.85em;
+}
+
+.List td
+{
+	overflow: hidden;
+    border-bottom:1px solid black;
+    font-size:1.05em;
+    padding-top:0.55em;
+    padding-bottom:0.1em;
+}
+
+.List .Row:hover {
+    background-color:#c8ccde;
+}

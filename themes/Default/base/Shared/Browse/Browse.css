@@ -1,0 +1,72 @@
+#Browse ul, #Browse li {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font: inherit;
+    vertical-align: baseline;
+}
+
+#Browse ul {
+    list-style: none;
+}
+
+#Browse {
+	background-color:#c8ccde;
+	border-bottom:1px solid grey;
+}
+
+#Browse h3
+{
+	width:15em;
+    background-color:#c8ccde;	
+	display:inline-block;
+	text-align:center;
+	border:1px solid grey;
+	border-right:3px double grey;
+	border-left:0;
+}
+
+#Browse ul
+{
+	display:inline;	
+}
+
+#Browse li 
+{
+	padding:0;
+	margin:0;
+	display:inline-block;
+	background-color:#DFE3F3;
+}
+
+#Browse li a
+{
+	text-align:center;
+	border:1px solid grey;
+	border-left:0;
+	width:8.4em;
+	display:block;
+	text-decoration: none;
+	background-color:#EEE;
+	color:black;
+}
+
+#Browse h3, #Browse li a
+{
+	font-size:1.0em;
+	padding:0.4em 0;
+	margin:0;
+	border-bottom:0;
+}
+
+#Browse li a:hover
+{
+	color:white;
+	background-color:#B1B5C6;
+}
+
+#Browse li .active
+{
+	color:black;
+    background-color:#c8ccde;
+}

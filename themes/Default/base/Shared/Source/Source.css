@@ -1,0 +1,32 @@
+#Source ul, #Browse li {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font: inherit;
+    vertical-align: baseline;
+}
+
+#Source ul {
+    list-style: none;
+	display:table;	
+}
+
+#Source .code {
+	max-height:40em;
+	overflow:auto;
+    border: 1px solid grey;
+    background-color: white;
+}
+
+#Source .code-content ul li {
+    padding: 0 1em;
+}
+
+#Source .code-content ul li .line {
+    padding-left: 1.5em;
+}
+
+#Source .odd 
+{
+    background-color: #E7E7E7;
+}
