@@ -1,7 +1,7 @@
 # About
 Doctran is a cross-platform documentation generator for the Fortran programming language. It's purpose is to take free-format Fortran files, and produce a collection of html files documenting their contents. 
 
-On this GitHub page you will find the open source base component of Doctran. The available plugins allowing one to document Fortran constructs  are currently proprietary and are available [here](http://www.doctran.co.uk/obtain).
+On this GitHub page you will find the open source base component of Doctran. The available plugins allowing one to document Fortran constructs  are currently proprietary and are available [here](http://www.doctran.co.uk/pages/download).
 
 #Aims
 The ultimate aim of this project is to create robust software for creating documentation for the Fortran language, that eventually will be open-source. At the present time, the base code is open source and freely available here on Gibhub.
