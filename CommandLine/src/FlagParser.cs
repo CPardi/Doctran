@@ -57,21 +57,24 @@ namespace Doctran.Fbase.Common
                     string fileDir = argPath.Substring(0, argPath.Length - pattern.Length);
 
                     // Get absolute path.
-                    string absPath = fileDir == "" ? "." + Settings.slash : Path.GetFullPath(fileDir);
-
-                    // Search files mathing the pattern
                     try
                     {
+                        string absPath = fileDir == "" ? "." + Settings.slash : Path.GetFullPath(fileDir);
+
                         string[] files = Directory.GetFiles(absPath, pattern.Trim(), SearchOption.TopDirectoryOnly);
 
                         // Add the files to the source files list.
                         settings.SourceFiles.AddRange(files);
                     }
-                    catch
+                    catch (ArgumentException e)
                     {
-                        Console.WriteLine("----------------------Warning----------------------");
-                        Console.WriteLine("Directory '" + absPath + "' does not exist and was ignored.");
-                    } 
+                        UserInformer.GiveError("argument", args[i], e);
+                    }
+                    catch (IOException e)
+                    {
+                        UserInformer.GiveWarning("argument", e);
+                    }
+                    
                 }
                 else if (Regex.IsMatch(args[i], settings.FilePathRegex))
                 {

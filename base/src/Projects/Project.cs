@@ -25,32 +25,30 @@ namespace Doctran.Fbase.Projects
 
 		public Project(Common.Settings settings)
         {
-            if (settings.has_info && System.IO.File.Exists(settings.ProjectInfo))
+            if (settings.has_info)
             {
-                this.lines =
-                    (from line in File.ReadFile(System.IO.Path.GetFullPath(settings.ProjectInfo))
-                     select new FileLine(line.Number, "!>" + line.Text)
-                    ).ToList();
-                this.Search();
+                try
+                {
+                    this.lines =
+                        (from line in File.ReadFile(System.IO.Path.GetFullPath(settings.ProjectInfo))
+                         select new FileLine(line.Number, "!>" + line.Text)
+                        ).ToList();
+                    this.Search();
+                }
+                catch (System.IO.IOException e) { UserInformer.GiveError("project info", settings.ProjectInfo, e); }
             }
 
             this.OutputDirectory = settings.OutputDirectory;
 
-			this.SubObjects.AddRange(
-				from path in settings.SourceFiles.AsParallel()
-                where System.IO.File.Exists(path)
-				select new File(this, System.IO.Path.GetFullPath(path))
-			);
-
-
-            var unfoundFile = settings.SourceFiles.Where(path => !System.IO.Directory.Exists(path))
-                                           .Where(path => !System.IO.File.Exists(path)).ToList();
-            unfoundFile.ForEach(path =>
+            try
             {
-                Console.WriteLine("----------------------Warning----------------------");
-                Console.WriteLine("File '" + path + "' does not exist and was ignored.");
+                this.SubObjects.AddRange(
+                    from path in settings.SourceFiles.AsParallel()
+                    where System.IO.File.Exists(path)
+                    select new File(this, System.IO.Path.GetFullPath(path))
+                );
             }
-            );
+            catch (System.IO.IOException e) { UserInformer.GiveError("source file", settings.ProjectInfo, e); }
         }
 
         private static List<FileLine> Add(List<FileLine> lines)

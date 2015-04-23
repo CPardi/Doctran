@@ -16,6 +16,11 @@ namespace Doctran.Fbase.Common
 {
     public static class Helper
     {
+        public static void Stop()
+        {
+            Environment.Exit(1);
+        }
+
         public static string RemoveInlineComment(String s)
         {
             return s.Split('!')[0].Trim();

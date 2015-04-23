@@ -22,8 +22,15 @@ namespace Doctran.BaseClasses
         public String XElement_Name;
 
         protected XFortranObject() { }
+        
         protected XFortranObject(FortranObject parent, String XElement_Name, List<FileLine> lines, bool ContainsBlocks)
             : base(parent, lines, ContainsBlocks)
+        {
+            this.XElement_Name = XElement_Name;
+        }
+
+        protected XFortranObject(FortranObject parent, String name, String XElement_Name, List<FileLine> lines, bool ContainsBlocks)
+            : base(parent, name, lines, ContainsBlocks)
         {
             this.XElement_Name = XElement_Name;
         }

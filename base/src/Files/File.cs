@@ -25,7 +25,7 @@ namespace Doctran.Fbase.Files
 
         // Reads a file, determines its type and loads the contained procedure and/or modules.
         public File(FortranObject parent, String pathAndFilename)
-            : base(parent, "File",File.ReadFile(pathAndFilename), true)
+            : base(parent, Path.GetFileName(pathAndFilename),"File",File.ReadFile(pathAndFilename), true)
         {
             this.PathAndFilename = pathAndFilename;
 
@@ -46,13 +46,18 @@ namespace Doctran.Fbase.Files
 			// Add a blank line to make the index of the list equal the line number. This also simplifies the <FortranObject>.Seach method.
             lines.Add(new FileLine(0, ""));
 
-            // Open the file at the file path and load into a streamreader. Then, loop through each line and add it to a List.
-            using (StreamReader FileReader = new StreamReader(pathAndFilename))
+            try
             {
-                String Line;
-                int lineIndex = 1;
-                while ((Line = FileReader.ReadLine()) != null) { lines.Add(new FileLine(lineIndex, Line)); lineIndex++; }
+                // Open the file at the file path and load into a streamreader. Then, loop through each line and add it to a List.
+                using (StreamReader FileReader = new StreamReader(pathAndFilename))
+                {
+                    String Line;
+                    int lineIndex = 1;
+                    while ((Line = FileReader.ReadLine()) != null) { lines.Add(new FileLine(lineIndex, Line)); lineIndex++; }
+                }
             }
+            catch (IOException) { throw; }
+
 
 			// Search the source for any include statements and add their content to this file.
             AddIncludedFiles(ref lines, Path.GetDirectoryName(pathAndFilename));

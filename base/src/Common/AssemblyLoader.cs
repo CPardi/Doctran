@@ -24,8 +24,10 @@ namespace Doctran.Fbase.Common
 			String[] paths = null;
 			try {
 				paths = Directory.GetFiles (Path.GetFullPath (pluginPath));
-			} catch {
-                Console.WriteLine(@"Warning: Plugins directory not found at """ + pluginPath + @"""");
+			} 
+            catch(IOException e)
+            {
+                UserInformer.GiveWarning("plugin directory", e);
                 return;
 			}
 
@@ -34,9 +36,12 @@ namespace Doctran.Fbase.Common
 					Assembly assembly = Assembly.LoadFrom(path);
 					loadedAssemblys.Add(assembly.GetName());
 					this.asssemblyTypes.AddRange (assembly.GetTypes ());
-				} catch {
-                    Console.WriteLine(@"Warning: Could not load assembly within file """ + Path.GetFileName(path) + @"""");
 				}
+                catch (IOException e)
+                {
+                    UserInformer.GiveWarning("loaded plugin", e);
+                    return;
+                }
 			}
 		}
 

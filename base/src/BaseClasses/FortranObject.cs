@@ -33,6 +33,25 @@ namespace Doctran.BaseClasses
             if (ContainsBlocks) { this.Search(); }
         }
 
+        protected FortranObject(FortranObject parent, String name,List<FileLine> lines, bool ContainsBlocks)
+        {
+            this.parent = parent;
+            this.Name = name;
+            this.lines = lines;
+            if (ContainsBlocks) 
+            {
+                try
+                {
+                    this.Search();
+                }
+                catch (UnclosedBlockException e)
+                {
+                    Console.WriteLine("Error in '" + this.Name + "' - " + e.ToString());
+                    Helper.Stop();
+                }
+            }
+        }
+
         public String Identifier
         {
             get
@@ -50,7 +69,7 @@ namespace Doctran.BaseClasses
 
             FortranObject current = this;
             List<FortranBlock> Blocks = PluginManager.FortranBlocks; 
-
+                       
             // Loop through the file lines from lineIndex till the last line.
             while (lineIndex < current.lines.Count)
             {
@@ -68,12 +87,7 @@ namespace Doctran.BaseClasses
                         var removalBlocks = new List<FortranBlock>();
                         do
                         {
-                            if (lineIndex >= lines.Count)
-                            {
-                                Console.WriteLine("----------------------Error----------------------");
-                                internalBlocks.ForEach(blk => Console.WriteLine("A '" + blk.GetType().Name + "' has not been closed."));
-                                Environment.Exit(1);
-                            }
+                            if (lineIndex >= lines.Count) { throw new UnclosedBlockException(internalBlocks.First()); }
 
                             if (Blocks[i].CheckInternal)
                             {
@@ -139,4 +153,19 @@ namespace Doctran.BaseClasses
         }
     }
 
+    public class UnclosedBlockException : ApplicationException
+    {
+        public FortranBlock block;
+
+        public UnclosedBlockException(FortranBlock block)
+            : base()
+        {
+            this.block = block;
+        }
+
+        public override string ToString()
+        {
+            return "A " + this.block.GetType().Name + " has not been closed.";
+        }
+    }
 }
