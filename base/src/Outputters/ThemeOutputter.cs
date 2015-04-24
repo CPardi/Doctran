@@ -7,6 +7,8 @@ using System;
 using System.Linq;
 using System.IO;
 
+using dotless.Core;
+
 namespace Doctran.Fbase.Outputters
 {
     public class ThemeOutputter
@@ -18,11 +20,37 @@ namespace Doctran.Fbase.Outputters
             this.overwriteTheme = overwriteTheme;
         }
 
-        public void Output(String themePath, String outputDirectory)
+        public void Output(String themePath, String colorScheme, String outputDirectory)
         {
             String[] allFiles = Directory.GetFiles(themePath, "*", SearchOption.AllDirectories);
-            String[] excludedFiles = Directory.GetFiles(themePath, "*.xslt", SearchOption.AllDirectories);
-            String[] filesToCopy = allFiles.Except(excludedFiles).ToArray();
+
+            var xsltFiles = Directory.GetFiles(themePath, "*.xslt", SearchOption.AllDirectories);
+            var lessFiles = Directory.GetFiles(themePath, "*.less", SearchOption.AllDirectories);
+
+            foreach (var lessPath in lessFiles)
+            {
+                String relPath = outputDirectory + lessPath.Substring(themePath.Length);
+                String outputPath = relPath.Remove(relPath.Length - 5) + ".css";
+                Directory.CreateDirectory(Path.GetDirectoryName(outputPath));
+
+                String lessString;
+                using (StreamReader FileReader = new StreamReader(lessPath)) { lessString = FileReader.ReadToEnd(); }
+
+                try
+                {
+                    String curDir = Environment.CurrentDirectory;
+                    Directory.SetCurrentDirectory(Common.Settings.execPath);
+                    String cssText = Less.Parse( @"@import ""colorSchemes/" + colorScheme + @".less""; " + Environment.NewLine + lessString);
+                    File.WriteAllText(outputPath, cssText);
+                    Directory.SetCurrentDirectory(curDir);
+                }
+                catch(FileNotFoundException e)
+                {
+                    UserInformer.GiveError("LESS stylesheet", e.FileName, e);
+                }
+            }
+
+            String[] filesToCopy = allFiles.Except(xsltFiles).Except(lessFiles).ToArray();
 
             foreach (String filePath in filesToCopy)
             {

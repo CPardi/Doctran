@@ -1,0 +1,127 @@
+#Menu #Holder ul, #Menu #Holder li {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font: inherit;
+    vertical-align: baseline;
+}
+
+#Menu #Holder ul {
+    list-style: none;
+}
+
+#Menu{
+	float:left;
+	width:15em;
+	height:37em;
+	border: 1px solid @border;	
+	border-left:none;
+	overflow: hidden;
+	margin-bottom:2%;
+	.background1;
+}
+
+#Menu .arrow.subExpand {
+    font-size:0.75em;
+    margin-right: 0.25em;
+}
+
+#Menu .arrow {
+   font-family: Lucida Sans Unicode, Arial Unicode MS, sans-serif; 
+}
+
+#Menu #Holder{
+	height:33.3em;
+	overflow: scroll;
+}
+
+#Menu #Holder li{
+	margin-top:0.3em;
+	padding-left:0.6em;
+}
+
+#Menu #Holder ul{
+	padding-left:0.4em;
+}
+
+#Menu #Holder li a{
+	white-space: nowrap;
+}
+
+#Menu #Holder > ul {
+  padding-bottom:1.0em;
+}
+
+#Menu #Holder > ul > li  {
+  padding-left:0;
+}
+
+#Menu #Heading  {
+	padding-bottom:1em;
+	padding-left:0.5em;
+	padding-right:1em;
+	padding-top:1em;
+	margin-bottom:0.2em;
+	border-bottom: 1px solid @border;
+	.block
+}
+
+#Menu #Heading h2{
+	margin:0;
+	font-size:1.5em;
+	border:0;
+	padding:0;
+}
+
+#Menu a, #Contents-Menu a:visited, #Contents-Menu a:hover{
+	text-decoration:none;
+	.menulink;
+}
+
+#Menu a:hover{
+	font-weight: bold;
+}
+
+#Menu .active > a, #Menu .active > a:hover
+{
+	font-weight: bold;
+	.menulink;
+}
+
+#Menu .subtitle > a, #Menu .subtitle > a:hover {
+	font-weight: inherit;
+	.menuheading;
+}
+
+#Menu #Holder .subtitle > a::before {
+    content:"▼";
+    font-size:0.75;
+}
+
+#Menu #Holder > ul >li >ul > li > a::before {
+	content:"▶";
+	color:inherit;
+	margin-right:0.5em;
+	margin-left: 0.15em;
+}
+
+#Menu #Holder > ul >li >ul >li>.active::before, #Menu  #Holder .file::before, #Menu #Holder .module::before, #Menu #Holder .type::before {
+	content:"▼";
+	color:inherit;
+	margin-right:0.5em;
+	margin-left: 0;
+}
+
+  #Menu #Holder>ul >li >ul >li>.function::before
+, #Menu #Holder>ul >li >ul >li>.subroutine::before
+, #Menu #Holder>ul >li >ul >li>.overload::before
+, #Menu #Holder>ul >li >ul >li>.assignment::before
+, #Menu #Holder>ul >li >ul >li>.operator::before {
+	content:"";
+	margin:0;
+}
+
+.jsEnabled #Menu #Holder a::before
+{
+    content:"";
+}

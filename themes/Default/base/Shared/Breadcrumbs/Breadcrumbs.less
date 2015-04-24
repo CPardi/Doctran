@@ -1,0 +1,52 @@
+#Breadcrumbs{
+	list-style: none inside none; 
+	border: 1px solid @border;
+	border-right:none;
+	overflow: hidden;
+	margin-bottom:2%;
+	padding:0;
+}
+
+#Breadcrumbs h2 {
+	display:none;
+}
+
+#Breadcrumbs ul, li {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font: inherit;
+    vertical-align: baseline;
+}
+
+#Breadcrumbs ul {
+    list-style: none;
+}
+
+#Breadcrumbs li{
+	border: 1px solid @border;
+	border-left:none;
+	border-top:none;
+	border-bottom:none;
+	float: left;
+}
+
+#Breadcrumbs li a:hover{
+	.highlight;
+}	
+
+#Breadcrumbs a, #Breadcrumbs a:visited{
+	display:block;
+	color:black;
+	text-decoration: none; 
+	float: left;
+	padding: 5px 15px 5px 15px;
+	.blocklink;
+}
+#Breadcrumbs .active, #Breadcrumbs .active:hover{
+	background-color:inherit;
+}
+
+#Breadcrumbs .active a,#Breadcrumbs .active a:hover {
+    .active;
+}

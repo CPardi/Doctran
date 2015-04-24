@@ -31,7 +31,7 @@ namespace Doctran.BaseClasses
 
         public static List<Plugin> Plugins { get; private set; }
 
-		private static readonly AssemblyLoader _PluginLoader = new AssemblyLoader(new Settings().execPath + @"plugins");
+		private static readonly AssemblyLoader _PluginLoader = new AssemblyLoader(Settings.execPath + @"plugins");
 
         public static List<FortranBlock> FortranBlocks { get; set; }
 

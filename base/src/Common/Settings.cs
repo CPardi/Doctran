@@ -14,7 +14,7 @@ namespace Doctran.Fbase.Common
     {
 		public readonly static Char slash = Path.DirectorySeparatorChar;
 
-		public readonly String execPath = Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory) + slash;
+		public readonly static String execPath = Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory) + slash;
 
 		// Project settings.
         public bool has_info = false;
@@ -62,11 +62,12 @@ namespace Doctran.Fbase.Common
 		// Theme settings.
 		public String xsltName = @"main.xslt";
         public bool overwriteTheme = false;
+        public String ColorScheme = "Default";
 		public String ThemeName = "Default";
 		public String ThemesDirectory = @"themes" + slash;
 		public String ThemeFullPath {
 			get {
-				return this.execPath + this.ThemesDirectory + this.ThemeName + slash;
+				return execPath + this.ThemesDirectory + this.ThemeName + slash;
 			}
 		}
 		public String XsltFullPathAndName {

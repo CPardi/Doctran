@@ -22,7 +22,7 @@ namespace Doctran
         public static void GiveWarning(String name, Exception e)
         {
             addNewLine();
-            Console.WriteLine("ERROR: In " + name + ". " + e.Message);
+            Console.WriteLine("WARNING: In " + name + ". " + e.Message);
         }
 
         public static void GiveError(String name, Exception e)

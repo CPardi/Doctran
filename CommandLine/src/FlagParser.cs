@@ -25,6 +25,7 @@ namespace Doctran.Fbase.Common
                 new Output_dir(),
                 new Project_info(),
                 new Theme(),
+                new ColorScheme(),
                 new Overwrite(),
                 new Help(),
                 new Extensions()
@@ -373,6 +374,21 @@ namespace Doctran.Fbase.Common
         public override string Category { get { return "Themes"; } }
         public override string LongFlag { get { return "theme"; } }
         public override string Description { get { return this.flagParam + " is the name of the theme to be applied. (Default: Default)"; } }        
+    }
+
+    class ColorScheme : Flag
+    {
+        public ColorScheme() : base("c", "NAME") { }
+
+        protected override void Action(String[] args, ref int line_no, Settings settings)
+        {
+            settings.ColorScheme = args[line_no + 1];
+            line_no++;
+        }
+
+        public override string Category { get { return "Themes"; } }
+        public override string LongFlag { get { return "color_scheme"; } }
+        public override string Description { get { return this.flagParam + " is the name of the color scheme to be used. (Default: Default)"; } }
     }
 
     class Overwrite : Flag
