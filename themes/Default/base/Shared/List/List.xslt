@@ -13,7 +13,11 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
 		<xsl:param name="prefix" select="Prefix"/>
 
 		<link rel="stylesheet" type="text/css" href="{concat($prefix,'base/Shared/List/List.css')}" />
-	</xsl:template>
+
+    <script type="text/javascript" src="{concat($prefix, 'base/Shared/List/List.js')}"></script>
+    <script type="text/javascript" src="{concat($prefix, 'base/Shared/List/sorttable.js')}"></script>
+    
+  </xsl:template>
 
 	<xsl:template mode="List-AddHeading" match="*">
 
@@ -22,10 +26,11 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
 				<xsl:apply-templates mode="CellHeadings" select="."/>
 			</Headings>
 		</xsl:variable>
-
-		<tr class="Heading">
+    <thead>
+      <tr class="Heading">
 			<xsl:apply-templates mode="List-AddCell" select="$Headings/Heading"/>
-		</tr>
+		  </tr>
+    </thead>
 
 	</xsl:template>
 
@@ -39,11 +44,11 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
 				</xsl:apply-templates>
 			</Cells>
 		</xsl:variable>
-
+    
 		<tr class="Row">
 			<xsl:apply-templates mode="List-AddCell" select="$Cells/Cell"/>
 		</tr>
-
+    
 	</xsl:template>
 
 	<xsl:template mode="List-AddCell" match="Heading">

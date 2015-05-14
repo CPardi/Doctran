@@ -22,9 +22,23 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
 					<xsl:value-of select="$title"/>
 				</title>
 
+         <!--Include Jquery--> 
+        <script src="{concat($prefix,'base/Shared/Page/jquery-1.11.1.min.js')}" type="text/javascript"/>
+        
+         <!--Include Jquery-UI for search.--> 
+        <script type="text/javascript" src="{concat($prefix,'base/Shared/Page/jquery-ui.min.js')}"></script>
+        <link rel="stylesheet" type="text/css" href="{concat($prefix,'base/Shared/Page/jquery-ui.min.css')}" />
+        <link rel="stylesheet" type="text/css" href="{concat($prefix,'base/Shared/Page/jquery-ui-structure.min.css')}" />
+        <link rel="stylesheet" type="text/css" href="{concat($prefix,'base/Shared/Page/jquery-ui.theme.min.css')}" />
 				<link rel="stylesheet" type="text/css" href="{concat($prefix,'base/Shared/Page/reset.css')}" />
 				<link rel="stylesheet" type="text/css" href="{concat($prefix,'base/Shared/Page/Page.css')}" />
-				<script src="{concat($prefix,'base/Shared/Page/jquery-1.11.1.min.js')}" type="text/javascript"/>
+        
+        <!--Set global variable for relative prefix.-->
+        <xsl:variable name="apos">'</xsl:variable>
+        <script>
+          <xsl:value-of select="concat( 'globals = { prefix : ', $apos, $prefix, $apos, '};' )" />
+        </script>
+        
         <script src="{concat($prefix,'base/Shared/Page/Page.js')}" type="text/javascript"/>
 
 				<xsl:call-template name="Header-head">
@@ -39,6 +53,10 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
 					<xsl:with-param name="prefix" select="$prefix"/>
 				</xsl:call-template>
 
+        <xsl:call-template name="Search-head">
+          <xsl:with-param name="prefix" select="$prefix"/>
+        </xsl:call-template>
+        
 				<xsl:copy-of select="$Content-head"/>
 
 			</head>

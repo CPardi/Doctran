@@ -4,8 +4,11 @@
 //  file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 using System;
-using System.IO;
+using System.Collections.Generic;
 using System.Linq;
+using System.Xml;
+using System.Xml.Linq;
+using System.IO;
 
 using Doctran.Fbase.Projects;
 using Doctran.Fbase.Common;
@@ -28,35 +31,36 @@ namespace Doctran.ConsoleRunner
 
 			// Setup project and output HTMLs.
 			XmlOutputter xmlOutputter;
-			if (settings.use_existing_xml)
-			{
-				xmlOutputter = new XmlOutputter(settings.OutputDirectory + Settings.slash + settings.existing_xml_name);
-			}
-			else
-			{
-				Console.Write ("Analysing project block structure... ");
-				var project = new Project(settings);
 
-                Console.Write("Done" + Environment.NewLine + "Post processing project... ");
-                foreach (var traverser in PluginManager.Traversers.ToList().OrderBy(t => t.Value.Key))
-                    traverser.Value.Value.Go(project);                    
+            if (Settings.verbose >= 2) Console.Write("Analysing project block structure... ");
+			var project = new Project(settings);
 
-                Console.Write("Done" + Environment.NewLine + "Generating xml... ");
-				xmlOutputter = new XmlOutputter(project.XEle());
-			}
+            if (Settings.verbose >= 2) Console.Write("Done" + Environment.NewLine + "Post processing project... ");
+            foreach (var traverser in PluginManager.Traversers.ToList().OrderBy(t => t.Value.Key))
+                traverser.Value.Value.Go(project);                    
+
+            if (Settings.verbose >= 2) Console.Write("Done" + Environment.NewLine + "Generating xml... ");
+			xmlOutputter = new XmlOutputter(project.XEle());
+
 			if (settings.save_xml) { xmlOutputter.SaveToDisk(settings.OutputDirectory + settings.save_xml_name); }
 
-            Console.Write("Done" + Environment.NewLine + "Outputting theme files... ");
+            if (Settings.verbose >= 2) Console.Write("Done" + Environment.NewLine + "Outputting theme files... ");
 			var themeOutputter = new ThemeOutputter(settings.overwriteTheme);
-			themeOutputter.Output(settings.ThemeFullPath, settings.OutputFullPath);
+            themeOutputter.Output(settings.ThemeFullPath, settings.ColorScheme, settings.OutputFullPath);
 
-            Console.Write("Done" + Environment.NewLine + "Generating htmls... ");
+            XmlReader reader = new XElement("Source",
+                (from file in project.SubObjectsOfType<Doctran.Fbase.Files.File>()
+                    select file.SourceXEle)).CreateReader();
+
+            if (Settings.verbose >= 2) Console.Write("Done" + Environment.NewLine + "Generating htmls... ");
 			var htmlOutputter = new HtmlOutputter(settings.XsltFullPathAndName);
-			htmlOutputter.SaveToDisk(xmlOutputter.XDocument, settings.OutputDirectory);
+            htmlOutputter.SetParameter("verbose", Settings.verbose);
+            htmlOutputter.SetParameter("source", reader);
+            htmlOutputter.SaveToDisk(xmlOutputter.XDocument, settings.OutputDirectory);
 
-			Console.WriteLine("Done");
-			Console.WriteLine(@"Documentation can be found at """ + settings.OutputFullPath + @"""");
-			Console.WriteLine(@"Documentation generation complete.");
+            if (Settings.verbose >= 2) Console.WriteLine("Done");
+            if (Settings.verbose >= 2) Console.WriteLine(@"Documentation can be found at """ + settings.OutputFullPath + @"""");
+            if (Settings.verbose >= 2) Console.WriteLine(@"Documentation generation complete.");
 			return 0;
 		}
 
@@ -71,6 +75,10 @@ namespace Doctran.ConsoleRunner
 				Console.WriteLine("internal error");
 				Console.WriteLine("Exception details written to " + logPath);
 				using (var sq = new StreamWriter (logPath, false)) {
+
+                    sq.WriteLine("======Exception Type======");
+                    sq.WriteLine(ex.GetType().Name);
+                    sq.WriteLine("");
 
                     sq.WriteLine("======Message======");
                     sq.WriteLine(ex.Message);

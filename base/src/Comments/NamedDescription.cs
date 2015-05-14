@@ -18,8 +18,6 @@ namespace Doctran.Fbase.Comments
 {
     public class NamedDescriptionBlock : FortranBlock
     {
-        private InformationBlock infoBlock = new InformationBlock();
-
         public NamedDescriptionBlock() 
         {
             this.CheckInternal = false;
@@ -28,18 +26,20 @@ namespace Doctran.Fbase.Comments
 
         public override bool BlockStart(Type parentType, List<FileLine> lines, int lineIndex)
         {
-            return 
-                    Regex.IsMatch(lines[lineIndex].Text.Trim(), @"!>\s*\w.*\s*-.*")
-                    && !infoBlock.BlockStart(parentType, lines, lineIndex);
+            return
+                CommentDefinitions.NDescStart(lines[lineIndex].Text)
+                && !CommentDefinitions.DetailLine(lines[lineIndex].Text)
+                && !CommentDefinitions.InfoStart(lines[lineIndex].Text);
         }
 
         public override bool BlockEnd(Type parentType, List<FileLine> lines, int lineIndex)
         {
             if(lineIndex + 1 >= lines.Count) return true;
-            return 
-                   !lines[lineIndex + 1].Text.Trim().StartsWith("!>")
-                | this.BlockStart(parentType, lines, lineIndex + 1)
-                | infoBlock.BlockStart(parentType, lines, lineIndex + 1);
+
+            return
+                CommentDefinitions.NDescEnd(lines[lineIndex + 1].Text)
+                || this.BlockStart(parentType, lines, lineIndex + 1)
+                || CommentDefinitions.InfoStart(lines[lineIndex + 1].Text);
         }
 
         public override List<FortranObject> ReturnObject(FortranObject parent, List<FileLine> lines)
@@ -72,10 +72,7 @@ namespace Doctran.Fbase.Comments
                 where !Regex.IsMatch(line.Text, @"^\s*!>>")
                 select " " + line.Text.Trim().Substring(3)));
 
-            String detailed = String.Concat(
-                from line in lines
-                where Regex.IsMatch(line.Text, @"^\s*!>>")
-                select " " + line.Text.Trim().Substring(4));
+            String detailed = Description.MergeLines(lines);
 
             this.Add(new Description(parent, name, basic.ToString(), detailed, lines));
             

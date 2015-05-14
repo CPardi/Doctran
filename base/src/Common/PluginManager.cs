@@ -5,7 +5,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using Doctran.Fbase.Common;
 
@@ -24,12 +23,12 @@ namespace Doctran.BaseClasses
             PluginManager.Traversers.Add("ErrorChecker", new KeyValuePair<int, Traverser>(1, new Traverser(PluginManager.PluginLoader.GetClassInstances<PostAction>("Doctran.Exceptions"))));                      
 
             //Initialize plugins.
-            PluginManager.Plugins = PluginManager.PluginLoader.GetClassInstances<Plugin>();
+            PluginManager.Plugins = PluginManager.PluginLoader.GetClassInstances<IPlugin>();
             foreach (var plugin in Plugins)
                 plugin.Initialize();
         }
 
-        public static List<Plugin> Plugins { get; private set; }
+        public static List<IPlugin> Plugins { get; private set; }
 
 		private static readonly AssemblyLoader _PluginLoader = new AssemblyLoader(Settings.execPath + @"plugins");
 
@@ -46,38 +45,6 @@ namespace Doctran.BaseClasses
                 return _PluginLoader;
             }
         }
-
-        //public static List<FortranBlock> FortranBlocks {
-        //    get 
-        //    {
-        //        return AllFortranBlocks;
-        //    }
-        //}
-
-        //private static readonly List<PostAction> _PostProcessors = _PluginLoader.GetExclude<PostAction>(excludeNamespace: "Doctran.Exceptions");
-        //public static List<PostAction> PostProcessors
-        //{
-        //    get
-        //    {
-        //        return _PostProcessors;
-        //    }
-        //}
-
-        //private static readonly List<PostAction> _Exceptions = _PluginLoader.GetFrom<PostAction>(fromNamespace: "Doctran.Exceptions");
-        //public static List<PostAction> Exceptions
-        //{
-        //    get
-        //    {
-        //        return _Exceptions;
-        //    }
-        //}
-
-        //private static readonly List<ObjectGroup> _ObjectGroups = _PluginLoader.Get<ObjectGroup>();
-        //public static List<ObjectGroup> ObjectGroups {
-        //    get {
-        //        return _ObjectGroups;
-        //    }
-        //}
 	}
 }
 

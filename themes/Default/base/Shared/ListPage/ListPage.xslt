@@ -33,11 +33,11 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
 						<xsl:with-param name="prefix" select="$prefix"/>
 						<xsl:with-param name="activeBrowse" select="$objects/local-name()"/>
 					</xsl:call-template>
-					<div id="ListContent">
+					<div id="PageContent">
 						<xsl:call-template name="Section">
 							<xsl:with-param name="name" select="$title"/>
 							<xsl:with-param name="content">
-								<table class="List">
+								<table class="List sortable">
 									<xsl:apply-templates mode="List-AddHeading" select="$objects"/>
 									<xsl:apply-templates mode="List-AddRows" select="$objects/*[Access != 'Private' or not(Access)]">
 										<xsl:sort select="Identifier"/>

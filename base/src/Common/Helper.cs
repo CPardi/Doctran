@@ -11,11 +11,14 @@ using System.Xml.Linq;
 using System.Text.RegularExpressions;
 using System.Reflection;
 using System.IO;
+using MarkdownSharp;
 
 namespace Doctran.Fbase.Common
 {
     public static class Helper
     {
+        public static readonly Markdown markdown = new Markdown();
+
         public static void Stop()
         {
             Environment.Exit(1);

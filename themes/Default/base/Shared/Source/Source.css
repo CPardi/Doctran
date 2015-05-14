@@ -9,6 +9,7 @@
 #Source ul {
     list-style: none;
 	display:table;	
+	min-width: 100%;
 }
 
 #Source .code {
@@ -29,4 +30,252 @@
 #Source .odd 
 {
     background-color: #E7E7E7;
+}
+
+
+.fortran ul {
+    list-style-type : none;
+    display : table;
+    white-space : pre;
+}
+
+.fortran ul li {
+    margin : 0;
+    padding : 0;
+}
+
+.fortran ul .odd {
+    background-color : #F0F0F0;
+}
+
+.fortran ul .even {
+    background-color : inherit;
+}
+
+.fortran .line-number-span {
+    color : #181818;
+    display : inline-block;
+    width : 2.5em;
+    border-right : 1px solid grey;
+    padding : 0.05em 0.5em 0.05em 0;
+    text-align : right;
+}
+
+.fortran .code-text-span {
+    border-left : 1px solid #E8E8E8 ;
+    padding-left : 2.0em;
+    white-space : pre;
+}
+
+.fortran .continuation {
+    color : #0000FF;
+}
+
+.fortran .specialCharacter {
+    color : Red;
+}
+
+.fortran .brackets {
+    color : Red;
+}
+
+.fortran .intrinsic {
+    color :#00A000;
+    font-weight: bold;
+}
+
+.fortran .plainText {
+    color : Black;
+    background-color : White;
+}
+
+.fortran .htmlServerSideScript {
+    background-color : Yellow;
+}
+
+.fortran .htmlComment {
+    color : Green;
+}
+
+.fortran .htmlTagDelimiter {
+    color : Blue;
+}
+
+.fortran .htmlElementName {
+    color : #A31515;
+}
+
+.fortran .htmlAttributeName {
+    color : Red;
+}
+
+.fortran .htmlAttributeValue {
+    color : Blue;
+}
+
+.fortran .htmlOperator {
+    color : Blue;
+}
+
+.fortran .comment {
+    color : #A0A0A0;
+}
+
+.fortran .xmlDocTag {
+    color : Gray;
+}
+
+.fortran .xmlDocComment {
+    color : Green;
+}
+
+.fortran .string {
+    color : #0000FF;
+}
+
+.fortran .stringCSharpVerbatim {
+    color : #A31515;
+}
+
+.fortran .keyword {
+    color : #0000A0;
+    font-weight: bold;
+}
+
+.fortran .preprocessorKeyword {
+    color : #00A000;
+}
+
+.fortran .htmlEntity {
+    color : Red;
+}
+
+.fortran .xmlAttribute {
+    color : Red;
+}
+
+.fortran .xmlAttributeQuotes {
+    color : Black;
+}
+
+.fortran .xmlAttributeValue {
+    color : Blue;
+}
+
+.fortran .xmlCDataSection {
+    color : Gray;
+}
+
+.fortran .xmlComment {
+    color : Green;
+}
+
+.fortran .xmlDelimiter {
+    color : Blue;
+}
+
+.fortran .xmlName {
+    color : #A31515;
+}
+
+.fortran .className {
+    color : MediumTurquoise;
+}
+
+.fortran .cssSelector {
+    color : #A31515;
+}
+
+.fortran .cssPropertyName {
+    color : Red;
+}
+
+.fortran .cssPropertyValue {
+    color : Blue;
+}
+
+.fortran .sqlSystemFunction {
+    color : Magenta;
+}
+
+.fortran .powershellAttribute {
+    color : PowderBlue;
+}
+
+.fortran .powershellOperator {
+    color : Gray;
+}
+
+.fortran .powershellType {
+    color : Teal;
+}
+
+.fortran .powershellVariable {
+    color : OrangeRed;
+}
+
+.fortran .type {
+    color : Teal;
+}
+
+.fortran .typeVariable {
+    color : Teal;
+    font-style : italic;
+}
+
+.fortran .namespace {
+    color : Navy;
+}
+
+.fortran .constructor {
+    color : Purple;
+}
+
+.fortran .predefined {
+    color : Navy;
+}
+
+.fortran .pseudoKeyword {
+    color : Navy;
+}
+
+.fortran .stringEscape {
+    color : Gray;
+}
+
+.fortran .controlKeyword {
+    color : Blue;
+}
+
+.fortran .number 
+{
+    color: #F000F0
+}
+
+.fortran .operator 
+{
+    color: #FF0000
+}
+
+.fortran .delimiter {
+}
+
+.fortran .markdownHeader {
+    font-weight : bold;
+}
+
+.fortran .markdownCode {
+    color : Teal;
+}
+
+.fortran .markdownListItem {
+    font-weight : bold;
+}
+
+.fortran .italic {
+    font-style : italic;
+}
+
+.fortran .bold {
+    font-weight : bold;
 }

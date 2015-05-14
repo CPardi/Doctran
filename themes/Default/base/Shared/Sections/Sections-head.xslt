@@ -11,6 +11,7 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
 	<xsl:template name="Sections-head">
 		<xsl:param name="prefix" select="Prefix"/>
 		<link rel="stylesheet" type="text/css" href="{concat($prefix,'base/Shared/Sections/Sections.css')}" />
+    <script src="{concat($prefix,'base/Shared/Sections/Sections.js')}" type="text/javascript"></script>
 	</xsl:template>
 
 </xsl:stylesheet>	

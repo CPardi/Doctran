@@ -24,7 +24,7 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
 			<h3>
 				<xsl:value-of select="$name"/>
 			</h3>
-			<div class="content">
+			<div class="content unfolded">
 				<xsl:copy-of select="$content"/>
 			</div>
 		</div>

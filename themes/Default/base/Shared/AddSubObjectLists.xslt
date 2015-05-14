@@ -34,7 +34,7 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
 						<xsl:call-template name="Subsection">
 							<xsl:with-param name="name" select="$group/Title"/>
 							<xsl:with-param name="content">
-								<table class="List">
+								<table class="List sortable">
 									<xsl:apply-templates mode="List-AddHeading" select="$current/*[local-name() = $group/Containers/Name][1]"/>
 									<xsl:apply-templates mode="List-AddRows" select="$subObjects">
 										<xsl:with-param name="prefix" select="$prefix"/>							

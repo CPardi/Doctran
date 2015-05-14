@@ -11,15 +11,15 @@ using System.Xml;
 using System.Xml.Linq;
 using System.IO;
 using Saxon.Api;
-using Microsoft.VisualBasic;
 
 namespace Doctran.Fbase.Outputters
 {
     public class HtmlOutputter
     {
-        readonly XsltTransformer transformer;
+        private readonly XsltTransformer transformer;
         // Define a processor, creates things that do 'proper' stuff. Also contain saxon dll information such as version no.
-        readonly Processor processor = new Processor();
+        private readonly Processor processor = new Processor();
+        private readonly DocumentBuilder builder;
 
         public HtmlOutputter(String xsltPathAndName)
         {
@@ -31,6 +31,18 @@ namespace Doctran.Fbase.Outputters
             compiler.BaseUri = new Uri(xsltPathAndName);
             XsltExecutable executable = compiler.Compile(textreader);
             this.transformer = executable.Load();
+
+            builder = processor.NewDocumentBuilder();
+        }
+
+        public void SetParameter(String name, int iNum)
+        {
+            transformer.SetParameter(new Saxon.Api.QName(name), new XdmAtomicValue(iNum));
+        }
+
+        public void SetParameter(String name, XmlReader reader)
+        {
+            transformer.SetParameter(new Saxon.Api.QName(name), builder.Build(reader));
         }
 
 		public void SaveToDisk(XDocument xDocument, String outputDirectory)
@@ -40,7 +52,7 @@ namespace Doctran.Fbase.Outputters
 
             // Load the source document from an XMLReader.
             XmlReader Reader = xDocument.CreateReader();
-
+            
             // Set the root node of the source document to be the initial context node
             transformer.InitialContextNode = processor.NewDocumentBuilder().Build(Reader);
 

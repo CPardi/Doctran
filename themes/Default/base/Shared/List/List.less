@@ -19,8 +19,14 @@
 
 .List .Heading a
 {	
+	margin-left: 1em;
 	font-size:1.0em;
-	padding-right: 1.5em;
+}
+
+.List .Heading td
+{
+	padding-top:0.5em;
+	padding-bottom:0.25em;
 }
 
 .List .Row a
@@ -29,9 +35,8 @@
     text-decoration:none;
     color:inherit;
     display: block;
-    margin: -6em 0;
-    padding: 6em 0.25em;
 	font-size:0.85em;
+	padding: 0.75em 1.5em 0.2em 1.5em;
 }
 
 .List td
@@ -39,10 +44,14 @@
 	overflow: hidden;
     border-bottom:1px solid black;
     font-size:1.05em;
-    padding-top:0.55em;
-    padding-bottom:0.1em;
 }
 
 .List .Row:hover {
     .highlight;
+}
+
+/* Sortable tables */
+table.sortable thead {
+    cursor: hand;
+	cursor: pointer;
 }

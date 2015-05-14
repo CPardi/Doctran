@@ -27,21 +27,59 @@ function subtitle_onclick() {
     else {
         close($subtitle.parent().parent().parent().parent().find(".subExpand"), "▶");
         open($subtitle, "▼");
-        }
+    }
 }
 
 $(document).ready(function () {
+
+    var $Menu = $("#Menu");
+    var $Menu_Heading = $Menu.children("#Heading");
+
+    $Menu_Heading.find("h2").css("display", "inline-block");
+
+    var $HiddenMenu = $("<div><span>▶<span></div>")
+        .prop("id", "HiddenMenu")
+        .css("margin-top", $Menu.css("margin-top"))
+        .css("display", "none")
+        .click(function () {
+            $Menu.show();
+            $HiddenMenu.hide();
+            $("#ObjectContent").css("margin-left", "18em");
+        });
+
+    $HiddenMenu.insertAfter($Menu);
+
+    var $hideSwitch = $("<a><span>◀</span></a>")
+        .prop("id", "HideSwitch")
+        .click(function () {
+            $Menu.hide();
+            $HiddenMenu.show();
+            $("#ObjectContent").css("margin-left", "3.0em");
+        });
+
+    $Menu_Heading.append($hideSwitch);
+
     $("#Menu #Holder ul > .objectEntry")
-		.prepend(function () {
-		    if ($(this).find("ul").text() !== "") {
-		        return $("<span class='objectExpand arrow'>▼</span>").click(objectEntry_onclick);
-		    }
-		});
+        .prepend(function () {
+            if ($(this).find("ul").text() !== "") {
+                return $("<span class='objectExpand arrow'>▼</span>")
+                    .css("cursor", "pointer").css("cursor", "hand")
+                    .click(objectEntry_onclick)
+                    .mousedown(function (e) {
+                        e.preventDefault();
+                    });
+            }
+        });
 
     $("#Menu #Holder ul > .subtitle")
-		.prepend(function () {
-		    return $("<span class='subExpand arrow'>▼</span>").click(subtitle_onclick);
-		});
+        .prepend(function () {
+            return $("<span class='subExpand arrow'>▼</span>")
+                .css("cursor", "pointer").css("cursor", "hand")
+                .click(subtitle_onclick)
+                .mousedown(function (e) {
+                    e.preventDefault();
+                });
+        });
 
     $(".objectExpand").each(function () {
         close($(this), "▶")

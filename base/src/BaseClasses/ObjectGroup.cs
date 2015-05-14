@@ -25,6 +25,7 @@ namespace Doctran.BaseClasses
         {
             return Obj.GetType().IsSubclassOf(T) | Obj.GetType() == T;
         }
-        public virtual XElement XEle(IEnumerable<XElement> Content) { return null; }
+        public XElement XEle(XElement content) { return this.XEle(new List<XElement> { content }); }
+        public virtual XElement XEle(IEnumerable<XElement> content) { return null; }
     }
 }

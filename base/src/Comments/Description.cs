@@ -35,11 +35,8 @@ namespace Doctran.Exceptions
             if (obj.parent.Identifier != obj.Identifier)
             {
                 var file = obj.GoUpTillType<File>();
-                Console.WriteLine("----------------------Warning----------------------");
-                Console.WriteLine("Error from line '" + obj.lines.First().Number
-                                  + "' to '" + obj.lines.Last().Number
-                                  + "' of file '" + file.Name + file.Info.Extension + "'.");
-                Console.WriteLine("Description identifier does not match parent identifier and has been ignored.");
+                UserInformer.GiveWarning(file.Name + file.Info.Extension, obj.lines.First().Number, obj.lines.Last().Number
+                                        , "Description identifier does not match parent identifier and has been ignored.");
                 obj.parent.SubObjects.Remove(obj);
             }
         }
@@ -49,11 +46,8 @@ namespace Doctran.Exceptions
             if (obj.parent.SubObjectsOfType<Description>().Count > 1)
             {
                 var file = obj.GoUpTillType<File>();
-                Console.WriteLine("----------------------Warning----------------------");
-                Console.WriteLine("Error from line '" + obj.lines.First().Number
-                                  + "' to '" + obj.lines.Last().Number
-                                  + "' of file '" + file.Name + file.Info.Extension + "'.");
-                Console.WriteLine("Description is not unique and has been ignored.");
+                UserInformer.GiveWarning(file.Name + file.Info.Extension, obj.lines.First().Number, obj.lines.Last().Number
+                                                                        ,"Description is not unique and has been ignored.");
                 obj.parent.SubObjects.Remove(obj);
             }
         }
@@ -64,9 +58,7 @@ namespace Doctran.Fbase.Comments
 {
     public class DescriptionBlock : FortranBlock
     {
-        private InformationBlock infoBlock = new InformationBlock();
-        private NamedDescriptionBlock nDescBlock = new NamedDescriptionBlock();
-
+        
         public DescriptionBlock() 
         {
             this.CheckInternal = false;
@@ -75,17 +67,21 @@ namespace Doctran.Fbase.Comments
 
         public override bool BlockStart(Type parentType, List<FileLine> lines, int lineIndex)
         {
-			return lines[lineIndex].Text.Trim().StartsWith("!>")
-                && !infoBlock.BlockStart(parentType, lines, lineIndex);
+            return
+                CommentDefinitions.DescStart(lines[lineIndex].Text)
+                && !CommentDefinitions.DetailLine(lines[lineIndex].Text)
+                && !CommentDefinitions.NDescStart(lines[lineIndex].Text)
+                && !CommentDefinitions.InfoStart(lines[lineIndex].Text);
         }
 
         public override bool BlockEnd(Type parentType, List<FileLine> lines, int lineIndex)
         {
-            if(lineIndex + 1 >= lines.Count) return true;
+            if (lineIndex + 1 >= lines.Count) return true;
+
             return
-                   !lines[lineIndex + 1].Text.Trim().StartsWith("!>")
-                 | infoBlock.BlockStart(parentType, lines, lineIndex + 1)
-                 | nDescBlock.BlockStart(parentType, lines, lineIndex + 1);
+                CommentDefinitions.DescEnd(lines[lineIndex + 1].Text)
+                || CommentDefinitions.InfoStart(lines[lineIndex + 1].Text)
+                || CommentDefinitions.NDescStart(lines[lineIndex + 1].Text);
         }
 
         public override List<FortranObject> ReturnObject(FortranObject parent, List<FileLine> lines)
@@ -169,10 +165,15 @@ namespace Doctran.Fbase.Comments
                 from line in lines
                 where Regex.IsMatch(line.Text, @"!>\s*\w")
                 select (Regex.Match(line.Text, @"!>(.*)").Groups[1].Value.Trim()) + " ").TrimEnd();
-            this.Detailed = String.Concat(
+            this.Detailed = MergeLines(lines);
+        }
+
+        public static String MergeLines(List<FileLine> lines)
+        {
+            return String.Concat(
                 from line in lines
                 where Regex.IsMatch(line.Text, @"!>>(.*)")
-                select (Regex.Match(line.Text, @"!>>(.*)").Groups[1].Value.Trim()) + " ").TrimEnd();
+                select (Regex.Match(line.Text, @"!>>(.*)").Groups[1].Value) + "\n");
         }
 
         protected override String GetIdentifier()
@@ -181,21 +182,17 @@ namespace Doctran.Fbase.Comments
             else return this.identifier;
         }
 
-        protected XElement parse(String name, String basic)
+        protected XElement parse(String name, String text)
         {
             try
             {
-                return XElement.Parse("<" + name + ">" + basic + "</" + name + ">", LoadOptions.PreserveWhitespace);
+                return XElement.Parse("<" + name + ">" + text + "</" + name + ">", LoadOptions.PreserveWhitespace);
             }
             catch
             {
                 var file = this.GoUpTillType<Files.File>();
-                Console.WriteLine();
-                Console.WriteLine("----------------------Warning----------------------");
-                Console.WriteLine("Error from line '" + this.lines.First().Number 
-                                  + "' to '" + this.lines.Last().Number 
-                                  + "' of file '" + file.Name + file.Info.Extension + "'.");
-                Console.WriteLine(name + " description could not be parsed and was ignored.");
+
+                UserInformer.GiveWarning(file.Name + file.Info.Extension, this.lines.First().Number, this.lines.Last().Number, name + " description could not be parsed and was ignored.");
                 return new XElement(name);
             }
         }
@@ -203,8 +200,17 @@ namespace Doctran.Fbase.Comments
         public override XElement XEle()
         {
             XElement xele = new XElement(this.XElement_Name);
+
             xele.Add(this.parse("Basic", this.Basic));
-            if (this.Detailed != null) xele.Add(this.parse("Detailed", this.Detailed));
+
+            var project = this.GoUpTillType<Projects.Project>();
+
+            XElement detailed;
+            if (project.UseText) detailed = new XElement("Detailed", this.parse("Text", "<![CDATA[" + this.Detailed + "]]>"));
+            else if (project.UseHtml) detailed = this.parse("Detailed", "<Html>" + this.Detailed + @"</Html>");
+            else detailed = this.parse("Detailed", "<Html>" + Helper.markdown.Transform(this.Detailed) + @"</Html>");
+
+            if (this.Detailed != null) xele.Add(detailed);
             return xele;
         }
     }

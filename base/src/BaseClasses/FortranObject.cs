@@ -35,6 +35,8 @@ namespace Doctran.BaseClasses
 
         protected FortranObject(FortranObject parent, String name,List<FileLine> lines, bool ContainsBlocks)
         {
+            if (Settings.verbose >= 3) Console.WriteLine("Analysing: " + name);
+
             this.parent = parent;
             this.Name = name;
             this.lines = lines;
@@ -46,7 +48,7 @@ namespace Doctran.BaseClasses
                 }
                 catch (UnclosedBlockException e)
                 {
-                    Console.WriteLine("Error in '" + this.Name + "' - " + e.ToString());
+                    UserInformer.GiveError(this.Name, e.ToString());
                     Helper.Stop();
                 }
             }
@@ -87,7 +89,8 @@ namespace Doctran.BaseClasses
                         var removalBlocks = new List<FortranBlock>();
                         do
                         {
-                            if (lineIndex >= lines.Count) { throw new UnclosedBlockException(internalBlocks.First()); }
+                            if (lineIndex >= lines.Count)
+                                throw new UnclosedBlockException(Blocks[i]);
 
                             if (Blocks[i].CheckInternal)
                             {
@@ -99,16 +102,14 @@ namespace Doctran.BaseClasses
                                     }
 										
                                 removalBlocks.Clear();
+
                                 foreach (FortranBlock bk in Blocks)
                                     if (bk.BlockEnd(this.GetType(), lines, lineIndex))
-                                    {
                                         removalBlocks.Add(bk);
-                                    }
-										
+                                    
+
                                 foreach (FortranBlock bk in removalBlocks)
-                                {
-									internalBlocks.Remove(bk);
-                                }
+                                    internalBlocks.Remove(bk);
 							}
 
                             if (!internalBlocks.Any() && Blocks[i].BlockEnd(this.GetType(), current.lines, lineIndex)) break;
@@ -165,7 +166,7 @@ namespace Doctran.BaseClasses
 
         public override string ToString()
         {
-            return "A " + this.block.GetType().Name + " has not been closed.";
+            return "A " + this.block.GetType().Name + " has not been closed";
         }
     }
 }

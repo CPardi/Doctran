@@ -7,6 +7,8 @@ using System;
 using System.Linq;
 using System.IO;
 
+using Doctran.Fbase.Common;
+
 using dotless.Core;
 
 namespace Doctran.Fbase.Outputters
@@ -23,12 +25,13 @@ namespace Doctran.Fbase.Outputters
         public void Output(String themePath, String colorScheme, String outputDirectory)
         {
             String[] allFiles = Directory.GetFiles(themePath, "*", SearchOption.AllDirectories);
-
             var xsltFiles = Directory.GetFiles(themePath, "*.xslt", SearchOption.AllDirectories);
             var lessFiles = Directory.GetFiles(themePath, "*.less", SearchOption.AllDirectories);
 
             foreach (var lessPath in lessFiles)
             {
+                if (Settings.verbose >= 3) Console.WriteLine("Outputting: " + lessPath);
+
                 String relPath = outputDirectory + lessPath.Substring(themePath.Length);
                 String outputPath = relPath.Remove(relPath.Length - 5) + ".css";
                 Directory.CreateDirectory(Path.GetDirectoryName(outputPath));
@@ -49,11 +52,14 @@ namespace Doctran.Fbase.Outputters
                     UserInformer.GiveError("LESS stylesheet", e.FileName, e);
                 }
             }
-
+                
             String[] filesToCopy = allFiles.Except(xsltFiles).Except(lessFiles).ToArray();
 
             foreach (String filePath in filesToCopy)
             {
+                if (Settings.verbose >= 3)
+                    Console.WriteLine("Outputting: " + filePath);
+
                 String outputPath = outputDirectory + filePath.Substring(themePath.Length);
                 Directory.CreateDirectory(Path.GetDirectoryName(outputPath));
                 if (!File.Exists(outputPath) | overwriteTheme)

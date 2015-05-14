@@ -6,10 +6,11 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
  file, You can obtain one at http://mozilla.org/MPL/2.0/.
 -->
 
-<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                              xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
 	<xsl:template mode="Each" match="File">
-
+    
 			<xsl:call-template name="EachObject">
 				<xsl:with-param name="Object" select="."/>
 
@@ -24,8 +25,9 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
 					<xsl:apply-templates mode="AddSubObjectLists" select=".">
 						<xsl:with-param name="prefix" select="Prefix"/>
 					</xsl:apply-templates>
+          
 				</xsl:with-param>
-
+        
 			</xsl:call-template>
 		
 	</xsl:template>

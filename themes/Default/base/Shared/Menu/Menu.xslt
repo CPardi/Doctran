@@ -32,7 +32,7 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
     <div id="Menu">
       <div id="Heading">
         <h2>
-          <xsl:text> Menu</xsl:text>
+          <xsl:text>Menu</xsl:text>
         </h2>
       </div>
       <div id="Holder">

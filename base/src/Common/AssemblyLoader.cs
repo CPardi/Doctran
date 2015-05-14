@@ -63,10 +63,11 @@ namespace Doctran.Fbase.Common
 		private List<T> GetClassInstances<T>(Func<T, int> ordering, Func<String, bool> namespaceWhere)
 		{
 			List<T> instances = new List<T>();
-			var typesOfT = this.asssemblyTypes.Where(t => !t.IsAbstract && t.IsSubclassOf(typeof(T)));
+            var typesOfT = this.asssemblyTypes.Where(t => !t.IsAbstract && (t.IsSubclassOf(typeof(T)) | t.GetInterfaces().Contains(typeof(T)) ));
 			instances.AddRange(
 				from t in typesOfT
                 where namespaceWhere(t.Namespace)
+                where !t.IsInterface
 				let instOfT = (T)Activator.CreateInstance(t)
 				orderby ordering(instOfT)
 				select instOfT

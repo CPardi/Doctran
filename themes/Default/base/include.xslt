@@ -39,6 +39,7 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
 	<xsl:include href="Shared/Header/Header.xslt" />
 	
 	<xsl:include href="Shared/Browse/Browse.xslt" />
+  <xsl:include href="Shared/Search/Search.xslt" />
 	<xsl:include href="Shared/Menu/Menu.xslt" />
 	
 	<xsl:include href="Shared/Breadcrumbs/Breadcrumbs.xslt" />	

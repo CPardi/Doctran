@@ -1,4 +1,9 @@
-#Short-Description {
+#Short-Description 
+{
+    margin-bottom: 2em;
+}
+
+#Short-Description > span {
 	margin-left:1em;
 	font-size:0.9em;
 	width:65%;

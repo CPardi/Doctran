@@ -57,10 +57,6 @@
 }
 
 #Menu #Heading  {
-	padding-bottom:1em;
-	padding-left:0.5em;
-	padding-right:1em;
-	padding-top:1em;
 	margin-bottom:0.2em;
 	border-bottom: 1px solid @border;
 	.block
@@ -68,9 +64,8 @@
 
 #Menu #Heading h2{
 	margin:0;
-	font-size:1.5em;
 	border:0;
-	padding:0;
+	padding:0.75em 0.3em;
 }
 
 #Menu a, #Contents-Menu a:visited, #Contents-Menu a:hover{
@@ -124,4 +119,49 @@
 .jsEnabled #Menu #Holder a::before
 {
     content:"";
+}
+
+#HiddenMenu {
+    padding: 0.75em 0.15em;
+    float: left;
+    border: 1px solid @border;
+    border-left: none;
+	font-size: 1.5em;
+    cursor: hand;
+    cursor: pointer;
+    color: black;
+    .block
+}
+
+#HiddenMenu span {
+	font-size : 0.5em;
+	padding-bottom: 0.4em;
+	vertical-align: middle;
+}
+
+#HiddenMenu:hover {
+	.highlight;
+}
+
+#Menu #HideSwitch {
+    padding: 0.75em 0.15em;
+	font-size: 1.5em;
+    border-left: 1px solid gray;
+    color: black;
+    float:right;
+    margin-left: 0.5em;
+    cursor: hand;
+    cursor: pointer;
+	.block;
+}
+
+#Menu #HideSwitch span {
+	font-size : 0.5em;
+	padding-bottom: 0.4em;
+	vertical-align: middle;
+}
+
+#Menu #HideSwitch:hover {
+	font-weight : normal;
+	.highlight;
 }

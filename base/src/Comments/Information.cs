@@ -18,6 +18,7 @@ namespace Doctran.Fbase.Comments
 {
     public class InformationBlock : FortranBlock
     {
+
         public InformationBlock() 
         {
             this.CheckInternal = false;
@@ -26,13 +27,19 @@ namespace Doctran.Fbase.Comments
 
         public override bool BlockStart(Type parentType, List<FileLine> lines, int lineIndex)
         {
-            return Regex.IsMatch(lines[lineIndex].Text.Trim(), @"^!>\s*\w+\s*:");
+            return
+                CommentDefinitions.InfoStart(lines[lineIndex].Text)
+                && !CommentDefinitions.NDescStart(lines[lineIndex].Text)
+                && !CommentDefinitions.DetailLine(lines[lineIndex].Text);
         }
 
         public override bool BlockEnd(Type parentType, List<FileLine> lines, int lineIndex)
         {
             if (lineIndex + 1 >= lines.Count) return true;
-            return !Regex.IsMatch(lines[lineIndex + 1].Text.Trim(), @"^!>>");
+
+            return
+                CommentDefinitions.InfoEnd(lines[lineIndex + 1].Text)
+                || CommentDefinitions.NDescStart(lines[lineIndex + 1].Text);
         }
 
         public override List<FortranObject> ReturnObject(FortranObject parent, List<FileLine> lines)
@@ -56,8 +63,26 @@ namespace Doctran.Fbase.Comments
 
     public class Information : XFortranObject
     {
+        private String _value;
+
         public Information(FortranObject parent, String typeName,List<FileLine> lines)
-            : base(parent, typeName, lines, true) { }
+            : base(parent, typeName, lines, true) 
+        { 
+            this.GetValue();
+        }
+
+        public Information(FortranObject parent, String typeName, String value)
+            :base(parent, typeName, new List<FileLine>(), true)
+        {
+            this._value = value;
+        }
+
+        public Information(FortranObject parent, String typeName, String value, List<SubInformation> subInformation)
+            : base(parent, typeName, new List<FileLine>(), true)
+        {
+            this._value = value;
+            this.SubObjects.AddRange(subInformation);
+        }
 
         public String Type
         {
@@ -71,11 +96,15 @@ namespace Doctran.Fbase.Comments
         {
             get
             {
-                Match aMatch = Regex.Match(lines[0].Text.Trim(), @".*:(.*)");
-                String Value = aMatch.Groups[1].Value.Trim();
-                if (Value != "") return Value;
-                else return null;
+                return _value;
             }
+        }
+
+        private void GetValue()
+        {
+            Match aMatch = Regex.Match(this.lines[0].Text.Trim(), @".*:(.*)");
+            String value = aMatch.Groups[1].Value.Trim();
+            if (value != "") this._value = value;
         }
 
         protected override String GetIdentifier()
@@ -139,8 +168,18 @@ namespace Doctran.Fbase.Comments
 
     public class SubInformation : XFortranObject
     {
+        private String _value;
+
         public SubInformation(FortranObject parent, String typeName, List<FileLine> lines)
-            : base(parent, typeName, lines, false) { }
+            : base(parent, typeName, lines, false) 
+        {
+            this.GetValue();
+        }
+
+        public SubInformation(FortranObject parent, String typeName, String value)
+            : base(parent, typeName, new List<FileLine>(), false) {
+                this._value = value;
+        }
 
         public String Type
         {
@@ -150,18 +189,22 @@ namespace Doctran.Fbase.Comments
             }
         }
 
+        private void GetValue()
+        {
+            Match aMatch = Regex.Match(lines[0].Text.Trim(), @"^!>>\s*\w+\s*:(.*)");
+            String value = aMatch.Groups[1].Value.Trim();
+            var temp = (from line in this.lines.Skip(1)
+                        select line.Text.Substring(3).Trim()).ToArray();
+            value = value + String.Join(" ", temp);
+
+            if (value != "") this._value = value;
+        }
+
         public String Value
         {
             get
             {
-                Match aMatch = Regex.Match(lines[0].Text.Trim(), @"^!>>\s*\w+\s*:(.*)");
-                String Value = aMatch.Groups[1].Value.Trim();
-                var temp = (from line in this.lines.Skip(1)
-                            select line.Text.Substring(3).Trim()).ToArray();
-                Value = Value + String.Join(" ", temp);
-
-                if (Value != "") return Value;
-                else return null;
+                return _value;
             }
         }
 

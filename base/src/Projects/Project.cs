@@ -20,44 +20,147 @@ namespace Doctran.Fbase.Projects
 {
     public class Project : XFortranObject
     {
-        public string OutputDirectory;
-        DateTime CreationDate = DateTime.Now;
+        #region Private fields
 
-		public Project(Common.Settings settings)
+        private DateTime _creationDate = DateTime.Now;
+
+        #endregion
+
+        #region Constructor
+
+        public Project(Common.Settings settings)
         {
+            // Read the project file if there is one.
             if (settings.has_info)
             {
                 try
                 {
                     this.lines =
                         (from line in File.ReadFile(System.IO.Path.GetFullPath(settings.ProjectInfo))
+                         where line.Text != ""
                          select new FileLine(line.Number, "!>" + line.Text)
                         ).ToList();
-                    this.Search();
                 }
                 catch (System.IO.IOException e) { UserInformer.GiveError("project info", settings.ProjectInfo, e); }
+
+                this.Search();
             }
 
-            this.OutputDirectory = settings.OutputDirectory;
+            this.Name = this.GetName();
+            this.GetMarkupType();
+            this.AddDefaults();
 
             try
             {
                 this.SubObjects.AddRange(
                     from path in settings.SourceFiles.AsParallel()
                     where System.IO.File.Exists(path)
-                    select new File(this, System.IO.Path.GetFullPath(path))
+                    let fullpath = System.IO.Path.GetFullPath(path)
+                    select new File(this, fullpath, File.ReadFile(fullpath))
                 );
             }
             catch (System.IO.IOException e) { UserInformer.GiveError("source file", settings.ProjectInfo, e); }
         }
 
-        private static List<FileLine> Add(List<FileLine> lines)
+        #endregion
+
+        #region Public Properties
+
+        public bool UseText { get; private set; }
+        public bool UseHtml { get; private set; }
+        public bool UseMd { get; private set; }
+
+        #endregion
+
+        #region Private Methods
+
+        /// <summary>
+        /// Get the name of the project from project file.
+        /// </summary>
+        /// <returns></returns>
+        private String GetName()
         {
-            return
-                (from line in lines
-                select new FileLine(line.Number, "!>" + line.Text)
-                ).ToList();
+            var nameInfo = this.SubObjectsOfType<Information>().Where(info => info.Type == "Name");
+            switch (nameInfo.Count())
+            {
+                case 0:
+                    return "My Project";
+                case 1:
+                    this.SubObjects.RemoveAll(info => info == nameInfo);
+                    return nameInfo.Single().Value;
+                default:
+                    UserInformer.GiveWarning("project info", "Name specified more than once. Using first occurence");
+                    this.SubObjects.RemoveAll(info => info == nameInfo);
+                    return nameInfo.First().Value;
+            }
         }
+
+        /// <summary>
+        /// Get the markup type specified in the project file.
+        /// </summary>
+        private void GetMarkupType()
+        {
+            var markup = "markdown";
+            try
+            {
+                var markupInfo = this.SubObjectsOfType<Information>().Where(info => info.Type == "Markup").SingleOrDefault();
+                if (markupInfo != null) markup = markupInfo.Value;
+            }
+            catch (InvalidOperationException)
+            {
+                UserInformer.GiveWarning("project info", "Markup type specified multiple times, using Markdown");
+            }
+
+            switch (markup.ToLower())
+            {
+                case "text":
+                    this.UseText = true;
+                    break;
+                case "html":
+                    this.UseHtml = true;
+                    break;
+                case "markdown":
+                    this.UseMd = true;
+                    break;
+                default:
+                    UserInformer.GiveWarning("project info", "Specified markup type is invalid, using Markdown");
+                    break;
+            }
+        }
+
+        private void AddDefaults()
+        {
+            this.AddDefault(new Information(this, "ShowSource", "", new List<SubInformation>() { 
+                new SubInformation(this, "Type", "Function"),
+                new SubInformation(this, "Type", "Subroutine")
+            }));
+
+            this.AddDefault(new Information(this, "Searchable", "", new List<SubInformation>() { 
+                new SubInformation(this, "Type", "File"),
+                new SubInformation(this, "Type", "Module"),
+                new SubInformation(this, "Type", "Type"),
+                new SubInformation(this, "Type", "Assignment"),
+                new SubInformation(this, "Type", "Operator"),
+                new SubInformation(this, "Type", "Overload"),
+                new SubInformation(this, "Type", "Function"),
+                new SubInformation(this, "Type", "Subroutine")
+            }));
+        }
+
+        /// <summary>
+        /// Add a default in case required information is not specified in the project file.
+        /// </summary>
+        /// <param name="defaultInfo">The information that should be used if some is not already specified.</param>
+        private void AddDefault(Information defaultInfo)
+        {
+            var temp = this.SubObjectsOfType<Information>().Where(info => info.Type == defaultInfo.Type);
+            if (!temp.Any())
+                this.SubObjects.Add(defaultInfo);
+        }
+
+        #endregion
+
+        #region Overrides
 
         protected override String GetIdentifier()
         {
@@ -67,17 +170,25 @@ namespace Doctran.Fbase.Projects
         public override XElement XEle()
         {
             XElement xele = new XElement("Project");
-            if (this.SubObjectsOfType<Information>().All(info => info.Type != "Name")) { xele.Add(new XElement("Name","My Project")); }
-            xele.Add(new XElement("DocCreated", this.CreationDate.XEle()));
+
+            xele.Add(new XElement("Name", this.Name));
+            xele.Add(new XElement("DocCreated", this._creationDate.XEle()));
             xele.Add(
+                new InformationGroup().XEle(
                 from info in this.SubObjectsOfType<Information>()
+                select info.XEle()
+                    ));
+            xele.Add(
+                from info in this.SubObjectsOfType<Description>()
                 select info.XEle()
                     );
             xele.Add(new XElement("Files",
-				from file in this.SubObjectsOfType<File>().AsParallel()
-				select file.XEle())
+                from file in this.SubObjectsOfType<File>()
+                select file.XEle())
                     );
             return xele;
         }
+
+        #endregion
     }
 }

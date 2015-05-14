@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 
 using Doctran.BaseClasses;
+using Doctran.Fbase.Common;
 
 using Doctran.Fbase.Projects;
 using Doctran.Fbase.Files;
@@ -37,6 +38,7 @@ namespace Doctran.BaseClasses
         {
             foreach (File file in project.SubObjectsOfType<File>())
             {
+                if (Settings.verbose >= 3) Console.WriteLine("Post processing: " + file.Name + file.Info.Extension);
                 Navigate(file);
             }
         }

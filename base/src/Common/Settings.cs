@@ -56,8 +56,8 @@ namespace Doctran.Fbase.Common
 		// XML IO settings.
 		public bool save_xml = false;
 		public String save_xml_name = "";
-		public bool use_existing_xml = false;
-		public String existing_xml_name = "";
+
+        public static int verbose = 2;
 
 		// Theme settings.
 		public String xsltName = @"main.xslt";

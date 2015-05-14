@@ -50,8 +50,6 @@ namespace Doctran.BaseClasses
             List<XElement> xeles = new List<XElement>();
             foreach (var grp in PluginManager.ObjectGroups)
             {
-
-
                 List<XElement> xele =
                     (from sObj in obj.SubObjectsOfType<XFortranObject>()
                      where grp.Is(sObj)
@@ -59,8 +57,15 @@ namespace Doctran.BaseClasses
 					 where grp_xele != null
 					 select grp_xele).ToList();
 
-				if (xele.Any())
-                    xeles.Add(grp.XEle(xele));
+                if (xele.Any())
+                {
+                    try { xeles.Add(grp.XEle(xele)); }
+                    catch (InvalidOperationException e)
+                    {
+                        xeles.Add(grp.XEle(xele.First()));
+                        UserInformer.GiveWarning(obj.GetType().Name + " " + obj.Name + " within " + this.GoUpTillType<Doctran.Fbase.Files.File>().Name, e);
+                    }
+                }
             }
             return xeles;
         }
@@ -70,6 +75,12 @@ namespace Doctran.BaseClasses
             XElement xele = new XElement(this.XElement_Name);
             xele.Add(new XElement("Name", this.Name));
             xele.Add(new XElement("Identifier", this.Identifier));
+
+            if (this.lines.Count != 0)
+                xele.Add(new XElement("Lines",
+                            new XElement("First", Math.Max(1, this.lines.First().Number)),
+                            new XElement("Last", this.lines.Last().Number)
+                            ));
 
             xele.Add(GroupXEle(this));
             var subXEles = this.SubObjectsNotOfType<XFortranObject>().SelectMany

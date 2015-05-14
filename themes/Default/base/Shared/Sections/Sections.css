@@ -11,6 +11,16 @@
 	padding-left:1em;
 }
 
+.section .folded 
+{
+    display: none;
+}
+
+.section .unfolded 
+{
+    display: block;
+}
+
 .subsection > h4
 {
 	margin-top: 1.75em;

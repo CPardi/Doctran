@@ -9,7 +9,9 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
 <xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
 	<xsl:template mode="RunAll" match="Project">
-		
+
+    <xsl:call-template name="Search-page" />
+   
 		<xsl:call-template name="OutputProject"/>
 		<xsl:call-template name="OutputFiles"/>
 

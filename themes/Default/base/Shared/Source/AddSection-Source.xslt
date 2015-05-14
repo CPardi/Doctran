@@ -6,46 +6,30 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
  file, You can obtain one at http://mozilla.org/MPL/2.0/.
 -->
 
-<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                              xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  
+  <xsl:template mode="AddSection" match="Source">
+    <xsl:param name="prefix"/>
+    <xsl:param name="file" as="element()"/>
+    <xsl:param name="firstLine" as="xs:integer">0</xsl:param>
+    <xsl:param name="lastLine" as="xs:integer">0</xsl:param>
 
-	<xsl:template mode="AddSection" match="Source">
-
-		<xsl:call-template name="Section">
+    <xsl:call-template name="Section">
 			<xsl:with-param name="name" select="'Source'"/>
 			<xsl:with-param name="id" select="'Source'"/>
 			<xsl:with-param name="content">
-				<p>The program source shown below is taken from '<xsl:value-of select="ancestor::File/Name"/><xsl:value-of select="ancestor::File/Extension"/>'.
+				<p>The program source shown below is taken from '<a href="{concat($prefix, $file/Path)}"><xsl:value-of select="$file/Name"/><xsl:value-of select="$file/Extension"/></a>'.
 				</p>
-				<div class="code">
-					<pre class="code-content">
-						<code>
-							<ul>
-								<xsl:apply-templates mode="WriteLine" select="."/>
-							</ul>
-						</code>
-					</pre>
+				<div class="fortran code">
+          <code>
+					<ul>
+						<xsl:copy-of select="File[Name = $file/Name]/Lines/div/ul/li[span[@class = 'line-number-span']/text() &gt;= $firstLine][span[@class='line-number-span']/text() &lt;= $lastLine]"/>
+					</ul>
+          </code>
 				</div>
 			</xsl:with-param>
 		</xsl:call-template>
-
-	</xsl:template>
-
-	<xsl:template mode="WriteLine" match="Line[Number mod 2 = 0]">
-		<li class="even">
-			<xsl:value-of select="Number"/>
-			<span class="line">
-				<xsl:value-of select="Text"/>
-			</span>
-		</li>
-	</xsl:template>
-
-	<xsl:template mode="WriteLine" match="Line[Number mod 2 != 0]">
-		<li class="odd">
-			<xsl:value-of select="Number"/>
-			<span class="line">
-				<xsl:value-of select="Text"/>
-			</span>
-		</li>
-	</xsl:template>
+  </xsl:template>
 
 </xsl:stylesheet>

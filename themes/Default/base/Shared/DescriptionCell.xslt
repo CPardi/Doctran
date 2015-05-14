@@ -16,9 +16,11 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
 				<Text>
           <xsl:apply-templates mode="RemoveRoot" select="Description/Basic"/>
 				</Text>
-				<href>
-					<xsl:value-of select="$href"/>
-				</href>	
+        <xsl:if test="$href">
+          <href>
+            <xsl:value-of select="$href"/>
+          </href>
+        </xsl:if>
 			</Cell>
 		</xsl:if>
 
