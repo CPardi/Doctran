@@ -18,76 +18,76 @@ using Doctran.Fbase.Projects;
 namespace Doctran.BaseClasses
 { 
 	public abstract class XFortranObject : FortranObject
-    {
-        public String XElement_Name;
+	{
+		public String XElement_Name;
 
-        protected XFortranObject() { }
-        
-        protected XFortranObject(FortranObject parent, String XElement_Name, List<FileLine> lines, bool ContainsBlocks)
-            : base(parent, lines, ContainsBlocks)
-        {
-            this.XElement_Name = XElement_Name;
-        }
+		protected XFortranObject() { }
+		
+		protected XFortranObject(FortranObject parent, String XElement_Name, List<FileLine> lines, bool ContainsBlocks)
+			: base(parent, lines, ContainsBlocks)
+		{
+			this.XElement_Name = XElement_Name;
+		}
 
-        protected XFortranObject(FortranObject parent, String name, String XElement_Name, List<FileLine> lines, bool ContainsBlocks)
-            : base(parent, name, lines, ContainsBlocks)
-        {
-            this.XElement_Name = XElement_Name;
-        }
+		protected XFortranObject(FortranObject parent, String name, String XElement_Name, List<FileLine> lines, bool ContainsBlocks)
+			: base(parent, name, lines, ContainsBlocks)
+		{
+			this.XElement_Name = XElement_Name;
+		}
 
-        private List<XElement> NonFortranObject(FortranObject obj)
-        {
-            List<XElement> xeles = new List<XElement>();
-            xeles.AddRange(GroupXEle(obj));
-            xeles.AddRange(
-                obj.SubObjectsNotOfType<XFortranObject>().SelectMany(sObj => NonFortranObject(sObj))
-                );
-            return xeles;
-        }
+		private List<XElement> NonFortranObject(FortranObject obj)
+		{
+			List<XElement> xeles = new List<XElement>();
+			xeles.AddRange(GroupXEle(obj));
+			xeles.AddRange(
+				obj.SubObjectsNotOfType<XFortranObject>().SelectMany(sObj => NonFortranObject(sObj))
+				);
+			return xeles;
+		}
 
-        private List<XElement> GroupXEle(FortranObject obj)
-        {
-            List<XElement> xeles = new List<XElement>();
-            foreach (var grp in PluginManager.ObjectGroups)
-            {
-                List<XElement> xele =
-                    (from sObj in obj.SubObjectsOfType<XFortranObject>()
-                     where grp.Is(sObj)
+		private List<XElement> GroupXEle(FortranObject obj)
+		{
+			List<XElement> xeles = new List<XElement>();
+			foreach (var grp in PluginManager.ObjectGroups)
+			{
+				List<XElement> xele =
+					(from sObj in obj.SubObjectsOfType<XFortranObject>()
+					 where grp.Is(sObj)
 					 let grp_xele = sObj.XEle()
 					 where grp_xele != null
 					 select grp_xele).ToList();
 
-                if (xele.Any())
-                {
-                    try { xeles.Add(grp.XEle(xele)); }
-                    catch (InvalidOperationException e)
-                    {
-                        xeles.Add(grp.XEle(xele.First()));
-                        UserInformer.GiveWarning(obj.GetType().Name + " " + obj.Name + " within " + this.GoUpTillType<Doctran.Fbase.Files.File>().Name, e);
-                    }
-                }
-            }
-            return xeles;
-        }
+				if (xele.Any())
+				{
+					try { xeles.Add(grp.XEle(xele)); }
+					catch (InvalidOperationException e)
+					{
+						xeles.Add(grp.XEle(xele.First()));
+						UserInformer.GiveWarning(obj.GetType().Name + " " + obj.Name + " within " + this.GoUpTillType<Doctran.Fbase.Files.File>().Name, e);
+					}
+				}
+			}
+			return xeles;
+		}
 
-        public virtual XElement XEle()
-        {
-            XElement xele = new XElement(this.XElement_Name);
-            xele.Add(new XElement("Name", this.Name));
-            xele.Add(new XElement("Identifier", this.Identifier));
+		public virtual XElement XEle()
+		{
+			XElement xele = new XElement(this.XElement_Name);
+			xele.Add(new XElement("Name", this.Name));
+			xele.Add(new XElement("Identifier", this.Identifier));
 
-            if (this.lines.Count != 0)
-                xele.Add(new XElement("Lines",
-                            new XElement("First", Math.Max(1, this.lines.First().Number)),
-                            new XElement("Last", this.lines.Last().Number)
-                            ));
+			if (this.lines.Count != 0)
+				xele.Add(new XElement("Lines",
+							new XElement("First", Math.Max(1, this.lines.First().Number)),
+							new XElement("Last", this.lines.Last().Number)
+							));
 
-            xele.Add(GroupXEle(this));
-            var subXEles = this.SubObjectsNotOfType<XFortranObject>().SelectMany
-                (sObj => NonFortranObject(sObj));
-            if (subXEles.Any())
-                xele.Add(subXEles);
-            return xele;
-        }
-    }
+			xele.Add(GroupXEle(this));
+			var subXEles = this.SubObjectsNotOfType<XFortranObject>().SelectMany
+				(sObj => NonFortranObject(sObj));
+			if (subXEles.Any())
+				xele.Add(subXEles);
+			return xele;
+		}
+	}
 }

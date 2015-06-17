@@ -8,21 +8,38 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
 
 <xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
-	<xsl:template mode="AddStatisticsSection" match="Project">
+    <xsl:template mode="AddStatisticsSection" match="Project">
 
-		<xsl:variable name="Statistics" as="element()">
-			<xsl:apply-templates mode="StatisticsList" select="."/>
-		</xsl:variable>
+        <xsl:variable name="stats" as="element()">
+            <xsl:call-template name="StatisticsRows"/>
+        </xsl:variable>
 
-		<xsl:call-template name="Section">
-			<xsl:with-param name="name" select="'Statistics'"/>
-			<xsl:with-param name="content">
-				<table class="List">			
-					<xsl:apply-templates mode="List-AddRows" select="$Statistics/Statistic"/>
-				</table>
-			</xsl:with-param>
-		</xsl:call-template>
+        <xsl:call-template name="Section">
+            <xsl:with-param name="name" select="'Statistics'"/>
+            <xsl:with-param name="content">
+                <p>The table below shows some basic statistics of the project.</p>
+                <xsl:call-template name="Table">
+                    <xsl:with-param name="rows" select="$stats/*"/>
+                    <xsl:with-param name="columns" as="element()">
+                        <Columns>
+                            <Column>
+                                <Title>Statistic</Title>
+                                <Name>Name</Name>
+                            </Column>
+                            <Column>
+                                <Title>Value</Title>
+                                <Name>Value</Name>
+                            </Column>
+                        </Columns>
+                    </xsl:with-param>
+                </xsl:call-template>
+            </xsl:with-param>
+        </xsl:call-template>
 
-	</xsl:template>	
+    </xsl:template>
+
+    <xsl:template mode="TableCell" match="Name[parent::Stat]">
+        <xsl:value-of select="."/>
+    </xsl:template>
 
 </xsl:stylesheet>

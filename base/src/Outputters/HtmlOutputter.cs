@@ -11,6 +11,7 @@ using System.Xml;
 using System.Xml.Linq;
 using System.IO;
 using Saxon.Api;
+using System.Threading;
 
 namespace Doctran.Fbase.Outputters
 {
@@ -40,12 +41,17 @@ namespace Doctran.Fbase.Outputters
             transformer.SetParameter(new Saxon.Api.QName(name), new XdmAtomicValue(iNum));
         }
 
+        public void SetParameter(String name, String str)
+        {
+            transformer.SetParameter(new Saxon.Api.QName(name), new XdmAtomicValue(str));
+        }
+
         public void SetParameter(String name, XmlReader reader)
         {
             transformer.SetParameter(new Saxon.Api.QName(name), builder.Build(reader));
         }
 
-		public void SaveToDisk(XDocument xDocument, String outputDirectory)
+        public void SaveToDisk(XDocument xDocument, String outputDirectory)
         {
             // The transformation destination variable.
             DomDestination destination = new DomDestination();
@@ -59,8 +65,13 @@ namespace Doctran.Fbase.Outputters
             // BaseOutputUri is only necessary for xsl:result-document.
             transformer.BaseOutputUri = new Uri(Path.GetFullPath(outputDirectory));
 
+            // Pass the output directory to the stylesheet.
+            this.SetParameter("workingDirectory", transformer.BaseOutputUri.AbsolutePath);
+
             //Output the transform to the above variable.
             transformer.Run(destination);
         }
+
+
     }
 }

@@ -33,7 +33,7 @@ function subtitle_onclick() {
 $(document).ready(function () {
 
     var $Menu = $("#Menu");
-    var $Menu_Heading = $Menu.children("#Heading");
+    var $Menu_Heading = $Menu.children(".heading");
 
     $Menu_Heading.find("h2").css("display", "inline-block");
 
@@ -44,7 +44,7 @@ $(document).ready(function () {
         .click(function () {
             $Menu.show();
             $HiddenMenu.hide();
-            $("#ObjectContent").css("margin-left", "18em");
+            $("#Article").css("margin-left", "18em");
         });
 
     $HiddenMenu.insertAfter($Menu);
@@ -54,20 +54,24 @@ $(document).ready(function () {
         .click(function () {
             $Menu.hide();
             $HiddenMenu.show();
-            $("#ObjectContent").css("margin-left", "3.0em");
+            $("#Article").css("margin-left", "3.0em");
         });
 
     $Menu_Heading.append($hideSwitch);
 
     $("#Menu #Holder ul > .objectEntry")
-        .prepend(function () {
+        .each(function () {
             if ($(this).find("ul").text() !== "") {
-                return $("<span class='objectExpand arrow'>▼</span>")
+                $(this).prepend($("<span class='objectExpand arrow'>▼</span>")
                     .css("cursor", "pointer").css("cursor", "hand")
                     .click(objectEntry_onclick)
                     .mousedown(function (e) {
                         e.preventDefault();
-                    });
+                    })
+					);
+            }
+            else {
+                $(this).addClass("leaf");
             }
         });
 
@@ -95,5 +99,5 @@ $(document).ready(function () {
         open($subtitle, "▼");
     });
 
-    $("#Menu #Holder").scrollTop($(".active").offset().top - $("#Holder").offset().top);
+    if($(".active").length) $("#Menu #Holder").scrollTop($(".active").offset().top - $("#Holder").offset().top);
 })

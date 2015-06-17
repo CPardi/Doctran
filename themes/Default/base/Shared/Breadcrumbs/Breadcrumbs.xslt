@@ -18,7 +18,7 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
 			<h2>Breadcrumbs</h2>
 			<ul>
 				<li>
-					<a href="{concat(Prefix,'index.html')}">					
+					<a href="{concat(Prefix,'index.html')}">
 						<xsl:value-of select="/Project/Name"/>
 					</a>
 				</li>
@@ -46,8 +46,11 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
 				<xsl:if test="$active">
 					<xsl:attribute name="class" select="'active'"/>
 				</xsl:if>
+                <xsl:if test="Access='Private'">
+                    <xsl:attribute name="class" select="'noaccess'"/>
+                </xsl:if>
 				<a>
-					<xsl:if test="not($active)">
+					<xsl:if test="not($active) and (Access!='Private' or not(Access))">
 						<xsl:attribute name="href" select="concat($prefix,href)"/>
 					</xsl:if>
 					<xsl:apply-templates mode="Name" select="."/>

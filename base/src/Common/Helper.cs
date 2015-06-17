@@ -9,7 +9,6 @@ using System.Linq;
 using System.Text;
 using System.Xml.Linq;
 using System.Text.RegularExpressions;
-using System.Reflection;
 using System.IO;
 using MarkdownSharp;
 
@@ -94,11 +93,45 @@ namespace Doctran.Fbase.Common
             return DelimiteredText;
         }
 
+        public static List<String> DelimiterExceptQuotes(String text, char delimiter)
+        {
+            List<String> DelimiteredText = new List<string>();
+            bool s_quotes = false;
+            bool d_quotes = false;
+            int PrevIndex = 0, CurrentIndex = 0;
+            foreach (char aChar in text)
+            {
+                if (!(s_quotes | d_quotes))
+                {
+                    s_quotes = aChar == '\'';
+                    d_quotes = aChar == '"';
+                }
+                else
+                {
+                    if (s_quotes) s_quotes = !(aChar == '\'');
+                    if (d_quotes) d_quotes = !(aChar == '"');
+                }
+
+                if (!(s_quotes | d_quotes) && aChar == delimiter)
+                {
+                    DelimiteredText.Add(text.Substring(PrevIndex, CurrentIndex - PrevIndex).Trim());
+                    PrevIndex = CurrentIndex + 1;
+                }
+                if (CurrentIndex == text.Length - 1)
+                {
+                    DelimiteredText.Add(text.Substring(PrevIndex, CurrentIndex - PrevIndex + 1).Trim());
+                }
+                CurrentIndex++;
+            }
+            return DelimiteredText;
+        }
+
         public static String ValidName(String name)
         {
             return name.Replace('+', 'p')
                         .Replace('-', 'm')
                         .Replace('/', 'd')
+                        .Replace('\\', 'V')
                         .Replace('*', 't')
                         .Replace('=', 'e')
                         .Replace('.', 'o')

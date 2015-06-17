@@ -11,33 +11,43 @@
 	display:none;
 }
 
-#Breadcrumbs ul, li {
+#Breadcrumbs > ul, #Breadcrumbs > ul > li {
     margin: 0;
     padding: 0;
-    border: 0;
     font: inherit;
     vertical-align: baseline;
 }
 
-#Breadcrumbs ul {
+#Breadcrumbs > ul {
     list-style: none;
 }
 
-#Breadcrumbs li{
+#Breadcrumbs > ul > li{
 	border: 1px solid @border;
 	border-left:none;
 	border-top:none;
 	border-bottom:none;
 	float: left;
+    line-height: 1.5;
 }
 
-#Breadcrumbs li a:hover{
+#Breadcrumbs .noaccess > a {
+  background-color: #A7A7A7;
+  cursor: default;
+}
+
+#Breadcrumbs .noaccess > a:hover {
+  background-color: #A7A7A7;
+  cursor: default;
+}
+
+#Breadcrumbs > ul > li > a:hover{
 	.highlight;
 }	
 
 #Breadcrumbs a, #Breadcrumbs a:visited{
 	display:block;
-	color:black;
+	color:@text;
 	text-decoration: none; 
 	float: left;
 	padding: 5px 15px 5px 15px;

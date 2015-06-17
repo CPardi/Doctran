@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
+using System.Net;
 
 using Doctran.Fbase.Files;
 using Doctran.Fbase.Common;
@@ -67,6 +68,7 @@ namespace Doctran.Fbase.Comments
 
         public override bool BlockStart(Type parentType, List<FileLine> lines, int lineIndex)
         {
+            if (CommentDefinitions.DescStart(lines[lineIndex - 1].Text)) return false;
             return
                 CommentDefinitions.DescStart(lines[lineIndex].Text)
                 && !CommentDefinitions.DetailLine(lines[lineIndex].Text)
@@ -102,11 +104,13 @@ namespace Doctran.Fbase.Comments
                 && obj.parent.lines.Count > 1 && obj.parent.lines[1].Number == obj.lines[0].Number) return;
 
             String ident = obj.Identifier;
-            var temp = (from sObjs in obj.parent.SubObjects
+            var descriptions = (from sObjs in obj.parent.SubObjects
                         where sObjs.Identifier == ident
                         where sObjs.GetType() != typeof(Description)
                         select sObjs);
-            FortranObject parSubObj = temp.SingleOrDefault();
+
+            FortranObject parSubObj = descriptions.FirstOrDefault();
+            if (descriptions.Count() > 1) UserInformer.GiveWarning(parSubObj.Name, "Description specified multiple times. Using first occurence");
 
             if (parSubObj != null)
             {
@@ -138,13 +142,13 @@ namespace Doctran.Fbase.Comments
         public Description() { }
 
         public Description(FortranObject parent, String basicText)
-            : base(parent, "Description", new List<FileLine> { new FileLine(0, basicText) }, false)
+            : base(parent, "Description", new List<FileLine> { new FileLine(-1, basicText) }, false)
         {
             this.Basic = basicText;
         }
 
         public Description(FortranObject parent, String identifier, String basicText)
-            : base(parent, "Description", new List<FileLine> { new FileLine(0, basicText) }, false)
+            : base(parent, "Description", new List<FileLine> { new FileLine(-1, basicText) }, false)
         {
             this.identifier = identifier;
             this.Basic = basicText;
@@ -163,7 +167,7 @@ namespace Doctran.Fbase.Comments
         {
             this.Basic = String.Concat(
                 from line in lines
-                where Regex.IsMatch(line.Text, @"!>\s*\w")
+                where Regex.IsMatch(line.Text, @"^\s*!>") && !Regex.IsMatch(line.Text, @"^\s*!>>")
                 select (Regex.Match(line.Text, @"!>(.*)").Groups[1].Value.Trim()) + " ").TrimEnd();
             this.Detailed = MergeLines(lines);
         }
@@ -172,7 +176,7 @@ namespace Doctran.Fbase.Comments
         {
             return String.Concat(
                 from line in lines
-                where Regex.IsMatch(line.Text, @"!>>(.*)")
+                where Regex.IsMatch(line.Text, @"^\s*!>>(.*)")
                 select (Regex.Match(line.Text, @"!>>(.*)").Groups[1].Value) + "\n");
         }
 
@@ -201,16 +205,17 @@ namespace Doctran.Fbase.Comments
         {
             XElement xele = new XElement(this.XElement_Name);
 
-            xele.Add(this.parse("Basic", this.Basic));
+            xele.Add(this.parse("Basic", WebUtility.HtmlEncode(this.Basic)));
 
-            var project = this.GoUpTillType<Projects.Project>();
-
-            XElement detailed;
-            if (project.UseText) detailed = new XElement("Detailed", this.parse("Text", "<![CDATA[" + this.Detailed + "]]>"));
-            else if (project.UseHtml) detailed = this.parse("Detailed", "<Html>" + this.Detailed + @"</Html>");
-            else detailed = this.parse("Detailed", "<Html>" + Helper.markdown.Transform(this.Detailed) + @"</Html>");
-
-            if (this.Detailed != null) xele.Add(detailed);
+            if (this.Detailed != null && this.Detailed != "")
+            {
+                var project = this.GoUpTillType<Projects.Project>();
+                XElement detailed;
+                if (project.UseText) detailed = new XElement("Detailed", this.parse("Text", "<![CDATA[" + this.Detailed + "]]>"));
+                else if (project.UseHtml) detailed = this.parse("Detailed", "<Html>" + this.Detailed + @"</Html>");
+                else detailed = this.parse("Detailed", "<Html>" + Helper.markdown.Transform(this.Detailed) + @"</Html>");
+                xele.Add(detailed);
+            }
             return xele;
         }
     }

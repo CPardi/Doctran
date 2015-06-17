@@ -8,7 +8,7 @@
     <RootNamespace>base</RootNamespace>
     <AssemblyName>base</AssemblyName>
     <UseMSBuildEngine>False</UseMSBuildEngine>
-    <ReleaseVersion>1.1</ReleaseVersion>
+    <ReleaseVersion>1.2</ReleaseVersion>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
   </PropertyGroup>
@@ -37,38 +37,17 @@
     <Reference Include="System" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Xml" />
-    <Reference Include="saxon9he-api">
-      <HintPath>..\..\..\..\..\..\Program Files\Saxonica\SaxonHE9.6N\bin\saxon9he-api.dll</HintPath>
-    </Reference>
-    <Reference Include="saxon9he">
-      <HintPath>..\..\..\..\..\..\Program Files\Saxonica\SaxonHE9.6N\bin\saxon9he.dll</HintPath>
-    </Reference>
-    <Reference Include="IKVM.Runtime">
-      <HintPath>..\..\..\..\..\..\Program Files\Saxonica\SaxonHE9.6N\bin\IKVM.Runtime.dll</HintPath>
-    </Reference>
-    <Reference Include="IKVM.OpenJDK.Charsets">
-      <HintPath>..\..\..\..\..\..\Program Files\Saxonica\SaxonHE9.6N\bin\IKVM.OpenJDK.Charsets.dll</HintPath>
-    </Reference>
-    <Reference Include="IKVM.OpenJDK.Core">
-      <HintPath>..\..\..\..\..\..\Program Files\Saxonica\SaxonHE9.6N\bin\IKVM.OpenJDK.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="IKVM.OpenJDK.Text">
-      <HintPath>..\..\..\..\..\..\Program Files\Saxonica\SaxonHE9.6N\bin\IKVM.OpenJDK.Text.dll</HintPath>
-    </Reference>
-    <Reference Include="IKVM.OpenJDK.Util">
-      <HintPath>..\..\..\..\..\..\Program Files\Saxonica\SaxonHE9.6N\bin\IKVM.OpenJDK.Util.dll</HintPath>
-    </Reference>
-    <Reference Include="IKVM.OpenJDK.XML.API">
-      <HintPath>..\..\..\..\..\..\Program Files\Saxonica\SaxonHE9.6N\bin\IKVM.OpenJDK.XML.API.dll</HintPath>
-    </Reference>
-    <Reference Include="MarkdownSharp">
-      <HintPath>..\..\MarkdownSharp\MarkdownSharp\bin\Release\MarkdownSharp.dll</HintPath>
-    </Reference>
     <Reference Include="dotless.Core">
       <HintPath>..\..\dotless\dotless.Core.dll</HintPath>
     </Reference>
     <Reference Include="ColorCode">
       <HintPath>..\..\colorcodefortran\ColorCode-mono\bin\Release\ColorCode.dll</HintPath>
+    </Reference>
+    <Reference Include="MarkdownSharp">
+      <HintPath>..\..\MarkdownSharp\MarkdownSharp\bin\Release\MarkdownSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="saxon9he-api">
+      <HintPath>packages\Saxon-HE.9.6.0.6\lib\net40\saxon9he-api.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -76,4 +55,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
 </Project>

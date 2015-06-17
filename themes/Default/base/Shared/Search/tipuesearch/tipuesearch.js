@@ -1,4 +1,3 @@
-
 /*
  Tipue Search 5.0
  Copyright (c) 2015 Tipue
@@ -7,36 +6,36 @@
  */
 
 
-(function($) {
+(function ($) {
 
-    $.fn.tipuesearch = function(options) {
+    $.fn.tipuesearch = function (options) {
 
-        var set = $.extend( {
-
-            'autocomplete'           : {
-                'autofocus'     : false,
-                'categorized'   : false,
-                'delay'         : 0,
-                'position'      : { my: "left top", at: "left bottom", collision: "none" },
-                'minimumLength' : 1
+        var set = $.extend(true, {
+            'autocomplete': {
+                'autofocus': false,
+                'categorized': false,
+                'delay': 0,
+                'position': {my: "left top", at: "left bottom", collision: "none"},
+                'minimumLength': 1,
+                'show': 15
             },
-            'show'                   : 7,
-            'newWindow'              : false,
-            'showURL'                : true,
-            'showTitleCount'         : true,
-            'minimumLength'          : 3,
-            'descriptiveWords'       : 25,
-            'highlightTerms'         : true,
-            'highlightEveryTerm'     : false,
-            'mode'                   : 'static',
-            'liveDescription'        : '*',
-            'liveContent'            : '*',
-            'contentLocation'        : 'tipuesearch/tipuesearch_content.json',
-            'debug'                  : false
+            'show': 7,
+            'newWindow': false,
+            'showURL': true,
+            'showTitleCount': true,
+            'minimumLength': 3,
+            'descriptiveWords': 25,
+            'highlightTerms': true,
+            'highlightEveryTerm': false,
+            'mode': 'static',
+            'liveDescription': '*',
+            'liveContent': '*',
+            'contentLocation': 'tipuesearch/tipuesearch_content.json',
+            'debug': false
 
         }, options);
 
-        return this.each(function() {
+        return this.each(function () {
 
             var selectFromAuto = false;
             var tipuesearch_in = {
@@ -48,10 +47,10 @@
             var tipuesearch_t_c = 0;
 
             /* Add a uncategorized autocomplete, if needed. */
-            if(set.autocomplete !== false) {
+            if (set.autocomplete !== false) {
 
                 /* Convert the Tipue Json into a Jquery Json. */
-                var autoNames = toJqueryUiJson();
+                var autoNames = toJqueryUiJson(set.autocomplete.show);
 
                 var params = {
                     /* User specified parameters.*/
@@ -59,13 +58,16 @@
                     minLength: set.autocomplete.minimumLength,
                     position: set.autocomplete.position,
                     /*Source and item URL given from Json input.*/
-                    source: autoNames,
+                    source: function(request, response) {
+                        var results = $.ui.autocomplete.filter(autoNames, request.term);
+                        response(results.slice(0, set.autocomplete.show));
+                    },
                     select: function (event, ui) {
                         window.location.href = ui.item.url;
                     }
                 };
 
-                if(!set.autocomplete.categorized) {
+                if (!set.autocomplete.categorized) {
                     /* Add the auto-completion to the tipue_search_input. */
                     $("#tipue_search_input").autocomplete(params);
                 } else {
@@ -103,13 +105,10 @@
                 }
             }
 
-            if (set.mode == 'live')
-            {
-                for (var i = 0; i < tipuesearch_pages.length; i++)
-                {
+            if (set.mode == 'live') {
+                for (var i = 0; i < tipuesearch_pages.length; i++) {
                     $.get(tipuesearch_pages[i])
-                        .done(function(html)
-                        {
+                        .done(function (html) {
                             var cont = $(set.liveContent, html).text();
                             cont = cont.replace(/\s+/g, ' ');
                             var desc = $(set.liveDescription, html).text();
@@ -117,12 +116,10 @@
 
                             var t_1 = html.toLowerCase().indexOf('<title>');
                             var t_2 = html.toLowerCase().indexOf('</title>', t_1 + 7);
-                            if (t_1 != -1 && t_2 != -1)
-                            {
+                            if (t_1 != -1 && t_2 != -1) {
                                 var tit = html.slice(t_1 + 7, t_2);
                             }
-                            else
-                            {
+                            else {
                                 var tit = tipuesearch_string_1;
                             }
 
@@ -137,28 +134,24 @@
                 }
             }
 
-            if (set.mode == 'json')
-            {
+            if (set.mode == 'json') {
                 $.getJSON(set.contentLocation)
-                    .done(function(json)
-                    {
+                    .done(function (json) {
                         tipuesearch_in = $.extend({}, json);
                     });
             }
 
-            if (set.mode == 'static')
-            {
+            if (set.mode == 'static') {
                 tipuesearch_in = $.extend({}, tipuesearch);
             }
 
             var tipue_search_w = '';
-            if (set.newWindow)
-            {
+            if (set.newWindow) {
                 tipue_search_w = ' target="_blank"';
             }
 
             /* Converts the Json structure specified by Tipue Search to that required by teh Jquery Ui. */
-            function toJqueryUiJson(){
+            function toJqueryUiJson() {
                 return $(tipuesearch["pages"]).map(function () {
                     return {
                         label: this.title,
@@ -168,27 +161,23 @@
                 }).get();
             }
 
-            function getURLP(name)
-            {
-                return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search)||[,""])[1].replace(/\+/g, '%20')) || null;
+            function getURLP(name) {
+                return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [, ""])[1].replace(/\+/g, '%20')) || null;
             }
-            if (getURLP('q'))
-            {
+
+            if (getURLP('q')) {
                 $('#tipue_search_input').val(getURLP('q'));
                 getTipueSearch(0, true);
             }
 
-            $(this).keyup(function(event)
-            {
+            $(this).keyup(function (event) {
                 /* Only get search results if an auto completion has not been clicked. */
-                if( !this.selectFromAuto && event.keyCode == '13')
-                {
+                if (!this.selectFromAuto && event.keyCode == '13') {
                     getTipueSearch(0, true);
                 }
             });
 
-            function getTipueSearch(start, replace)
-            {
+            function getTipueSearch(start, replace) {
                 $('#tipue_search_content').hide();
                 $('#tipue_search_content').html('<div class="tipue_search_spinner"><div class="tipue_search_rect1"></div><div class="tipue_search_rect2"></div><div class="rect3"></div></div>');
                 $('#tipue_search_content').show();
@@ -204,52 +193,39 @@
                 var d = $('#tipue_search_input').val().toLowerCase();
                 d = $.trim(d);
 
-                if ((d.match("^\"") && d.match("\"$")) || (d.match("^'") && d.match("'$")))
-                {
+                if ((d.match("^\"") && d.match("\"$")) || (d.match("^'") && d.match("'$"))) {
                     standard = false;
                 }
 
-                if (standard)
-                {
+                if (standard) {
                     var d_w = d.split(' ');
                     d = '';
-                    for (var i = 0; i < d_w.length; i++)
-                    {
+                    for (var i = 0; i < d_w.length; i++) {
                         var a_w = true;
-                        for (var f = 0; f < tipuesearch_stop_words.length; f++)
-                        {
-                            if (d_w[i] == tipuesearch_stop_words[f])
-                            {
+                        for (var f = 0; f < tipuesearch_stop_words.length; f++) {
+                            if (d_w[i] == tipuesearch_stop_words[f]) {
                                 a_w = false;
                                 show_stop = true;
                             }
                         }
-                        if (a_w)
-                        {
+                        if (a_w) {
                             d = d + ' ' + d_w[i];
                         }
                     }
                     d = $.trim(d);
                     d_w = d.split(' ');
                 }
-                else
-                {
+                else {
                     d = d.substring(1, d.length - 1);
                 }
 
-                if (d.length >= set.minimumLength)
-                {
-                    if (standard)
-                    {
-                        if (replace)
-                        {
+                if (d.length >= set.minimumLength) {
+                    if (standard) {
+                        if (replace) {
                             var d_r = d;
-                            for (var i = 0; i < d_w.length; i++)
-                            {
-                                for (var f = 0; f < tipuesearch_replace.words.length; f++)
-                                {
-                                    if (d_w[i] == tipuesearch_replace.words[f].word)
-                                    {
+                            for (var i = 0; i < d_w.length; i++) {
+                                for (var f = 0; f < tipuesearch_replace.words.length; f++) {
+                                    if (d_w[i] == tipuesearch_replace.words[f].word) {
                                         d = d.replace(d_w[i], tipuesearch_replace.words[f].replace_with);
                                         show_replace = true;
                                     }
@@ -259,83 +235,65 @@
                         }
 
                         var d_t = d;
-                        for (var i = 0; i < d_w.length; i++)
-                        {
-                            for (var f = 0; f < tipuesearch_stem.words.length; f++)
-                            {
-                                if (d_w[i] == tipuesearch_stem.words[f].word)
-                                {
+                        for (var i = 0; i < d_w.length; i++) {
+                            for (var f = 0; f < tipuesearch_stem.words.length; f++) {
+                                if (d_w[i] == tipuesearch_stem.words[f].word) {
                                     d_t = d_t + ' ' + tipuesearch_stem.words[f].stem;
                                 }
                             }
                         }
                         d_w = d_t.split(' ');
 
-                        for (var i = 0; i < tipuesearch_in.pages.length; i++)
-                        {
+                        for (var i = 0; i < tipuesearch_in.pages.length; i++) {
                             var score = 0;
                             var s_t = tipuesearch_in.pages[i].text;
-                            for (var f = 0; f < d_w.length; f++)
-                            {
+                            for (var f = 0; f < d_w.length; f++) {
                                 var pat = new RegExp(d_w[f], 'gi');
-                                if (tipuesearch_in.pages[i].title.search(pat) != -1)
-                                {
+                                if (tipuesearch_in.pages[i].title.search(pat) != -1) {
                                     var m_c = tipuesearch_in.pages[i].title.match(pat).length;
                                     score += (20 * m_c);
                                 }
-                                if (tipuesearch_in.pages[i].text.search(pat) != -1)
-                                {
+                                if (tipuesearch_in.pages[i].text.search(pat) != -1) {
                                     var m_c = tipuesearch_in.pages[i].text.match(pat).length;
                                     score += (20 * m_c);
                                 }
 
-                                if (set.highlightTerms)
-                                {
-                                    if (set.highlightEveryTerm)
-                                    {
+                                if (set.highlightTerms) {
+                                    if (set.highlightEveryTerm) {
                                         var patr = new RegExp('(' + d_w[f] + ')', 'gi');
                                     }
-                                    else
-                                    {
+                                    else {
                                         var patr = new RegExp('(' + d_w[f] + ')', 'i');
                                     }
                                     s_t = s_t.replace(patr, "<span class=\"h01\">$1</span>");
                                 }
 
-                                if (tipuesearch_in.pages[i].tags.search(pat) != -1)
-                                {
+                                if (tipuesearch_in.pages[i].tags.search(pat) != -1) {
                                     var m_c = tipuesearch_in.pages[i].tags.match(pat).length;
                                     score += (10 * m_c);
                                 }
 
-                                if (tipuesearch_in.pages[i].url.search(pat) != -1)
-                                {
+                                if (tipuesearch_in.pages[i].url.search(pat) != -1) {
                                     score += 20;
                                 }
 
-                                if (score != 0)
-                                {
-                                    for (var e = 0; e < tipuesearch_weight.weight.length; e++)
-                                    {
-                                        if (tipuesearch_in.pages[i].url == tipuesearch_weight.weight[e].url)
-                                        {
+                                if (score != 0) {
+                                    for (var e = 0; e < tipuesearch_weight.weight.length; e++) {
+                                        if (tipuesearch_in.pages[i].url == tipuesearch_weight.weight[e].url) {
                                             score += tipuesearch_weight.weight[e].score;
                                         }
                                     }
                                 }
 
-                                if (d_w[f].match('^-'))
-                                {
+                                if (d_w[f].match('^-')) {
                                     pat = new RegExp(d_w[f].substring(1), 'i');
-                                    if (tipuesearch_in.pages[i].title.search(pat) != -1 || tipuesearch_in.pages[i].text.search(pat) != -1 || tipuesearch_in.pages[i].tags.search(pat) != -1)
-                                    {
+                                    if (tipuesearch_in.pages[i].title.search(pat) != -1 || tipuesearch_in.pages[i].text.search(pat) != -1 || tipuesearch_in.pages[i].tags.search(pat) != -1) {
                                         score = 0;
                                     }
                                 }
                             }
 
-                            if (score != 0)
-                            {
+                            if (score != 0) {
                                 found.push(
                                     {
                                         "score": score,
@@ -347,61 +305,48 @@
                             }
                         }
                     }
-                    else
-                    {
-                        for (var i = 0; i < tipuesearch_in.pages.length; i++)
-                        {
+                    else {
+                        for (var i = 0; i < tipuesearch_in.pages.length; i++) {
                             var score = 0;
                             var s_t = tipuesearch_in.pages[i].text;
                             var pat = new RegExp(d, 'gi');
-                            if (tipuesearch_in.pages[i].title.search(pat) != -1)
-                            {
+                            if (tipuesearch_in.pages[i].title.search(pat) != -1) {
                                 var m_c = tipuesearch_in.pages[i].title.match(pat).length;
                                 score += (20 * m_c);
                             }
-                            if (tipuesearch_in.pages[i].text.search(pat) != -1)
-                            {
+                            if (tipuesearch_in.pages[i].text.search(pat) != -1) {
                                 var m_c = tipuesearch_in.pages[i].text.match(pat).length;
                                 score += (20 * m_c);
                             }
 
-                            if (set.highlightTerms)
-                            {
-                                if (set.highlightEveryTerm)
-                                {
+                            if (set.highlightTerms) {
+                                if (set.highlightEveryTerm) {
                                     var patr = new RegExp('(' + d + ')', 'gi');
                                 }
-                                else
-                                {
+                                else {
                                     var patr = new RegExp('(' + d + ')', 'i');
                                 }
                                 s_t = s_t.replace(patr, "<span class=\"h01\">$1</span>");
                             }
 
-                            if (tipuesearch_in.pages[i].tags.search(pat) != -1)
-                            {
+                            if (tipuesearch_in.pages[i].tags.search(pat) != -1) {
                                 var m_c = tipuesearch_in.pages[i].tags.match(pat).length;
                                 score += (10 * m_c);
                             }
 
-                            if (tipuesearch_in.pages[i].url.search(pat) != -1)
-                            {
+                            if (tipuesearch_in.pages[i].url.search(pat) != -1) {
                                 score += 20;
                             }
 
-                            if (score != 0)
-                            {
-                                for (var e = 0; e < tipuesearch_weight.weight.length; e++)
-                                {
-                                    if (tipuesearch_in.pages[i].url == tipuesearch_weight.weight[e].url)
-                                    {
+                            if (score != 0) {
+                                for (var e = 0; e < tipuesearch_weight.weight.length; e++) {
+                                    if (tipuesearch_in.pages[i].url == tipuesearch_weight.weight[e].url) {
                                         score += tipuesearch_weight.weight[e].score;
                                     }
                                 }
                             }
 
-                            if (score != 0)
-                            {
+                            if (score != 0) {
                                 found.push(
                                     {
                                         "score": score,
@@ -414,72 +359,59 @@
                         }
                     }
 
-                    if (c != 0)
-                    {
-                        if (set.showTitleCount && tipuesearch_t_c == 0)
-                        {
+                    if (c != 0) {
+                        if (set.showTitleCount && tipuesearch_t_c == 0) {
                             var title = document.title;
                             document.title = '(' + c + ') ' + title;
                             tipuesearch_t_c++;
                         }
 
-                        if (show_replace == 1)
-                        {
+                        if (show_replace == 1) {
                             out += '<div id="tipue_search_warning">' + tipuesearch_string_2 + ' ' + d + '. ' + tipuesearch_string_3 + ' <a id="tipue_search_replaced">' + d_r + '</a></div>';
                         }
-                        if (c == 1)
-                        {
+                        if (c == 1) {
                             out += '<div id="tipue_search_results_count">' + tipuesearch_string_4 + '</div>';
                         }
-                        else
-                        {
+                        else {
                             c_c = c.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                             out += '<div id="tipue_search_results_count">' + c_c + ' ' + tipuesearch_string_5 + '</div>';
                         }
 
-                        found.sort(function(a, b) { return b.score - a.score } );
+                        found.sort(function (a, b) {
+                            return b.score - a.score
+                        });
 
                         var l_o = 0;
-                        for (var i = 0; i < found.length; i++)
-                        {
-                            if (l_o >= start && l_o < set.show + start)
-                            {
-                                out += '<div class="tipue_search_content_title"><a href="' + found[i].url + '"' + tipue_search_w + '>' +  found[i].title + '</a></div>';
+                        for (var i = 0; i < found.length; i++) {
+                            if (l_o >= start && l_o < set.show + start) {
+                                out += '<div class="tipue_search_content_title"><a href="' + found[i].url + '"' + tipue_search_w + '>' + found[i].title + '</a></div>';
 
-                                if (set.debug)
-                                {
+                                if (set.debug) {
                                     out += '<div class="tipue_search_content_debug">Score: ' + found[i].score + '</div>';
                                 }
 
-                                if (set.showURL)
-                                {
+                                if (set.showURL) {
                                     var s_u = found[i].url.toLowerCase();
-                                    if(s_u.indexOf('http://') == 0)
-                                    {
+                                    if (s_u.indexOf('http://') == 0) {
                                         s_u = s_u.slice(7);
                                     }
                                     out += '<div class="tipue_search_content_url"><a href="' + found[i].url + '"' + tipue_search_w + '>' + s_u + '</a></div>';
                                 }
 
-                                if (found[i].desc)
-                                {
+                                if (found[i].desc) {
                                     var t = found[i].desc;
                                     var t_d = '';
                                     var t_w = t.split(' ');
-                                    if (t_w.length < set.descriptiveWords)
-                                    {
+                                    if (t_w.length < set.descriptiveWords) {
                                         t_d = t;
                                     }
-                                    else
-                                    {
-                                        for (var f = 0; f < set.descriptiveWords; f++)
-                                        {
+                                    else {
+                                        for (var f = 0; f < set.descriptiveWords; f++) {
                                             t_d += t_w[f] + ' ';
                                         }
                                     }
                                     t_d = $.trim(t_d);
-                                    if (t_d.charAt(t_d.length - 1) != '.')
-                                    {
+                                    if (t_d.charAt(t_d.length - 1) != '.') {
                                         t_d += ' ...';
                                     }
                                     out += '<div class="tipue_search_content_text">' + t_d + '</div>';
@@ -488,84 +420,65 @@
                             l_o++;
                         }
 
-                        if (c > set.show)
-                        {
+                        if (c > set.show) {
                             var pages = Math.ceil(c / set.show);
                             var page = (start / set.show);
                             out += '<div id="tipue_search_foot"><ul id="tipue_search_foot_boxes">';
 
-                            if (start > 0)
-                            {
+                            if (start > 0) {
                                 out += '<li><a class="tipue_search_foot_box" id="' + (start - set.show) + '_' + replace + '">' + tipuesearch_string_6 + '</a></li>';
                             }
 
-                            if (page <= 2)
-                            {
+                            if (page <= 2) {
                                 var p_b = pages;
-                                if (pages > 3)
-                                {
+                                if (pages > 3) {
                                     p_b = 3;
                                 }
-                                for (var f = 0; f < p_b; f++)
-                                {
-                                    if (f == page)
-                                    {
+                                for (var f = 0; f < p_b; f++) {
+                                    if (f == page) {
                                         out += '<li class="current">' + (f + 1) + '</li>';
                                     }
-                                    else
-                                    {
+                                    else {
                                         out += '<li><a class="tipue_search_foot_box" id="' + (f * set.show) + '_' + replace + '">' + (f + 1) + '</a></li>';
                                     }
                                 }
                             }
-                            else
-                            {
+                            else {
                                 var p_b = page + 2;
-                                if (p_b > pages)
-                                {
+                                if (p_b > pages) {
                                     p_b = pages;
                                 }
-                                for (var f = page - 1; f < p_b; f++)
-                                {
-                                    if (f == page)
-                                    {
+                                for (var f = page - 1; f < p_b; f++) {
+                                    if (f == page) {
                                         out += '<li class="current">' + (f + 1) + '</li>';
                                     }
-                                    else
-                                    {
+                                    else {
                                         out += '<li><a class="tipue_search_foot_box" id="' + (f * set.show) + '_' + replace + '">' + (f + 1) + '</a></li>';
                                     }
                                 }
                             }
 
-                            if (page + 1 != pages)
-                            {
+                            if (page + 1 != pages) {
                                 out += '<li><a class="tipue_search_foot_box" id="' + (start + set.show) + '_' + replace + '">' + tipuesearch_string_7 + '</a></li>';
                             }
 
                             out += '</ul></div>';
                         }
                     }
-                    else
-                    {
+                    else {
                         out += '<div id="tipue_search_warning">' + tipuesearch_string_8 + '</div>';
                     }
                 }
-                else
-                {
-                    if (show_stop)
-                    {
+                else {
+                    if (show_stop) {
                         out += '<div id="tipue_search_warning">' + tipuesearch_string_8 + '. ' + tipuesearch_string_9 + '</div>';
                     }
-                    else
-                    {
+                    else {
                         out += '<div id="tipue_search_warning">' + tipuesearch_string_10 + '</div>';
-                        if (set.minimumLength == 1)
-                        {
+                        if (set.minimumLength == 1) {
                             out += '<div id="tipue_search_warning">' + tipuesearch_string_11 + '</div>';
                         }
-                        else
-                        {
+                        else {
                             out += '<div id="tipue_search_warning">' + tipuesearch_string_12 + ' ' + set.minimumLength + ' ' + tipuesearch_string_13 + '</div>';
                         }
                     }
@@ -575,13 +488,11 @@
                 $('#tipue_search_content').html(out);
                 $('#tipue_search_content').slideDown(200);
 
-                $('#tipue_search_replaced').click(function()
-                {
+                $('#tipue_search_replaced').click(function () {
                     getTipueSearch(0, false);
                 });
 
-                $('.tipue_search_foot_box').click(function()
-                {
+                $('.tipue_search_foot_box').click(function () {
                     var id_v = $(this).attr('id');
                     var id_a = id_v.split('_');
 

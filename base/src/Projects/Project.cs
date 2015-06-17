@@ -18,6 +18,49 @@ using Doctran.Fbase.Comments;
 
 namespace Doctran.Fbase.Projects
 {
+    public class ProjectPostAction : PostAction
+    {
+        private List<File> _files;
+
+        public ProjectPostAction() : base(typeof(Project)) { }
+
+        public override void PostObject(ref FortranObject obj)
+        {
+            LoadFiles(obj);
+            CheckFilenames(0);            
+        }
+
+        private void CheckFilenames(int depth)
+        {
+            List<String> sameNames = new List<String>();
+            sameNames.AddRange((from file in _files
+                                 where _files.Count(f => f.Name.ToLower() == file.Name.ToLower()) > 1
+                                 select file.Name.ToLower()).Distinct());
+            if (!sameNames.Any()) return;
+            
+            foreach (var name in sameNames)
+            {
+                var list = _files.Where(f => f.Name.ToLower() == name);
+                foreach (var file in list)
+                {
+                    System.IO.DirectoryInfo path = System.IO.Directory.GetParent(file.PathAndFilename);
+                    for (int d = 0; d < depth; d++) { path = path.Parent; }
+
+                    file.Name = path.Name.ToLower() + Settings.slash + file.Name;
+
+                    Console.WriteLine(file.Name);
+                }
+            }
+
+            CheckFilenames(depth + 1);
+        }
+
+        private void LoadFiles(FortranObject obj)
+        {
+            if (_files == null) _files = obj.SubObjectsOfType<File>();
+        }
+    }
+
     public class Project : XFortranObject
     {
         #region Private fields
@@ -42,6 +85,9 @@ namespace Doctran.Fbase.Projects
                         ).ToList();
                 }
                 catch (System.IO.IOException e) { UserInformer.GiveError("project info", settings.ProjectInfo, e); }
+
+                // Add a blank line to simplify the <FortranObject>.Seach method.
+                this.lines.Insert(0, new FileLine(0,""));
 
                 this.Search();
             }
@@ -131,6 +177,8 @@ namespace Doctran.Fbase.Projects
         private void AddDefaults()
         {
             this.AddDefault(new Information(this, "ShowSource", "", new List<SubInformation>() { 
+                new SubInformation(this, "Type", "File"),
+                new SubInformation(this, "Type", "Program"),
                 new SubInformation(this, "Type", "Function"),
                 new SubInformation(this, "Type", "Subroutine")
             }));
@@ -138,7 +186,7 @@ namespace Doctran.Fbase.Projects
             this.AddDefault(new Information(this, "Searchable", "", new List<SubInformation>() { 
                 new SubInformation(this, "Type", "File"),
                 new SubInformation(this, "Type", "Module"),
-                new SubInformation(this, "Type", "Type"),
+                new SubInformation(this, "Type", "DerivedType"),
                 new SubInformation(this, "Type", "Assignment"),
                 new SubInformation(this, "Type", "Operator"),
                 new SubInformation(this, "Type", "Overload"),

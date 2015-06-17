@@ -11,6 +11,7 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
 	<xsl:template name="BrowseItems">
 		<Items>
 			<Item>
+                <Title>Files</Title>
 				<Name>Files</Name>
 				<href>html/Navigation/FileList.html</href>
 			</Item>

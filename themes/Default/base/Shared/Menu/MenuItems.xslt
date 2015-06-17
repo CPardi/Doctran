@@ -24,11 +24,7 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
 				<xsl:value-of select="href"/>
 			</xsl:variable>
 
-			<xsl:variable name="blockName">
-				<xsl:apply-templates mode="BlockName" select="."/>
-			</xsl:variable>
-
-			<xsl:variable name="className" select="lower-case($blockName)"/>
+			<xsl:variable name="className" select="local-name()"/>
 
 			<xsl:choose>
 

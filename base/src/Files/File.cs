@@ -52,8 +52,7 @@ namespace Doctran.Fbase.Files
         {
             get
             {
-                // Get original source. Skip the first line added for convenience.
-                var str = String.Concat(this.OriginalLines.Skip(1).Select(line => line.Text + Environment.NewLine));
+                var str = String.Concat(this.OriginalLines.Select(line => line.Text + Environment.NewLine));
 
                 // Return a syntax highlighted source code.
                 CodeColorizer cc = new CodeColorizer();
@@ -69,10 +68,7 @@ namespace Doctran.Fbase.Files
         public static List<FileLine> ReadFile(String pathAndFilename)
         {
             List<FileLine> lines = new List<FileLine>();
-
-            // Add a blank line to make the index of the list equal the line number. This also simplifies the <FortranObject>.Seach method.
-            lines.Add(new FileLine(0, ""));
-
+            
             try
             {
                 // Open the file at the file path and load into a streamreader. Then, loop through each line and add it to a List.
@@ -80,7 +76,11 @@ namespace Doctran.Fbase.Files
                 {
                     String line;
                     int lineIndex = 1;
-                    while ((line = FileReader.ReadLine()) != null) { CheckForPreprocessing(Path.GetFileName(pathAndFilename), line); lines.Add(new FileLine(lineIndex, line)); lineIndex++; }
+                    while ((line = FileReader.ReadLine()) != null) 
+                    { 
+                        CheckForPreprocessing(Path.GetFileName(pathAndFilename), line); 
+                        lines.Add(new FileLine(lineIndex, line)); lineIndex++; 
+                    }
                 }
             }
             catch (IOException) { throw; }
@@ -99,6 +99,10 @@ namespace Doctran.Fbase.Files
 
             // Remove any line coninuations by joining onto a single line.
             RemoveContinuationLines(ref modLines);
+
+            // Add a blank line to simplify the <FortranObject>.Seach method.
+            modLines.Insert(0, new FileLine(0, ""));
+
             return modLines;
         }
 
@@ -138,7 +142,10 @@ namespace Doctran.Fbase.Files
             int lineIndex = 0;
             while (lineIndex < lines.Count)
             {
-                modifyingLines.Add(new FileLine(lines[lineIndex].Number, MergeContinuations(ref lineIndex, lines, false)));
+                int num = lines[lineIndex].Number;
+                modifyingLines.AddRange(
+                    from l in SplitEndings(MergeContinuations(ref lineIndex, lines, false))
+                    select new FileLine(num, l));
                 lineIndex++;
             }
             lines.Clear();
@@ -157,13 +164,28 @@ namespace Doctran.Fbase.Files
             }
         }
 
+        private static List<String> SplitEndings(String line)
+        {
+            string[] line_nocomm = line.Split('!');
+
+            List<String> lines = Helper.DelimiterExceptQuotes(line_nocomm[0].Trim(), ';');
+            if (lines.Count > 0)
+            {
+                lines[lines.Count - 1] += (line_nocomm.Length > 1 ? "!" + String.Concat(line_nocomm.Skip(1)) : "");
+                return lines;
+            }
+            else
+                return new List<String>() { line };
+        }
+
         private static String MergeContinuations(ref int lineIndex, List<FileLine> lines, bool removeComment)
         {
-            String lineText_noComment = lines[lineIndex].Text.Split('!')[0].Trim().TrimStart('&');
+            String lineText_noComment = Helper.RemoveInlineComment(lines[lineIndex].Text).TrimStart('&');
             if (lineText_noComment.EndsWith("&"))
             {
                 lineIndex++;
                 Helper.SkipComment(lines, ref lineIndex);
+                if (Helper.RemoveInlineComment(lines[lineIndex].Text) == "") lineIndex++;
                 return lineText_noComment.TrimEnd('&') + MergeContinuations(ref lineIndex, lines, true);
             }
             else if (removeComment)
@@ -196,6 +218,7 @@ namespace Doctran.Fbase.Files
             xele.AddFirst(new XElement("LineCount", this.NumLines),
                      new XElement("Created", this.Info.CreationTime.XEle()),
                      new XElement("LastModified", this.Info.LastWriteTime.XEle()),
+                     new XElement("ValidName", Helper.ValidName(this.Name)),
                      new XElement("Extension", this.Info.Extension)
                      );
 

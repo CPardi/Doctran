@@ -29,7 +29,7 @@ namespace Doctran.Fbase.Outputters
                   documentBody);
         }
 
-		public XDocument XDocument { get; set; }
+        public XDocument XDocument { get; set; }
 
         public void SaveToDisk(String relativePathAndName)
         {

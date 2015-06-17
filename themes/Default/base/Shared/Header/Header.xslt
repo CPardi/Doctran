@@ -8,29 +8,31 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
 
 <xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
-	<xsl:template name="Header-head">
-		<xsl:param name="prefix" select="Prefix"/>
+    <xsl:template name="Header-head">
+        <xsl:param name="prefix" select="Prefix"/>
 
-		<!-- Link to the Header's stylesheet. -->
-		<link rel="stylesheet" type="text/css" href="{concat($prefix,'base/Shared/Header/Header.css')}" />
+        <!-- Link to the Header's stylesheet. -->
+        <link rel="stylesheet" type="text/css" href="{concat($prefix,'base/Shared/Header/Header.css')}"/>
 
-	</xsl:template>
+    </xsl:template>
 
-	<xsl:template name="Header-body">
-		<xsl:param name="prefix" select="Prefix"/>
+    <xsl:template name="Header-body">
+        <xsl:param name="prefix" select="Prefix"/>
 
-		<div id="Header">
-			<h1>
-				<a href="{concat($prefix,'index.html')}">
-					<xsl:value-of select="/Project/Name"/>
-				</a>
-        <br/>
-        <span>
-            <xsl:value-of select="/Project/Description/Basic"/>
-        </span>
-			</h1>	
-		</div>
+        <div id="Header">
+            <h1>
+                <a href="{concat($prefix,'index.html')}">
+                    <xsl:value-of select="/Project/Name"/>
+                </a>
+                <br/>
+                <xsl:if test="/Project/Description/Basic">
+                    <span>
+                        <xsl:value-of select="/Project/Description/Basic/node()"/>
+                    </span>
+                </xsl:if>
+            </h1>
+        </div>
 
-	</xsl:template>
+    </xsl:template>
 
 </xsl:stylesheet>

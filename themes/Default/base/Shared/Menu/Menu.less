@@ -31,7 +31,7 @@
 }
 
 #Menu #Holder{
-	height:33.3em;
+	height:33em;
 	overflow: scroll;
 }
 
@@ -56,25 +56,16 @@
   padding-left:0;
 }
 
-#Menu #Heading  {
+#Menu .heading  {
 	margin-bottom:0.2em;
 	border-bottom: 1px solid @border;
 	.block
 }
 
-#Menu #Heading h2{
+#Menu .heading h2{
 	margin:0;
 	border:0;
 	padding:0.75em 0.3em;
-}
-
-#Menu a, #Contents-Menu a:visited, #Contents-Menu a:hover{
-	text-decoration:none;
-	.menulink;
-}
-
-#Menu a:hover{
-	font-weight: bold;
 }
 
 #Menu .active > a, #Menu .active > a:hover
@@ -85,6 +76,7 @@
 
 #Menu .subtitle > a, #Menu .subtitle > a:hover {
 	font-weight: inherit;
+	font-size:0.9em;
 	.menuheading;
 }
 
@@ -115,8 +107,10 @@
 	content:"";
 	margin:0;
 }
-
-.jsEnabled #Menu #Holder a::before
+#Menu #Holder .leaf {
+	margin-left: 0.8em;
+}
+body > .jsEnabled #Menu #Holder a::before
 {
     content:"";
 }
@@ -129,7 +123,7 @@
 	font-size: 1.5em;
     cursor: hand;
     cursor: pointer;
-    color: black;
+    color: @text;
     .block
 }
 
@@ -147,7 +141,7 @@
     padding: 0.75em 0.15em;
 	font-size: 1.5em;
     border-left: 1px solid gray;
-    color: black;
+    color: @text;
     float:right;
     margin-left: 0.5em;
     cursor: hand;

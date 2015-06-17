@@ -1,11 +1,7 @@
-.section > .content {
-	margin-left:2.0em;
-}
-
 .section > h3
 {
-	margin-top: 2em;
-	margin-bottom:1em;
+	margin-top: 2.5em;
+	margin-bottom:1.5em;
 	border-bottom:1px solid;
     font-size:1.3em;
 	padding-left:1em;

@@ -13,10 +13,10 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
 		<xsl:param name="AdditionalContent-head"/>
 		<xsl:param name="AdditionalContent-body"/>
 
-    <xsl:if test="$verbose >= 3">
-      <xsl:message select="concat('Outputting: ',local-name(),' - ',Name,Extension)" />
-    </xsl:if>
-    
+		<xsl:if test="$verbose >= 3">
+			<xsl:message select="concat('Outputting: ',ancestor::File/Name, ancestor::File/Extension, ' : ', local-name(),' - ',Name,Extension)" />
+		</xsl:if>
+
 		<xsl:apply-templates mode="EachObject" select="$Object">
 			<xsl:with-param name="AdditionalContent-head" select="$AdditionalContent-head"/>
 			<xsl:with-param name="AdditionalContent-body" select="$AdditionalContent-body"/>
@@ -28,7 +28,7 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
 		<xsl:param name="AdditionalContent-head"/>
 		<xsl:param name="AdditionalContent-body"/>
 
-		<xsl:result-document href="{Path}">
+		<xsl:result-document href="{href}">
 			<xsl:call-template name="Page">
 
 				<xsl:with-param name="title">
@@ -42,15 +42,15 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
 
 				<xsl:with-param name="Content-head">
 					<link rel="stylesheet" type="text/css" href="{concat(Prefix,'base/Shared/EachObject/EachObject.css')}" />
-          <link rel="stylesheet" type="text/css" href="{concat(Prefix,'base/Shared/Source/Source.css')}" />          
+					<link rel="stylesheet" type="text/css" href="{concat(Prefix,'base/Shared/Source/Source.css')}" />          
 					<xsl:call-template name="Browse-head">
 						<xsl:with-param name="prefix" select="Prefix"/>
 					</xsl:call-template>
 
-          <xsl:call-template name="Breadcrumbs-head"/>
+					<xsl:call-template name="Breadcrumbs-head"/>
 					<xsl:call-template name="Menu-head"/>
-          <xsl:call-template name="AddAuthorsSection-head"/>
-          <xsl:copy-of select="$AdditionalContent-head"/>
+					<xsl:call-template name="AddAuthorsSection-head"/>
+					<xsl:copy-of select="$AdditionalContent-head"/>
 				</xsl:with-param>
 
 				<xsl:with-param name="Content-body">
@@ -62,8 +62,8 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
 					<xsl:call-template name="Menu-body">
 						<xsl:with-param name="prefix" select="Prefix"/>
 					</xsl:call-template>
-					<div id="ObjectContent">
-                        
+					<div id="Article">
+
 						<xsl:call-template name="Breadcrumbs-body"/>
 
 						<h2 id="Content-Title">
@@ -79,22 +79,22 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
 						</h2>
 						<div id="Short-Description">
 							<span>
-								<xsl:apply-templates mode="RemoveRoot" select="Description/Basic"/>
+								<xsl:copy-of select="Description/Basic/node()"/>
 							</span>
 						</div>
 
 						<xsl:copy-of select="$AdditionalContent-body"/>
 
-            <xsl:if test="local-name() = /Project/Information/ShowSource/Type">
-              <xsl:apply-templates mode="AddSection" select="$source">
-                <xsl:with-param name="prefix" select="Prefix" />
-                <xsl:with-param name="file" select=".[local-name()='File']|ancestor::File"/>
-                <xsl:with-param name="firstLine" select="Lines/First"/>
-                <xsl:with-param name="lastLine" select="Lines/Last"/>
-              </xsl:apply-templates>
-            </xsl:if>
+						<xsl:if test="local-name() = /Project/Information/ShowSource/Type">
+							<xsl:apply-templates mode="AddSection" select="$source">
+								<xsl:with-param name="prefix" select="Prefix" />
+								<xsl:with-param name="file" select=".[local-name()='File']|ancestor::File"/>
+								<xsl:with-param name="firstLine" select="Lines/First"/>
+								<xsl:with-param name="lastLine" select="Lines/Last"/>
+							</xsl:apply-templates>
+						</xsl:if>
 
-            <xsl:variable name="Authors">
+						<xsl:variable name="Authors">
 							<Authors>
 								<xsl:copy-of select="Information/Author"/>
 							</Authors>

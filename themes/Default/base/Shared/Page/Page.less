@@ -1,56 +1,90 @@
 ﻿body {
-	font-size:1em;
-    margin:0 auto;
-    padding:0;
-	text-align: center;
-	float: none;
-	.background1;
+  font-size: 1em;
+  margin: 0 auto;
+  padding: 0;
+  text-align: center;
+  float: none;
+  .background1;
 }
 
-#Page 
-{
-    margin-bottom:2em;
-	margin-top:2em;
-	display: inline-block;
-	border: 1px solid @border;
-	height:auto;
-	width: 70em;
-	text-align: left;
-	.background2;
+#Page {
+  margin-bottom: 2em;
+  margin-top: 2em;
+  display: inline-block;
+  border: 1px solid @border;
+  height: auto;
+  width: 70em;
+  text-align: left;
+  .background2;
+  color: @text;
 }
 
-#PageContent {
-	margin:0 2.5em;
+#Article {
+  margin: 0 2.5em;
 }
 
-.variable, .argument, .result{
-	font-family:monospace;
+#Article p {
+  line-height: 1.5;
 }
 
-#Content h2
-{
-	font-size:1.5em;
-	border-bottom:1px solid;
-	margin-top:2.0em;
+.variable, .argument, .result {
+  font-family: monospace;
+}
+
+#Content h2 {
+  font-size: 1.5em;
+  border-bottom: 1px solid;
+  margin-top: 2.0em;
 }
 
 #Content h2 #Object-Type {
-	float:right;
-	margin-right:1em;
-	font-size:inherit;
+  float: right;
+  margin-right: 1em;
+  font-size: inherit;
 }
 
 #Content h2 #Object-Name {
-	margin-left:1em;
-	font-size:inherit;
+  margin-left: 1em;
+  font-size: inherit;
 }
 
-#Content h2 .seperator{
-	display: none;
+#Content h2 .seperator {
+  display: none;
 }
 
-sup 
-{ 
-	vertical-align: top;
-	font-size: 0.9em; 
+sup {
+  vertical-align: top;
+  font-size: 0.9em;
+}
+
+a {
+  .menulink;
+}
+
+a:hover {
+  .menuhover;
+}
+
+pre {
+  font-size: 1.1em;
+  border-width: 1px 2px 2px 1px;
+  border-style: solid;
+  border-color: #808080;
+  margin: 0.5em;
+  line-height: 2;
+  padding: 0.5em 1.5em;
+  background-color: #F8F8F8;
+}
+
+#Article ul {
+  margin-left: 2em;
+  line-height: 1.75;
+}
+
+#Article ul > li > ul {
+  margin-left: 0em;
+}
+
+#Article li {
+  margin-left: 1.5em;
 }

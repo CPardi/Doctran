@@ -4,10 +4,6 @@
 //  file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.IO;
 
 using Doctran.Fbase.Common;
 using Doctran.Fbase.Comments;
@@ -16,6 +12,7 @@ namespace Doctran.BaseClasses
 {
     public interface IPlugin
     {
+        int LoadOrder();
         void Initialize();
         void WriteInformation();
     }

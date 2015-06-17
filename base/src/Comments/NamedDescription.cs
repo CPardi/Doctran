@@ -35,7 +35,6 @@ namespace Doctran.Fbase.Comments
         public override bool BlockEnd(Type parentType, List<FileLine> lines, int lineIndex)
         {
             if(lineIndex + 1 >= lines.Count) return true;
-
             return
                 CommentDefinitions.NDescEnd(lines[lineIndex + 1].Text)
                 || this.BlockStart(parentType, lines, lineIndex + 1)
@@ -48,7 +47,7 @@ namespace Doctran.Fbase.Comments
         }
     }
 
-	public class NamedDescriptionGroup : ObjectGroup
+    public class NamedDescriptionGroup : ObjectGroup
     {
         public NamedDescriptionGroup()
             : base(typeof(NamedDescription)) { }

@@ -14,7 +14,7 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
 		<xsl:apply-templates mode="Generate-Url-Path" select="Name" >
 			<xsl:with-param name="slash" select="'/'"/>
 		</xsl:apply-templates>
-		<xsl:text>.html</xsl:text>
+        <xsl:text>/</xsl:text>
 
 	</xsl:template>
 

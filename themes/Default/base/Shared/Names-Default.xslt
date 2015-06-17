@@ -12,8 +12,12 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
 		<xsl:value-of select="Name"/>
 	</xsl:template>
 
-	<xsl:template mode="FileName IdName" match="*">
-		<xsl:value-of select="concat(local-name(),'-',Name)"/>
+    <xsl:template mode="FileName IdName" match="*[not(ValidName)]">
+        <xsl:value-of select="concat(local-name(),'-',Name)"/>
+    </xsl:template>
+
+	<xsl:template mode="FileName IdName" match="*[ValidName]">
+		<xsl:value-of select="concat(local-name(),'-',ValidName)"/>
 	</xsl:template>
 
 	<xsl:template mode="BlockName" match="*">

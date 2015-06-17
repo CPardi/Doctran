@@ -44,7 +44,7 @@ namespace Doctran.Fbase.Comments
 
         public override List<FortranObject> ReturnObject(FortranObject parent, List<FileLine> lines)
         {
-            Match aMatch = Regex.Match(lines[0].Text.Trim(), @"!>(.*):");
+            Match aMatch = Regex.Match(lines[0].Text.Trim(), @"!>\s*(\w+)\s*:");
             String typeName = aMatch.Groups[1].Value.Trim();
             return new List<FortranObject>() { new Information(parent, typeName, lines) };
         }

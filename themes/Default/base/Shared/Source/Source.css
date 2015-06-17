@@ -1,15 +1,20 @@
-#Source ul, #Browse li {
+#Source code > ul {
     margin: 0;
     padding: 0;
     border: 0;
     font: inherit;
     vertical-align: baseline;
-}
-
-#Source ul {
     list-style: none;
 	display:table;	
 	min-width: 100%;
+    font-size: 1.05em;
+    line-height: 1.2;
+}
+
+#Source code > ul > li {
+    margin: 0;
+    padding: 0;
+    border: 0;
 }
 
 #Source .code {
@@ -19,36 +24,28 @@
     background-color: white;
 }
 
-#Source .code-content ul li {
-    padding: 0 1em;
-}
-
-#Source .code-content ul li .line {
-    padding-left: 1.5em;
-}
-
 #Source .odd 
 {
     background-color: #E7E7E7;
 }
 
 
-.fortran ul {
+.fortran > code > ul {
     list-style-type : none;
     display : table;
     white-space : pre;
 }
 
-.fortran ul li {
+.fortran > code > ul li {
     margin : 0;
     padding : 0;
 }
 
-.fortran ul .odd {
+.fortran > code > ul .odd {
     background-color : #F0F0F0;
 }
 
-.fortran ul .even {
+.fortran > code > ul .even {
     background-color : inherit;
 }
 

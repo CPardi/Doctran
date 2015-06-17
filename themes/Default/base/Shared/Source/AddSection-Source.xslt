@@ -7,7 +7,8 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
 -->
 
 <xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                              xmlns:xs="http://www.w3.org/2001/XMLSchema">
+							  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+							  exclude-result-prefixes="xs">
   
   <xsl:template mode="AddSection" match="Source">
     <xsl:param name="prefix"/>
@@ -19,7 +20,7 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
 			<xsl:with-param name="name" select="'Source'"/>
 			<xsl:with-param name="id" select="'Source'"/>
 			<xsl:with-param name="content">
-				<p>The program source shown below is taken from '<a href="{concat($prefix, $file/Path)}"><xsl:value-of select="$file/Name"/><xsl:value-of select="$file/Extension"/></a>'.
+				<p>The program source shown below is taken from '<a href="{concat($prefix, $file/href)}"><xsl:value-of select="$file/Name"/><xsl:value-of select="$file/Extension"/></a>'.
 				</p>
 				<div class="fortran code">
           <code>

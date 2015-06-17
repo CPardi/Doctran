@@ -13,42 +13,44 @@ using Doctran.BaseClasses;
 
 namespace Doctran.Fbase.Common
 {
-	public class AssemblyLoader
-	{
-		private readonly List<AssemblyName> loadedAssemblys = new List<AssemblyName> ();
-        private readonly List<Type> asssemblyTypes = new List<Type>();
+    public class AssemblyLoader
+    {
+        private readonly List<Type> _assemblyTypes = new List<Type>();
 
-		public AssemblyLoader (String pluginPath)
-		{
-            this.asssemblyTypes.AddRange(Assembly.GetCallingAssembly().GetTypes().OrderByDescending(t => t.Name));
-			String[] paths = null;
-			try {
-				paths = Directory.GetFiles (Path.GetFullPath (pluginPath));
-			} 
-            catch(IOException e)
+        public AssemblyLoader(String pluginPath)
+        {
+            _assemblyTypes.AddRange(typeof(FortranObject).Assembly.GetTypes());
+            String[] paths = null;
+            try
+            {
+                paths = Directory.GetFiles(Path.GetFullPath(pluginPath));
+            }
+            catch (IOException e)
             {
                 UserInformer.GiveWarning("plugin directory", e);
                 return;
-			}
+            }
 
-			foreach (string path in paths) {
-				try {
-					Assembly assembly = Assembly.LoadFrom(path);
-					loadedAssemblys.Add(assembly.GetName());
-					this.asssemblyTypes.AddRange (assembly.GetTypes ());
-				}
+            foreach (string path in paths)
+            {
+                try
+                {
+                    Assembly assembly = Assembly.LoadFrom(path);
+                    this._assemblyTypes.AddRange(assembly.GetTypes());
+                }
                 catch (IOException e)
                 {
                     UserInformer.GiveWarning("loaded plugin", e);
                     return;
                 }
-			}
-		}
+            }
+            this._assemblyTypes.OrderByDescending(t => t.Name);
+        }
 
-		public List<T> GetClassInstances<T>()
-		{
-			return GetClassInstances<T>(new Func<T,int>(weight => 0), name => true);
-		}
+        public List<T> GetClassInstances<T>()
+        {
+            return GetClassInstances<T>(new Func<T,int>(weight => 0), name => true);
+        }
 
         public List<T> GetClassInstances<T>(Func<T, int> ordering)
         {
@@ -60,20 +62,20 @@ namespace Doctran.Fbase.Common
             return GetClassInstances<T>(new Func<T, int>(weight => 0), name => name.StartsWith(fromNamespace));
         }
 
-		private List<T> GetClassInstances<T>(Func<T, int> ordering, Func<String, bool> namespaceWhere)
-		{
-			List<T> instances = new List<T>();
-            var typesOfT = this.asssemblyTypes.Where(t => !t.IsAbstract && (t.IsSubclassOf(typeof(T)) | t.GetInterfaces().Contains(typeof(T)) ));
-			instances.AddRange(
-				from t in typesOfT
+        private List<T> GetClassInstances<T>(Func<T, int> ordering, Func<String, bool> namespaceWhere)
+        {
+            List<T> instances = new List<T>();
+            var typesOfT = this._assemblyTypes.Where(t => !t.IsAbstract && (t.IsSubclassOf(typeof(T)) | t.GetInterfaces().Contains(typeof(T)) ));
+            instances.AddRange(
+                from t in typesOfT
                 where namespaceWhere(t.Namespace)
                 where !t.IsInterface
-				let instOfT = (T)Activator.CreateInstance(t)
-				orderby ordering(instOfT)
-				select instOfT
-			);
-			return instances;
-		}
+                let instOfT = (T)Activator.CreateInstance(t)
+                orderby ordering(instOfT)
+                select instOfT
+            );
+            return instances;
+        }
 
         public List<Type> GetClassTypes<T>()
         {
@@ -93,7 +95,7 @@ namespace Doctran.Fbase.Common
         private List<Type> GetClassTypes<T>(Func<Type, int> ordering, Func<String, bool> namespaceWhere)
         {
             List<Type> types = new List<Type>();
-            var typesOfT = this.asssemblyTypes.Where(t => !t.IsAbstract && t.IsSubclassOf(typeof(T)));
+            var typesOfT = this._assemblyTypes.Where(t => !t.IsAbstract && t.IsSubclassOf(typeof(T)));
             types.AddRange(
                 from t in typesOfT
                 where namespaceWhere(t.Namespace)
@@ -102,6 +104,6 @@ namespace Doctran.Fbase.Common
             );
             return types;
         }
-	}
+    }
 }
 

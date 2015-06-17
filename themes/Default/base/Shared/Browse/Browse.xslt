@@ -35,7 +35,7 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
 									<xsl:attribute name="href" select="concat($prefix,href)"/>
 								</xsl:otherwise>
 							</xsl:choose>
-							<xsl:value-of select="Name"/>
+							<xsl:value-of select="Title"/>
 						</a>
 					</li>
 				</xsl:for-each>

@@ -12,6 +12,8 @@
 .highlight() {
 	color: darken(#FF8100,30%);
 	background-color: #BF7830;
+	cursor: hand;
+	cursor: pointer;
 }
 
 .background1() {
@@ -28,7 +30,13 @@
 }
 
 .menulink() {
+	outline:none;
+	text-decoration:none;
 	color: darken(#FF8100,20%);
+}
+
+.menuhover() {
+	color: darken(#FF8100,10%);
 }
 
 .blocklink() {
@@ -37,3 +45,5 @@
 }
 	
 @border: darken(#FF8100,30%);
+
+@text: darken(#FF8100,30%);

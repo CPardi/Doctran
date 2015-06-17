@@ -46,6 +46,7 @@ namespace Doctran.Fbase.Common
             {
                 addNewLine();
                 Console.WriteLine("WARNING: In " + name + ". " + e.Message + ".");
+                throw new ApplicationException();
             }
         }
 

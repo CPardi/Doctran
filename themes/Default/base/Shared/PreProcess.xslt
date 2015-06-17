@@ -8,16 +8,27 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
 
 <xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
-	<xsl:template mode="Preprocess" match="File">
+	<xsl:template mode="Preprocess" match="Project">
+		<xsl:call-template name="AddNavigation">
+			<xsl:with-param name="project" select="."/>
+		</xsl:call-template>
+	</xsl:template>
+
+	<xsl:template name="AddNavigation">
+		<xsl:param name="project"/>
+		<xsl:apply-templates mode="AddNavigation" select="$project"/>
+	</xsl:template>
+
+	<xsl:template mode="AddNavigation" match="File">
 		<xsl:copy>
 			<xsl:call-template name="addNavigationElements"/>
-			<xsl:apply-templates mode="Preprocess" select="@* | node()"/>
+			<xsl:apply-templates mode="AddNavigation" select="@* | node()"/>
 		</xsl:copy>
 	</xsl:template>
 
-	<xsl:template mode="Preprocess" match="@* | node()">
+	<xsl:template mode="AddNavigation" match="@* | node()">
 		<xsl:copy>
-			<xsl:apply-templates mode="Preprocess" select="@* | node()"/>
+			<xsl:apply-templates mode="AddNavigation" select="@* | node()"/>
 		</xsl:copy>
 	</xsl:template>
 
@@ -25,9 +36,6 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
 		<Prefix>
 			<xsl:apply-templates mode="PathToRoot" select="."/>
 		</Prefix>
-		<Path>
-			<xsl:apply-templates mode="GeneratePath" select="."/>
-		</Path>
 		<href>
 			<xsl:apply-templates mode="GenerateURL" select="."/>
 		</href>
