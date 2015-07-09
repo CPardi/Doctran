@@ -22,11 +22,13 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
         <xsl:param name="columns" as="element()"/>
         <xsl:param name="prefix"/>
         <xsl:param name="sortBy"/>
+        <xsl:param name="sortOrder" select="'ascending'"/>
         <xsl:param name="sortable" select="false()"/>
 
 		<div class="table-holder">
 		    <xsl:call-template name="SmartenTable">
 		        <xsl:with-param name="sortColumnNum" select="$columns/*[Name=$sortBy]/position()"/>
+            <xsl:with-param name="sortOrder" select="$sortOrder"/>
 		        <xsl:with-param name="table" as="element()">
 		            <table class="{if ($sortable) then 'sortable' else ''}">
 		                <thead>

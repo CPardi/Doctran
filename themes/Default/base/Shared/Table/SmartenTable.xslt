@@ -11,28 +11,33 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
     <xsl:template name="SmartenTable">
         <xsl:param name="table" as="element()"/>
         <xsl:param name="sortColumnNum"/>
-
+        <xsl:param name="sortOrder"/>
+      
         <xsl:apply-templates mode="SmartenTable" select="$table">
             <xsl:with-param name="sortColumnNum" select="$sortColumnNum"/>
+          <xsl:with-param name="sortOrder" select="$sortOrder"/>
         </xsl:apply-templates>
     </xsl:template>
 
     <xsl:template mode="SmartenTable" match="@* | node()">
         <xsl:param name="sortColumnNum"/>
+        <xsl:param name="sortOrder"/>
 
-        <xsl:copy>
+      <xsl:copy>
             <xsl:apply-templates mode="SmartenTable" select="@* | node()">
                 <xsl:with-param name="sortColumnNum" select="$sortColumnNum"/>
+                <xsl:with-param name="sortOrder" select="$sortOrder"/>
             </xsl:apply-templates>
         </xsl:copy>
     </xsl:template>
 
     <xsl:template mode="SmartenTable" match="tbody">
         <xsl:param name="sortColumnNum"/>
+        <xsl:param name="sortOrder"/>
 
         <xsl:copy>
             <xsl:perform-sort>
-                <xsl:sort select="(td[position()=$sortColumnNum][a]/a | td[position()=$sortColumnNum][not(a)])/lower-case(text())"/>
+                <xsl:sort order="{$sortOrder}" select="(td[position()=$sortColumnNum][a]/a | td[position()=$sortColumnNum][not(a)])/lower-case(text())"/>
                 <xsl:apply-templates mode="SmartenTable" select="tr"/>
             </xsl:perform-sort>
         </xsl:copy>

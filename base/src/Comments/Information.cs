@@ -18,14 +18,10 @@ namespace Doctran.Fbase.Comments
 {
     public class InformationBlock : FortranBlock
     {
+        public InformationBlock()
+            : base("Information", true, false, 1) { }
 
-        public InformationBlock() 
-        {
-            this.CheckInternal = false;
-            this.Weight = 1;
-        }
-
-        public override bool BlockStart(Type parentType, List<FileLine> lines, int lineIndex)
+        public override bool BlockStart(String parent_block_name, List<FileLine> lines, int lineIndex)
         {
             return
                 CommentDefinitions.InfoStart(lines[lineIndex].Text)
@@ -33,20 +29,20 @@ namespace Doctran.Fbase.Comments
                 && !CommentDefinitions.DetailLine(lines[lineIndex].Text);
         }
 
-        public override bool BlockEnd(Type parentType, List<FileLine> lines, int lineIndex)
+        public override bool BlockEnd(String parent_block_name, List<FileLine> lines, int lineIndex)
         {
             if (lineIndex + 1 >= lines.Count) return true;
-
             return
                 CommentDefinitions.InfoEnd(lines[lineIndex + 1].Text)
+                || CommentDefinitions.InfoStart(lines[lineIndex + 1].Text)
                 || CommentDefinitions.NDescStart(lines[lineIndex + 1].Text);
         }
 
-        public override List<FortranObject> ReturnObject(FortranObject parent, List<FileLine> lines)
+        public override List<FortranObject> ReturnObject(IEnumerable<FortranObject> sub_objects, List<FileLine> lines)
         {
             Match aMatch = Regex.Match(lines[0].Text.Trim(), @"!>\s*(\w+)\s*:");
             String typeName = aMatch.Groups[1].Value.Trim();
-            return new List<FortranObject>() { new Information(parent, typeName, lines) };
+            return new List<FortranObject>() { new Information(typeName, sub_objects, lines) };
         }
     }
 
@@ -65,23 +61,23 @@ namespace Doctran.Fbase.Comments
     {
         private String _value;
 
-        public Information(FortranObject parent, String typeName,List<FileLine> lines)
-            : base(parent, typeName, lines, true) 
+        public Information(String typeName, IEnumerable<FortranObject> sub_objects, List<FileLine> lines)
+            : base(typeName, sub_objects, lines) 
         { 
             this.GetValue();
         }
 
-        public Information(FortranObject parent, String typeName, String value)
-            :base(parent, typeName, new List<FileLine>(), true)
+        public Information(String typeName, String value)
+            :base(typeName, new List<FileLine>())
         {
             this._value = value;
         }
 
-        public Information(FortranObject parent, String typeName, String value, List<SubInformation> subInformation)
-            : base(parent, typeName, new List<FileLine>(), true)
+        public Information(String typeName, String value, List<SubInformation> subInformation)
+            : base(typeName, new List<FileLine>())
         {
             this._value = value;
-            this.SubObjects.AddRange(subInformation);
+            this.AddSubObjects(subInformation);
         }
 
         public String Type
@@ -129,29 +125,26 @@ namespace Doctran.Fbase.Comments
         private InformationBlock infoBlock = new InformationBlock();
 
         public SubInformationBlock()
-        {
-            this.CheckInternal = false;
-            this.Weight = 2;
-        }
+            : base("Sub-Information", false, false, 2) { }
 
-        public override bool BlockStart(Type parentType, List<FileLine> lines, int lineIndex)
+        public override bool BlockStart(String parent_block_name, List<FileLine> lines, int lineIndex)
         {
             return Regex.IsMatch(lines[lineIndex].Text.Trim(), @"^!>>\s*\w+\s*:");
         }
 
-        public override bool BlockEnd(Type parentType, List<FileLine> lines, int lineIndex)
+        public override bool BlockEnd(String parent_block_name, List<FileLine> lines, int lineIndex)
         {
             if (lineIndex + 1 >= lines.Count) return true;
             return !Regex.IsMatch(lines[lineIndex + 1].Text.Trim(), @"^!>>")
-                 | this.BlockStart(parentType, lines, lineIndex + 1)
-                 | infoBlock.BlockStart(parentType, lines, lineIndex + 1);
+                 | this.BlockStart(parent_block_name, lines, lineIndex + 1)
+                 | infoBlock.BlockStart(parent_block_name, lines, lineIndex + 1);
         }
 
-        public override List<FortranObject> ReturnObject(FortranObject parent, List<FileLine> lines)
+        public override List<FortranObject> ReturnObject(IEnumerable<FortranObject> sub_objects, List<FileLine> lines)
         {
             Match aMatch = Regex.Match(lines[0].Text.Trim(), @"!>>(.*):");
             String TypeName = aMatch.Groups[1].Value.Trim();
-            return new List<FortranObject>() { new SubInformation(parent, TypeName, lines) };
+            return new List<FortranObject>() { new SubInformation(TypeName, lines) };
         }
     }
 
@@ -170,14 +163,14 @@ namespace Doctran.Fbase.Comments
     {
         private String _value;
 
-        public SubInformation(FortranObject parent, String typeName, List<FileLine> lines)
-            : base(parent, typeName, lines, false) 
+        public SubInformation(String typeName, List<FileLine> lines)
+            : base(typeName, lines) 
         {
             this.GetValue();
         }
 
-        public SubInformation(FortranObject parent, String typeName, String value)
-            : base(parent, typeName, new List<FileLine>(), false) {
+        public SubInformation(String typeName, String value)
+            : base(typeName, new List<FileLine>()) {
                 this._value = value;
         }
 

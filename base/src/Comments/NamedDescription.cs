@@ -18,13 +18,10 @@ namespace Doctran.Fbase.Comments
 {
     public class NamedDescriptionBlock : FortranBlock
     {
-        public NamedDescriptionBlock() 
-        {
-            this.CheckInternal = false;
-            this.Weight = 0;
-        }
+        public NamedDescriptionBlock()
+            : base("Named Description", false, false, 0) { }
 
-        public override bool BlockStart(Type parentType, List<FileLine> lines, int lineIndex)
+        public override bool BlockStart(String parent_block_name, List<FileLine> lines, int lineIndex)
         {
             return
                 CommentDefinitions.NDescStart(lines[lineIndex].Text)
@@ -32,18 +29,18 @@ namespace Doctran.Fbase.Comments
                 && !CommentDefinitions.InfoStart(lines[lineIndex].Text);
         }
 
-        public override bool BlockEnd(Type parentType, List<FileLine> lines, int lineIndex)
+        public override bool BlockEnd(String parent_block_name, List<FileLine> lines, int lineIndex)
         {
             if(lineIndex + 1 >= lines.Count) return true;
             return
                 CommentDefinitions.NDescEnd(lines[lineIndex + 1].Text)
-                || this.BlockStart(parentType, lines, lineIndex + 1)
+                || this.BlockStart(parent_block_name, lines, lineIndex + 1)
                 || CommentDefinitions.InfoStart(lines[lineIndex + 1].Text);
         }
 
-        public override List<FortranObject> ReturnObject(FortranObject parent, List<FileLine> lines)
+        public override List<FortranObject> ReturnObject(IEnumerable<FortranObject> sub_objects, List<FileLine> lines)
         {
-            return new NamedDescription(parent, lines);
+            return new NamedDescription(lines);
         }
     }
 
@@ -60,7 +57,7 @@ namespace Doctran.Fbase.Comments
 
     public class NamedDescription : List<FortranObject>
     {
-        public NamedDescription(FortranObject parent, List<FileLine> lines)
+        public NamedDescription(List<FileLine> lines)
         {
             Match aMatch = Regex.Match(lines[0].Text, @"!>\s*(\w.*)\s*-(.*)");
             String name = aMatch.Groups[1].Value.Trim();
@@ -73,7 +70,7 @@ namespace Doctran.Fbase.Comments
 
             String detailed = Description.MergeLines(lines);
 
-            this.Add(new Description(parent, name, basic.ToString(), detailed, lines));
+            this.Add(new Description(name, basic.ToString(), detailed, lines));
             
         }
     }

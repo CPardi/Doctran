@@ -24,15 +24,16 @@ namespace Doctran.Fbase.Files
         #region Constructor
 
         // Reads a file, determines its type and loads the contained procedure and/or modules.
-        public File(FortranObject parent, String pathAndFilename, List<FileLine> lines)
-            : base(parent, Path.GetFileName(pathAndFilename), "File", File.PreProcessFile(pathAndFilename, lines), true)
+        public File(String pathAndFilename, IEnumerable<FortranObject> sub_objects, List<FileLine> lines)
+            : base(Path.GetFileName(pathAndFilename), sub_objects,"File", lines)
         {
             this.PathAndFilename = pathAndFilename;
-            this.OriginalLines = lines;
             this.Info = new FileInfo(this.PathAndFilename);
 
             // Get the filename from the inputted string
             Name = Path.GetFileNameWithoutExtension(pathAndFilename);
+
+            Parser parse = new Parser(PluginManager.FortranBlocks);
         }
 
         #endregion

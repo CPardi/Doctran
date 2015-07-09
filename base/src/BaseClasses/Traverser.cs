@@ -37,15 +37,6 @@ namespace Doctran.BaseClasses
         public void Go(Project project)
         {
             Navigate(project);
-
-            //foreach (PostAction block in this.postActions)
-            //    if (block.Is(project)) { block.PostObject(ref project); }
-
-            //foreach (File file in project.SubObjectsOfType<File>())
-            //{
-            //    if (Settings.verbose >= 3) Console.WriteLine("Post processing: " + file.Name + file.Info.Extension);
-            //    Navigate(file);
-            //}
         }
 
         protected void Navigate(FortranObject obj)

@@ -15,8 +15,11 @@ using MarkdownSharp;
 namespace Doctran.Fbase.Common
 {
     public static class Helper
-    {
-        public static readonly Markdown markdown = new Markdown();
+    {    
+        public static String RegexMultipleOr(IEnumerable<String> regexes)
+        {
+            return regexes.First() + String.Concat(regexes.Skip(1).Select(d => "|" + d));
+        }
 
         public static void Stop()
         {

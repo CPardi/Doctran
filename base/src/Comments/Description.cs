@@ -6,16 +6,18 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using System.Net;
 
+using Doctran.Fbase.Projects;
 using Doctran.Fbase.Files;
 using Doctran.Fbase.Common;
 using Doctran.Fbase.Comments;
 
 using Doctran.BaseClasses;
+
+using MarkdownSharp;
 
 namespace Doctran.Exceptions
 {
@@ -46,9 +48,17 @@ namespace Doctran.Exceptions
         {
             if (obj.parent.SubObjectsOfType<Description>().Count > 1)
             {
-                var file = obj.GoUpTillType<File>();
-                UserInformer.GiveWarning(file.Name + file.Info.Extension, obj.lines.First().Number, obj.lines.Last().Number
-                                                                        ,"Description is not unique and has been ignored.");
+                if (obj.parent is Project)
+                {
+                    UserInformer.GiveWarning("project file", obj.lines.First().Number, obj.lines.Last().Number
+                                                                            , "Description is not unique and has been ignored.");
+                }
+                else
+                {
+                    var file = obj.GoUpTillType<File>();
+                    UserInformer.GiveWarning(file.Name + file.Info.Extension, obj.lines.First().Number, obj.lines.Last().Number
+                                                                            , "Description is not unique and has been ignored.");
+                }
                 obj.parent.SubObjects.Remove(obj);
             }
         }
@@ -59,16 +69,20 @@ namespace Doctran.Fbase.Comments
 {
     public class DescriptionBlock : FortranBlock
     {
-        
-        public DescriptionBlock() 
+        public DescriptionBlock()
+            : base("Description", false, false, 3) { }
+
+        public static String BlockName
         {
-            this.CheckInternal = false;
-            this.Weight = 3;
+            get
+            {
+                return "Description";
+            }
         }
 
-        public override bool BlockStart(Type parentType, List<FileLine> lines, int lineIndex)
+        public override bool BlockStart(String parent_block_name, List<FileLine> lines, int lineIndex)
         {
-            if (CommentDefinitions.DescStart(lines[lineIndex - 1].Text)) return false;
+            if (parent_block_name == DescriptionBlock.BlockName) return false;
             return
                 CommentDefinitions.DescStart(lines[lineIndex].Text)
                 && !CommentDefinitions.DetailLine(lines[lineIndex].Text)
@@ -76,19 +90,18 @@ namespace Doctran.Fbase.Comments
                 && !CommentDefinitions.InfoStart(lines[lineIndex].Text);
         }
 
-        public override bool BlockEnd(Type parentType, List<FileLine> lines, int lineIndex)
+        public override bool BlockEnd(String parent_block_name, List<FileLine> lines, int lineIndex)
         {
-            if (lineIndex + 1 >= lines.Count) return true;
-
+            if (lines.Count == lineIndex + 1) return true;
             return
                 CommentDefinitions.DescEnd(lines[lineIndex + 1].Text)
                 || CommentDefinitions.InfoStart(lines[lineIndex + 1].Text)
                 || CommentDefinitions.NDescStart(lines[lineIndex + 1].Text);
         }
 
-        public override List<FortranObject> ReturnObject(FortranObject parent, List<FileLine> lines)
+        public override List<FortranObject> ReturnObject(IEnumerable<FortranObject> sub_objects, List<FileLine> lines)
         {
-            return new List<FortranObject> { new Description(parent, lines) };
+            return new List<FortranObject> { new Description(lines) };
         }
     }
 
@@ -115,8 +128,7 @@ namespace Doctran.Fbase.Comments
             if (parSubObj != null)
             {
                 obj.parent.SubObjects.Remove(obj);
-                obj.parent = parSubObj;
-                parSubObj.SubObjects.Add(obj);
+                parSubObj.AddSubObject(obj);
             }
         }
     }
@@ -137,33 +149,34 @@ namespace Doctran.Fbase.Comments
         public String Basic { get; private set; }
         public String Detailed { get; private set; }
 
+        private readonly Markdown _markdown = new Markdown();
         private String identifier;
 
         public Description() { }
 
-        public Description(FortranObject parent, String basicText)
-            : base(parent, "Description", new List<FileLine> { new FileLine(-1, basicText) }, false)
+        public Description(String basicText)
+            : base("Description", new List<FileLine> { new FileLine(-1, basicText) })
         {
             this.Basic = basicText;
         }
 
-        public Description(FortranObject parent, String identifier, String basicText)
-            : base(parent, "Description", new List<FileLine> { new FileLine(-1, basicText) }, false)
+        public Description(String identifier, String basicText)
+            : base("Description", new List<FileLine> { new FileLine(-1, basicText) })
         {
             this.identifier = identifier;
             this.Basic = basicText;
         }
 
-        public Description(FortranObject parent, String identifier, String basicText, String detailedText, List<FileLine> lines)
-            : base(parent, "Description", lines, false)
+        public Description(String identifier, String basicText, String detailedText, List<FileLine> lines)
+            : base("Description", lines)
         {
             this.identifier = identifier;
             this.Basic = basicText;
             this.Detailed = detailedText;
         }
 
-        public Description(FortranObject parent, List<FileLine> lines)
-            : base(parent, "Description", lines, false)
+        public Description(List<FileLine> lines)
+            : base("Description", lines)
         {
             this.Basic = String.Concat(
                 from line in lines
@@ -213,7 +226,7 @@ namespace Doctran.Fbase.Comments
                 XElement detailed;
                 if (project.UseText) detailed = new XElement("Detailed", this.parse("Text", "<![CDATA[" + this.Detailed + "]]>"));
                 else if (project.UseHtml) detailed = this.parse("Detailed", "<Html>" + this.Detailed + @"</Html>");
-                else detailed = this.parse("Detailed", "<Html>" + Helper.markdown.Transform(this.Detailed) + @"</Html>");
+                else detailed = this.parse("Detailed", "<Html>" + _markdown.Transform(this.Detailed) + @"</Html>");
                 xele.Add(detailed);
             }
             return xele;

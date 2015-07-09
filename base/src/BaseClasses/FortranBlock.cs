@@ -15,10 +15,21 @@ namespace Doctran.BaseClasses
 {
     public abstract class FortranBlock
     {
-        public int Weight = 0;
-        public bool CheckInternal = true;
-        public abstract bool BlockStart(Type parentType, List<FileLine> lines, int lineIndex);
-        public abstract bool BlockEnd(Type parentType, List<FileLine> lines, int lineIndex);
-        public abstract List<FortranObject> ReturnObject(FortranObject parent, List<FileLine> lines);
+        public FortranBlock(String name, bool check_internal = true, bool explicit_end = true, int weight = 0)
+        {
+            this.Name = name;
+            this.CheckInternal = check_internal;
+            this.ExplicitEnd = explicit_end;
+            this.Weight = weight;
+        }
+
+        public bool CheckInternal { get; private set; }
+        public bool ExplicitEnd { get; private set; }
+        public int Weight { get; private set; }
+        public String Name { get; private set; }        
+
+        public abstract bool BlockStart(String parent_block_name, List<FileLine> lines, int lineIndex);
+        public abstract bool BlockEnd(String parent_block_name, List<FileLine> lines, int lineIndex);
+        public abstract List<FortranObject> ReturnObject(IEnumerable<FortranObject> sub_objects, List<FileLine> lines);
     }
 }

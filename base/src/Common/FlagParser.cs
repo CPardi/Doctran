@@ -305,7 +305,7 @@ namespace Doctran.Fbase.Common
 
 		public void WriteHelp()
 		{
-			Console.WriteLine("Doctran Documentation Generator Version 1.2.");
+			Console.WriteLine("Doctran Documentation Generator Version 1.2.1");
 			Console.WriteLine("Usage is: doctran [options] source_files");
 			Console.WriteLine();
 			Console.WriteLine("-- Options List --");

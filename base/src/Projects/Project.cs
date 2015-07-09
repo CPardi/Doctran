@@ -71,6 +71,8 @@ namespace Doctran.Fbase.Projects
 
         #region Constructor
 
+        private Parser _parser = new Parser(PluginManager.FortranBlocks);
+
         public Project(Common.Settings settings)
         {
             // Read the project file if there is one.
@@ -80,32 +82,29 @@ namespace Doctran.Fbase.Projects
                 {
                     this.lines =
                         (from line in File.ReadFile(System.IO.Path.GetFullPath(settings.ProjectInfo))
-                         where line.Text != ""
-                         select new FileLine(line.Number, "!>" + line.Text)
+                         select new FileLine(line.Number, line.Text != "" ? "!>" + line.Text : "")
                         ).ToList();
                 }
                 catch (System.IO.IOException e) { UserInformer.GiveError("project info", settings.ProjectInfo, e); }
 
-                // Add a blank line to simplify the <FortranObject>.Seach method.
-                this.lines.Insert(0, new FileLine(0,""));
-
-                this.Search();
+                this.AddSubObjects(_parser.ParseFile(settings.ProjectInfo, this.lines).SubObjects);
             }
 
             this.Name = this.GetName();
             this.GetMarkupType();
             this.AddDefaults();
-
+           
             try
             {
-                this.SubObjects.AddRange(
-                    from path in settings.SourceFiles.AsParallel()
-                    where System.IO.File.Exists(path)
-                    let fullpath = System.IO.Path.GetFullPath(path)
-                    select new File(this, fullpath, File.ReadFile(fullpath))
-                );
+                var files = (from path in settings.SourceFiles.AsParallel()
+                             where System.IO.File.Exists(path)
+                             let fullpath = System.IO.Path.GetFullPath(path)
+                             select _parser.ParseFile(fullpath, File.ReadFile(fullpath))).ToList();
+
+                this.AddSubObjects(files);
             }
-            catch (System.IO.IOException e) { UserInformer.GiveError("source file", settings.ProjectInfo, e); }
+            catch (System.IO.IOException e) { UserInformer.GiveError("source file", e.Message, e); }
+
         }
 
         #endregion
@@ -176,22 +175,22 @@ namespace Doctran.Fbase.Projects
 
         private void AddDefaults()
         {
-            this.AddDefault(new Information(this, "ShowSource", "", new List<SubInformation>() { 
-                new SubInformation(this, "Type", "File"),
-                new SubInformation(this, "Type", "Program"),
-                new SubInformation(this, "Type", "Function"),
-                new SubInformation(this, "Type", "Subroutine")
+            this.AddDefault(new Information("ShowSource", "", new List<SubInformation>() { 
+                new SubInformation("Type", "File"),
+                new SubInformation("Type", "Program"),
+                new SubInformation("Type", "Function"),
+                new SubInformation("Type", "Subroutine")
             }));
 
-            this.AddDefault(new Information(this, "Searchable", "", new List<SubInformation>() { 
-                new SubInformation(this, "Type", "File"),
-                new SubInformation(this, "Type", "Module"),
-                new SubInformation(this, "Type", "DerivedType"),
-                new SubInformation(this, "Type", "Assignment"),
-                new SubInformation(this, "Type", "Operator"),
-                new SubInformation(this, "Type", "Overload"),
-                new SubInformation(this, "Type", "Function"),
-                new SubInformation(this, "Type", "Subroutine")
+            this.AddDefault(new Information("Searchable", "", new List<SubInformation>() { 
+                new SubInformation("Type", "File"),
+                new SubInformation("Type", "Module"),
+                new SubInformation("Type", "DerivedType"),
+                new SubInformation("Type", "Assignment"),
+                new SubInformation("Type", "Operator"),
+                new SubInformation("Type", "Overload"),
+                new SubInformation("Type", "Function"),
+                new SubInformation("Type", "Subroutine")
             }));
         }
 
@@ -203,7 +202,7 @@ namespace Doctran.Fbase.Projects
         {
             var temp = this.SubObjectsOfType<Information>().Where(info => info.Type == defaultInfo.Type);
             if (!temp.Any())
-                this.SubObjects.Add(defaultInfo);
+                this.AddSubObject(defaultInfo);
         }
 
         #endregion
@@ -231,7 +230,7 @@ namespace Doctran.Fbase.Projects
                 select info.XEle()
                     );
             xele.Add(new XElement("Files",
-                from file in this.SubObjectsOfType<File>()
+                from file in this.SubObjectsOfType<File>().AsParallel()
                 select file.XEle())
                     );
             return xele;
