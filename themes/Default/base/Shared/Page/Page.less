@@ -10,13 +10,20 @@
 #Page {
   margin-bottom: 2em;
   margin-top: 2em;
-  display: inline-block;
   border: 1px solid @border;
   height: auto;
-  width: 70em;
   text-align: left;
-  .background2;
   color: @text;
+}
+
+#Page > .main-container {
+  margin: 0;
+  position: absolute;
+  top: 0;
+  left: @menuWidth;
+  bottom: 0;
+  right: 0;
+  overflow: auto;
 }
 
 #Article {

@@ -1,3 +1,16 @@
+#Menu{
+  width: @menuWidth;
+  border: 1px solid @border;
+  border-left:none;
+  overflow: hidden;
+  margin:0;
+  position: absolute;
+  top:0;
+  bottom:0;
+  left:0;
+  .background1;
+}
+
 #Menu #Holder ul, #Menu #Holder li {
     margin: 0;
     padding: 0;
@@ -10,17 +23,6 @@
     list-style: none;
 }
 
-#Menu{
-	float:left;
-	width:15em;
-	height:37em;
-	border: 1px solid @border;	
-	border-left:none;
-	overflow: hidden;
-	margin-bottom:2%;
-	.background1;
-}
-
 #Menu .arrow.subExpand {
     font-size:0.75em;
     margin-right: 0.25em;
@@ -31,8 +33,7 @@
 }
 
 #Menu #Holder{
-	height:33em;
-	overflow: scroll;
+	overflow: auto;
 }
 
 #Menu #Holder li{

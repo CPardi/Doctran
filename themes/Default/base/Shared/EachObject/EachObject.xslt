@@ -59,9 +59,6 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
 						<xsl:with-param name="prefix" select="Prefix"/>
 					</xsl:call-template>	
 
-					<xsl:call-template name="Menu-body">
-						<xsl:with-param name="prefix" select="Prefix"/>
-					</xsl:call-template>
 					<div id="Article">
 
 						<xsl:call-template name="Breadcrumbs-body"/>

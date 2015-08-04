@@ -68,17 +68,22 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
             </head>
             <body>
                 <div id="Page">
-                    <xsl:call-template name="Header-body">
-                        <xsl:with-param name="prefix" select="$prefix"/>
-                    </xsl:call-template>
 
-                    <div id="Content">
-                        <xsl:copy-of select="$Content-body"/>
+                    <div class="main-container">
+                        <xsl:call-template name="Header-body">
+                            <xsl:with-param name="prefix" select="$prefix"/>
+                        </xsl:call-template>
+
+                        <div id="Content">
+                            <xsl:copy-of select="$Content-body"/>
+                        </div>
+
+                        <xsl:call-template name="Footer-body"/>
                     </div>
-                    <br/>
-                    <br/>
-                    <br/>
-                    <xsl:call-template name="Footer-body"/>
+
+                    <xsl:call-template name="Menu-body">
+                        <xsl:with-param name="prefix" select="Prefix"/>
+                    </xsl:call-template>
                 </div>
                 <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
             </body>
