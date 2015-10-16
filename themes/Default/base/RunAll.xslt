@@ -12,8 +12,8 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
 
     <xsl:call-template name="Search-page" />
    
-		<xsl:call-template name="OutputProject"/>
 		<xsl:call-template name="OutputFiles"/>
+		<xsl:call-template name="OutputUserPages"/>
 
 	</xsl:template>
 

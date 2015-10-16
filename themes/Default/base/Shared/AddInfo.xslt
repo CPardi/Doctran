@@ -24,7 +24,7 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
 		<xsl:param name="info" />
 
 		<xsl:copy>
-			<xsl:copy-of copy-namespaces="no" select="$info"/>
+			<xsl:copy-of select="$info"/>
 			<xsl:apply-templates mode="AddRest" select="@* | node()"/>
 		</xsl:copy>
 	</xsl:template>

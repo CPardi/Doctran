@@ -8,7 +8,7 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
 
 <xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
-	<xsl:include href="Output.xslt" />
+	<xsl:include href="Names.xslt" />
 	<xsl:include href="SubObjects.xslt" />
 
 </xsl:stylesheet>

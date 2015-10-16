@@ -1,162 +1,22 @@
-#Menu{
+@menuWidth: 20em;
+
+#Menu {
   width: @menuWidth;
-  border: 1px solid @border;
-  border-left:none;
+  border-right: 1px solid #808080;
   overflow: hidden;
-  margin:0;
+  margin: 0;
   position: absolute;
-  top:0;
-  bottom:0;
-  left:0;
-  .background1;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  background-color: #383D43;
 }
 
-#Menu #Holder ul, #Menu #Holder li {
-    margin: 0;
-    padding: 0;
-    border: 0;
-    font: inherit;
-    vertical-align: baseline;
-}
-
-#Menu #Holder ul {
-    list-style: none;
-}
-
-#Menu .arrow.subExpand {
-    font-size:0.75em;
-    margin-right: 0.25em;
-}
-
-#Menu .arrow {
-   font-family: Lucida Sans Unicode, Arial Unicode MS, sans-serif; 
-}
-
-#Menu #Holder{
-	overflow: auto;
-}
-
-#Menu #Holder li{
-	margin-top:0.3em;
-	padding-left:0.6em;
-}
-
-#Menu #Holder ul{
-	padding-left:0.4em;
-}
-
-#Menu #Holder li a{
-	white-space: nowrap;
-}
-
-#Menu #Holder > ul {
-  padding-bottom:1.0em;
-}
-
-#Menu #Holder > ul > li  {
-  padding-left:0;
-}
-
-#Menu .heading  {
-	margin-bottom:0.2em;
-	border-bottom: 1px solid @border;
-	.block
-}
-
-#Menu .heading h2{
-	margin:0;
-	border:0;
-	padding:0.75em 0.3em;
-}
-
-#Menu .active > a, #Menu .active > a:hover
-{
-	font-weight: bold;
-	.menulink;
-}
-
-#Menu .subtitle > a, #Menu .subtitle > a:hover {
-	font-weight: inherit;
-	font-size:0.9em;
-	.menuheading;
-}
-
-#Menu #Holder .subtitle > a::before {
-    content:"▼";
-    font-size:0.75;
-}
-
-#Menu #Holder > ul >li >ul > li > a::before {
-	content:"▶";
-	color:inherit;
-	margin-right:0.5em;
-	margin-left: 0.15em;
-}
-
-#Menu #Holder > ul >li >ul >li>.active::before, #Menu  #Holder .file::before, #Menu #Holder .module::before, #Menu #Holder .type::before {
-	content:"▼";
-	color:inherit;
-	margin-right:0.5em;
-	margin-left: 0;
-}
-
-  #Menu #Holder>ul >li >ul >li>.function::before
-, #Menu #Holder>ul >li >ul >li>.subroutine::before
-, #Menu #Holder>ul >li >ul >li>.overload::before
-, #Menu #Holder>ul >li >ul >li>.assignment::before
-, #Menu #Holder>ul >li >ul >li>.operator::before {
-	content:"";
-	margin:0;
-}
-#Menu #Holder .leaf {
-	margin-left: 0.8em;
-}
-body > .jsEnabled #Menu #Holder a::before
-{
-    content:"";
-}
-
-#HiddenMenu {
-    padding: 0.75em 0.15em;
-    float: left;
-    border: 1px solid @border;
-    border-left: none;
-	font-size: 1.5em;
-    cursor: hand;
-    cursor: pointer;
-    color: @text;
-    .block
-}
-
-#HiddenMenu span {
-	font-size : 0.5em;
-	padding-bottom: 0.4em;
-	vertical-align: middle;
-}
-
-#HiddenMenu:hover {
-	.highlight;
-}
-
-#Menu #HideSwitch {
-    padding: 0.75em 0.15em;
-	font-size: 1.5em;
-    border-left: 1px solid gray;
-    color: @text;
-    float:right;
-    margin-left: 0.5em;
-    cursor: hand;
-    cursor: pointer;
-	.block;
-}
-
-#Menu #HideSwitch span {
-	font-size : 0.5em;
-	padding-bottom: 0.4em;
-	vertical-align: middle;
-}
-
-#Menu #HideSwitch:hover {
-	font-weight : normal;
-	.highlight;
+#Menu > .contentContainer{
+  overflow: auto;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
 }

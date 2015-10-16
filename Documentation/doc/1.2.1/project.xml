@@ -1,0 +1,528 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<Project>
+  <Name />
+  <Information>
+    <Name>Doctran</Name>
+    <Tagline>A documentation generator for Fortran.</Tagline>
+    <Menu>
+      <ul>
+        <li>
+          <a href="index.html">Welcome to Doctran</a>
+        </li>
+        <li>
+          <a href="installation.html">Installation</a>
+          <ul>
+            <li>
+              <a href="installation/windows.html">Windows Systems</a>
+            </li>
+            <li>
+              <a href="installation/unix.html">Linux and Max OS X Systems</a>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <a href="getting-started.html">Getting Started</a>
+        </li>
+        <li>
+          <a href="command-line.html">Command Line Options</a>
+        </li>
+        <li>
+          <a href="project-files.html">Project Files</a>
+          <ul>
+            <li>
+              <a href="project-files/name.html">Name</a>
+            </li>
+            <li>
+              <a href="project-files/author.html">Author</a>
+            </li>
+            <li>
+              <a href="project-files/markup.html">Markup</a>
+            </li>
+            <li>
+              <a href="project-files/showsource.html">ShowSource</a>
+            </li>
+            <li>
+              <a href="project-files/searchable.html">Searchable</a>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <a href="description-comments.html">Description Comments</a>
+        </li>
+        <li>
+          <a href="information-comments.html">Information Comments</a>
+          <ul>
+            <li>
+              <a href="information-comments/author.html">Author</a>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <a href="../version-catalogue/index.html">Version Catalogue</a>
+        </li>
+        <li>
+          <a href="http://www.doctran.co.uk">Doctran Home</a>
+        </li>
+      </ul>
+    </Menu>
+    <UserPage>
+      <Path>command-line.html</Path>
+      <Content>
+        <h1>Command Line Options</h1>
+        <p>Doctran can be supplied with the command-line options shown below.</p>
+        <h2>Help</h2>
+        <p>These options force Doctran to display various information meant to be helpful to the user.</p>
+        <table>
+          <thead>
+            <tr>
+              <td>Option name</td>
+              <td>Description</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>plugins</td>
+              <td>This option forces Doctran to check the plugins folder with its installation path for any shared libraries present and write their names and version. Doctran will exit immediately after plugins have been checked.</td>
+            </tr>
+            <tr>
+              <td>verbose VALUE</td>
+              <td>
+Sets how much information should written to the screen. VALUE can be the following:
+
+ * 1 - No output apart from fatal errors.
+ * 2 - (Default) Basic information output. Statement of the current operation, warning messages and fatal errors are written to the screen.
+ * 3 - Detailed information output. Everything from 2 with a lot of information on what is processing.
+</td>
+            </tr>
+            <tr>
+              <td>help, -h</td>
+              <td>Displays usage information.</td>
+            </tr>
+          </tbody>
+        </table>
+        <h2>I/O</h2>
+        <p>These options allow the user to affect the output Doctran produces.</p>
+        <table>
+          <thead>
+            <tr>
+              <td>Option name</td>
+              <td>Description</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td> save_xml FILE</td>
+              <td>Tells Doctran to save the intermediary xml generated during the documentation's generation. FILE is the name and/or path for the xml file.</td>
+            </tr>
+            <tr>
+              <td> output_dir, -o DIR</td>
+              <td>DIR is the output directory for the documentation. If this is not specified then Doctran output the documentation in the current directory.</td>
+            </tr>
+            <tr>
+              <td> extensions EXT,</td>
+              <td>EXT should be a comma separated list of any additional extensions your source files may have. (Default: f90, f95, f03, f08)</td>
+            </tr>
+          </tbody>
+        </table>
+        <h2>Project</h2>
+        <p>These options allow the user to specify information relating to their project.</p>
+        <table>
+          <thead>
+            <tr>
+              <td>Option name</td>
+              <td>Description</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td> project_info FILE,</td>
+              <td>FILE is the name and/or path of the project's information file.</td>
+            </tr>
+          </tbody>
+        </table>
+        <h2>Themes</h2>
+        <p>These options relate to the customization of the documentation's look and feel.</p>
+        <table>
+          <thead>
+            <tr>
+              <td>Option name</td>
+              <td>Description</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td> theme, -t NAME,</td>
+              <td>NAME is the name of the theme to be applied. (Default: Default)</td>
+            </tr>
+            <tr>
+              <td> color_scheme, -c NAME</td>
+              <td>NAME is the name of the color scheme to be used. (Default: Default)</td>
+            </tr>
+            <tr>
+              <td> overwrite true/false</td>
+              <td>If true then the auxiliary files (css, scripts, etc.) and html files in the output directory will be overwritten. If false then just the html files will be overwritten. (Default: false)</td>
+            </tr>
+          </tbody>
+        </table>
+      </Content>
+    </UserPage>
+    <UserPage>
+      <Path>description-comments.html</Path>
+      <Content>
+        <h1>Descriptive Comments</h1>
+        <p>A description can be placed anywhere within a block to describe that block's purpose. In the case of declarations of variables-like objects, a description must be placed on the line directly beneath the declaration line. A variable-like object refers to variables, arguments and components. A description made up of two parts, a basic and a detail part.</p>
+        <h3>Basic Part</h3>
+        <p>The basic part of a description being with <code>!&gt;</code> and is used to give a brief outline of what the block is used for. This description is used as the subtitle on the block's documentation page, as well as the description displayed within lists.</p>
+        <p>Note, a variable-like object can only contain a basic description part.</p>
+        <h3>Detail Part</h3>
+        <p>Doctran will treat any line beginning with <code>!&gt;&gt;</code> as a detailed description component. The detailed part of a description is only seen within the blocks documentation page. Detailed descriptions can contain markdown if enabled (See <a href="project-files.md">project files</a>). Note that section headings are given by <code>&lt;h3&gt;</code> tags in html or the <code>###</code> in markdown. Doctran will automatically make the content between headings foldable.</p>
+        <p>If required, a description maybe split onto multiple lines by starting the next line with <code>!&gt;</code> or <code>!&gt;&gt;</code> for basic and detailed components respectively.</p>
+        <h3>Example</h3>
+        <p>An example of some valid descriptions are shown below.</p>
+        <pre>
+          <code>type Vector_1d
+    !&gt; A basic description.
+    !&gt; Another line may be included and must be directly below the previous line.
+    !&gt;&gt; ### Markdown parsed heading
+    !&gt;&gt; A detailed description.
+    !&gt;&gt; The same applies for a multi-line detailed descriptions.
+
+    real x_1
+    !&gt; A basic description of a variable. This must be directly below the declaration.
+end type
+</code>
+        </pre>
+        <h2>Named Descriptions</h2>
+        <p>Named descriptions allow the description of variable-like objects, where several of them are declared on a single line. Any line with the form <code>!&gt; NAME - DESCRIPTION</code>, where <code>NAME</code> is a string of alpha numeric characters, will be interpreted by Doctran as a named description. As with all Fortran names the <code>NAME</code> specified is not case sensitive.</p>
+        <h3>Example</h3>
+        <p>An example of some valid named descriptions are shown below.</p>
+        <pre>
+          <code>type Vector_2d
+    real x_1, x_2
+    !&gt; x_1 - A real variable holding the value of the vector in the x direction.
+    !&gt; x_2 - A real variable holding the value of the vector in the y direction.
+end type
+</code>
+        </pre>
+        <h2>Alternative Commenting</h2>
+        <p>Named description allow for more flexibility when specifying your descriptions. Doctran will search within a block and also its parent block for names matching the description's name. This allows for a different style of commenting to be used as shown in the example below.</p>
+        <pre>
+          <code>!&gt; Vector_2d - A type containing two real components, representing the two degrees of freedom.
+!&gt;&gt; Mathematically this type represents the following:
+!&gt;&gt; \[ \vec{x} = \left(\begin{array}{c} x_1 \\ x_2 \end{array} \right) \]
+type Vector_2d
+    !&gt; x_1 - A real variable holding the value of the vector in the x direction.
+    !&gt; x_2 - A real variable holding the value of the vector in the y direction.
+    real x_1, x_2
+end type
+</code>
+        </pre>
+      </Content>
+    </UserPage>
+    <UserPage>
+      <Path>getting-started.html</Path>
+      <Content>
+        <h1>Getting Started</h1>
+        <p>Once you have downloaded and run the installation package on you system, it is best to test that the installation has been successful. To do this use the following steps:
+  - Open up a Doctran Command Prompt, on Windows systems, or a terminal, on other systems.
+  - Type <code>cd testing</code> to move into the testing folder
+  - Then on Windows systems type <code>run_tests.bat</code> or <code>sh run_tests.sh</code> on other systems.</p>
+        <p>Doctran will then be run on a collection of simple source files. If documentation generation is completed successfully, then you will see the message "Documentation generation complete." outputted. You can view the documentation generated by searching in your home directory for the Docs directory.</p>
+        <p>If everything finished successfully you are now ready to start creating documentation for you own Fortran projects.</p>
+        <h2>Running Doctran</h2>
+        <p>Doctran can only be run from the command line. The most basic syntax for running Doctran is </p>
+        <pre>
+          <code>doctran source_files
+</code>
+        </pre>
+        <p>where source_files is a space separated list of paths to your source files. This will output your documentation in the current directory.</p>
+        <p>Commonly, you would want your documentation to be placed within a new folder. To do this use the <code>--output_dir</code> option or its shorter <code>-o</code> option as shown below.</p>
+        <pre>
+          <code>doctran -o Docs source_files
+</code>
+        </pre>
+        <p>The above will output documentation in the Docs directory and if required creating it.</p>
+        <p>The most general syntax for running Doctran is shown below.</p>
+        <pre>
+          <code>doctran [options] source_files
+</code>
+        </pre>
+        <p>A full list of options is shown <a href="command-line.md">here</a></p>
+      </Content>
+    </UserPage>
+    <UserPage>
+      <Path>index.html</Path>
+      <Content>
+        <h1>Welcome to Doctran 1.2.1</h1>
+        <p>
+          <image align="left" style="margin: 0 4em 1.0em 0" src="images/logo.png" /> Doctran is a documentation generator for generating API documentation in HTML format from modern Fortran source code. It has full support for Fortran 95 standard and the object oriented parts of the Fortran 2003 standard.</p>
+        <p>The HTML format allows related documents to be conveniently hyper-linked together. Both breadcrumb and drop-down menu navigations are automatically generated to allow quick access to all parts of you source code.</p>
+        <p>Doctran is developed in a Windows environment, but is a cross platform application and has been run on various Linux flavours. It is also likely to run on Mac, although this has not been tested.</p>
+      </Content>
+    </UserPage>
+    <UserPage>
+      <Path>information-comments.html</Path>
+      <Content>
+        <h1>Information Comments</h1>
+        <p>An information element specifies a specific property of a block. Any line of the form <code>!&gt; TYPE : DESCRIPTION</code>, where <code>TYPE</code> is a string of alpha numeric characters, will be interpreted by Doctran as a information element. The <code>TYPE</code> specification is not case sensitive.</p>
+        <p>Any line of the form <code>!&gt;&gt; COMPONENT : DESCRIPTION</code> will be interpreted as a sub-component of the <code>TYPE</code> above. Again the <code>COMPONENT</code> is not case sensitive. See the author example below.</p>
+        <p>Currently only an author information element is supported by Doctran. However, if you would like additional information comment types to be supported, get in touch via <a href="mailto:support@doctran.co.uk">support@doctran.co.uk</a> and I'll see what I can do.</p>
+        <p>Doctran supports the following informational elements:</p>
+        <ul>
+          <li>
+            <a href="information-comments/author.md">Author</a>
+          </li>
+        </ul>
+      </Content>
+    </UserPage>
+    <UserPage>
+      <Path>installation.html</Path>
+      <Content>
+        <h1>Installation Instructions</h1>
+        <p>Doctran may be run on Windows systems from XP SP3 onwards, and on Linux and Mac OS X systems that support the Mono 2.8 framework or above.</p>
+        <p>Doctran has been tested by the developer on the following systems, and runs on:</p>
+        <ul>
+          <li>Windows XP, 7 and 8</li>
+          <li>Ubuntu 14.04</li>
+          <li>Fedora 21</li>
+          <li>OpenSUSE 13.2</li>
+        </ul>
+        <p>However, it should run on any system that can run the Mono framework. If you find you can run on any system not mentioned here please email <a href="mailto:support@doctran.co.uk">support@doctran.co.uk</a> so it can be added to the list.</p>
+      </Content>
+    </UserPage>
+    <UserPage>
+      <Path>project-files.html</Path>
+      <Content>
+        <h1>Project Files</h1>
+        <p>The project file is simply a plain text file that contains information about your project. You can specify a project file using the <code>--project_info</code> option</p>
+        <p>You can specify a tagline by writing it on the first line of the file. After this you can specify the content to be displayed on the project page by per-appending it with <code>&gt;</code>. Markdown is allowed within this section. Next you can add informational elements which must start with <code>Type:</code>. The following project information types are supported:</p>
+        <ul>
+          <li>
+            <a href="project-files/name.md">Name</a>
+          </li>
+          <li>
+            <a href="project-files/author.md">Author</a>
+          </li>
+          <li>
+            <a href="project-files/markup.md">Markup</a>
+          </li>
+          <li>
+            <a href="project-files/showsource.md">ShowSource</a>
+          </li>
+          <li>
+            <a href="project-files/searchable.md">Searchable</a>
+          </li>
+        </ul>
+        <p>An example project file is shown below</p>
+        <pre>
+          <code>Objects with both magnitude and direction.
+&gt;### Description 
+&gt;This project contains types and procedures.
+
+&gt;### File List
+&gt; This project contains the following Fortran 95 source files.
+
+&gt; * Example1.f90
+&gt; * Example2.f90
+&gt; * Vectors.f90
+&gt; * Vectors_1d.f90
+&gt; * Vectors_2d.f90
+
+Name: Vectors
+
+Searchable:
+&gt; Type: File
+&gt; Type: Module
+&gt; Type: Type
+&gt; Type: Assignment
+&gt; Type: Overload
+&gt; Type: Operator
+&gt; Type: Function
+&gt; Type: Subroutine
+
+ShowSource:
+&gt; Type: Program
+&gt; Type: Type
+&gt; Type: Assignment
+&gt; Type: Overload
+&gt; Type: Operator
+&gt; Type: Function
+&gt; Type: Subroutine
+</code>
+        </pre>
+      </Content>
+    </UserPage>
+    <UserPage>
+      <Path>information-comments/author.html</Path>
+      <Content>
+        <h1>Author</h1>
+        <p>An author information element is used to specify the author who wrote that block of code. It may be placed within any block of code and the information will be shown on that block's documentation page. The unique author names within all blocks are collect and also shown on the project's index page.</p>
+        <h2>Sub-Information</h2>
+        <p>The author information comment supports the following sub-information:</p>
+        <ul>
+          <li>Name - The author's name.</li>
+          <li>Email - The author's email, used to create a mailto link.</li>
+          <li>Affiliation - The institution or company the author belongs to.</li>
+        </ul>
+        <p>Below shows an example of an author information element for a subroutine.</p>
+        <pre>
+          <code>subroutine equals(lhs, rhs)
+!&gt; Author:
+!&gt;&gt; Name: Bob
+!&gt;&gt; Email: bob@example.com
+!&gt;&gt; Affiliation: A Different Fortran Software Company
+
+    type(Vector_1d),intent(inout) :: lhs
+    type(Vector_1d),intent(in) :: rhs
+
+    lhs%x_1 = rhs%x_2
+
+end subroutine
+</code>
+        </pre>
+      </Content>
+    </UserPage>
+    <UserPage>
+      <Path>installation/unix.html</Path>
+      <Content>
+        <h1>Linux and Mac OS X Installations</h1>
+        <p>Installation on Unix based systems are distributed as a <a href="https://github.com/megastep/makeself">makeself</a> package. To install place DoctranTrial.sh in the directory you would like to install Doctran within. Then, open a terminal within that directory and run </p>
+        <pre>
+          <code>sh ./DoctranTrial.sh
+</code>
+        </pre>
+        <p>and follow the instruction to install. The install package will check and warn you about any missing prerequisites. You will be asked if you want to add a symbolic link from Doctran to your /usr/bin/ folder. This will allow you to call Doctran from any folder. Confirming will require root access and you will be prompted to enter your root password.</p>
+        <h2>Prerequisites</h2>
+        <p>The only prerequisite required currently is the Mono framework. This must be version 2.8 or above. Information on its installation can be found on Mono's <a href="http://www.mono-project.com/download/">website</a></p>
+      </Content>
+    </UserPage>
+    <UserPage>
+      <Path>installation/windows.html</Path>
+      <Content>
+        <h1>Windows Systems</h1>
+        <p>The Windows package comes as a self-installing executable, making installation straightforward. Proceed by following the dialogues. You will be asked to download and install any missing prerequisites, and to add a shortcut to Doctran's command prompt. This is recommended, as loading the command prompt using one of these shortcuts is probably the quickest way of getting started using Doctran.</p>
+        <h2>Prerequisites</h2>
+        <p>Doctran's only prerequisite currently is the the .Net Framework 4.</p>
+      </Content>
+    </UserPage>
+    <UserPage>
+      <Path>project-files/author.html</Path>
+      <Content>
+        <h1>Author</h1>
+        <p>Use this to specify any additional authors not specified within <a href="information-comments/author.md">author</a> information comments within the source.  This can be specified multiple times and take the following form:</p>
+        <pre>
+          <code>Author:
+&gt;SubComponent: SubComponent_Value
+</code>
+        </pre>
+        <p>It the following sub-components:</p>
+        <table>
+          <thead>
+            <tr>
+              <td>Name</td>
+              <td>Maximum allowed</td>
+              <td>Description</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Name</td>
+              <td>1</td>
+              <td>The author's name.</td>
+            </tr>
+            <tr>
+              <td>Email</td>
+              <td>1</td>
+              <td>The author's email will be displayed as a mailto link.</td>
+            </tr>
+            <tr>
+              <td>Affiliation</td>
+              <td>1</td>
+              <td> The author's institution or work place.</td>
+            </tr>
+          </tbody>
+        </table>
+      </Content>
+    </UserPage>
+    <UserPage>
+      <Path>project-files/markup.html</Path>
+      <Content>
+        <h1>Markup</h1>
+        <p>The type of markup used for detailed descriptions. This should be specified only once and take the following form:</p>
+        <pre>
+          <code>Markup: Markup_Value
+</code>
+        </pre>
+        <p>
+          <code>Markup_Value</code> must take the value text, html or markdown (Default).</p>
+      </Content>
+    </UserPage>
+    <UserPage>
+      <Path>project-files/name.html</Path>
+      <Content>
+        <h1>Name</h1>
+        <p>The name of the project to be display within the header and title. This should be specified only once and take the following form:</p>
+        <pre>
+          <code>Name: Name_Value
+</code>
+        </pre>
+      </Content>
+    </UserPage>
+    <UserPage>
+      <Path>project-files/searchable.html</Path>
+      <Content>
+        <h1>Searchable</h1>
+        <p>The type of code block that should be indexed and viewable within the documentation search results. This should be specified only once and take the following form:</p>
+        <pre>
+          <code>Searchable:
+&gt; Type: Type_Value
+</code>
+        </pre>
+        <p>
+          <code>Type</code> may be specified multiple times and <code>Type_Value</code> can take any of the following values:</p>
+        <ul>
+          <li>File</li>
+          <li>Program</li>
+          <li>Module</li>
+          <li>DerivedType</li>
+          <li>Assignment</li>
+          <li>Overload</li>
+          <li>Operator</li>
+          <li>Function </li>
+          <li>Subroutine</li>
+        </ul>
+        <p>By default all of the above is made searchable.</p>
+      </Content>
+    </UserPage>
+    <UserPage>
+      <Path>project-files/showsource.html</Path>
+      <Content>
+        <h1>ShowSource</h1>
+        <p>The type of code block that syntax highlighted source code should be included on its page. This should be specified only once and take the following form:</p>
+        <pre>
+          <code>Markup:
+&gt; Type: Type_Value
+</code>
+        </pre>
+        <p>
+          <code>Type</code> may be specified multiple times and <code>Type_Value</code> can take of the following values:</p>
+        <ul>
+          <li>File</li>
+          <li>Program</li>
+          <li>Module</li>
+          <li>DerivedType</li>
+          <li>Assignment</li>
+          <li>Overload</li>
+          <li>Operator</li>
+          <li>Function</li>
+          <li>Subroutine</li>
+        </ul>
+        <p>By default the source will be shown for programs, functions and subroutines.</p>
+      </Content>
+    </UserPage>
+  </Information>
+  <DocCreated>
+    <DateTime>2015-10-16T15:03:48.1340721+01:00</DateTime>
+  </DocCreated>
+  <Files />
+</Project>

@@ -1,0 +1,40 @@
+#Breadcrumbs {
+  list-style: none inside none;
+  overflow: hidden;
+  margin-bottom: 2%;
+  padding: 0 0.5em;
+  border-width: 1px 0 1px 0;
+  border-style: solid;
+  border-color: #c5c8cb;
+}
+#Breadcrumbs > h1 {
+  display: none;
+}
+#Breadcrumbs > ul {
+  list-style: none;
+  margin: 0 !important;
+  padding: 0 !important;
+  font-size: 1.1em;
+}
+#Breadcrumbs > ul > li {
+  line-height: 1.3;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: inline-block;
+}
+#Breadcrumbs > ul > li > .separator {
+  padding: 0px 0.5em;
+}
+#Breadcrumbs > ul > li > .type {
+  font-size: 0.8em;
+}
+#Breadcrumbs .active {
+  font-weight: bold;
+}
+#Breadcrumbs .active > span {
+  font-weight: normal;
+}
+#Breadcrumbs a,
+#Breadcrumbs #Breadcrumbs a:visited {
+  text-decoration: none;
+}

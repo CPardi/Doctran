@@ -1,0 +1,23 @@
+Name: My Project
+TagLine: A Sample Project
+
+Menu: menu.html
+UserPage: index.md
+Copy: images\\*
+
+Searchable:
+> Type: File
+> Type: Program
+> Type: Module
+> Type: DerivedType
+> Type: Assignment
+> Type: Overload
+> Type: Operator
+> Type: Function
+> Type: Subroutine 
+
+ShowSource:
+> Type: File
+> Type: Program
+> Type: Function
+> Type: Subroutine

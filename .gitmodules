@@ -1,0 +1,12 @@
+[submodule "Fortran95"]
+	path = Fortran95
+	url = ./Fortran95/
+[submodule "Fortran95.Test"]
+	path = Fortran95.Test
+	url = ./Fortran95.Test/
+[submodule "Fortran2003.Test"]
+	path = Fortran2003.Test
+	url = ./Fortran2003.Test/
+[submodule "Fortran2003"]
+	path = Fortran2003
+	url = ./Fortran2003/

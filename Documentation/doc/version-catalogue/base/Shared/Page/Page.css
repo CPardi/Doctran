@@ -1,0 +1,113 @@
+body {
+  font-size: 1em;
+  margin: 0 auto;
+  padding: 0;
+  text-align: center;
+  float: none;
+}
+#Page {
+  height: auto;
+  text-align: left;
+  color: #404853;
+}
+#Page > .mainContainer {
+  margin: 0;
+  position: absolute;
+  top: 0;
+  left: 20em;
+  bottom: 0;
+  right: 0;
+  overflow: auto;
+}
+#Page > .mainContainer > #Article {
+  margin: 3em 7.5% 0 7.5%;
+  min-width: 30em;
+  max-width: 75em;
+  /* HEADINGS */
+
+  /* INLINE ELEMENTS */
+
+}
+#Page > .mainContainer > #Article p {
+  line-height: 1.5;
+  margin-bottom: 1em;
+}
+#Page > .mainContainer > #Article ul {
+  margin: 1em 0 1em 2em;
+  line-height: 1.75;
+}
+#Page > .mainContainer > #Article ul li {
+  margin-left: 1.5em;
+}
+#Page > .mainContainer > #Article ul li ul {
+  margin: 0 0 0.2em 2em;
+}
+#Page > .mainContainer > #Article pre {
+  padding: 0.2em 1em;
+  white-space: pre-wrap;
+  font-family: Consolas, Monaco, Andale Mono, monospace;
+  line-height: 1.5;
+  font-size: 13px;
+  border: 1px solid #dddddd;
+  background-color: #f7f7f7;
+  border-radius: 3px;
+  margin: 0 10% 1em 3%;
+}
+#Page > .mainContainer > #Article code {
+  border: 1px solid #dddddd;
+  padding: 0.05em 0.2em;
+  background-color: #f7f7f7;
+  border-radius: 3px;
+}
+#Page > .mainContainer > #Article pre code {
+  padding: 0;
+  border: 0px;
+}
+#Page > .mainContainer > #Article table {
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+#Page > .mainContainer > #Article h1 {
+  padding-left: 0.2em;
+  font-size: 2em;
+  font-weight: bold;
+  border-bottom: 1px solid #c5c8cb;
+  line-height: 1.2;
+  margin-top: 1.5em;
+  margin-bottom: 1.2em;
+}
+#Page > .mainContainer > #Article h2 {
+  font-size: 1.3em;
+  font-weight: bold;
+  padding-left: 1em;
+  line-height: 1.4;
+  display: inline-block;
+  padding-right: 2.5%;
+  margin-top: 1.05em;
+  margin-bottom: 0.84em;
+  border-bottom: 1px solid #c5c8cb;
+}
+#Page > .mainContainer > #Article h3 {
+  font-size: 1.15em;
+  line-height: 1.4;
+  font-weight: bold;
+  font-style: italic;
+  margin: 0.45em 0 0.36em 1.2em;
+}
+#Page > .mainContainer > #Article sup {
+  vertical-align: top;
+  font-size: 0.9em;
+}
+#Page > .mainContainer > #Article .variable,
+#Page > .mainContainer > #Article .argument,
+#Page > .mainContainer > #Article .result {
+  font-family: monospace;
+}
+#Page > .mainContainer > #Article a {
+  outline: none;
+  text-decoration: none;
+  color: #1364c4;
+}
+#Page > .mainContainer > #Article a:hover {
+  color: #3390b1;
+}

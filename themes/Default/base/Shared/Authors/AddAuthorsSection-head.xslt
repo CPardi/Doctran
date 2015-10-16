@@ -10,7 +10,7 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
 
 	<xsl:template name="AddAuthorsSection-head">
 		<xsl:param name="prefix" select="Prefix"/>
-		<link rel="stylesheet" type="text/css" href="{concat($prefix,'base/Shared/Authors/Authors.css')}" />
+		<link rel="stylesheet" type="text/css" href="{concat($prefix,'base/Shared/Authors/Authors.css')}"/>
 	</xsl:template>
 	
 </xsl:stylesheet>

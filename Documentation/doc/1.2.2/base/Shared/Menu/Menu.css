@@ -1,0 +1,19 @@
+#Menu {
+  width: 20em;
+  border-right: 1px solid gray;
+  overflow: hidden;
+  margin: 0;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  background-color: #383d43;
+}
+#Menu > .contentContainer {
+  overflow: auto;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}

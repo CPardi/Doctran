@@ -15,10 +15,12 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
 
 				<xsl:with-param name="AdditionalContent-body">
 
-					<xsl:apply-templates mode="AddDescription" select="Description"/>
+					<xsl:apply-templates mode="AddDescription" select="Description">
+						<xsl:with-param name="prefix" select="''"/>
+					</xsl:apply-templates>
 
 					<xsl:apply-templates mode="AddSubObjectLists" select=".">
-						<xsl:with-param name="prefix" select="Prefix"/>
+						<xsl:with-param name="prefix" select="''"/>
 					</xsl:apply-templates>
           
 				</xsl:with-param>

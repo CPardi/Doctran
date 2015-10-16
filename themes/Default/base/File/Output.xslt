@@ -8,16 +8,8 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
 
 <xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
-	<xsl:template name="OutputFiles">
-		
-		<xsl:call-template name="ListPage">
-			<xsl:with-param name="filename" select="'FileList'"/>
-			<xsl:with-param name="title" select="'File List'"/>
-			<xsl:with-param name="objects" select="Files"/>
-		</xsl:call-template>
-		
-		<xsl:apply-templates mode="Each" select="/Project/Files/File"/>
-
-	</xsl:template>
+    <xsl:template name="OutputFiles">
+        <xsl:apply-templates mode="Each" select="/Project/Files/File"/>
+    </xsl:template>
 
 </xsl:stylesheet>

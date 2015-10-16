@@ -18,7 +18,7 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
             <Groups>
                 <xsl:variable name="allSubObjects" as="element()">
                     <Groups>
-                        <xsl:copy-of copy-namespaces="no" select="$additionalSubObjects/*"/>
+                        <xsl:copy-of select="$additionalSubObjects/*"/>
 
                         <xsl:perform-sort>
                             <xsl:sort select="position()" data-type="number" order="descending"/>

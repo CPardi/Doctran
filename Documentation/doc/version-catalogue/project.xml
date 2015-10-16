@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<Project>
+  <Name />
+  <Information>
+    <Name>Doctran</Name>
+    <Tagline>A documentation generator for Fortran.</Tagline>
+    <Menu>
+      <ul>
+        <li>
+          <a href="index.html">Versions</a>
+          <ul>
+            <li>
+              <a href="../1.2.2/index.html">1.2.2 (Latest)</a>
+            </li>
+            <li>
+              <a href="../1.2.1/index.html">1.2.1</a>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <a href="changelog.html">Changelog</a>
+        </li>
+        <li>
+          <a href="http://www.doctran.co.uk">Doctran Home</a>
+        </li>
+      </ul>
+    </Menu>
+    <UserPage>
+      <Path>changelog.html</Path>
+      <Content>
+        <h1>Changelog</h1>
+        <h2>Version 1.2.2 (Latest)</h2>
+        <ul>
+          <li>The style of the generated documentation has been modified to take advantage of wide screen and high resolution displays.</li>
+          <li>
+            <code>Menu</code> project information added, to allow menu customizations. The menu is now generated from a markdown or HTML file containing macros.</li>
+          <li>
+            <code>UserPage</code> project information added, so that additional documentation pages can be created from the user's markdown or HTML files.</li>
+          <li>
+            <code>Source</code> project information added so that source files can be specified from the project file.</li>
+          <li>A project page is no longer automatically generated from comments within the project file, instead this can be created using the <code>UserPage</code> information.</li>
+          <li>
+            <code>Tagline</code> project information added, which should not be used to specify the project's tagline.</li>
+          <li>Color schemes removed.</li>
+          <li>
+            <code>--color_scheme</code> command-line argument removed.</li>
+          <li>
+            <code>--theme</code> command line argument removed.</li>
+          <li>Doctran will now run without any Fortran source files specified, to allow for use as a static wiki generator.</li>
+        </ul>
+        <h2>Version 1.2.1</h2>
+        <ul>
+          <li>The block searching algorithm has been improved.</li>
+          <li>The "end" statement to terminate functions and subroutines within interfaces is now reconsigned.</li>
+          <li>Broken links in the 'Type' column of argument lists within the documentation pages of assignments and operators fixed.</li>
+        </ul>
+        <h2>Version 1.2</h2>
+        <ul>
+          <li>Support for the object oriented constructs from the Fortran 2003 standard added.</li>
+        </ul>
+        <h2>Version 1.1</h2>
+        <ul>
+          <li>Markdown supported within descriptions added.</li>
+          <li>Syntax highlighting of source code added.</li>
+          <li>A Javascript search added.</li>
+          <li>Support for different color schemes.</li>
+        </ul>
+        <h2>Version 1.0</h2>
+        <ul>
+          <li>Initial Release </li>
+        </ul>
+      </Content>
+    </UserPage>
+    <UserPage>
+      <Path>index.html</Path>
+      <Content>
+        <h1>Version Catalogue</h1>
+        <p>
+          <image align="left" style="margin: 0 4em 1.0em 0" src="images/logo.png" />
+Previous versions of Doctran are listed below.</p>
+        <ul>
+          <li>
+            <a href="../1.2.2/index.md">1.2.2</a> (Latest)</li>
+          <li>
+            <a href="../1.2.1/index.md">1.2.1</a>
+          </li>
+        </ul>
+      </Content>
+    </UserPage>
+  </Information>
+  <DocCreated>
+    <DateTime>2015-10-16T15:04:08.4572345+01:00</DateTime>
+  </DocCreated>
+  <Files />
+</Project>

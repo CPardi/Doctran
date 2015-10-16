@@ -21,9 +21,9 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
 			<xsl:if test="$class">
 				<xsl:attribute name="class" select="concat('subsection ', $class)"/>
 			</xsl:if>
-			<h4>
+			<h3>
 				<xsl:value-of select="$name"/>
-			</h4>
+			</h3>
 			<div class="content">
 				<xsl:copy-of select="$content"/>
 			</div>

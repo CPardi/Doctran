@@ -1,0 +1,135 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{76ED33A3-5634-4A57-81AD-C8B948E6FF12}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Doctran</RootNamespace>
+    <AssemblyName>Doctran</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>
+    </DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ColorCode">
+      <HintPath>..\..\colorcodefortran\ColorCode-mono\bin\Release\ColorCode.dll</HintPath>
+    </Reference>
+    <Reference Include="CommandLine, Version=1.9.71.2, Culture=neutral, PublicKeyToken=de6f01bd326f8c32, processorArchitecture=MSIL">
+      <HintPath>..\packages\CommandLineParser.1.9.71\lib\net40\CommandLine.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="dotless.Core, Version=1.5.1.0, Culture=neutral, PublicKeyToken=96b446c9e63eae34, processorArchitecture=MSIL">
+      <HintPath>..\packages\dotless.1.5.1\lib\dotless.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="IKVM.OpenJDK.Security">
+      <HintPath>..\..\..\..\..\..\Program Files\Saxonica\SaxonHE9.6N\bin\IKVM.OpenJDK.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="MarkdownSharp, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MarkdownSharp.1.13.0.0\lib\35\MarkdownSharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="saxon9he-api, Version=9.6.0.6, Culture=neutral, PublicKeyToken=e1fdd002d5083fe6, processorArchitecture=MSIL">
+      <HintPath>..\packages\Saxon-HE.9.6.0.6\lib\net40\saxon9he-api.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BaseClasses\FortranBlock.cs" />
+    <Compile Include="BaseClasses\FortranObject.cs" />
+    <Compile Include="BaseClasses\IPlugin.cs" />
+    <Compile Include="BaseClasses\ObjectGroup.cs" />
+    <Compile Include="BaseClasses\Parser.cs" />
+    <Compile Include="BaseClasses\PostAction.cs" />
+    <Compile Include="BaseClasses\Traverser.cs" />
+    <Compile Include="BaseClasses\XFortranObject.cs" />
+    <Compile Include="Comments\CommentDefinitions.cs" />
+    <Compile Include="Comments\Description.cs" />
+    <Compile Include="Comments\Information\Information.cs" />
+    <Compile Include="Comments\NamedDescription.cs" />
+    <Compile Include="Common\AssemblyLoader.cs" />
+    <Compile Include="Common\FileLine.cs" />
+    <Compile Include="Common\Helper.cs" />
+    <Compile Include="Common\Options.cs" />
+    <Compile Include="Common\PluginManager.cs" />
+    <Compile Include="Common\EnvVar.cs" />
+    <Compile Include="Common\PathList.cs" />
+    <Compile Include="Common\UserInformer.cs" />
+    <Compile Include="Files\File.cs" />
+    <Compile Include="OptionFile\Exceptions.cs" />
+    <Compile Include="OptionFile\Menu.cs" />
+    <Compile Include="OptionFile\OptionFactory.cs" />
+    <Compile Include="OptionFile\Parser.cs" />
+    <Compile Include="OptionFile\UserPage.cs" />
+    <Compile Include="OptionFile\ValueAttribute.cs" />
+    <Compile Include="OptionFile\XmlPassThroughOptionsAttribute.cs" />
+    <Compile Include="Outputters\HtmlOutputter.cs" />
+    <Compile Include="Outputters\ThemeOutputter.cs" />
+    <Compile Include="Outputters\XmlOutputter.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Projects\Project.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Content Include="..\themes\**\*">
+      <Link>themes\%(RecursiveDir)\%(FileName)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <Content Include="defaults\index.md">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="defaults\project.info">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="defaults\images\logo.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="defaults\menu.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

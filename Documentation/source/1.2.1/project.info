@@ -1,0 +1,7 @@
+Name: Doctran
+Tagline: A documentation generator for Fortran.
+
+Menu: menu.markdown
+UserPage: **/*.md
+
+Copy: images/*.png

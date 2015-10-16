@@ -6,7 +6,9 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
  file, You can obtain one at http://mozilla.org/MPL/2.0/.
 -->
 
-<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:stylesheet version="2.0" exclude-result-prefixes="doctran xsl"
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:doctran="http://www.doctran.co.uk">
 
     <xsl:template name="Header-head">
         <xsl:param name="prefix" select="Prefix"/>
@@ -21,14 +23,14 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
 
         <div id="Header">
             <h1>
-                <a href="{concat($prefix,'index.html')}">
-                    <xsl:value-of select="/Project/Name"/>
+                <a class="title" href="{concat($prefix,'index.html')}">
+                    <xsl:value-of select="doctran:object-name(/Project)"/>
                 </a>
-                <br/>
-                <xsl:if test="/Project/Description/Basic">
-                    <span>
-                        <xsl:value-of select="/Project/Description/Basic/node()"/>
-                    </span>
+                <xsl:if test="/Project/Information/Tagline">
+                    <a class="tagline" href="{concat($prefix,'index.html')}">
+                        <xsl:text> : </xsl:text>
+                        <xsl:value-of select="/Project/Information/Tagline"/>
+                    </a>
                 </xsl:if>
             </h1>
         </div>

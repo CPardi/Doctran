@@ -1,0 +1,19 @@
+#Article > #ContentTitle > .objectType {
+  float: right;
+  margin-right: 1em;
+  font-size: inherit;
+}
+#Article > #ContentTitle > .separator {
+  display: none;
+}
+#Article > #ContentTitle > .objectName {
+  margin-left: 1em;
+  font-size: inherit;
+}
+#Article > .basicDescription {
+  margin: -1.75em 0 3em 0;
+  font-size: 0.9em;
+  display: block;
+  line-height: 2;
+  margin-bottom: 1.5em;
+}
