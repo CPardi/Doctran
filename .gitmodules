@@ -1,0 +1,6 @@
+[submodule "Plugin-Fortran95"]
+	path = Plugin-Fortran95
+	url = ./Plugin-Fortran95
+[submodule "Plugin-Fortran2003"]
+	path = Plugin-Fortran2003
+	url = ./Plugin-Fortran2003
