@@ -20,25 +20,25 @@ namespace Doctran.Fbase.Comments
         public NamedDescriptionBlock()
             : base("Named Description", false, false, 0) { }
 
-        public override bool BlockStart(string parent_block_name, List<FileLine> lines, int lineIndex)
+        public override bool BlockStart(string parentBlockName, List<FileLine> lines, int lineIndex)
         {
             return
                 CommentDefinitions.NDescStart(lines[lineIndex].Text)
-                && !parent_block_name.StartsWith("Information_")
+                && !parentBlockName.StartsWith("Information_")
                 && !CommentDefinitions.DetailLine(lines[lineIndex].Text)
                 && !CommentDefinitions.InfoStart(lines[lineIndex].Text);
         }
 
-        public override bool BlockEnd(string parent_block_name, List<FileLine> lines, int lineIndex)
+        public override bool BlockEnd(string parentBlockName, List<FileLine> lines, int lineIndex)
         {
             if(lineIndex + 1 >= lines.Count) return true;
             return
                 CommentDefinitions.NDescEnd(lines[lineIndex + 1].Text)
-                || this.BlockStart(parent_block_name, lines, lineIndex + 1)
+                || this.BlockStart(parentBlockName, lines, lineIndex + 1)
                 || CommentDefinitions.InfoStart(lines[lineIndex + 1].Text);
         }
 
-        public override List<FortranObject> ReturnObject(IEnumerable<FortranObject> sub_objects, List<FileLine> lines)
+        public override List<FortranObject> ReturnObject(IEnumerable<FortranObject> subObjects, List<FileLine> lines)
         {
             return new NamedDescription(lines);
         }

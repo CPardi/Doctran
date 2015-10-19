@@ -12,6 +12,8 @@ using Doctran.Fbase.Common;
 
 namespace Doctran.BaseClasses
 {
+    using Reporting;
+
     public abstract class XFortranObject : FortranObject
 	{
 		public string XElement_Name;
@@ -54,19 +56,29 @@ namespace Doctran.BaseClasses
 				List<XElement> xele =
 					(from sObj in obj.SubObjectsOfType<XFortranObject>()
 					 where grp.Is(sObj)
-					 let grp_xele = sObj.XEle()
-					 where grp_xele != null
-					 select grp_xele).ToList();
+					 let grpXele = sObj.XEle()
+					 where grpXele != null
+					 select grpXele).ToList();
 
-				if (xele.Any())
-				{
-					try { xeles.Add(grp.XEle(xele)); }
-					catch (InvalidOperationException e)
-					{
-						xeles.Add(grp.XEle(xele.First()));
-						UserInformer.GiveWarning(obj.GetType().Name + " " + obj.Name + " within " + this.GoUpTillType<Doctran.Fbase.Files.File>().Name, e);
-					}
-				}
+			    if (!xele.Any())
+			    {
+			        continue;
+			    }
+
+			    try
+			    {
+			        xeles.Add(grp.XEle(xele));
+			    }
+			    catch (InvalidOperationException e)
+			    {
+			        xeles.Add(grp.XEle(xele.First()));
+			        Report.Warning((pub) =>
+			        {
+			            pub.AddWarningDescription("Error in XML parsing.");
+			            pub.AddReason(e.Message);
+			            pub.AddLocation(obj.GetType().Name + " " + obj.Name + " within " + this.GoUpTillType<Doctran.Fbase.Files.File>().Name);
+			        });
+			    }
 			}
 			return xeles;
 		}

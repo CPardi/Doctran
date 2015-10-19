@@ -8,6 +8,8 @@ using System.IO;
 
 namespace Doctran.Fbase.Outputters
 {
+    using Common;
+
     public class XmlOutputter
     {
         public XmlOutputter(string relativePathAndName)
@@ -26,7 +28,7 @@ namespace Doctran.Fbase.Outputters
 
         public void SaveToDisk(string relativePathAndName)
         {
-             Common.Helper.CreateDirectory(Path.GetDirectoryName(Path.GetFullPath(relativePathAndName)));
+             HelperUtils.CreateDirectory(Path.GetDirectoryName(Path.GetFullPath(relativePathAndName)));
              this.XDocument.Save(Path.GetFullPath(relativePathAndName));
         }
     }

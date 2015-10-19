@@ -14,6 +14,7 @@ namespace Doctran
     using Fbase.Outputters;
     using Fbase.Projects;
     using OptionFile;
+    using Reporting;
     using File = Fbase.Files.File;
     using Parser = CommandLine.Parser;
 
@@ -27,6 +28,8 @@ namespace Doctran
             AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionTrapper;
 #endif
 
+            Report.SetReleaseProfile();
+
             var options = new Options();
 
             try
@@ -35,19 +38,30 @@ namespace Doctran
             }
             catch (IOException e)
             {
-                UserInformer.GiveError("command line arguments", e.Message);
+                Report.Error(
+                    (pub, ex) =>
+                    {
+                        pub.AddErrorDescription("Invalid argument list.");
+                        pub.AddReason(e.Message);
+                    }, e);
             }
 
             if (options.ShowHelp)
             {
-                Console.WriteLine(options.GetUsage());
-                Helper.Stop();
+                Report.MessageThenExit(
+                    pub =>
+                    {
+                        pub.AddMessage(options.GetUsage());
+                    });
             }
 
             if (options.ShowPluginInformation)
             {
-                PluginManager.WriteInformation();
-                Helper.Stop();
+                Report.MessageThenExit(
+                    pub =>
+                    {
+                        pub.AddMessage(PluginManager.InformationString);
+                    });
             }
 
             ShowLicensing = options.ShowLicensing;

@@ -18,7 +18,7 @@ namespace Doctran.OptionFile
             var paths = new PathList(false) { value.Trim() };
 
             return paths
-                .Select(p => Helper.GetMarkUpFile(string.Empty, p))
+                .Select(p => HelperUtils.GetMarkUpFile(string.Empty, p))
                 .Select(htmlFile => new UserPage(depth, htmlFile.Item1, htmlFile.Item2, lines));
         }
     }

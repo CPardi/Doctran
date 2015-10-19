@@ -17,7 +17,7 @@ namespace Doctran.OptionFile
     {
         public IEnumerable<IInformation> Create(int depth, string value, IEnumerable<FortranObject> subObjects, List<FileLine> lines)
         {
-            var menu_html = Helper.GetMarkUpFile(Directory.GetCurrentDirectory() + EnvVar.slash, value);
+            var menu_html = HelperUtils.GetMarkUpFile(Directory.GetCurrentDirectory() + EnvVar.slash, value);
             // Change any .md extensions to .html
             string menu_string = Regex.Replace(menu_html.Item2, @"(.*?\.)(?:md|markdown)", new MatchEvaluator(match => match.Groups[1].Value + "html"));
 

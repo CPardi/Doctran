@@ -12,6 +12,8 @@ using Doctran.Fbase.Common;
 
 namespace Doctran.BaseClasses
 {
+    using Reporting;
+
     /// <summary>
     /// This class parses a code file.
     /// </summary>
@@ -107,7 +109,16 @@ namespace Doctran.BaseClasses
 
             } while(true);
 
-            if (!blockObjects.Any()) UserInformer.GiveError(pathAndFileName, "The " + block_name.ToLower() + " beggining at line " + lines[start_index].Number + " has not been closed");
+            if (!blockObjects.Any())
+            {
+                Report.Error((pub, ex) =>
+                {
+                    pub.AddErrorDescription("Error parsing source file.");
+                    pub.AddReason("The " + block_name.ToLower() + " beggining at line " + lines[start_index].Number + " has not been closed");
+                    pub.AddLocation(pathAndFileName);
+                }, new Exception("Parser Exception."));
+            }
+
             return blockObjects;
         }
 

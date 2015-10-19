@@ -83,7 +83,8 @@
     <Compile Include="Common\PluginManager.cs" />
     <Compile Include="Common\EnvVar.cs" />
     <Compile Include="Common\PathList.cs" />
-    <Compile Include="Common\UserInformer.cs" />
+    <Compile Include="Helper\TitledTextBuilder.cs" />
+    <Compile Include="Reporting\Report.cs" />
     <Compile Include="Files\File.cs" />
     <Compile Include="OptionFile\Exceptions.cs" />
     <Compile Include="OptionFile\Menu.cs" />
@@ -98,6 +99,8 @@
     <Compile Include="Program.cs" />
     <Compile Include="Projects\Project.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reporting\ConsolePublisher.cs" />
+    <Compile Include="Reporting\ReportMode.cs" />
     <Content Include="..\themes\**\*">
       <Link>themes\%(RecursiveDir)\%(FileName)%(Extension)</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

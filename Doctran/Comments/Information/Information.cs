@@ -39,14 +39,14 @@ namespace Doctran.Fbase.Comments
             _factories.Add(matchType, factory);
         }
 
-        public override bool BlockStart(string parent_block_name, List<FileLine> lines, int lineIndex)
+        public override bool BlockStart(string parentBlockName, List<FileLine> lines, int lineIndex)
         {
             return
                 CommentDefinitions.InfoAtDepthStart(lines[lineIndex].Text, _depth)
                 && !CommentDefinitions.NDescStart(lines[lineIndex].Text);
         }
 
-        public override bool BlockEnd(string parent_block_name, List<FileLine> lines, int lineIndex)
+        public override bool BlockEnd(string parentBlockName, List<FileLine> lines, int lineIndex)
         {
             if (lineIndex + 1 >= lines.Count) return true;
 
@@ -56,7 +56,7 @@ namespace Doctran.Fbase.Comments
                 || CommentDefinitions.NDescStart(lines[lineIndex + 1].Text);
         }
 
-        public override List<FortranObject> ReturnObject(IEnumerable<FortranObject> sub_objects, List<FileLine> lines)
+        public override List<FortranObject> ReturnObject(IEnumerable<FortranObject> subObjects, List<FileLine> lines)
         {
             // Regex group the type-name and it's value.
             Match aMatch = Regex.Match(lines[0].Text.Trim(), @"!>+?\s*?(\w+)\s*?:\s*?(.*)");
@@ -67,14 +67,14 @@ namespace Doctran.Fbase.Comments
             // Retrieve the value, from the definition line and any subsequent lines.
             string value = aMatch.Groups[2].Value.Trim()
                 + string.Concat(lines.Skip(1)
-                                .Where(line => line.Number <= (sub_objects.Any() ? sub_objects.First().lines.First().Number - 1 : lines.Last().Number))
+                                .Where(line => line.Number <= (subObjects.Any() ? subObjects.First().lines.First().Number - 1 : lines.Last().Number))
                                 .Select(line => line.Text.Substring(_depth + 1) + Environment.NewLine));
 
             IEnumerable<FortranObject> objs = _factories.ContainsKey(typeName)
                 ?
-                    _factories[typeName].Create(_depth, value, sub_objects, lines).Cast<FortranObject>()
+                    _factories[typeName].Create(_depth, value, subObjects, lines).Cast<FortranObject>()
                 :
-                    Helper.Singlet(new XInformation(_depth, typeName, value, sub_objects, lines));
+                    HelperUtils.Singlet(new XInformation(_depth, typeName, value, subObjects, lines));
             return objs.ToList();            
         }
     }

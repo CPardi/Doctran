@@ -9,12 +9,14 @@ using System.Linq;
 using System.Xml.Linq;
 using Doctran.Fbase.Common;
 using Doctran.BaseClasses;
-
-using Doctran.Fbase.Files;
 using Doctran.Fbase.Comments;
 
 namespace Doctran.Fbase.Projects
 {
+    using System.IO;
+    using Reporting;
+    using File = Files.File;
+
     public class ProjectPostAction : PostAction
     {
         private List<File> _files;
@@ -85,7 +87,11 @@ namespace Doctran.Fbase.Projects
                              select _sourceParser.ParseFile(path, File.ReadFile(path))).ToList();            
                 this.AddSubObjects(files);
             }
-            catch (System.IO.IOException e) { UserInformer.GiveError("source file", e.Message, e); }
+            catch (IOException e) { Report.Error((pub, ex) =>
+            {
+                pub.AddErrorDescription("Error in specified source file.");
+                pub.AddReason(e.Message);
+            }, e); }
 
         }
 

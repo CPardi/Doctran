@@ -24,8 +24,8 @@ namespace Doctran.BaseClasses
         public int Weight { get; private set; }
         public string Name { get; private set; }        
 
-        public abstract bool BlockStart(string parent_block_name, List<FileLine> lines, int lineIndex);
-        public abstract bool BlockEnd(string parent_block_name, List<FileLine> lines, int lineIndex);
-        public abstract List<FortranObject> ReturnObject(IEnumerable<FortranObject> sub_objects, List<FileLine> lines);
+        public abstract bool BlockStart(string parentBlockName, List<FileLine> lines, int lineIndex);
+        public abstract bool BlockEnd(string parentBlockName, List<FileLine> lines, int lineIndex);
+        public abstract List<FortranObject> ReturnObject(IEnumerable<FortranObject> subObjects, List<FileLine> lines);
     }
 }

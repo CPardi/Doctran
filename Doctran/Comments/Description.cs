@@ -20,6 +20,8 @@ using MarkdownSharp;
 
 namespace Doctran.Exceptions
 {
+    using Reporting;
+
     public class DescriptionException : PostAction
     {
         public DescriptionException()
@@ -28,69 +30,89 @@ namespace Doctran.Exceptions
 
         public override void PostObject(ref FortranObject obj)
         {
-            this.correctName(ref obj);
-            this.checkUniqueness(ref obj);
+            this.CorrectName(ref obj);
+            this.CheckUniqueness(ref obj);
         }
 
-        public void correctName(ref FortranObject obj)
+        public void CorrectName(ref FortranObject obj)
         {
-            if (obj.parent.Identifier != obj.Identifier)
+            if (obj.parent.Identifier == obj.Identifier)
             {
-                var file = obj.GoUpTillType<File>();
-                UserInformer.GiveWarning(file.Name + file.Info.Extension, obj.lines.First().Number, obj.lines.Last().Number
-                                        , "Description identifier does not match parent identifier and has been ignored.");
-                obj.parent.SubObjects.Remove(obj);
+                return;
             }
+
+            var curObj = obj;
+            var file = obj.GoUpTillType<File>();
+            Report.Warning(pub =>
+            {
+                pub.AddWarningDescription("Description meta-data was ignored");
+                pub.AddReason("Description identifier does not match parent identifier.");
+                pub.AddLocation(curObj.lines.First().Number == curObj.lines.Last().Number
+                    ? $"At line {curObj.lines.First().Number} of '{file.Name}{file.Info.Extension}'."
+                    : $"Within lines {curObj.lines.First().Number} to {curObj.lines.Last().Number} of '{file.Name}{file.Info.Extension}'.");
+            });
+            obj.parent.SubObjects.Remove(obj);
         }
 
-        public void checkUniqueness(ref FortranObject obj)
+        public void CheckUniqueness(ref FortranObject obj)
         {
-            if (obj.parent.SubObjectsOfType<Description>().Count > 1)
+            if (obj.parent.SubObjectsOfType<Description>().Count <= 1)
             {
-                if (obj.parent is Project)
-                {
-                    UserInformer.GiveWarning("project file", obj.lines.First().Number, obj.lines.Last().Number
-                                                                            , "Description is not unique and has been ignored.");
-                }
-                else
-                {
-                    var file = obj.GoUpTillType<File>();
-                    UserInformer.GiveWarning(file.Name + file.Info.Extension, obj.lines.First().Number, obj.lines.Last().Number
-                                                                            , "Description is not unique and has been ignored.");
-                }
-                obj.parent.SubObjects.Remove(obj);
+                return;
             }
+
+            var curObj = obj;
+            var file = obj.GoUpTillType<File>();
+            if (obj.parent is Project)
+            {
+                Report.Warning(pub =>
+                {
+                    pub.AddWarningDescription("Description meta-data was ignored");
+                    pub.AddReason("Multiple descriptions specified for a single block.");
+                    pub.AddLocation(curObj.lines.First().Number == curObj.lines.Last().Number
+                        ? $"At line {curObj.lines.First().Number} of '{file.Name}{file.Info.Extension}'."
+                        : $"Within lines {curObj.lines.First().Number} to {curObj.lines.Last().Number} of '{file.Name}{file.Info.Extension}'.");
+                });
+            }
+            else
+            {
+                Report.Warning(pub =>
+                {
+                    pub.AddWarningDescription("Description meta-data was ignored");
+                    pub.AddReason("Multiple descriptions specified for a single block.");
+                    pub.AddLocation(curObj.lines.First().Number == curObj.lines.Last().Number
+                        ? $"At line {curObj.lines.First().Number} of '{file.Name}{file.Info.Extension}'."
+                        : $"Within lines {curObj.lines.First().Number} to {curObj.lines.Last().Number} of '{file.Name}{file.Info.Extension}'.");
+                });
+            }
+            obj.parent.SubObjects.Remove(obj);
         }
     }
 }
 
 namespace Doctran.Fbase.Comments
 {
+    using Reporting;
+
     public class DescriptionBlock : FortranBlock
     {
         public DescriptionBlock()
             : base("Description", false, false, 3) { }
 
-        public static string BlockName
-        {
-            get
-            {
-                return "Description";
-            }
-        }
+        public static string BlockName => "Description";
 
-        public override bool BlockStart(string parent_block_name, List<FileLine> lines, int lineIndex)
+        public override bool BlockStart(string parentBlockName, List<FileLine> lines, int lineIndex)
         {
-            if (parent_block_name == DescriptionBlock.BlockName) return false;
+            if (parentBlockName == DescriptionBlock.BlockName) return false;
             return
                 CommentDefinitions.DescStart(lines[lineIndex].Text)
-                && !parent_block_name.StartsWith("Information_")
+                && !parentBlockName.StartsWith("Information_")
                 && !CommentDefinitions.DetailLine(lines[lineIndex].Text)
                 && !CommentDefinitions.NDescStart(lines[lineIndex].Text)
                 && !CommentDefinitions.InfoStart(lines[lineIndex].Text);
         }
 
-        public override bool BlockEnd(string parent_block_name, List<FileLine> lines, int lineIndex)
+        public override bool BlockEnd(string parentBlockName, List<FileLine> lines, int lineIndex)
         {
             if (lines.Count == lineIndex + 1) return true;
             return
@@ -99,7 +121,7 @@ namespace Doctran.Fbase.Comments
                 || CommentDefinitions.NDescStart(lines[lineIndex + 1].Text);
         }
 
-        public override List<FortranObject> ReturnObject(IEnumerable<FortranObject> sub_objects, List<FileLine> lines)
+        public override List<FortranObject> ReturnObject(IEnumerable<FortranObject> subObjects, List<FileLine> lines)
         {
             return new List<FortranObject> { new Description(lines) };
         }
@@ -122,8 +144,23 @@ namespace Doctran.Fbase.Comments
                         where sObjs.GetType() != typeof(Description)
                         select sObjs);
 
-            FortranObject parSubObj = descriptions.FirstOrDefault();
-            if (descriptions.Count() > 1) UserInformer.GiveWarning(parSubObj.Name, "Description specified multiple times. Using first occurence");
+            var fortranObjects = descriptions as IList<FortranObject> ?? descriptions.ToList();
+
+            if (fortranObjects.Count() > 1)
+            {
+                var curObj = obj;
+                var file = obj.GoUpTillType<File>();
+                Report.Warning(pub =>
+                {
+                    pub.AddWarningDescription("Description meta-data was ignored");
+                    pub.AddReason("Description specified multiple times. Using first occurence");
+                    pub.AddLocation(curObj.lines.First().Number == curObj.lines.Last().Number
+                        ? $"At line {curObj.lines.First().Number} of '{file.Name}{file.Info.Extension}'."
+                        : $"Within lines {curObj.lines.First().Number} to {curObj.lines.Last().Number} of '{file.Name}{file.Info.Extension}'.");
+                });
+            }
+
+            FortranObject parSubObj = fortranObjects.FirstOrDefault();
 
             if (parSubObj != null)
             {
@@ -138,9 +175,9 @@ namespace Doctran.Fbase.Comments
         public DescriptionGroup()
             : base(typeof(Description)) { }
 
-        public override XElement XEle(IEnumerable<XElement> Content)
+        public override XElement XEle(IEnumerable<XElement> content)
         {
-            return Content.SingleOrDefault();
+            return content.SingleOrDefault();
         }
     }
 
@@ -150,7 +187,7 @@ namespace Doctran.Fbase.Comments
         public string Detailed { get; private set; }
 
         private readonly Markdown _markdown = new Markdown();
-        private string identifier;
+        private string _identifier;
 
         public Description() { }
 
@@ -163,14 +200,14 @@ namespace Doctran.Fbase.Comments
         public Description(string identifier, string basicText)
             : base("Description", new List<FileLine> { new FileLine(-1, basicText) })
         {
-            this.identifier = identifier;
+            this._identifier = identifier;
             this.Basic = basicText;
         }
 
         public Description(string identifier, string basicText, string detailedText, List<FileLine> lines)
             : base("Description", lines)
         {
-            this.identifier = identifier;
+            this._identifier = identifier;
             this.Basic = basicText;
             this.Detailed = detailedText;
         }
@@ -195,11 +232,11 @@ namespace Doctran.Fbase.Comments
 
         protected override string GetIdentifier()
         {
-            if (this.identifier == null) return this.parent.Identifier;
-            else return this.identifier;
+            if (this._identifier == null) return this.parent.Identifier;
+            else return this._identifier;
         }
 
-        protected XElement parse(string name, string text)
+        protected XElement Parse(string name, string text)
         {
             try
             {
@@ -207,24 +244,34 @@ namespace Doctran.Fbase.Comments
             }
             catch
             {
-                var file = this.GoUpTillType<Files.File>();
+                var curObj = this;
+                var file = this.GoUpTillType<File>();
 
-                UserInformer.GiveWarning(file.Name + file.Info.Extension, this.lines.First().Number, this.lines.Last().Number, name + " description could not be parsed and was ignored.");
+                Report.Warning(pub =>
+                {
+                    pub.AddWarningDescription("Description meta-data was ignored.");
+                    pub.AddReason("Description could not be parsed.");
+                    pub.AddLocation(curObj.lines.First().Number == curObj.lines.Last().Number
+                        ? $"At line {curObj.lines.First().Number} of '{file.Name}{file.Info.Extension}'."
+                        : $"Within lines {curObj.lines.First().Number} to {curObj.lines.Last().Number} of '{file.Name}{file.Info.Extension}'.");
+                });
+
                 return new XElement(name);
             }
         }
 
         public override XElement XEle()
         {
-            XElement xele = new XElement(this.XElement_Name);
+            var xele = new XElement(this.XElement_Name);
 
-            xele.Add(this.parse("Basic", WebUtility.HtmlEncode(this.Basic.Replace("\"", "\\" +  "\""))));
+            xele.Add(this.Parse("Basic", WebUtility.HtmlEncode(this.Basic.Replace("\"", "\\" +  "\""))));
 
-            if (this.Detailed != null && this.Detailed != "")
+            if (string.IsNullOrEmpty(this.Detailed))
             {
-                var project = this.GoUpTillType<Projects.Project>();
-                xele.Add(this.parse("Detailed", _markdown.Transform(this.Detailed)));
+                return xele;
             }
+
+            xele.Add(this.Parse("Detailed", _markdown.Transform(this.Detailed)));
             return xele;
         }
     }

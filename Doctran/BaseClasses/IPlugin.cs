@@ -11,7 +11,7 @@ namespace Doctran.BaseClasses
     {
         int LoadOrder();
         void Initialize();
-        void WriteInformation();
+        string InformationString { get; }
     }
 }
 

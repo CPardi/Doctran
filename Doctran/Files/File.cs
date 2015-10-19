@@ -18,13 +18,15 @@ using Doctran.Fbase.Common;
 
 namespace Doctran.Fbase.Files
 {
+    using Reporting;
+
     public class File : XFortranObject
     {
         #region Constructor
 
         // Reads a file, determines its type and loads the contained procedure and/or modules.
-        public File(string pathAndFilename, IEnumerable<FortranObject> sub_objects, List<FileLine> lines)
-            : base(Path.GetFileName(pathAndFilename), sub_objects,"File", lines)
+        public File(string pathAndFilename, IEnumerable<FortranObject> subObjects, List<FileLine> lines)
+            : base(Path.GetFileName(pathAndFilename), subObjects,"File", lines)
         {
             this.PathAndFilename = pathAndFilename;
             this.Info = new FileInfo(this.PathAndFilename);
@@ -70,11 +72,11 @@ namespace Doctran.Fbase.Files
             try
             {
                 // Open the file at the file path and load into a streamreader. Then, loop through each line and add it to a List.
-                using (StreamReader FileReader = new StreamReader(pathAndFilename))
+                using (StreamReader fileReader = new StreamReader(pathAndFilename))
                 {
                     string line;
                     int lineIndex = 1;
-                    while ((line = FileReader.ReadLine()) != null)
+                    while ((line = fileReader.ReadLine()) != null)
                     {
                         CheckForPreprocessing(Path.GetFileName(pathAndFilename), line);
                         lines.Add(new FileLine(lineIndex, line));
@@ -84,7 +86,13 @@ namespace Doctran.Fbase.Files
             }
             catch (IOException e)
             {
-                UserInformer.GiveWarning(pathAndFilename, e.Message);
+                Report.Warning(
+                    pub =>
+                    {
+                        pub.AddErrorDescription("Could not read file.");
+                        pub.AddReason(e.Message);
+                    });
+
                 throw;
             }
 
@@ -111,7 +119,7 @@ namespace Doctran.Fbase.Files
 
         public static void AddIncludedFiles(ref List<FileLine> lines, string path)
         {
-            List<FileLine> ModifyingLines = new List<FileLine>();
+            List<FileLine> modifyingLines = new List<FileLine>();
 
             foreach (FileLine line in lines)
             {
@@ -122,7 +130,7 @@ namespace Doctran.Fbase.Files
                     string includePath = path + Common.EnvVar.slash + matchInclude.Groups[1].Value.Replace('\\', Common.EnvVar.slash).Replace('/', Common.EnvVar.slash);
                     try
                     {
-                        ModifyingLines.AddRange(ReadFile(includePath).Select(l => new FileLine(line.Number, l.Text)));
+                        modifyingLines.AddRange(ReadFile(includePath).Select(l => new FileLine(line.Number, l.Text)));
                     }
                     catch
                     {
@@ -131,11 +139,11 @@ namespace Doctran.Fbase.Files
                 }
                 else
                 {
-                    ModifyingLines.Add(line);
+                    modifyingLines.Add(line);
                 }
             }
             lines.Clear();
-            lines.AddRange(ModifyingLines);
+            lines.AddRange(modifyingLines);
         }
 
         public static void RemoveContinuationLines(ref List<FileLine> lines)
@@ -161,20 +169,24 @@ namespace Doctran.Fbase.Files
 
         private static void CheckForPreprocessing(string filename, string line)
         {
-            if (Regex.IsMatch(Helper.RemoveInlineComment(line), @"^\s*(?:#define|#elif|#elifdef|#elifndef|#else|#endif|#error|#if|#ifdef|#ifndef|#line|#pragma|#undef|#include)"))
+            if (Regex.IsMatch(HelperUtils.RemoveInlineComment(line), @"^\s*(?:#define|#elif|#elifdef|#elifndef|#else|#endif|#error|#if|#ifdef|#ifndef|#line|#pragma|#undef|#include)"))
             {
-                UserInformer.GiveError(filename, "preprocessor directives detected, please pass the code through your preprocessor and rerun Doctran upon the output.");
+                Report.Error(
+                    (pub, ex) =>
+                    {
+                        pub.AddErrorDescription("Source contains preprocessor directives, please pass the code through your preprocessor and rerun Doctran upon the output.");
+                    }, new Exception("Source contains preprocessor directives."));
             }
         }
 
         private static List<string> SplitEndings(string line)
         {
-            string[] line_nocomm = line.Split('!');
+            string[] lineNocomm = line.Split('!');
 
-            List<string> lines = Helper.DelimiterExceptQuotes(line_nocomm[0].Trim(), ';');
+            List<string> lines = HelperUtils.DelimiterExceptQuotes(lineNocomm[0].Trim(), ';');
             if (lines.Count > 0)
             {
-                lines[lines.Count - 1] += (line_nocomm.Length > 1 ? "!" + string.Concat(line_nocomm.Skip(1)) : "");
+                lines[lines.Count - 1] += (lineNocomm.Length > 1 ? "!" + string.Concat(lineNocomm.Skip(1)) : "");
                 return lines;
             }
             else
@@ -183,17 +195,17 @@ namespace Doctran.Fbase.Files
 
         private static string MergeContinuations(ref int lineIndex, List<FileLine> lines, bool removeComment)
         {
-            string lineText_noComment = Helper.RemoveInlineComment(lines[lineIndex].Text).TrimStart('&');
-            if (lineText_noComment.EndsWith("&"))
+            string lineTextNoComment = HelperUtils.RemoveInlineComment(lines[lineIndex].Text).TrimStart('&');
+            if (lineTextNoComment.EndsWith("&"))
             {
                 lineIndex++;
-                Helper.SkipComment(lines, ref lineIndex);
-                if (Helper.RemoveInlineComment(lines[lineIndex].Text) == "") lineIndex++;
-                return lineText_noComment.TrimEnd('&') + MergeContinuations(ref lineIndex, lines, true);
+                HelperUtils.SkipComment(lines, ref lineIndex);
+                if (HelperUtils.RemoveInlineComment(lines[lineIndex].Text) == "") lineIndex++;
+                return lineTextNoComment.TrimEnd('&') + MergeContinuations(ref lineIndex, lines, true);
             }
             else if (removeComment)
             {
-                return lineText_noComment.TrimEnd('&');
+                return lineTextNoComment.TrimEnd('&');
             }
             else
             {
@@ -221,7 +233,7 @@ namespace Doctran.Fbase.Files
             xele.AddFirst(new XElement("LineCount", this.NumLines),
                      new XElement("Created", this.Info.CreationTime.XEle()),
                      new XElement("LastModified", this.Info.LastWriteTime.XEle()),
-                     new XElement("ValidName", Helper.ValidName(this.Name)),
+                     new XElement("ValidName", HelperUtils.ValidName(this.Name)),
                      new XElement("Extension", this.Info.Extension)
                      );
 

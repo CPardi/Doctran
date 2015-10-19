@@ -13,7 +13,9 @@ using MarkdownSharp;
 
 namespace Doctran.Fbase.Common
 {
-    public static class Helper
+    using Reporting;
+
+    public static class HelperUtils
     {
         public static IEnumerable<T> Singlet<T>(T tInstance)
         {
@@ -31,34 +33,44 @@ namespace Doctran.Fbase.Common
         /// <summary>
         /// Return a html file path and html content for a html or markdown file.
         /// </summary>
-        /// <param name="file_path">The path to the html or markdown file.</param>
+        /// <param name="filePath">The path to the html or markdown file.</param>
         /// <returns>In the first string is the file path for the html file. In the second string in the html content that the file should contain.</returns>
-        public static Tuple<string, string> GetMarkUpFile(string relative_path, string file_path)
+        public static Tuple<string, string> GetMarkUpFile(string relativePath, string filePath)
         {
-            Markdown mdParser = new Markdown();
+            var mdParser = new Markdown();
 
             // Store the file's path and contents in these variables initially, and if its a markdown file then reassign after.
-            string html_path = file_path;
-            var html_text = "";
+            var htmlPath = filePath;
+            var htmlText = "";
 
             // Get the text from the file specified.
             try
             {
-                html_text = string.Concat(from text in Files.File.ReadFile(relative_path + file_path)
-                                          select text.Text + Environment.NewLine);
+                htmlText = string.Concat(from text in Files.File.ReadFile(relativePath + filePath)
+                    select text.Text + Environment.NewLine);
             }
-            catch { UserInformer.GiveError("Project File", "File not found at \"" + file_path + "\""); }
+            catch(IOException e)
+            {
+                Report.Error((pub, ex) =>
+                {
+                    pub.AddWarningDescription("Error in markup file path.");
+                    pub.AddReason(e.Message);
+                    pub.AddLocation(filePath);
+                }, e);
+            }
 
             // Check if a Markdown is specified and if so parse it to get the html. The Path information should specified the 
             // path in the documentation to the file. So change its externsion to html.
-            var ext = System.IO.Path.GetExtension(file_path);
-            if (ext == ".md" || ext == ".markdown")
+            var ext = Path.GetExtension(filePath);
+            if (ext != ".md" && ext != ".markdown")
             {
-                html_path = file_path.Remove(file_path.LastIndexOf('.')) + ".html";
-                html_text = mdParser.Transform(html_text);
+                return new Tuple<string, string>(htmlPath, htmlText);
             }
 
-            return new Tuple<string, string>(html_path, html_text);
+            htmlPath = filePath.Remove(filePath.LastIndexOf('.')) + ".html";
+            htmlText = mdParser.Transform(htmlText);
+
+            return new Tuple<string, string>(htmlPath, htmlText);
         }
 
         public static string RegexMultipleOr(IEnumerable<string> regexes)
@@ -105,73 +117,73 @@ namespace Doctran.Fbase.Common
         public static bool GotoNextUsefulLine(List<FileLine> lines, ref int lineIndex)
         {
             if (lineIndex >= lines.Count) return true;
-            string text_nowhitespace;
+            string textNowhitespace;
             while (
-                (text_nowhitespace = lines[lineIndex].Text.Trim()) == ""
-                | (text_nowhitespace.StartsWith("!") & !text_nowhitespace.StartsWith("!>"))
+                (textNowhitespace = lines[lineIndex].Text.Trim()) == ""
+                | (textNowhitespace.StartsWith("!") & !textNowhitespace.StartsWith("!>"))
                     ) { lineIndex++; if (lineIndex >= lines.Count) break; }
             return lineIndex == lines.Count;
         }
 
-        public static string NoWhitespace(string Text)
+        public static string NoWhitespace(string text)
         {
-            return Regex.Replace(Text, @"\s+", "");
+            return Regex.Replace(text, @"\s+", "");
         }
 
         public static List<string> DelimiterExceptBrackets(string text, char delimiter)
         {
-            List<string> DelimiteredText = new List<string>();
-            int WithinBracketsDepth = 0;
-            int PrevIndex = 0, CurrentIndex = 0;
+            List<string> delimiteredText = new List<string>();
+            int withinBracketsDepth = 0;
+            int prevIndex = 0, currentIndex = 0;
             foreach (char aChar in text)
             {
-                if (aChar == '(' | aChar == '[') { WithinBracketsDepth++; }
-                if (aChar == ')' | aChar == ']') WithinBracketsDepth--;
-                if (WithinBracketsDepth == 0 & aChar == delimiter)
+                if (aChar == '(' | aChar == '[') { withinBracketsDepth++; }
+                if (aChar == ')' | aChar == ']') withinBracketsDepth--;
+                if (withinBracketsDepth == 0 & aChar == delimiter)
                 {
-                    DelimiteredText.Add(text.Substring(PrevIndex, CurrentIndex - PrevIndex).Trim());
-                    PrevIndex = CurrentIndex + 1;
+                    delimiteredText.Add(text.Substring(prevIndex, currentIndex - prevIndex).Trim());
+                    prevIndex = currentIndex + 1;
                 }
-                if (CurrentIndex == text.Count() - 1)
+                if (currentIndex == text.Count() - 1)
                 {
-                    DelimiteredText.Add(text.Substring(PrevIndex, CurrentIndex - PrevIndex + 1).Trim());
+                    delimiteredText.Add(text.Substring(prevIndex, currentIndex - prevIndex + 1).Trim());
                 }
-                CurrentIndex++;
+                currentIndex++;
             }
-            return DelimiteredText;
+            return delimiteredText;
         }
 
         public static List<string> DelimiterExceptQuotes(string text, char delimiter)
         {
-            List<string> DelimiteredText = new List<string>();
-            bool s_quotes = false;
-            bool d_quotes = false;
-            int PrevIndex = 0, CurrentIndex = 0;
+            List<string> delimiteredText = new List<string>();
+            bool sQuotes = false;
+            bool dQuotes = false;
+            int prevIndex = 0, currentIndex = 0;
             foreach (char aChar in text)
             {
-                if (!(s_quotes | d_quotes))
+                if (!(sQuotes | dQuotes))
                 {
-                    s_quotes = aChar == '\'';
-                    d_quotes = aChar == '"';
+                    sQuotes = aChar == '\'';
+                    dQuotes = aChar == '"';
                 }
                 else
                 {
-                    if (s_quotes) s_quotes = !(aChar == '\'');
-                    if (d_quotes) d_quotes = !(aChar == '"');
+                    if (sQuotes) sQuotes = !(aChar == '\'');
+                    if (dQuotes) dQuotes = !(aChar == '"');
                 }
 
-                if (!(s_quotes | d_quotes) && aChar == delimiter)
+                if (!(sQuotes | dQuotes) && aChar == delimiter)
                 {
-                    DelimiteredText.Add(text.Substring(PrevIndex, CurrentIndex - PrevIndex).Trim());
-                    PrevIndex = CurrentIndex + 1;
+                    delimiteredText.Add(text.Substring(prevIndex, currentIndex - prevIndex).Trim());
+                    prevIndex = currentIndex + 1;
                 }
-                if (CurrentIndex == text.Length - 1)
+                if (currentIndex == text.Length - 1)
                 {
-                    DelimiteredText.Add(text.Substring(PrevIndex, CurrentIndex - PrevIndex + 1).Trim());
+                    delimiteredText.Add(text.Substring(prevIndex, currentIndex - prevIndex + 1).Trim());
                 }
-                CurrentIndex++;
+                currentIndex++;
             }
-            return DelimiteredText;
+            return delimiteredText;
         }
 
         public static string ValidName(string name)

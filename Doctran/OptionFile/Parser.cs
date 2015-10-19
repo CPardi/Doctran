@@ -15,6 +15,7 @@ namespace Doctran.OptionFile
 {
     using System;
     using System.IO;
+    using Reporting;
     using File = Fbase.Files.File;
 
     public class Parser<TOptions>
@@ -74,7 +75,12 @@ namespace Doctran.OptionFile
                         }
                         catch (Exception e)
                         {
-                            UserInformer.GiveError("project file", e.Message);
+                            Report.Error(
+                                (pub, ex) =>
+                                {
+                                    pub.AddErrorDescription("Error within project file.");
+                                    pub.AddReason(e.Message);
+                                }, e);
                         }
                     }
                 }
@@ -109,7 +115,12 @@ namespace Doctran.OptionFile
             }
             catch (IOException e)
             {
-                UserInformer.GiveError("Could not locate project file.", e);
+                Report.Error(
+                    (pub, ex) =>
+                    {
+                        pub.AddErrorDescription("Could not locate project file.");
+                        pub.AddReason(e.Message);
+                    }, e);
                 throw;
             }
 
@@ -135,7 +146,12 @@ namespace Doctran.OptionFile
             }
             catch (Exception e)
             {
-                UserInformer.GiveError("project file", e.Message);
+                Report.Error(
+                    (pub, ex) =>
+                    {
+                        pub.AddErrorDescription("Error within project file.");
+                        pub.AddReason(e.Message);
+                    }, e);
                 throw;
             }
         }

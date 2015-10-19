@@ -13,6 +13,8 @@ using Doctran.BaseClasses;
 
 namespace Doctran.Fbase.Common
 {
+    using Reporting;
+
     public class AssemblyLoader
     {
         private readonly List<Type> _assemblyTypes = new List<Type>();
@@ -20,31 +22,43 @@ namespace Doctran.Fbase.Common
         public AssemblyLoader(string pluginPath)
         {
             _assemblyTypes.AddRange(typeof(FortranObject).Assembly.GetTypes());
-            string[] paths = null;
+            string[] paths;
             try
             {
                 paths = Directory.GetFiles(Path.GetFullPath(pluginPath));
             }
             catch (IOException e)
             {
-                UserInformer.GiveWarning("plugin directory", e);
+                Report.Warning(pub =>
+                {
+                    pub.AddWarningDescription("Plugin directory is invalid.");
+                    pub.AddReason(e.Message);
+                    pub.AddLocation(pluginPath);
+                });
+
                 return;
             }
 
-            foreach (string path in paths)
+            foreach (var path in paths)
             {
                 try
                 {
-                    Assembly assembly = Assembly.LoadFrom(path);
-                    this._assemblyTypes.AddRange(assembly.GetTypes());
+                    var assembly = Assembly.LoadFrom(path);
+                    _assemblyTypes.AddRange(assembly.GetTypes());
                 }
                 catch (IOException e)
                 {
-                    UserInformer.GiveWarning("loaded plugin", e);
+                    Report.Warning(pub =>
+                    {
+                        pub.AddWarningDescription("Could not load plugin.");
+                        pub.AddReason(e.Message);
+                        pub.AddLocation(pluginPath);
+                    });
                     return;
                 }
             }
-            this._assemblyTypes.OrderByDescending(t => t.Name);
+
+            _assemblyTypes = _assemblyTypes.OrderByDescending(t => t.Name).ToList();
         }
 
         public List<T> GetClassInstances<T>()

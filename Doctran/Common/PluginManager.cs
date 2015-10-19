@@ -12,6 +12,7 @@ using Doctran.Fbase.Comments;
 namespace Doctran.BaseClasses
 {
     using System;
+    using System.Text;
 
     public static class PluginManager
 	{
@@ -44,13 +45,20 @@ namespace Doctran.BaseClasses
 
 		public static AssemblyLoader PluginLoader { get; } = new AssemblyLoader(EnvVar.execPath + @"plugins");
 
-        public static void WriteInformation()
+        public static string InformationString
         {
-            Console.WriteLine($"List of installed plugins.{Environment.NewLine}");
-            foreach (var p in PluginManager.Plugins)
+            get
             {
-                p.WriteInformation();
-                Console.WriteLine(string.Empty);
+                var sb = new StringBuilder();
+                sb.Append("List of installed plugins.");
+                sb.Append(Environment.NewLine);
+                foreach (var p in PluginManager.Plugins)
+                {
+                    sb.Append(p.InformationString);
+                    sb.Append(Environment.NewLine);
+                }
+
+                return sb.ToString();
             }
         }
 	}
