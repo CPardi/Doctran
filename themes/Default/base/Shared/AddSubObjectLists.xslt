@@ -56,17 +56,15 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
                     <xsl:apply-templates mode="TableColumns" select="$objects_group[1]"/>
                 </xsl:variable>
 
-                <xsl:call-template name="Section">
-                    <xsl:with-param name="name" select="$group/Title"/>
-                    <xsl:with-param name="content">
-                        <xsl:call-template name="Table">
-                            <xsl:with-param name="rows" select="$objects_group"/>
-                            <xsl:with-param name="columns" select="$columns"/>
-                            <xsl:with-param name="prefix" select="$prefix"/>
-                            <xsl:with-param name="sortBy" select="$columns/SortBy"/>
-                            <xsl:with-param name="sortable" select="true()"/>
-                        </xsl:call-template>
-                    </xsl:with-param>
+                <h2>
+                    <xsl:value-of select="$group/Title"/>
+                </h2>
+                <xsl:call-template name="Table">
+                    <xsl:with-param name="rows" select="$objects_group"/>
+                    <xsl:with-param name="columns" select="$columns"/>
+                    <xsl:with-param name="prefix" select="$prefix"/>
+                    <xsl:with-param name="sortBy" select="$columns/SortBy"/>
+                    <xsl:with-param name="sortable" select="true()"/>
                 </xsl:call-template>
             </xsl:if>
         </xsl:for-each>

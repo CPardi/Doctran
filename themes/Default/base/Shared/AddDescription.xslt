@@ -10,7 +10,7 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
     <xsl:template mode="AddDescription" match="Description">
         <xsl:param name="prefix"/>
 
-        <xsl:copy-of select="Detailed"/>
+        <xsl:copy-of select="Detailed/node()"/>
 
     </xsl:template>
 

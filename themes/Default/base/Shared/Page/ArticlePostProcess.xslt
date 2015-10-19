@@ -15,10 +15,14 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
         <xsl:param name="prefix"/>
         <xsl:param name="article"/>
 
-        <xsl:apply-templates mode="ArticlePostProcess_Recurse" select="$article">
-            <xsl:with-param name="project" select="/Project"/>
-            <xsl:with-param name="prefix" select="$prefix"/>
-        </xsl:apply-templates>
+        <xsl:call-template name="SectionFormatter">
+            <xsl:with-param name="article">
+                <xsl:apply-templates mode="ArticlePostProcess_Recurse" select="$article">
+                    <xsl:with-param name="project" select="/Project"/>
+                    <xsl:with-param name="prefix" select="$prefix"/>
+                </xsl:apply-templates>
+            </xsl:with-param>
+        </xsl:call-template>
 
     </xsl:template>
 
