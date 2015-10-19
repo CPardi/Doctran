@@ -7,15 +7,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Doctran", "Doctran\Doctran.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Doctran.Test", "Doctran.Test\Doctran.Test.csproj", "{A465705C-9B34-4448-B10D-1819D0D514CD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fortran95", "Fortran95\Fortran95.csproj", "{58AB1A14-5C38-431C-853D-49A6C8BE6BC9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fortran95", "Plugin-Fortran95\Fortran95\Fortran95.csproj", "{58AB1A14-5C38-431C-853D-49A6C8BE6BC9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Licensing", "..\Licensing\Licensing\Licensing.csproj", "{C43378BA-9D88-49C0-A17D-0528ABC251BB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fortran2003", "Fortran2003\Fortran2003.csproj", "{1794E7E5-FB45-4F93-B7DF-A53FE3C6F59C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fortran2003", "Plugin-Fortran2003\Fortran2003\Fortran2003.csproj", "{1794E7E5-FB45-4F93-B7DF-A53FE3C6F59C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fortran95.Test", "Fortran95.Test\Fortran95.Test.csproj", "{63E70515-C3A2-4FDA-BEBA-142DA4E0B03B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fortran95.Test", "Plugin-Fortran95\Fortran95.Test\Fortran95.Test.csproj", "{63E70515-C3A2-4FDA-BEBA-142DA4E0B03B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fortran2003.Test", "Fortran2003.Test\Fortran2003.Test.csproj", "{D58B7B29-9C41-48F2-B498-A54B5CA3E258}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fortran2003.Test", "Plugin-Fortran2003\Fortran2003.Test\Fortran2003.Test.csproj", "{D58B7B29-9C41-48F2-B498-A54B5CA3E258}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
