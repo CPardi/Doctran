@@ -10,14 +10,14 @@ namespace Doctran
     using System.IO;
     using System.Linq;
     using System.Xml.Linq;
-    using BaseClasses;
-    using Fbase.Common;
-    using Fbase.Outputters;
-    using Fbase.Projects;
-    using OptionFile;
+    using Helper;
+    using Input.OptionFile;
     using Output;
+    using Parsing.FortranObjects;
     using Reporting;
-    using File = Fbase.Files.File;
+    using Utility;
+    using Utilitys;
+    using File = Parsing.FortranObjects.File;
     using Parser = CommandLine.Parser;
 
     public class Program
@@ -68,6 +68,8 @@ namespace Doctran
 
             ShowLicensing = options.ShowLicensing;
 
+            PluginLoader.Initialize();
+
             PluginManager.Initialize();
 
             var fileParser = new Parser<Options>();
@@ -77,7 +79,7 @@ namespace Doctran
             fileParser.AddRecognisedOption("UserPage", new UserPageFactory());
             fileParser.AddRecognisedOption("Menu", new MenuFactory());
 
-            fileParser.ParseFile(options.ProjectFilePath ?? EnvVar.defaultInfoPath, options);
+            fileParser.ParseFile(options.ProjectFilePath ?? EnvVar.DefaultInfoPath, options);
 
             options.SourceFilePaths.KeepDistinctOnly();
             EnvVar.Verbose = options.Verbose;
@@ -120,12 +122,12 @@ namespace Doctran
 
             if (EnvVar.Verbose >= 2) Console.Write("Done" + Environment.NewLine + "Generating htmls... ");
 
-            var preProcess = new XsltRunner(Path.Combine(EnvVar.execPath, "themes", options.ThemeName, "main_pre.xslt"));
+            var preProcess = new XsltRunner(Path.Combine(EnvVar.ExecPath, "themes", options.ThemeName, "main_pre.xslt"));
             var preProcessResult = preProcess.Run(xmlOutputter.XDocument, Path.GetFullPath(options.OutputDirectory));
 
-            var htmlOutputter = new XsltRunner(Path.Combine(EnvVar.execPath, "themes", options.ThemeName, "main.xslt"));
+            var htmlOutputter = new XsltRunner(Path.Combine(EnvVar.ExecPath, "themes", options.ThemeName, "main.xslt"));
             htmlOutputter.Run(preProcessResult.ToXDocument(),
-                Path.GetFullPath(options.OutputDirectory) + EnvVar.slash,
+                Path.GetFullPath(options.OutputDirectory) + EnvVar.Slash,
                 new KeyValuePair<string, object>("verbose", EnvVar.Verbose),
                 new KeyValuePair<string, object>("source", reader));
         }

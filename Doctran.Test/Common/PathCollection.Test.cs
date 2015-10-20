@@ -1,6 +1,4 @@
 ﻿using NUnit.Framework;
-
-using Doctran.Fbase.Common;
 using System.Reflection;
 using System.IO;
 using System;
@@ -8,6 +6,8 @@ using System.Linq;
 
 namespace Doctran.Test.Common
 {
+    using Helper;
+
     [TestFixture]
     public class PathCollectionTest
     {        

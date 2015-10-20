@@ -10,7 +10,7 @@
           <a href="index.html">Versions</a>
           <ul>
             <li>
-              <a href="../1.2.2/index.html">1.2.2 (Latest)</a>
+              <a href="../1.2.2/index.html">1.2.3 - 1.2.2 (Latest)</a>
             </li>
             <li>
               <a href="../1.2.1/index.html">1.2.1</a>
@@ -29,7 +29,13 @@
       <Path>changelog.html</Path>
       <Content>
         <h1>Changelog</h1>
-        <h2>Version 1.2.2 (Latest)</h2>
+        <h2>Version 1.2.3 (Latest)</h2>
+        <ul>
+          <li>Improved error messages.</li>
+          <li>Fixed bug causing block description heading sections to not be collapsible.</li>
+          <li>Fixed broken links in procedure argument documentation.</li>
+        </ul>
+        <h2>Version 1.2.2</h2>
         <ul>
           <li>The style of the generated documentation has been modified to take advantage of wide screen and high resolution displays.</li>
           <li>
@@ -80,7 +86,7 @@
 Previous versions of Doctran are listed below.</p>
         <ul>
           <li>
-            <a href="../1.2.2/index.md">1.2.2</a> (Latest)</li>
+            <a href="../1.2.2/index.md">1.2.3 - 1.2.2</a> (Latest)</li>
           <li>
             <a href="../1.2.1/index.md">1.2.1</a>
           </li>
@@ -89,7 +95,7 @@ Previous versions of Doctran are listed below.</p>
     </UserPage>
   </Information>
   <DocCreated>
-    <DateTime>2015-10-20T19:09:33.5471500+01:00</DateTime>
+    <DateTime>2015-10-20T19:47:55.8398336+01:00</DateTime>
   </DocCreated>
   <Files />
 </Project>

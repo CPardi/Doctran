@@ -5,12 +5,13 @@
 
 
 using Doctran;
-using Doctran.OptionFile;
 using NUnit.Framework;
 using System.IO;
 
 namespace Doctran.Test.OptionFile
 {
+    using Input.OptionFile;
+
     [TestFixture]
     public class ParserTest
     {

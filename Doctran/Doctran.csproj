@@ -55,10 +55,6 @@
       <HintPath>..\packages\IKVM.OpenJDK.XML.API.7.2.4630.5\lib\IKVM.OpenJDK.XML.API.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="IKVM.Runtime, Version=7.2.4630.5, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
-      <HintPath>..\packages\IKVM.Runtime.7.2.4630.5\lib\IKVM.Runtime.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="MarkdownSharp, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MarkdownSharp.1.13.0.0\lib\35\MarkdownSharp.dll</HintPath>
       <Private>True</Private>
@@ -73,76 +69,71 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BaseClasses\FortranBlock.cs" />
-    <Compile Include="BaseClasses\FortranObject.cs" />
-    <Compile Include="BaseClasses\IPlugin.cs" />
-    <Compile Include="BaseClasses\ObjectGroup.cs" />
-    <Compile Include="BaseClasses\Parser.cs" />
-    <Compile Include="BaseClasses\PostAction.cs" />
-    <Compile Include="BaseClasses\Traverser.cs" />
-    <Compile Include="BaseClasses\XFortranObject.cs" />
-    <Compile Include="Comments\CommentDefinitions.cs" />
-    <Compile Include="Comments\Description.cs" />
-    <Compile Include="Comments\Information\Information.cs" />
-    <Compile Include="Comments\NamedDescription.cs" />
-    <Compile Include="Common\AssemblyLoader.cs" />
-    <Compile Include="Common\FileLine.cs" />
-    <Compile Include="Common\Helper.cs" />
-    <Compile Include="Common\Options.cs" />
-    <Compile Include="Common\PluginManager.cs" />
-    <Compile Include="Common\EnvVar.cs" />
-    <Compile Include="Common\PathList.cs" />
+    <Compile Include="ILanguage.cs" />
+    <Compile Include="Parsing\FortranBlocks\DescriptionBlock.cs" />
+    <Compile Include="Comments\DescriptionException.cs" />
+    <Compile Include="Parsing\FortranBlocks\NamedDescriptionBlock.cs" />
+    <Compile Include="Comments\IInformation.cs" />
+    <Compile Include="Comments\IInformationFactory.cs" />
+    <Compile Include="Parsing\FortranObjects\XInformation.cs" />
+    <Compile Include="Parsing\ObjectGroups\NamedDescriptionGroup.cs" />
+    <Compile Include="Parsing\ObjectGroups\DescriptionGroup.cs" />
+    <Compile Include="Parsing\PostActions\DescriptionPostAction.cs" />
+    <Compile Include="Parsing\FortranBlock.cs" />
+    <Compile Include="Parsing\FortranObject.cs" />
+    <Compile Include="IPlugin.cs" />
+    <Compile Include="Output\ObjectGroup.cs" />
+    <Compile Include="Parsing\Parser.cs" />
+    <Compile Include="Parsing\PostAction.cs" />
+    <Compile Include="Parsing\Traverser.cs" />
+    <Compile Include="Parsing\XFortranObject.cs" />
+    <Compile Include="Utilitys\CommentUtilitys.cs" />
+    <Compile Include="Parsing\FortranObjects\Description.cs" />
+    <Compile Include="Parsing\FortranBlocks\InformationBlock.cs" />
+    <Compile Include="Parsing\FortranObjects\NamedDescription.cs" />
+    <Compile Include="Helper\AssemblyLoader.cs" />
+    <Compile Include="Helper\FileLine.cs" />
+    <Compile Include="Utilitys\Helper.cs" />
+    <Compile Include="Helper\Options.cs" />
+    <Compile Include="Utilitys\PathUtilitys.cs" />
+    <Compile Include="Utilitys\PluginLoader.cs" />
+    <Compile Include="Utilitys\PluginManager.cs" />
+    <Compile Include="Utilitys\EnvVar.cs" />
+    <Compile Include="Helper\PathList.cs" />
     <Compile Include="Helper\TitledTextBuilder.cs" />
-    <Compile Include="Outputters\DynamicErrorListener.cs" />
-    <Compile Include="Outputters\TransformerErrorListener.cs" />
-    <Compile Include="Outputters\XsltCompilerException.cs" />
-    <Compile Include="Outputters\XsltRunner.cs" />
+    <Compile Include="Output\DynamicErrorListener.cs" />
+    <Compile Include="Output\TransformerErrorListener.cs" />
+    <Compile Include="Output\XsltCompilerException.cs" />
+    <Compile Include="Output\XsltRunner.cs" />
+    <Compile Include="Parsing\PostActions\ProjectPostAction.cs" />
     <Compile Include="Reporting\Report.cs" />
-    <Compile Include="Files\File.cs" />
-    <Compile Include="OptionFile\Exceptions.cs" />
-    <Compile Include="OptionFile\Menu.cs" />
-    <Compile Include="OptionFile\OptionFactory.cs" />
-    <Compile Include="OptionFile\Parser.cs" />
-    <Compile Include="OptionFile\UserPage.cs" />
-    <Compile Include="OptionFile\ValueAttribute.cs" />
-    <Compile Include="OptionFile\XmlPassThroughOptionsAttribute.cs" />
-    <Compile Include="Outputters\HtmlOutputter.cs" />
-    <Compile Include="Outputters\ThemeOutputter.cs" />
-    <Compile Include="Outputters\XmlOutputter.cs" />
+    <Compile Include="Parsing\FortranObjects\File.cs" />
+    <Compile Include="Input\OptionFile\Exceptions.cs" />
+    <Compile Include="Input\OptionFile\Menu.cs" />
+    <Compile Include="Input\OptionFile\OptionFactory.cs" />
+    <Compile Include="Input\OptionFile\Parser.cs" />
+    <Compile Include="Input\OptionFile\UserPage.cs" />
+    <Compile Include="Input\OptionFile\ValueAttribute.cs" />
+    <Compile Include="Input\OptionFile\XmlPassThroughOptionsAttribute.cs" />
+    <Compile Include="Output\HtmlOutputter.cs" />
+    <Compile Include="Output\ThemeOutputter.cs" />
+    <Compile Include="Output\XmlOutputter.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="Projects\Project.cs" />
+    <Compile Include="Parsing\FortranObjects\Project.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Reporting\ConsolePublisher.cs" />
     <Compile Include="Reporting\ReportMode.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
-    <Content Include="defaults\index.md">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="defaults\project.info">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="defaults\images\logo.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="defaults\menu.html">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy /I /Y /S "$(ProjectDir)themes\Default" "$(SolutionDir)Doctran\bin\$(ConfigurationName)\themes\Default"</PostBuildEvent>
+    <PostBuildEvent>xcopy /I /Y /S "$(ProjectDir)themes\Default" "$(SolutionDir)Doctran\bin\$(ConfigurationName)\themes\Default"
+xcopy /I /Y /S "$(ProjectDir)defaults" "$(TargetDir)\defaults"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

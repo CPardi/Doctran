@@ -1,7 +1,7 @@
-﻿using Doctran.OptionFile;
-
-namespace Doctran.Test.OptionFile
+﻿namespace Doctran.Test.OptionFile
 {
+    using Input.OptionFile;
+
     class OptionsTest
     {
         [Value("Name")]

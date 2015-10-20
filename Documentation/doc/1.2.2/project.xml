@@ -327,6 +327,12 @@ This project contains the following Fortran 95 source files.
       <Path>what-s-new.html</Path>
       <Content>
         <h1>What's New</h1>
+        <h3>What's new in Doctran 1.2.3</h3>
+        <ul>
+          <li>Improved error messages.</li>
+          <li>Fixed bug causing block description heading sections to not be collapsible.</li>
+          <li>Fixed broken links in procedure argument documentation.</li>
+        </ul>
         <h3>What's new in Doctran 1.2.2</h3>
         <ul>
           <li>The style of the generated documentation has been modified to take advantage of wide screen and high resolution displays.</li>
@@ -842,7 +848,7 @@ end subroutine
     </UserPage>
   </Information>
   <DocCreated>
-    <DateTime>2015-10-20T19:09:22.2925063+01:00</DateTime>
+    <DateTime>2015-10-20T19:47:44.0891615+01:00</DateTime>
   </DocCreated>
   <Files />
 </Project>

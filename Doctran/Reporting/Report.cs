@@ -5,7 +5,7 @@ namespace Doctran.Reporting
     using System.Linq;
     using System.Reflection;
     using CommandLine.Text;
-    using Fbase.Common;
+    using Utilitys;
 
     public class Report
     {
