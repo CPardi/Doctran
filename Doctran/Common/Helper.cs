@@ -13,10 +13,24 @@ using MarkdownSharp;
 
 namespace Doctran.Fbase.Common
 {
+    using System.Xml;
     using Reporting;
 
     public static class HelperUtils
     {
+            public static XDocument ToXDocument(this XmlDocument document)
+            {
+                return document.ToXDocument(LoadOptions.None);
+            }
+
+        public static XDocument ToXDocument(this XmlDocument document, LoadOptions options)
+        {
+            using (XmlNodeReader reader = new XmlNodeReader(document))
+            {
+                return XDocument.Load(reader, options);
+            }
+        }
+
         public static IEnumerable<T> Singlet<T>(T tInstance)
         {
             yield return tInstance;

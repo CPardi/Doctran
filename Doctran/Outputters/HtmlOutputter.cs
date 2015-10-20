@@ -53,17 +53,17 @@ namespace Doctran.Fbase.Outputters
 
         public void SetParameter(string name, int iNum)
         {
-            _transformer.SetParameter(new Saxon.Api.QName(name), new XdmAtomicValue(iNum));
+            _transformer.SetParameter(new QName(name), new XdmAtomicValue(iNum));
         }
 
         public void SetParameter(string name, string str)
         {
-            _transformer.SetParameter(new Saxon.Api.QName(name), new XdmAtomicValue(str));
+            _transformer.SetParameter(new QName(name), new XdmAtomicValue(str));
         }
 
         public void SetParameter(string name, XmlReader reader)
         {
-            _transformer.SetParameter(new Saxon.Api.QName(name), _builder.Build(reader));
+            _transformer.SetParameter(new QName(name), _builder.Build(reader));
         }
 
         public void SaveToDisk(XDocument xDocument, string outputDirectory)

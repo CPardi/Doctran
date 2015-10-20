@@ -1,0 +1,46 @@
+.tableHolder {
+	overflow-x:auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+table, table > tbody, table > tfoot, table > thead, table tr, table th, table td {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font: inherit;
+  vertical-align: baseline;
+}
+
+table > thead > tr > td {
+  padding: 0 1.5em 0.25em;
+  font-style: italic;
+}
+
+table > thead > tr > td > span {
+  font-style: normal;
+}
+
+table > tbody > tr > td {
+  font-size: 0.9em;
+  padding: 1em 1.5em 0.25em;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  whitespace: pre-line;
+}
+
+table td {
+  overflow: hidden;
+  border-bottom: 1px solid #C5C8CB;
+  font-size: 1.05em;
+}
+
+/* Sortable tables */
+table.sortable thead {
+  cursor: hand;
+  cursor: pointer;
+}

@@ -47,12 +47,25 @@
       <HintPath>..\packages\dotless.1.5.1\lib\dotless.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="IKVM.OpenJDK.Core, Version=7.2.4630.5, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL" />
     <Reference Include="IKVM.OpenJDK.Security">
       <HintPath>..\..\..\..\..\..\Program Files\Saxonica\SaxonHE9.6N\bin\IKVM.OpenJDK.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="IKVM.OpenJDK.XML.API, Version=7.2.4630.5, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
+      <HintPath>..\packages\IKVM.OpenJDK.XML.API.7.2.4630.5\lib\IKVM.OpenJDK.XML.API.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="IKVM.Runtime, Version=7.2.4630.5, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
+      <HintPath>..\packages\IKVM.Runtime.7.2.4630.5\lib\IKVM.Runtime.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="MarkdownSharp, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MarkdownSharp.1.13.0.0\lib\35\MarkdownSharp.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="saxon9he, Version=9.6.0.6, Culture=neutral, PublicKeyToken=e1fdd002d5083fe6, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Saxon-HE.9.6.0.6\lib\net40\saxon9he.dll</HintPath>
     </Reference>
     <Reference Include="saxon9he-api, Version=9.6.0.6, Culture=neutral, PublicKeyToken=e1fdd002d5083fe6, processorArchitecture=MSIL">
       <HintPath>..\packages\Saxon-HE.9.6.0.6\lib\net40\saxon9he-api.dll</HintPath>
@@ -84,6 +97,10 @@
     <Compile Include="Common\EnvVar.cs" />
     <Compile Include="Common\PathList.cs" />
     <Compile Include="Helper\TitledTextBuilder.cs" />
+    <Compile Include="Outputters\DynamicErrorListener.cs" />
+    <Compile Include="Outputters\TransformerErrorListener.cs" />
+    <Compile Include="Outputters\XsltCompilerException.cs" />
+    <Compile Include="Outputters\XsltRunner.cs" />
     <Compile Include="Reporting\Report.cs" />
     <Compile Include="Files\File.cs" />
     <Compile Include="OptionFile\Exceptions.cs" />
@@ -101,10 +118,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Reporting\ConsolePublisher.cs" />
     <Compile Include="Reporting\ReportMode.cs" />
-    <Content Include="..\themes\**\*">
-      <Link>themes\%(RecursiveDir)\%(FileName)%(Extension)</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -128,6 +141,9 @@
     </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy /I /Y /S "$(ProjectDir)themes\Default" "$(SolutionDir)Doctran\bin\$(ConfigurationName)\themes\Default"</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

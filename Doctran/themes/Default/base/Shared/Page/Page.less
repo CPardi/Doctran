@@ -1,0 +1,133 @@
+﻿@heading-margin-top: 1.5em;
+@heading-margin-bottom: 1.2em;
+
+@general-margin-top: 1.0em;
+@general-margin-bottom: 1.0em;
+@menuWidth: 20em;
+
+body {
+  font-size: 1em;
+  margin: 0 auto;
+  padding: 0;
+  text-align: center;
+  float: none;
+}
+
+#Page {
+  height: auto;
+  text-align: left;
+  color: #404853;
+  & > .mainContainer {
+    margin: 0;
+    position: absolute;
+    top: 0;
+    left: @menuWidth;
+    bottom: 0;
+    right: 0;
+    overflow: auto;
+
+    & > #Article {
+      margin: 3em 7.5% 0 7.5%;
+      min-width: 30em;
+      max-width: 75em;
+
+      p {
+        line-height: 1.5;
+        margin-bottom: @general-margin-bottom;
+      }
+
+      ul {
+        margin: @general-margin-top 0 @general-margin-bottom 2em;
+        line-height: 1.75;
+
+        li {
+          margin-left: 1.5em;
+
+          ul {
+            margin: 0 0 0.2em 2em;
+          }
+        }
+      }
+
+      pre {
+        padding: 0.2em 1.0em;
+        white-space: pre-wrap;
+        font-family: Consolas, Monaco, Andale Mono, monospace;
+        line-height: 1.5;
+        font-size: 13px;
+        border: 1px solid #ddd;
+        background-color: #f7f7f7;
+        border-radius: 3px;
+        margin: 0 10% @general-margin-bottom 3%;
+      }
+      code {
+        border: 1px solid #ddd;
+        padding: 0.05em 0.2em;
+        background-color: #f7f7f7;
+        border-radius: 3px;
+      }
+      pre code {
+        padding: 0;
+        border: 0px;
+      }
+
+      table {
+        margin-top: @general-margin-top;
+        margin-bottom: @general-margin-bottom;
+      }
+
+      /* HEADINGS */
+
+      h1 {
+        padding-left: 0.2em;
+        font-size: 2.0em;
+        font-weight: bold;
+        border-bottom: 1px solid #C5C8CB;
+        line-height: 1.2;
+        margin-top: @heading-margin-top;
+        margin-bottom: @heading-margin-bottom;
+      }
+
+      h2 {
+        font-size: 1.3em;
+        font-weight: bold;
+        padding-left: 1em;
+        line-height: 1.4;
+        display: inline-block;
+        padding-right: 2.5%;
+        margin-top: 0.7*@heading-margin-top;
+        margin-bottom: 0.7*@heading-margin-bottom;
+        border-bottom: 1px solid #C5C8CB;
+      }
+
+      h3 {
+        font-size: 1.15em;
+        line-height: 1.4;
+        font-weight: bold;
+        font-style: italic;
+        margin: 0.3*@heading-margin-top 0 0.3*@heading-margin-bottom 1.2em;
+      }
+
+      /* INLINE ELEMENTS */
+
+      sup {
+        vertical-align: top;
+        font-size: 0.9em;
+      }
+
+      .variable, .argument, .result {
+        font-family: monospace;
+      }
+
+      a {
+        outline: none;
+        text-decoration: none;
+        color: #1364C4;
+      }
+
+      a:hover {
+        color: #3390b1;
+      }
+    }
+  }
+}

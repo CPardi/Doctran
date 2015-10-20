@@ -6,6 +6,7 @@
 namespace Doctran
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Xml.Linq;
@@ -14,6 +15,7 @@ namespace Doctran
     using Fbase.Outputters;
     using Fbase.Projects;
     using OptionFile;
+    using Output;
     using Reporting;
     using File = Fbase.Files.File;
     using Parser = CommandLine.Parser;
@@ -117,10 +119,15 @@ namespace Doctran
                     select file.SourceXEle)).CreateReader();
 
             if (EnvVar.Verbose >= 2) Console.Write("Done" + Environment.NewLine + "Generating htmls... ");
-            var htmlOutputter = new HtmlOutputter(EnvVar.XsltFullPathAndName(options.ThemeName));
-            htmlOutputter.SetParameter("verbose", EnvVar.Verbose);
-            htmlOutputter.SetParameter("source", reader);
-            htmlOutputter.SaveToDisk(xmlOutputter.XDocument, options.OutputDirectory + EnvVar.slash);
+
+            var preProcess = new XsltRunner(Path.Combine(EnvVar.execPath, "themes", options.ThemeName, "main_pre.xslt"));
+            var preProcessResult = preProcess.Run(xmlOutputter.XDocument, Path.GetFullPath(options.OutputDirectory));
+
+            var htmlOutputter = new XsltRunner(Path.Combine(EnvVar.execPath, "themes", options.ThemeName, "main.xslt"));
+            htmlOutputter.Run(preProcessResult.ToXDocument(),
+                Path.GetFullPath(options.OutputDirectory) + EnvVar.slash,
+                new KeyValuePair<string, object>("verbose", EnvVar.Verbose),
+                new KeyValuePair<string, object>("source", reader));
         }
 
         private static void OutputTheme(Options options)

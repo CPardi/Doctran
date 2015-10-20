@@ -1,5 +1,5 @@
  * [Versions](index.md)
-  * [1.2.2 (Latest)](../1.2.2/index.md)
+  * [1.2.3 - 1.2.2 (Latest)](../1.2.2/index.md)
   * [1.2.1](../1.2.1/index.md)
  * [Changelog](changelog.md)
  * [Doctran Home](http://www.doctran.co.uk)

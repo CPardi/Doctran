@@ -1,6 +1,11 @@
 #Changelog
 
-##Version 1.2.2 (Latest)
+##Version 1.2.3 (Latest)
+ * Improved error messages.
+ * Fixed bug causing block description heading sections to not be collapsible.
+ * Fixed broken links in procedure argument documentation.
+
+##Version 1.2.2
  * The style of the generated documentation has been modified to take advantage of wide screen and high resolution displays.
  * `Menu` project information added, to allow menu customizations. The menu is now generated from a markdown or HTML file containing macros.
  * `UserPage` project information added, so that additional documentation pages can be created from the user's markdown or HTML files.
