@@ -14,25 +14,21 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
             <xsl:call-template name="StatisticsRows"/>
         </xsl:variable>
 
-        <xsl:call-template name="Section">
-            <xsl:with-param name="name" select="'Statistics'"/>
-            <xsl:with-param name="content">
-                <p>The table below shows some basic statistics of the project.</p>
-                <xsl:call-template name="Table">
-                    <xsl:with-param name="rows" select="$stats/*"/>
-                    <xsl:with-param name="columns" as="element()">
-                        <Columns>
-                            <Column>
-                                <Title>Statistic</Title>
-                                <Name>Name</Name>
-                            </Column>
-                            <Column>
-                                <Title>Value</Title>
-                                <Name>Value</Name>
-                            </Column>
-                        </Columns>
-                    </xsl:with-param>
-                </xsl:call-template>
+        <h2>Statistics</h2>
+        <p>The table below shows some basic statistics of the project.</p>
+        <xsl:call-template name="Table">
+            <xsl:with-param name="rows" select="$stats/*"/>
+            <xsl:with-param name="columns" as="element()">
+                <Columns>
+                    <Column>
+                        <Title>Statistic</Title>
+                        <Name>Name</Name>
+                    </Column>
+                    <Column>
+                        <Title>Value</Title>
+                        <Name>Value</Name>
+                    </Column>
+                </Columns>
             </xsl:with-param>
         </xsl:call-template>
 

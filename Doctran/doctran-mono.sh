@@ -1,0 +1,1 @@
+mono "/c/Documents/Programming/VisualStudio/Projects/Doctran/Doctran/bin/Release/Doctran.exe" "$@"
