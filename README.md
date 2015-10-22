@@ -4,3 +4,14 @@
 The HTML format allows related documents to be conveniently hyper-linked together. Both breadcrumb and drop-down menu navigations are automatically generated to allow quick access to all parts of you source code.
 
 More information is available [here](http://www.doctran.co.uk), and the user guide is available [here](http://www.doctran.co.uk/doc).
+
+## Acknowledgments
+Doctran depends on the following excellent libraries:
+
+ * [Saxon-HE](http://sourceforge.net/projects/saxon/files/Saxon-HE/) - [Mozilla Public License Version 2.0](https://www.mozilla.org/en-US/MPL/2.0/)
+ * [ColorCode](https://colorcode.codeplex.com/) - [Microsoft Public License](https://opensource.org/licenses/MS-PL) - [Modified](https://colorcode.codeplex.com/SourceControl/network/forks/CPardi/ColorCodeFortran) to add Fortran support
+ * [Command line Parser Library](https://github.com/gsscoder/commandline/tree/stable-1.9.71.2) - [The MIT License](https://opensource.org/licenses/MIT)
+ * [Dotless](http://www.dotlesscss.org/) - [Apache License Version 2.0](http://www.apache.org/licenses/LICENSE-2.0)
+ * [MarkdownSharp](https://code.google.com/p/markdownsharp/) - [The MIT License](https://opensource.org/licenses/MIT)
+ * [Sorttable](http://www.kryogenix.org/code/browser/sorttable/) - [The MIT License](http://www.kryogenix.org/code/browser/licence.html)
+ * [Tipue Search](http://www.tipue.com/search/) - [The MIT License](https://opensource.org/licenses/MIT)
