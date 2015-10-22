@@ -11,29 +11,24 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
                 xmlns:doctran="http://www.doctran.co.uk">
 
     <xsl:template name="Search-head">
-        <xsl:param name="prefix" select="Prefix"/>
-
-        <link rel="stylesheet" type="text/css" href="{concat($prefix,'base/Shared/Search/tipuesearch/tipuesearch.css')}"/>
-        <script type="text/javascript" src="{concat($prefix,'base/Shared/Search/tipuesearch/tipuesearch_set.js')}"></script>
-        <script type="text/javascript" src="{concat($prefix,'base/Shared/Search/tipuesearch/tipuesearch_content.js')}"></script>
-        <script type="text/javascript" src="{concat($prefix,'base/Shared/Search/tipuesearch/tipuesearch.min.js')}"></script>
-
-        <script type="text/javascript" src="{concat($prefix,'base/Shared/Search/Search.js')}"></script>
-
+        <link rel="stylesheet" type="text/css" href="base/Shared/Search/tipuesearch/tipuesearch.css"/>
+        <script type="text/javascript" src="base/Shared/Search/tipuesearch/tipuesearch_set.js"></script>
+        <script type="text/javascript" src="base/Shared/Search/tipuesearch/tipuesearch_content.js"></script>
+        <script type="text/javascript" src="base/Shared/Search/tipuesearch/tipuesearch.min.js"></script>
+        <script type="text/javascript" src="base/Shared/Search/Search.js"></script>
     </xsl:template>
 
     <xsl:template name="Search-page">
-
-        <xsl:variable name="prefix" select="'../../'"/>
 
         <xsl:call-template name="TipueContent"/>
 
         <xsl:result-document href="html/Navigation/Search.html">
             <xsl:call-template name="Page">
 
+                <xsl:with-param name="prefix" select="'../../'"/>
+
                 <xsl:with-param name="Content-head">
-                    <xsl:call-template name="Search-head">
-                                            </xsl:call-template>
+                    <xsl:call-template name="Search-head"/>
                 </xsl:with-param>
 
                 <xsl:with-param name="Content-body">
@@ -43,7 +38,7 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
 
                 <xsl:with-param name="title" select="'Search Results'"/>
 
-                            </xsl:call-template>
+            </xsl:call-template>
         </xsl:result-document>
 
     </xsl:template>

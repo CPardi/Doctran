@@ -15,26 +15,21 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
         <xsl:param name="firstLine" as="xs:integer">0</xsl:param>
         <xsl:param name="lastLine" as="xs:integer">0</xsl:param>
 
-        <xsl:call-template name="Section">
-            <xsl:with-param name="name" select="'Source'"/>
-            <xsl:with-param name="id" select="'Source'"/>
-            <xsl:with-param name="content">
-                <p>The program source shown below is taken from '
-                    <a href="{$file/href}">
-                        <xsl:value-of select="$file/Name"/><xsl:value-of select="$file/Extension"/>
-                    </a>
-                    '.
-                </p>
-                <div class="fortran code">
-                    <code>
-                        <ul>
-                            <xsl:copy-of
-                                    select="File[Name = $file/Name]/Lines/div/ul/li[span[@class = 'line-number-span']/text() &gt;= $firstLine][span[@class='line-number-span']/text() &lt;= $lastLine]"/>
-                        </ul>
-                    </code>
-                </div>
-            </xsl:with-param>
-        </xsl:call-template>
+        <h2>Source</h2>
+        <p>The program source shown below is taken from '
+            <a href="{$file/href}">
+                <xsl:value-of select="$file/Name"/><xsl:value-of select="$file/Extension"/>
+            </a>
+            '.
+        </p>
+        <div class="fortran code">
+            <code>
+                <ul>
+                    <xsl:copy-of
+                            select="File[Name = $file/Name]/Lines/div/ul/li[span[@class = 'line-number-span']/text() &gt;= $firstLine][span[@class='line-number-span']/text() &lt;= $lastLine]"/>
+                </ul>
+            </code>
+        </div>
     </xsl:template>
 
 </xsl:stylesheet>

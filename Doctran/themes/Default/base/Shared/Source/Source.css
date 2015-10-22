@@ -1,4 +1,4 @@
-#Source code > ul {
+.fortran.code code > ul {
     margin: 0 !important;
     padding: 0 !important;;
     border: 0 !important;;
@@ -11,17 +11,17 @@
     line-height: 1.1;
 }
 
-#Source code > ul > li {
+.fortran.code code > ul > li {
     margin: 0 !important;
     padding: 0 !important;
     border: 0 !important;
 }
 
-#Source .code {
+.fortran.code .code {
     background-color: white;
 }
 
-#Source .even
+.fortran.code .even
 {
     background-color: #F6F6F6;
 }

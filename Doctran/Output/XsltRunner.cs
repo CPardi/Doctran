@@ -139,27 +139,39 @@ namespace Doctran.Output
             Report.Warnings(
                 (publisher, warning) =>
                 {
+                    var sourceLocator = warning.getLocator();
                     publisher.AddWarningDescription("XSLT runtime warning");
                     publisher.AddReason(warning.Message);
-                    publisher.AddLocation($"At line '{warning.getLocator().getLineNumber()}', column '{warning.getLocator().getColumnNumber()}' of '{StylesheetPath}'.");
+                    publisher.AddLocation(
+                        sourceLocator == null
+                            ? $"In '{StylesheetPath}'."
+                            : $"At line '{sourceLocator.getLineNumber()}', column '{sourceLocator.getColumnNumber()}' of '{sourceLocator.getSystemId()}'.");
                 },
                 listener.Warnings);
 
             Report.Warnings(
                 (publisher, error) =>
                 {
+                    var sourceLocator = error.getLocator();
                     publisher.AddWarningDescription("Non-fatal XSLT runtime error.");
                     publisher.AddReason(error.Message);
-                    publisher.AddLocation($"At line '{error.getLocator().getLineNumber()}', column '{error.getLocator().getColumnNumber()}' of '{StylesheetPath}'.");
+                    publisher.AddLocation(
+                        sourceLocator == null
+                            ? $"In '{StylesheetPath}'."
+                            : $"At line '{sourceLocator.getLineNumber()}', column '{sourceLocator.getColumnNumber()}' of '{sourceLocator.getSystemId()}'.");
                 },
                 listener.Errors);
 
             Report.Errors(
                 (publisher, fatalError) =>
                 {
+                    var sourceLocator = fatalError.getLocator();
                     publisher.AddErrorDescription("Fatal XSLT runtime error.");
                     publisher.AddReason(fatalError.Message);
-                    publisher.AddLocation($"At line '{fatalError.getLocator().getLineNumber()}', column '{fatalError.getLocator().getColumnNumber()}' of '{StylesheetPath}'.");
+                    publisher.AddLocation(
+                        sourceLocator == null
+                            ? $"In '{StylesheetPath}'."
+                            : $"At line '{sourceLocator.getLineNumber()}', column '{sourceLocator.getColumnNumber()}' of '{sourceLocator.getSystemId()}'.");
                 },
                 listener.FatalErrors);
         }
@@ -168,24 +180,24 @@ namespace Doctran.Output
         {
             foreach (var arg in arguments)
             {
+                var xmlArg = arg.Value as XmlReader;
+                if (xmlArg != null)
+                {
+                    transformer.SetParameter(new QName(arg.Key), _builder.Build(xmlArg));
+                    continue;
+                }
+
                 if (arg.Value is int)
                 {
                     transformer.SetParameter(new QName(arg.Key), new XdmAtomicValue((int)arg.Value));
-                    break;
+                    continue;
                 }
 
                 var sArg = arg.Value as string;
                 if (sArg != null)
                 {
                     transformer.SetParameter(new QName(arg.Key), new XdmAtomicValue(sArg));
-                    break;
-                }
-
-                var xmlArg = arg.Value as XmlReader;
-                if (xmlArg != null)
-                {
-                    transformer.SetParameter(new QName(arg.Key), _builder.Build(xmlArg));
-                    break;
+                    continue;
                 }
 
                 // If we get here then the parameter is unrecognized, so let the developer know.

@@ -51,7 +51,9 @@ namespace Doctran.Utilitys
             //Initialize plugins.
             PluginManager.Plugins = PluginManager.PluginLoader.GetClassInstances<IPlugin>();
             foreach (var plugin in Plugins.OrderBy(p => p.LoadOrder()))
+            {
                 plugin.Initialize();
+            }
         }
 
         public static List<IPlugin> Plugins { get; private set; }

@@ -1,9 +1,8 @@
-﻿namespace Doctran.Utility
+﻿namespace Doctran.Utilitys
 {
     using System;
     using System.Collections.Generic;
     using Helper;
-    using Utilitys;
 
     public static class PluginLoader
     {

@@ -15,7 +15,6 @@ namespace Doctran
     using Output;
     using Parsing.FortranObjects;
     using Reporting;
-    using Utility;
     using Utilitys;
     using File = Parsing.FortranObjects.File;
     using Parser = CommandLine.Parser;
@@ -114,9 +113,10 @@ namespace Doctran
 
         private static void OutputHtml(Project project, XmlOutputter xmlOutputter, Options options)
         {
-            var reader = new XElement("Source",
+            var xElements = 
                 (from file in project.SubObjectsOfType<File>()
-                    select file.SourceXEle)).CreateReader();
+                select file.SourceXEle).ToList();
+            var reader = new XDocument(new XElement("Source", xElements)).CreateReader();
 
             if (EnvVar.Verbose >= 2) Console.Write("Done" + Environment.NewLine + "Generating htmls... ");
 
@@ -124,6 +124,7 @@ namespace Doctran
             var preProcessResult = preProcess.Run(xmlOutputter.XDocument, Path.GetFullPath(options.OutputDirectory));
 
             var htmlOutputter = new XsltRunner(Path.Combine(EnvVar.ExecPath, "themes", options.ThemeName, "main.xslt"));
+
             htmlOutputter.Run(preProcessResult.ToXDocument(),
                 Path.GetFullPath(options.OutputDirectory) + EnvVar.Slash,
                 new KeyValuePair<string, object>("verbose", EnvVar.Verbose),
