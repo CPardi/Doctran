@@ -9,25 +9,44 @@ namespace Doctran.Utilitys
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
+    using Comments;
     using Helper;
     using Output;
     using Parsing;
     using Parsing.FortranBlocks;
+    using Parsing.ObjectGroups;
+    using Parsing.PostActions;
 
     public static class PluginManager
 	{
         public static void Initialize()
         {
             // Load base objects.
-            PluginManager.FortranBlocks = new List<FortranBlock>();
-            PluginManager.FortranBlocks.Add(new NamedDescriptionBlock());
-            PluginManager.FortranBlocks.Add(new DescriptionBlock());
+            PluginManager.FortranBlocks = new List<FortranBlock>
+            {
+                new NamedDescriptionBlock(),
+                new DescriptionBlock()
+            };
 
-            PluginManager.ObjectGroups = PluginManager.PluginLoader.GetClassInstances<ObjectGroup>("Doctran.Fbase");
+            PluginManager.ObjectGroups = new List<ObjectGroup>()
+            {
+                new NamedDescriptionGroup(),
+                new DescriptionGroup()
+            };
 
             PluginManager.Traversers = new Dictionary<string, KeyValuePair<int, Traverser>>();
-            PluginManager.Traversers.Add("Linker", new KeyValuePair<int, Traverser>(0, new Traverser(PluginManager.PluginLoader.GetClassInstances<PostAction>("Doctran.Fbase"))));
-            PluginManager.Traversers.Add("ErrorChecker", new KeyValuePair<int, Traverser>(1, new Traverser(PluginManager.PluginLoader.GetClassInstances<PostAction>("Doctran.Exceptions"))));
+            PluginManager.Traversers.Add("Linker", new KeyValuePair<int, Traverser>(0,
+                new Traverser(
+                    new List<PostAction>()
+                    {
+                        new ProjectPostAction(),
+                        new DescriptionPostAction(),
+                    })));
+            PluginManager.Traversers.Add("ErrorChecker", new KeyValuePair<int, Traverser>(1, new Traverser(
+                new List<PostAction>()
+                {
+                    new DescriptionException()
+                })));
 
             //Initialize plugins.
             PluginManager.Plugins = PluginManager.PluginLoader.GetClassInstances<IPlugin>();
@@ -35,7 +54,7 @@ namespace Doctran.Utilitys
                 plugin.Initialize();
         }
 
-		public static List<IPlugin> Plugins { get; private set; }
+        public static List<IPlugin> Plugins { get; private set; }
 
         public static List<FortranBlock> FortranBlocks { get; set; }
 

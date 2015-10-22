@@ -36,7 +36,7 @@ namespace Doctran
 
             try
             {
-                Parser.Default.ParseArguments(args, options);
+                Parser.Default.ParseArgumentsStrict(args, options);
             }
             catch (IOException e)
             {
@@ -47,6 +47,10 @@ namespace Doctran
                         pub.AddReason(e.Message);
                     }, e);
             }
+
+            ShowLicensing = options.ShowLicensing;
+
+            PluginManager.Initialize();
 
             if (options.ShowHelp)
             {
@@ -65,12 +69,6 @@ namespace Doctran
                         pub.AddMessage(PluginManager.InformationString);
                     });
             }
-
-            ShowLicensing = options.ShowLicensing;
-
-            PluginLoader.Initialize();
-
-            PluginManager.Initialize();
 
             var fileParser = new Parser<Options>();
             fileParser.AddRecognisedOption("Source");

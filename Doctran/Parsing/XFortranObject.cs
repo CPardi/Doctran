@@ -75,8 +75,8 @@ namespace Doctran.Parsing
 			        Report.Warning((pub) =>
 			        {
 			            pub.AddWarningDescription("Error in XML parsing.");
-			            pub.AddReason(e.Message);
-			            pub.AddLocation(obj.GetType().Name + " " + obj.Name + " within " + this.GoUpTillType<File>().Name);
+			            pub.AddReason($"Expected a single '{obj.GetType().Name}' block, but multiple were found. Only the first occurence will be used.");
+			            pub.AddLocation($"{obj.GetType().Name} '{obj.Name}' within '{this.GoUpTillType<File>().Name}'.");
 			        });
 			    }
 			}

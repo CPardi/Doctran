@@ -73,13 +73,13 @@
             // Check for a simple message first.
             if (Message != null)
             {
-                Console.WriteLine($"Message{Environment.NewLine}");
+                Console.Write(Message);
                 return;
             }
 
             // Give errors or warnings in standard form.
             var ttb = new TitledTextBuilder();
-            ttb.Append("Error", ErrorDescription);
+            ttb.Append(ErrorDescription != null ? "Error" : "Warning", ErrorDescription ?? WarningDescription);
 
             if (Reason != null)
             {

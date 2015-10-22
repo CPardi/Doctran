@@ -39,7 +39,7 @@ namespace Doctran.Parsing.FortranObjects
             try
             {
                 var files = (from path in options.SourceFilePaths.AsParallel()
-                             select _sourceParser.ParseFile(path, FortranObjects.File.ReadFile(path))).ToList();            
+                             select _sourceParser.ParseFile(path, File.ReadFile(path))).ToList();            
                 this.AddSubObjects(files);
             }
             catch (IOException e) { Report.Error((pub, ex) =>

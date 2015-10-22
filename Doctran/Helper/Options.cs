@@ -57,7 +57,7 @@ namespace Doctran.Helper
         [CommandLine.Option("help", HelpText = "Show this help and exit.")]
         public bool ShowHelp { get; set; }
 
-        [CommandLine.Option("license", DefaultValue = false, HelpText = "Run Doctran with this options to enter a license key and view license information.")]
+        [CommandLine.Option("license", DefaultValue = false, HelpText = "Run Doctran with this option to enter a license key and view license information.")]
         public bool ShowLicensing { get; set; }
 
         [CommandLine.ValueList(typeof(PathList))]

@@ -17,15 +17,8 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
         <xsl:result-document href="{Path}">
 
             <xsl:call-template name="Page">
-
-                <xsl:with-param name="title">
-                    <xsl:value-of select="Content/(h1|h2|h3)[1]"/>
-                </xsl:with-param>
-
-                <xsl:with-param name="Content-body" as="element()">
-                    <xsl:copy-of select="Content"/>
-                </xsl:with-param>
-
+                <xsl:with-param name="title" select="Content/(h1|h2|h3)[1]"/>
+                <xsl:with-param name="Content-body" select="Content/node()"/>
             </xsl:call-template>
 
         </xsl:result-document>
