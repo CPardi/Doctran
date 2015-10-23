@@ -6,58 +6,48 @@
 namespace Doctran.Parsing.FortranObjects
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Xml.Linq;
-    using FortranBlocks;
     using Helper;
-    using Parsing;
     using Reporting;
     using Utilitys;
 
     public class Project : XFortranObject
-    {        
-        private DateTime _creationDate = DateTime.Now;        
-        private Parser _sourceParser = new Parser(PluginManager.FortranBlocks);
-        private XElement _xmlPassthrough;
+    {
+        private DateTime _creationDate = DateTime.Now;
+        private readonly XElement _xmlPassthrough;
 
-        public string FilePath { get; private set; }
-        
-        public Project(Options options)
+        public Project(Options options, IEnumerable<FortranBlock> blockParsers)
         {
+            var sourceParser = new Parser(blockParsers);
+
             _xmlPassthrough = options.XmlInformation;
             this.FilePath = options.ProjectFilePath;
 
-            // Add information blocks for this output.
-            _sourceParser = new Parser(
-                PluginManager.FortranBlocks.Concat(
-                    from i in Enumerable.Range(1, 4)
-                    select new InformationBlock(i))
-                );
-
-            // Parse source files.
-            try
-            {
-                var files = (from path in options.SourceFilePaths.AsParallel()
-                             select _sourceParser.ParseFile(path, File.ReadFile(path))).ToList();            
-                this.AddSubObjects(files);
-            }
-            catch (IOException e) { Report.Error((pub, ex) =>
-            {
-                pub.AddErrorDescription("Error in specified source file.");
-                pub.AddReason(e.Message);
-            }, e); }
-
+            //// Parse source files.
+            //try
+            //{
+            //    var files = (from path in options.SourceFilePaths.AsParallel()
+            //        select sourceParser.ParseFile(path, File.ReadFile(path))).ToList();
+            //    this.AddSubObjects(files);
+            //}
+            //catch (IOException e)
+            //{
+            //    Report.Error((pub, ex) =>
+            //    {
+            //        pub.AddErrorDescription("Error in specified source file.");
+            //        pub.AddReason(e.Message);
+            //    }, e);
+            //}
         }
 
-        protected override string GetIdentifier()
-        {
-            return this.Name;
-        }
+        public string FilePath { get; private set; }
 
         public override XElement XEle()
         {
-            XElement xele = new XElement("Project");
+            var xele = new XElement("Project");
 
             xele.Add(new XElement("Name", this.Name));
             xele.Add(_xmlPassthrough);
@@ -65,12 +55,17 @@ namespace Doctran.Parsing.FortranObjects
             xele.Add(
                 from info in this.SubObjectsOfType<Description>()
                 select info.XEle()
-                    );
+                );
             xele.Add(new XElement("Files",
-                from file in this.SubObjectsOfType<FortranObjects.File>().AsParallel()
+                from file in this.SubObjectsOfType<File>().AsParallel()
                 select file.XEle())
-                    );
+                );
             return xele;
+        }
+
+        protected override string GetIdentifier()
+        {
+            return this.Name;
         }
     }
 }

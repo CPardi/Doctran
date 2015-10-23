@@ -13,6 +13,7 @@ namespace Doctran.Parsing.FortranObjects
     using System.Xml.Linq;
     using ColorCode;
     using Helper;
+    using Output;
     using Parsing;
     using Reporting;
     using Utilitys;
@@ -22,10 +23,11 @@ namespace Doctran.Parsing.FortranObjects
         #region Constructor
 
         // Reads a file, determines its type and loads the contained procedure and/or modules.
-        public File(string pathAndFilename, IEnumerable<FortranObject> subObjects, List<FileLine> lines)
+        public File(string pathAndFilename, IEnumerable<FortranObject> subObjects, List<FileLine> lines, IEnumerable<ObjectGroup> objectGroups)
             : base(Path.GetFileName(pathAndFilename), subObjects,"File", lines)
         {
             this.PathAndFilename = pathAndFilename;
+            ObjectGroups = objectGroups;
             this.Info = new FileInfo(this.PathAndFilename);
 
             // Get the filename from the inputted string
@@ -37,6 +39,7 @@ namespace Doctran.Parsing.FortranObjects
         #region Public Properties
 
         public string PathAndFilename { get; private set; }
+        public IEnumerable<ObjectGroup> ObjectGroups { get; }
         public FileInfo Info { get; private set; }
         public List<FileLine> OriginalLines { get; set; }
         public int NumLines { get { return this.lines.Count - 1; } } // Negate one for the false line added in ReadFile.

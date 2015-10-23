@@ -136,7 +136,7 @@ namespace Doctran.Input.OptionFile
             Parser parser = new Parser(infoList);
             try
             {
-                var result = parser.ParseFile(fileName, this.ReadAndPreProcessFile(fileName)).SubObjects;
+                var result = parser.ParseFile(fileName, this.ReadAndPreProcessFile(fileName), null).SubObjects;
                 TestParseResults(result);
                 var resultInfo = result.Cast<IInformation>();
 

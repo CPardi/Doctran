@@ -13,6 +13,7 @@ namespace Doctran
     using Helper;
     using Input.OptionFile;
     using Output;
+    using Parsing;
     using Parsing.FortranObjects;
     using Reporting;
     using Utilitys;
@@ -29,8 +30,27 @@ namespace Doctran
             AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionTrapper;
 #endif
 
-            Report.SetReleaseProfile();
+            Report.SetDebugProfile();
 
+            var options = GetOptions(args);
+            
+            options.SourceFilePaths.KeepDistinctOnly();
+            EnvVar.Verbose = options.Verbose;
+           
+            var project = GetProject(options.SourceFilePaths);
+
+            OutputTheme(options);
+            var xmlOutputter = GetXmlOutputter(project, options.XmlInformation, options.OutputDirectory, options.SaveXmlPath);
+            OutputHtml(project, xmlOutputter, options);
+
+            if (EnvVar.Verbose >= 2) Console.WriteLine("Done");
+            if (EnvVar.Verbose >= 2) Console.WriteLine(@"Documentation can be found at """ + Path.GetFullPath(options.OutputDirectory) + @"""");
+            if (EnvVar.Verbose >= 2) Console.WriteLine(@"Documentation generation complete.");
+            return 0;
+        }
+
+        private static Options GetOptions(string[] args)
+        {           
             var options = new Options();
 
             try
@@ -78,40 +98,27 @@ namespace Doctran
 
             fileParser.ParseFile(options.ProjectFilePath ?? EnvVar.DefaultInfoPath, options);
 
-            options.SourceFilePaths.KeepDistinctOnly();
-            EnvVar.Verbose = options.Verbose;
-
-            var project = GetProject(options);
-            PostProcessProject(ref project);
-
-            OutputTheme(options);
-            var xmlOutputter = GetXmlOutputter(project, options);
-            OutputHtml(project, xmlOutputter, options);
-
-            if (EnvVar.Verbose >= 2) Console.WriteLine("Done");
-            if (EnvVar.Verbose >= 2) Console.WriteLine(@"Documentation can be found at """ + Path.GetFullPath(options.OutputDirectory) + @"""");
-            if (EnvVar.Verbose >= 2) Console.WriteLine(@"Documentation generation complete.");
-            return 0;
+            return options;
         }
 
-        private static Project GetProject(Options options)
+        private static Project2 GetProject(IEnumerable<string> sourceFiles)
         {
             if (EnvVar.Verbose >= 2) Console.Write("Analysing project block structure... ");
-            return new Project(options);
+            return ProgramHelper.ParseProject(sourceFiles);
         }
 
-        private static XmlOutputter GetXmlOutputter(Project project, Options options)
+        private static XmlOutputter GetXmlOutputter(Project2 project, XElement xmlInformation, string outputDirectory, string saveXmlPath)
         {
             if (EnvVar.Verbose >= 2) Console.Write("Done" + Environment.NewLine + "Generating xml... ");
-            var xmlOutputter = new XmlOutputter(project.XEle());
-            if (options.SaveXmlPath != null)
+            var xmlOutputter = new XmlOutputter(project.XEle(xmlInformation));
+            if (saveXmlPath != null)
             {
-                xmlOutputter.SaveToDisk(Path.Combine(options.OutputDirectory, options.SaveXmlPath));
+                xmlOutputter.SaveToDisk(Path.Combine(outputDirectory, saveXmlPath));
             }
             return xmlOutputter;
         }
 
-        private static void OutputHtml(Project project, XmlOutputter xmlOutputter, Options options)
+        private static void OutputHtml(FortranObject project, XmlOutputter xmlOutputter, Options options)
         {
             var xElements = 
                 (from file in project.SubObjectsOfType<File>()
@@ -137,14 +144,7 @@ namespace Doctran
             var themeOutputter = new ThemeOutputter();
             themeOutputter.Output(options);
         }
-
-        private static void PostProcessProject(ref Project project)
-        {
-            if (EnvVar.Verbose >= 2) Console.Write("Done" + Environment.NewLine + "Post processing project... ");
-            foreach (var traverser in PluginManager.Traversers.ToList().OrderBy(t => t.Value.Key))
-                traverser.Value.Value.Go(project);
-        }
-
+        
         private static void UnhandledExceptionTrapper(object sender, UnhandledExceptionEventArgs e)
         {
             try

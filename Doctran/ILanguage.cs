@@ -7,11 +7,17 @@
 
 namespace Doctran
 {
+    using System.Collections.Generic;
+    using Output;
     using Parsing;
 
     public interface ILanguage
     {
-        Parser CreateParser();
+        IEnumerable<FortranBlock> BlocksParsers { get; }
+
+        IEnumerable<Traverser> Traversers { get; }
+
+        IEnumerable<ObjectGroup> ObjectGroups { get; }
     }
 }
 

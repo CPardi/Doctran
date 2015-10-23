@@ -96,7 +96,7 @@ namespace Doctran.Parsing.FortranObjects
 
         public override XElement XEle()
         {
-            var xele = new XElement(this.XElement_Name);
+            var xele = new XElement(this.XElementName);
 
             xele.Add(this.Parse("Basic", WebUtility.HtmlEncode(this.Basic.Replace("\"", "\\" +  "\""))));
 

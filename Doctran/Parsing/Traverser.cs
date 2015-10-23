@@ -7,6 +7,7 @@ namespace Doctran.Parsing
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using FortranObjects;
     using Utilitys;
 
@@ -15,9 +16,9 @@ namespace Doctran.Parsing
 
         private List<PostAction> postActions;
 
-        public Traverser(List<PostAction> postActions)
+        public Traverser(params PostAction[] postActions)
         {
-            this.postActions = postActions;
+            this.postActions = postActions.ToList();
         }
 
         public void AddAction(PostAction action)
@@ -30,14 +31,14 @@ namespace Doctran.Parsing
             this.postActions.AddRange(actions);
         }
 
-        public void Go(Project project)
+        public void Go(File file)
         {
-            Navigate(project);
+            Navigate(file);
         }
 
         protected void Navigate(FortranObject obj)
         {
-            if (EnvVar.Verbose >= 3 && obj is File) Console.WriteLine("Post processing: " + obj.Name + (obj as File).Info.Extension);
+            if (EnvVar.Verbose >= 3 && obj is File) Console.WriteLine("Post processing: " + obj.Name + ((File) obj).Info.Extension);
 
             foreach (PostAction block in this.postActions)
                 if (block.Is(obj)) { block.PostObject(ref obj); }

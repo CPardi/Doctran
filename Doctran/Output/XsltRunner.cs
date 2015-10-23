@@ -108,27 +108,39 @@ namespace Doctran.Output
             Report.Warnings(
                 (publisher, warning) =>
                 {
+                    var sourceLocator = warning.getLocator();
                     publisher.AddWarningDescription("XSLT compilation warning");
                     publisher.AddReason(warning.getCause().Message);
-                    publisher.AddLocation($"At line '{warning.getLocator().getLineNumber()}', column '{warning.getLocator().getColumnNumber()}' of '{StylesheetPath}'.");
+                    publisher.AddLocation(
+                        sourceLocator == null
+                            ? $"In '{StylesheetPath}'."
+                            : $"At line '{sourceLocator.getLineNumber()}', column '{sourceLocator.getColumnNumber()}' of '{StylesheetPath}'.");
                 },
                 listener.Warnings);
 
             Report.Warnings(
                 (publisher, error) =>
                 {
+                    var sourceLocator = error.getLocator();
                     publisher.AddWarningDescription("Non-fatal XSLT stylesheet error.");
                     publisher.AddReason(error.getCause().Message);
-                    publisher.AddLocation($"At line '{error.getLocator().getLineNumber()}', column '{error.getLocator().getColumnNumber()}' of '{StylesheetPath}'.");
+                    publisher.AddLocation(
+                        sourceLocator == null
+                            ? $"In '{StylesheetPath}'."
+                            : $"At line '{sourceLocator.getLineNumber()}', column '{sourceLocator.getColumnNumber()}' of '{StylesheetPath}'.");
                 },
                 listener.Errors);
 
             Report.Errors(
                 (publisher, fatalError) =>
                 {
+                    var sourceLocator = fatalError.getLocator();
                     publisher.AddErrorDescription("Fatal XSLT stylesheet error.");
                     publisher.AddReason(fatalError.getMessage());
-                    publisher.AddLocation($"At line '{fatalError.getLocator().getLineNumber()}', column '{fatalError.getLocator().getColumnNumber()}' of '{fatalError.getLocator().getSystemId()}'.");
+                    publisher.AddLocation(
+                        sourceLocator == null
+                            ? $"In '{StylesheetPath}'."
+                            : $"At line '{sourceLocator.getLineNumber()}', column '{sourceLocator.getColumnNumber()}' of '{sourceLocator.getSystemId()}'.");
                 },
                 listener.FatalErrors);
         }

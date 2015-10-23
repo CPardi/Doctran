@@ -11,47 +11,50 @@ namespace Doctran.Parsing
     using System.Xml.Linq;
     using FortranObjects;
     using Helper;
+    using Output;
     using Reporting;
     using Utilitys;
 
     public abstract class XFortranObject : FortranObject
 	{
-		public string XElement_Name;
+		public string XElementName;
 
 		protected XFortranObject() { }
 
-        protected XFortranObject(string XElement_Name, List<FileLine> lines)
+        protected XFortranObject(string xElementName, List<FileLine> lines)
             : base(lines)
         {
-            this.XElement_Name = XElement_Name;
+            this.XElementName = xElementName;
         }
 
-        protected XFortranObject(string XElement_Name, IEnumerable<FortranObject> sub_objects, List<FileLine> lines)
-			: base(sub_objects, lines)
+        protected XFortranObject(string xElementName, IEnumerable<FortranObject> subObjects, List<FileLine> lines)
+			: base(subObjects, lines)
 		{
-			this.XElement_Name = XElement_Name;
+			this.XElementName = xElementName;
 		}
 
-        protected XFortranObject(string name, IEnumerable<FortranObject> sub_objects, string XElement_Name, List<FileLine> lines)
-			: base(name, sub_objects, lines)
+        protected XFortranObject(string name, IEnumerable<FortranObject> subObjects, string xElementName, List<FileLine> lines)
+			: base(name, subObjects, lines)
 		{
-			this.XElement_Name = XElement_Name;
+			this.XElementName = xElementName;
 		}
 
 		private List<XElement> NonFortranObject(FortranObject obj)
 		{
-			List<XElement> xeles = new List<XElement>();
+			var xeles = new List<XElement>();
 			xeles.AddRange(GroupXEle(obj));
 			xeles.AddRange(
-				obj.SubObjectsNotOfType<XFortranObject>().SelectMany(sObj => NonFortranObject(sObj))
+				obj.SubObjectsNotOfType<XFortranObject>().SelectMany(NonFortranObject)
 				);
 			return xeles;
 		}
 
-		private List<XElement> GroupXEle(FortranObject obj)
+        private IEnumerable<ObjectGroup> ObjectGroups => this.GoUpTillType<File>().ObjectGroups;
+
+        private List<XElement> GroupXEle(FortranObject obj)
 		{
-			List<XElement> xeles = new List<XElement>();
-			foreach (var grp in PluginManager.ObjectGroups)
+			var xeles = new List<XElement>();
+			foreach (var grp in this.ObjectGroups)
 			{
 				List<XElement> xele =
 					(from sObj in obj.SubObjectsOfType<XFortranObject>()
@@ -69,7 +72,7 @@ namespace Doctran.Parsing
 			    {
 			        xeles.Add(grp.XEle(xele));
 			    }
-			    catch (InvalidOperationException e)
+			    catch (InvalidOperationException)
 			    {
 			        xeles.Add(grp.XEle(xele.First()));
 			        Report.Warning((pub) =>
@@ -85,7 +88,7 @@ namespace Doctran.Parsing
 
 		public virtual XElement XEle()
 		{
-			XElement xele = new XElement(this.XElement_Name);
+			XElement xele = new XElement(this.XElementName);
 			xele.Add(new XElement("Name", this.Name));
 			xele.Add(new XElement("Identifier", this.Identifier));
 
@@ -97,7 +100,7 @@ namespace Doctran.Parsing
 
 			xele.Add(GroupXEle(this));
 			var subXEles = this.SubObjectsNotOfType<XFortranObject>().SelectMany
-				(sObj => NonFortranObject(sObj));
+				(NonFortranObject);
 			if (subXEles.Any())
 				xele.Add(subXEles);
 			return xele;

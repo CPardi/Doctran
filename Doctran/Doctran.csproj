@@ -97,12 +97,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helper\ProgramHelper.cs" />
     <Compile Include="ILanguage.cs" />
+    <Compile Include="LanguageManager.cs" />
     <Compile Include="Parsing\FortranBlocks\DescriptionBlock.cs" />
     <Compile Include="Comments\DescriptionException.cs" />
     <Compile Include="Parsing\FortranBlocks\NamedDescriptionBlock.cs" />
     <Compile Include="Comments\IInformation.cs" />
     <Compile Include="Comments\IInformationFactory.cs" />
+    <Compile Include="Parsing\FortranObjects\Project2.cs" />
     <Compile Include="Parsing\FortranObjects\XInformation.cs" />
     <Compile Include="Parsing\ObjectGroups\NamedDescriptionGroup.cs" />
     <Compile Include="Parsing\ObjectGroups\DescriptionGroup.cs" />

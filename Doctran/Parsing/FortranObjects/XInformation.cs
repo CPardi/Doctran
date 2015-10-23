@@ -31,16 +31,16 @@ namespace Doctran.Parsing.FortranObjects
 
         protected override string GetIdentifier()
         {
-            return "Information(" + this.XElement_Name + ")";
+            return "Information(" + this.XElementName + ")";
         }
 
         public override XElement XEle()
         {
             return (string.IsNullOrEmpty(Value)
                 ?
-                new XElement(this.XElement_Name, this.SubObjects.Select(sinfo => (sinfo as XInformation).XEle()))
+                new XElement(this.XElementName, this.SubObjects.Select(sinfo => (sinfo as XInformation).XEle()))
                 :
-                XElement.Parse("<" + this.XElement_Name + ">" + this.Value + "</" + this.XElement_Name + ">")
+                XElement.Parse("<" + this.XElementName + ">" + this.Value + "</" + this.XElementName + ">")
                 );
         }
     }

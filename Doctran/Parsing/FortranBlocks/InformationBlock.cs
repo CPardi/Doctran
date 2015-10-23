@@ -39,6 +39,13 @@ namespace Doctran.Parsing.FortranBlocks
             _factories.Add(matchType, factory);
         }
 
+        public static IEnumerable<InformationBlock> MultiDepthEnumeration(int fromDepth, int toDepth)
+        {
+            return
+                from i in Enumerable.Range(fromDepth, toDepth)
+                select new InformationBlock(i);
+        }
+
         public override bool BlockStart(string parentBlockName, List<FileLine> lines, int lineIndex)
         {
             return
