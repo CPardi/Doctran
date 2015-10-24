@@ -29,7 +29,7 @@ namespace Doctran.Parsing.FortranBlocks
                 || CommentUtilitys.InfoStart(lines[lineIndex + 1].Text);
         }
 
-        public override List<FortranObject> ReturnObject(IEnumerable<FortranObject> subObjects, List<FileLine> lines)
+        public override IEnumerable<FortranObject> ReturnObject(IEnumerable<FortranObject> subObjects, List<FileLine> lines)
         {
             return new NamedDescription(lines);
         }

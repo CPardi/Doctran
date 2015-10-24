@@ -33,7 +33,7 @@ namespace Doctran.Parsing.FortranBlocks
                 || CommentUtilitys.NDescStart(lines[lineIndex + 1].Text);
         }
 
-        public override List<FortranObject> ReturnObject(IEnumerable<FortranObject> subObjects, List<FileLine> lines)
+        public override IEnumerable<FortranObject> ReturnObject(IEnumerable<FortranObject> subObjects, List<FileLine> lines)
         {
             return new List<FortranObject> { new Description(lines) };
         }

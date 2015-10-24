@@ -63,7 +63,7 @@ namespace Doctran.Parsing.FortranBlocks
                 || CommentUtilitys.NDescStart(lines[lineIndex + 1].Text);
         }
 
-        public override List<FortranObject> ReturnObject(IEnumerable<FortranObject> subObjects, List<FileLine> lines)
+        public override IEnumerable<FortranObject> ReturnObject(IEnumerable<FortranObject> subObjects, List<FileLine> lines)
         {
             // Regex group the type-name and it's value.
             Match aMatch = Regex.Match(lines[0].Text.Trim(), @"!>+?\s*?(\w+)\s*?:\s*?(.*)");

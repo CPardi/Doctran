@@ -25,6 +25,6 @@ namespace Doctran.Parsing
 
         public abstract bool BlockStart(string parentBlockName, List<FileLine> lines, int lineIndex);
         public abstract bool BlockEnd(string parentBlockName, List<FileLine> lines, int lineIndex);
-        public abstract List<FortranObject> ReturnObject(IEnumerable<FortranObject> subObjects, List<FileLine> lines);
+        public abstract IEnumerable<FortranObject> ReturnObject(IEnumerable<FortranObject> subObjects, List<FileLine> lines);
     }
 }
