@@ -19,7 +19,9 @@ namespace Doctran.Comments
 
         public void CorrectName(ref FortranObject obj)
         {
-            if (obj.parent.Identifier == obj.Identifier)
+            var desc = (Description)obj;
+
+            if (obj.parent.Identifier == desc.LinkedTo)
             {
                 return;
             }

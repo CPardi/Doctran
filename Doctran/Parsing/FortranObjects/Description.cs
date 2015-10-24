@@ -21,7 +21,9 @@ namespace Doctran.Parsing.FortranObjects
         public string Detailed { get; private set; }
 
         private readonly Markdown _markdown = new Markdown();
-        private string _identifier;
+        private readonly string _linkedTo;
+
+        public string LinkedTo => _linkedTo.ToLower();
 
         public Description() { }
 
@@ -31,17 +33,17 @@ namespace Doctran.Parsing.FortranObjects
             this.Basic = basicText;
         }
 
-        public Description(string identifier, string basicText)
+        public Description(string linkedTo, string basicText)
             : base("Description", new List<FileLine> { new FileLine(-1, basicText) })
         {
-            this._identifier = identifier;
+            this._linkedTo = linkedTo;
             this.Basic = basicText;
         }
 
-        public Description(string identifier, string basicText, string detailedText, List<FileLine> lines)
+        public Description(string linkedTo, string basicText, string detailedText, List<FileLine> lines)
             : base("Description", lines)
         {
-            this._identifier = identifier;
+            this._linkedTo = linkedTo;
             this.Basic = basicText;
             this.Detailed = detailedText;
         }
@@ -66,8 +68,7 @@ namespace Doctran.Parsing.FortranObjects
 
         protected override string GetIdentifier()
         {
-            if (this._identifier == null) return this.parent.Identifier;
-            else return this._identifier;
+            return $"Description{this.Name}";
         }
 
         protected XElement Parse(string name, string text)

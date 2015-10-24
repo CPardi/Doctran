@@ -12,16 +12,17 @@ namespace Doctran.Parsing.PostActions
 
         public override void PostObject(ref FortranObject obj)
         {
+            string linkedTo = (obj as Description)?.LinkedTo;
+
             // If this is a description directly below the definition statement then dont move it. This is really
             // just for function where the result name is the same as the function name.
-            if (obj.parent.Identifier == obj.Identifier 
+            if (obj.parent.Identifier == linkedTo
                 && obj.parent.lines.Count > 1 && obj.parent.lines[1].Number == obj.lines[0].Number) return;
 
-            string ident = obj.Identifier;
-            var descriptions = (from sObjs in obj.parent.SubObjects
-                where sObjs.Identifier == ident
-                where sObjs.GetType() != typeof(Description)
-                select sObjs);
+            var descriptions = 
+                from sObjs in obj.parent.SubObjects
+                where sObjs.Identifier == linkedTo
+                select sObjs;
 
             var fortranObjects = descriptions as IList<FortranObject> ?? descriptions.ToList();
 
