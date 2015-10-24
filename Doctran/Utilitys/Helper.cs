@@ -19,7 +19,12 @@ namespace Doctran.Utilitys
 
     public static class HelperUtils
     {
-            public static XDocument ToXDocument(this XmlDocument document)
+        public static IEnumerable<T> Empty<T>()
+        {
+            return new List<T>();
+        }
+
+        public static XDocument ToXDocument(this XmlDocument document)
             {
                 return document.ToXDocument(LoadOptions.None);
             }

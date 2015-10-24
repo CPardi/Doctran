@@ -12,7 +12,7 @@ namespace Doctran.Parsing
 
     public abstract class FortranObject
 	{
-        public FortranObject parent { get; private set; }
+        public FortranObject parent { get; set; }
 		public string Name { get; set; }
         public List<FortranObject> SubObjects { get; private set; }
 		public List<FileLine> lines { get; set; }
