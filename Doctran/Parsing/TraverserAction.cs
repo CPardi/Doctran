@@ -7,17 +7,18 @@ namespace Doctran.Parsing
 {
     using System;
 
-    public abstract class PostAction
+    public class TraverserAction<T> : ITraverserAction<T>
+        where T : FortranObject
     {
-        Type T;
-        protected PostAction(Type T)
+        public TraverserAction(Action<T> act)
         {
-            this.T = T;
+            this.Act = act;
         }
-        public bool Is(FortranObject Obj)
-        {
-            return Obj.GetType().IsSubclassOf(T) | Obj.GetType() == T;
-        }
-        public abstract void PostObject(ref FortranObject obj);
+
+        public Type ForType => typeof(T);
+
+        public Action<T> Act { get; }
+
+        Action<object> ITraverserAction.Act => obj => this.Act((T) obj);
     }
 }

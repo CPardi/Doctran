@@ -13,22 +13,11 @@ namespace Doctran.Parsing
 
     public class Traverser
     {
+        private readonly Dictionary<Type, Action<object>> _actions;
 
-        private List<PostAction> postActions;
-
-        public Traverser(params PostAction[] postActions)
+        public Traverser(params ITraverserAction[] actions)
         {
-            this.postActions = postActions.ToList();
-        }
-
-        public void AddAction(PostAction action)
-        {
-            this.postActions.Add(action);
-        }
-
-        public void AddActions(List<PostAction> actions)
-        {
-            this.postActions.AddRange(actions);
+            _actions = actions.ToDictionary(a => a.ForType, a => a.Act);
         }
 
         public void Go(File file)
@@ -40,10 +29,13 @@ namespace Doctran.Parsing
         {
             if (EnvVar.Verbose >= 3 && obj is File) Console.WriteLine("Post processing: " + obj.Name + ((File) obj).Info.Extension);
 
-            foreach (PostAction block in this.postActions)
-                if (block.Is(obj)) { block.PostObject(ref obj); }
+            Action<object> act;
+            if (_actions.TryGetValue(obj.GetType(), out act))
+            {
+                act(obj);
+            }
 
-            for (int i = obj.SubObjects.Count - 1; i >= 0; i-- )
+            for (var i = obj.SubObjects.Count - 1; i >= 0; i--)
             {
                 Navigate(obj.SubObjects[i]);
             }

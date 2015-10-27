@@ -100,28 +100,28 @@
     <Compile Include="Helper\ProgramHelper.cs" />
     <Compile Include="ILanguage.cs" />
     <Compile Include="LanguageManager.cs" />
-    <Compile Include="Parsing\FortranBlocks\DescriptionBlock.cs" />
-    <Compile Include="Comments\DescriptionException.cs" />
-    <Compile Include="Parsing\FortranBlocks\NamedDescriptionBlock.cs" />
+    <Compile Include="Parsing\BuiltIn\FortranBlocks\DescriptionBlock.cs" />
+    <Compile Include="Parsing\BuiltIn\FortranBlocks\NamedDescriptionBlock.cs" />
     <Compile Include="Comments\IInformation.cs" />
     <Compile Include="Comments\IInformationFactory.cs" />
-    <Compile Include="Parsing\FortranObjects\Project2.cs" />
-    <Compile Include="Parsing\FortranObjects\XInformation.cs" />
-    <Compile Include="Parsing\ObjectGroups\NamedDescriptionGroup.cs" />
-    <Compile Include="Parsing\ObjectGroups\DescriptionGroup.cs" />
-    <Compile Include="Parsing\PostActions\DescriptionPostAction.cs" />
+    <Compile Include="Parsing\BuiltIn\FortranObjects\Project2.cs" />
+    <Compile Include="Parsing\BuiltIn\FortranObjects\XInformation.cs" />
+    <Compile Include="Parsing\BuiltIn\ObjectGroups\NamedDescriptionGroup.cs" />
+    <Compile Include="Parsing\BuiltIn\ObjectGroups\DescriptionGroup.cs" />
+    <Compile Include="Parsing\BuiltIn\TraverserActions.cs" />
     <Compile Include="Parsing\FortranBlock.cs" />
     <Compile Include="Parsing\FortranObject.cs" />
     <Compile Include="IPlugin.cs" />
     <Compile Include="Output\ObjectGroup.cs" />
+    <Compile Include="Parsing\ITraverserAction.cs" />
     <Compile Include="Parsing\Parser.cs" />
-    <Compile Include="Parsing\PostAction.cs" />
+    <Compile Include="Parsing\TraverserAction.cs" />
     <Compile Include="Parsing\Traverser.cs" />
     <Compile Include="Parsing\XFortranObject.cs" />
     <Compile Include="Utilitys\CommentUtilitys.cs" />
-    <Compile Include="Parsing\FortranObjects\Description.cs" />
-    <Compile Include="Parsing\FortranBlocks\InformationBlock.cs" />
-    <Compile Include="Parsing\FortranObjects\NamedDescription.cs" />
+    <Compile Include="Parsing\BuiltIn\FortranObjects\Description.cs" />
+    <Compile Include="Parsing\BuiltIn\FortranBlocks\InformationBlock.cs" />
+    <Compile Include="Parsing\BuiltIn\FortranObjects\NamedDescription.cs" />
     <Compile Include="Helper\AssemblyLoader.cs" />
     <Compile Include="Helper\FileLine.cs" />
     <Compile Include="Utilitys\Helper.cs" />
@@ -136,9 +136,8 @@
     <Compile Include="Output\TransformerErrorListener.cs" />
     <Compile Include="Output\XsltCompilerException.cs" />
     <Compile Include="Output\XsltRunner.cs" />
-    <Compile Include="Parsing\PostActions\ProjectPostAction.cs" />
     <Compile Include="Reporting\Report.cs" />
-    <Compile Include="Parsing\FortranObjects\File.cs" />
+    <Compile Include="Parsing\BuiltIn\FortranObjects\File.cs" />
     <Compile Include="Input\OptionFile\Exceptions.cs" />
     <Compile Include="Input\OptionFile\Menu.cs" />
     <Compile Include="Input\OptionFile\OptionFactory.cs" />
@@ -150,7 +149,7 @@
     <Compile Include="Output\ThemeOutputter.cs" />
     <Compile Include="Output\XmlOutputter.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="Parsing\FortranObjects\Project.cs" />
+    <Compile Include="Parsing\BuiltIn\FortranObjects\Project.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Reporting\ConsolePublisher.cs" />
     <Compile Include="Reporting\ReportMode.cs" />
@@ -163,6 +162,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Parsing\BuiltIn\Traversers\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
