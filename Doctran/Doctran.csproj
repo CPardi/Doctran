@@ -163,9 +163,7 @@
     </Content>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Parsing\BuiltIn\Traversers\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy /I /Y /S "$(ProjectDir)themes\Default" "$(SolutionDir)Doctran\bin\$(ConfigurationName)\themes\Default"
