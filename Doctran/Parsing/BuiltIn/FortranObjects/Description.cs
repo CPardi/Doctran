@@ -12,20 +12,17 @@ namespace Doctran.Parsing.FortranObjects
     using System.Xml.Linq;
     using Helper;
     using MarkdownSharp;
-    using Parsing;
     using Reporting;
 
     public class Description : XFortranObject
     {
-        public string Basic { get; private set; }
-        public string Detailed { get; private set; }
-
-        private readonly Markdown _markdown = new Markdown();
         private readonly string _linkedTo;
 
-        public string LinkedTo => _linkedTo.ToLower();
+        private readonly Markdown _markdown = new Markdown();
 
-        public Description() { }
+        public Description()
+        {
+        }
 
         public Description(string basicText)
             : base("Description", new List<FileLine> { new FileLine(-1, basicText) })
@@ -58,12 +55,32 @@ namespace Doctran.Parsing.FortranObjects
             this.Detailed = MergeLines(lines);
         }
 
+        public string Basic { get; }
+        public string Detailed { get; }
+
+        public string LinkedTo => _linkedTo.ToLower();
+
         public static string MergeLines(List<FileLine> lines)
         {
             return string.Concat(
                 from line in lines
                 where Regex.IsMatch(line.Text, @"^\s*!>>(.*)")
                 select (Regex.Match(line.Text, @"!>>(.*)").Groups[1].Value) + "\n");
+        }
+
+        public override XElement XEle()
+        {
+            var xele = new XElement(this.XElementName);
+
+            xele.Add(this.Parse("Basic", WebUtility.HtmlEncode(this.Basic.Replace("\"", "\\" + "\""))));
+
+            if (string.IsNullOrEmpty(this.Detailed))
+            {
+                return xele;
+            }
+
+            xele.Add(this.Parse("Detailed", _markdown.Transform(this.Detailed)));
+            return xele;
         }
 
         protected override string GetIdentifier()
@@ -94,21 +111,5 @@ namespace Doctran.Parsing.FortranObjects
                 return new XElement(name);
             }
         }
-
-        public override XElement XEle()
-        {
-            var xele = new XElement(this.XElementName);
-
-            xele.Add(this.Parse("Basic", WebUtility.HtmlEncode(this.Basic.Replace("\"", "\\" +  "\""))));
-
-            if (string.IsNullOrEmpty(this.Detailed))
-            {
-                return xele;
-            }
-
-            xele.Add(this.Parse("Detailed", _markdown.Transform(this.Detailed)));
-            return xele;
-        }
     }
-
 }
