@@ -19,18 +19,4 @@ namespace Doctran.Parsing
 
         XElement Create(TParsed from);
     }
-
-    public interface IInterfaceXElements
-    {
-        Type ForType { get; }
-
-        IEnumerable<XElement> Create(object from);
-    }
-
-    public interface IInterfaceXElements<in TParsed>
-    {
-        Type ForType { get; }
-
-        IEnumerable<XElement> Create(TParsed from);
-    }
 }

@@ -115,6 +115,8 @@
     <Compile Include="IPlugin.cs" />
     <Compile Include="Output\ObjectGroup.cs" />
     <Compile Include="Parsing\IGroupXElement.cs" />
+    <Compile Include="Parsing\IInterfaceXElements.cs" />
+    <Compile Include="Parsing\InterfaceXElements.cs" />
     <Compile Include="Parsing\IObjectXElement.cs" />
     <Compile Include="Parsing\ITraverserAction.cs" />
     <Compile Include="Parsing\GroupXElement.cs" />
