@@ -2,7 +2,9 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using Helper;
+    using Reporting;
 
     public static class PluginLoader
     {
@@ -24,15 +26,19 @@
             Languages.Add(PathUtilitys.DottedExtension(extension), language);
         }
 
-        public static ILanguage GetLanguage(string extension)
+        public static ILanguage GetLanguageFromExtension(string path)
         {
+            var ext = Path.GetExtension(path);
             ILanguage language;
-            if (!Languages.TryGetValue(extension, out language))
+            if (!LanguageManager.TryGetLanguage(ext, out language))
             {
-                throw new ArgumentException($"No language corresponds to the file extension '{extension}'.");
+                var e = new ApplicationException($"'{path}' could not be parsed as no language is registered to the file extension '{ext}'.");
+                Report.Error((pub, ex) => { pub.AddErrorDescription(ex.Message); }, e);
+                throw e;
             }
-            
             return language;
         }
+
+        
     }
 }

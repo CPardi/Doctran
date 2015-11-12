@@ -104,6 +104,7 @@
     <Compile Include="Parsing\BuiltIn\FortranBlocks\NamedDescriptionBlock.cs" />
     <Compile Include="Comments\IInformation.cs" />
     <Compile Include="Comments\IInformationFactory.cs" />
+    <Compile Include="Parsing\BuiltIn\FortranObjects\IHasName.cs" />
     <Compile Include="Parsing\BuiltIn\FortranObjects\Project2.cs" />
     <Compile Include="Parsing\BuiltIn\FortranObjects\XInformation.cs" />
     <Compile Include="Parsing\BuiltIn\ObjectGroups\NamedDescriptionGroup.cs" />
@@ -113,11 +114,16 @@
     <Compile Include="Parsing\FortranObject.cs" />
     <Compile Include="IPlugin.cs" />
     <Compile Include="Output\ObjectGroup.cs" />
+    <Compile Include="Parsing\IGroupXElement.cs" />
+    <Compile Include="Parsing\IObjectXElement.cs" />
     <Compile Include="Parsing\ITraverserAction.cs" />
+    <Compile Include="Parsing\GroupXElement.cs" />
+    <Compile Include="Parsing\ObjectXElement.cs" />
     <Compile Include="Parsing\Parser.cs" />
     <Compile Include="Parsing\TraverserAction.cs" />
     <Compile Include="Parsing\Traverser.cs" />
     <Compile Include="Parsing\XFortranObject.cs" />
+    <Compile Include="Parsing\XmlGenerator.cs" />
     <Compile Include="Utilitys\CommentUtilitys.cs" />
     <Compile Include="Parsing\BuiltIn\FortranObjects\Description.cs" />
     <Compile Include="Parsing\BuiltIn\FortranBlocks\InformationBlock.cs" />

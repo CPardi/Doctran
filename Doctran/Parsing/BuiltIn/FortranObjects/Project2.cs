@@ -26,8 +26,11 @@
                 );
             xele.Add(new XElement("Files",
                 from file in this.SubObjectsOfType<File>().AsParallel()
-                select file.XEle())
-                );
+                let language = PluginLoader.GetLanguageFromExtension(file.PathAndFilename)
+                let xmlGenerator = language.XmlGenerator
+                select xmlGenerator.CreateForFile(file)
+                ));
+
             return xele;
         }
 

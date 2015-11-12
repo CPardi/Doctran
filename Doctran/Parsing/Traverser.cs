@@ -20,10 +20,7 @@ namespace Doctran.Parsing
             _actions = actions.ToDictionary(a => a.ForType, a => a.Act);
         }
 
-        public void Go(File file)
-        {
-            Navigate(file);
-        }
+        public void Go(File file) => Navigate(file);
 
         protected void Navigate(FortranObject obj)
         {

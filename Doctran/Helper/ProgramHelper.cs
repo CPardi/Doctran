@@ -1,11 +1,11 @@
 ﻿namespace Doctran.Helper
 {
-    using System;
     using System.Collections.Generic;
     using System.IO;
     using Parsing;
     using Parsing.FortranObjects;
     using Reporting;
+    using Utilitys;
     using File = Parsing.FortranObjects.File;
 
     internal static class ProgramHelper
@@ -24,14 +24,7 @@
                 }
 
                 // Parse source files.
-                var ext = Path.GetExtension(path);
-                ILanguage language;
-                if (!LanguageManager.TryGetLanguage(ext, out language))
-                {
-                    var e = new ApplicationException($"'{path}' could not be parsed as no language is registered to the file extension '{ext}'.");
-                    Report.Error((pub, ex) => { pub.AddErrorDescription(ex.Message); }, e);
-                    throw e;
-                }
+                var language = PluginLoader.GetLanguageFromExtension(path);
 
                 var parsedFile = new Parser(language.BlocksParsers).ParseFile(path, File.ReadFile(path), language.ObjectGroups);
 

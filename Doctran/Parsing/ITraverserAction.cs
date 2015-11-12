@@ -1,15 +1,11 @@
-﻿using System;
-
-namespace Doctran.Parsing
+﻿namespace Doctran.Parsing
 {
-    using System.Collections;
-    using System.Collections.Generic;
+    using System;
 
     public interface ITraverserAction
     {
-        Type ForType { get; }
-
         Action<object> Act { get; }
+        Type ForType { get; }
     }
 
     public interface ITraverserAction<in T> : ITraverserAction

@@ -18,6 +18,8 @@ namespace Doctran
         IEnumerable<Traverser> Traversers { get; }
 
         IEnumerable<ObjectGroup> ObjectGroups { get; }
+
+        XmlGenerator XmlGenerator { get; }
     }
 }
 

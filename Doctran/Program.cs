@@ -41,7 +41,7 @@ namespace Doctran
 
             OutputTheme(options);
             var xmlOutputter = GetXmlOutputter(project, options.XmlInformation, options.OutputDirectory, options.SaveXmlPath);
-            OutputHtml(project, xmlOutputter, options);
+            //OutputHtml(project, xmlOutputter, options);
 
             if (EnvVar.Verbose >= 2) Console.WriteLine("Done");
             if (EnvVar.Verbose >= 2) Console.WriteLine(@"Documentation can be found at """ + Path.GetFullPath(options.OutputDirectory) + @"""");
