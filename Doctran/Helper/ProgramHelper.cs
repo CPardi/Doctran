@@ -6,13 +6,12 @@
     using Parsing.FortranObjects;
     using Reporting;
     using Utilitys;
-    using File = Parsing.FortranObjects.File;
 
     internal static class ProgramHelper
     {
         public static Project2 ParseProject(IEnumerable<string> sourceFiles)
         {
-            var parsedFiles = new List<File>();
+            var parsedFiles = new List<SourceFile>();
 
             foreach (var path in sourceFiles)
             {
@@ -26,7 +25,7 @@
                 // Parse source files.
                 var language = PluginLoader.GetLanguageFromExtension(path);
 
-                var parsedFile = new Parser(language.BlocksParsers).ParseFile(path, File.ReadFile(path), language.ObjectGroups);
+                var parsedFile = new Parser(language.BlocksParsers).ParseFile(path, SourceFile.ReadFile(path), language.ObjectGroups);
 
                 foreach (var t in language.Traversers)
                 {

@@ -16,12 +16,28 @@ namespace Doctran.Parsing
             this.Func = func;
         }
 
+        public ObjectXElement(Func<TParsed, XElement> func, Predicate<TParsed> predicate)
+        {
+            this.Func = func;
+            this.Predicate = predicate;
+        }
+
         public Type ForType => typeof(TParsed);
 
         private Func<TParsed, XElement> Func { get; }
 
-        public XElement Create(TParsed from) => this.Func(from);
+        private Predicate<TParsed> Predicate { get; }
 
-        XElement IObjectXElement.Create(object from) => this.Create((TParsed)from);
+        public XElement Create(TParsed from)
+        {
+            if (this.Predicate != null && this.Predicate(from))
+            {
+                return null;
+            }
+
+            return this.Func(from);
+        }
+
+        XElement IObjectXElement.Create(object from) => this.Create((TParsed) from);
     }
 }

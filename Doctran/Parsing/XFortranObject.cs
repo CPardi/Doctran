@@ -49,7 +49,7 @@ namespace Doctran.Parsing
 			return xeles;
 		}
 
-        private IEnumerable<ObjectGroup> ObjectGroups => this.GoUpTillType<File>().ObjectGroups;
+        private IEnumerable<ObjectGroup> ObjectGroups => this.GoUpTillType<SourceFile>().ObjectGroups;
 
         private List<XElement> GroupXEle(FortranObject obj)
 		{
@@ -79,7 +79,7 @@ namespace Doctran.Parsing
 			        {
 			            pub.AddWarningDescription("Error in XML parsing.");
 			            pub.AddReason($"Expected a single '{obj.GetType().Name}' block, but multiple were found. Only the first occurence will be used.");
-			            pub.AddLocation($"{obj.GetType().Name} '{obj.Name}' within '{this.GoUpTillType<File>().Name}'.");
+			            pub.AddLocation($"{obj.GetType().Name} '{obj.Name}' within '{this.GoUpTillType<SourceFile>().Name}'.");
 			        });
 			    }
 			}

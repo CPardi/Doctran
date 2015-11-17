@@ -16,7 +16,6 @@ namespace Doctran.Input.OptionFile
     using Parsing.FortranBlocks;
     using Parsing.FortranObjects;
     using Reporting;
-    using File = Parsing.FortranObjects.File;
 
     public class Parser<TOptions>
     {
@@ -158,7 +157,7 @@ namespace Doctran.Input.OptionFile
 
         private List<FileLine> ReadAndPreProcessFile(string path)
         {
-            return (from line in File.ReadFile(path)
+            return (from line in SourceFile.ReadFile(path)
                     select new FileLine(line.Number, line.Text != "" ? "!>" + line.Text : "")
                    ).ToList();
         }

@@ -20,11 +20,11 @@ namespace Doctran.Parsing
             _actions = actions.ToDictionary(a => a.ForType, a => a.Act);
         }
 
-        public void Go(File file) => Navigate(file);
+        public void Go(SourceFile sourceFile) => Navigate(sourceFile);
 
         protected void Navigate(FortranObject obj)
         {
-            if (EnvVar.Verbose >= 3 && obj is File) Console.WriteLine("Post processing: " + obj.Name + ((File) obj).Info.Extension);
+            if (EnvVar.Verbose >= 3 && obj is SourceFile) Console.WriteLine("Post processing: " + obj.Name + ((SourceFile) obj).Info.Extension);
 
             Action<object> act;
             if (_actions.TryGetValue(obj.GetType(), out act))

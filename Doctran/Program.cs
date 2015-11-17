@@ -17,7 +17,6 @@ namespace Doctran
     using Parsing.FortranObjects;
     using Reporting;
     using Utilitys;
-    using File = Parsing.FortranObjects.File;
     using Parser = CommandLine.Parser;
 
     public class Program
@@ -121,7 +120,7 @@ namespace Doctran
         private static void OutputHtml(FortranObject project, XmlOutputter xmlOutputter, Options options)
         {
             var xElements = 
-                (from file in project.SubObjectsOfType<File>()
+                (from file in project.SubObjectsOfType<SourceFile>()
                 select file.SourceXEle).ToList();
             var reader = new XDocument(new XElement("Source", xElements)).CreateReader();
 

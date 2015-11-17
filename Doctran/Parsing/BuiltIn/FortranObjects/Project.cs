@@ -57,7 +57,7 @@ namespace Doctran.Parsing.FortranObjects
                 select info.XEle()
                 );
             xele.Add(new XElement("Files",
-                from file in this.SubObjectsOfType<File>().AsParallel()
+                from file in this.SubObjectsOfType<SourceFile>().AsParallel()
                 select file.XEle())
                 );
             return xele;

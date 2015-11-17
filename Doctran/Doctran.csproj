@@ -98,8 +98,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Helper\ProgramHelper.cs" />
-    <Compile Include="ILanguage.cs" />
-    <Compile Include="LanguageManager.cs" />
+    <Compile Include="IDocumentationGenerator.cs" />
+    <Compile Include="ILanguageParser.cs" />
+    <Compile Include="LanguageParserManager.cs" />
     <Compile Include="Parsing\BuiltIn\FortranBlocks\DescriptionBlock.cs" />
     <Compile Include="Parsing\BuiltIn\FortranBlocks\NamedDescriptionBlock.cs" />
     <Compile Include="Comments\IInformation.cs" />
@@ -145,7 +146,7 @@
     <Compile Include="Output\XsltCompilerException.cs" />
     <Compile Include="Output\XsltRunner.cs" />
     <Compile Include="Reporting\Report.cs" />
-    <Compile Include="Parsing\BuiltIn\FortranObjects\File.cs" />
+    <Compile Include="Parsing\BuiltIn\FortranObjects\SourceFile.cs" />
     <Compile Include="Input\OptionFile\Exceptions.cs" />
     <Compile Include="Input\OptionFile\Menu.cs" />
     <Compile Include="Input\OptionFile\OptionFactory.cs" />

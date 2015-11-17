@@ -58,7 +58,7 @@ namespace Doctran.Parsing.FortranObjects
         public string Basic { get; }
         public string Detailed { get; }
 
-        public string LinkedTo => _linkedTo.ToLower();
+        public string LinkedTo => _linkedTo?.ToLower();
 
         public static string MergeLines(List<FileLine> lines)
         {
@@ -97,7 +97,7 @@ namespace Doctran.Parsing.FortranObjects
             catch
             {
                 var curObj = this;
-                var file = this.GoUpTillType<File>();
+                var file = this.GoUpTillType<SourceFile>();
 
                 Report.Warning(pub =>
                 {

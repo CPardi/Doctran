@@ -4,22 +4,22 @@ namespace Doctran.Parsing
     using System.Collections.Generic;
     using System.Linq;
     using System.Xml.Linq;
-    using FortranObjects;
+    using Utilitys;
 
     public class XmlGenerator
     {
+        private readonly Dictionary<Type, Func<FortranObject, IEnumerable<XElement>>> _interfaceXmlDictionary;
         private readonly Dictionary<Type, Func<IEnumerable<XElement>, XElement>> _toGroupXmlDictionary;
         private readonly Dictionary<Type, Func<FortranObject, XElement>> _toXmlDictionary;
-        private readonly Dictionary<Type, Func<FortranObject, IEnumerable<XElement>>> _interfaceXmlDictionary;
 
         public XmlGenerator(
-            IEnumerable<IInterfaceXElements> interfaceXElements, 
-            IEnumerable<IObjectXElement> objectXElements, 
+            IEnumerable<IInterfaceXElements> interfaceXElements,
+            IEnumerable<IObjectXElement> objectXElements,
             IEnumerable<IGroupXElement> toGroupXmlDictionary)
         {
             _interfaceXmlDictionary = interfaceXElements.ToDictionary(
                 obj => obj.ForType,
-                obj => new Func<FortranObject, IEnumerable< XElement>>(obj.Create));
+                obj => new Func<FortranObject, IEnumerable<XElement>>(obj.Create));
 
             _toXmlDictionary = objectXElements.ToDictionary(
                 obj => obj.ForType,
@@ -41,22 +41,43 @@ namespace Doctran.Parsing
             }
         }
 
-        public XElement CreateForFile(File file) => this.Navigate(file).Single();
+        public IEnumerable<XElement> CreateForObject(FortranObject sourceFile)
+        {
+            return GetValue(sourceFile.GetType(), HelperUtils.Singlet(sourceFile));
+        }
 
-        private IEnumerable<XElement> GetValue(Type objType, IEnumerable<FortranObject> objsOfType, Func<FortranObject, XElement> toXml)
+        private IEnumerable<XElement> GetValue(Type objType, IEnumerable<FortranObject> objsOfType)
+        {
+            Func<FortranObject, XElement> toXml;
+            this._toXmlDictionary.TryGetValue(objType, out toXml);
+
+            Func<IEnumerable<XElement>, XElement> toGroupXml;
+            this._toGroupXmlDictionary.TryGetValue(objType, out toGroupXml);
+
+            if (toGroupXml == null && toXml != null)
+            {
+                return this.GetXmlValue(objType, objsOfType, toXml);
+            }
+
+            if (toGroupXml != null && toXml != null)
+            {
+                return HelperUtils.Singlet(toGroupXml(this.GetXmlValue(objType, objsOfType, toXml)));
+            }
+
+            return this.SkipLevel(objsOfType);
+        }
+
+        private IEnumerable<XElement> GetXmlValue(Type objType, IEnumerable<FortranObject> objsOfType, Func<FortranObject, XElement> toXml)
         {
             var xElements = new List<XElement>();
             foreach (var fortranObject in objsOfType)
             {
                 var xElement = toXml(fortranObject);
-
-
                 xElement.Add(objType.GetInterfaces().Select(inter => _interfaceXmlDictionary[inter](fortranObject)));
-
                 xElement.Add(this.Navigate(fortranObject));
                 xElements.Add(xElement);
             }
-            return xElements;
+            return xElements.Where(xElement => xElement != null);
         }
 
         private IEnumerable<XElement> Navigate(FortranObject obj)
@@ -64,28 +85,11 @@ namespace Doctran.Parsing
             var xElements = new List<XElement>();
             var subObjects = obj.SubObjects;
 
-            foreach (var objsOfType in subObjects.GroupBy(sObj => sObj.GetType()))
-            {
-                Func<FortranObject, XElement> toXml;
-                var objType = objsOfType.Key;
-                this._toXmlDictionary.TryGetValue(objType, out toXml);
+            xElements.AddRange(
+                from objsOfType in subObjects.GroupBy(sObj => sObj.GetType())
+                from xElement in this.GetValue(objsOfType.Key, objsOfType)
+                select xElement);
 
-                Func<IEnumerable<XElement>, XElement> toGroupXml;
-                this._toGroupXmlDictionary.TryGetValue(objType, out toGroupXml);
-
-                if (toGroupXml == null && toXml != null)
-                {
-                    xElements.AddRange(this.GetValue(objType, objsOfType, toXml));
-                }
-                else if (toGroupXml != null && toXml != null)
-                {
-                    xElements.Add(toGroupXml(this.GetValue(objType, objsOfType, toXml)));
-                }
-                else
-                {
-                    xElements.AddRange(this.SkipLevel(objsOfType));
-                }
-            }
             return xElements;
         }
 

@@ -38,11 +38,11 @@ namespace Doctran.Parsing
         /// <param name="pathAndFileName">The full path to the code file.</param>
         /// <param name="lines">The lines of the code file to be parsed.</param>
         /// <returns></returns>
-        public File ParseFile(string pathAndFileName, List<FileLine> lines, IEnumerable<ObjectGroup> objectGroups)
+        public SourceFile ParseFile(string pathAndFileName, List<FileLine> lines, IEnumerable<ObjectGroup> objectGroups)
         {
             if (EnvVar.Verbose >= 3) Console.WriteLine("Analyzing: " + pathAndFileName);
             int currentIndex = 0;
-            var file = SearchBlock(pathAndFileName, File.PreProcessFile(pathAndFileName, lines), true, 0, ref currentIndex, "File", "Project", objectGroups).Single() as File;
+            var file = SearchBlock(pathAndFileName, SourceFile.PreProcessFile(pathAndFileName, lines), true, 0, ref currentIndex, "File", "Project", objectGroups).Single() as SourceFile;
             file.OriginalLines = lines;
             return file;
         }
@@ -161,9 +161,9 @@ namespace Doctran.Parsing
         /// <param name="pathAndFileName">The full path to the code file.</param>
         /// <param name="blockSubObjects">The objects defined by th code blocks found within the file's lines of code.</param>
         /// <returns>A file with its parsed contents.</returns>
-        private File CreateFile(List<FileLine> lines, string pathAndFileName, IEnumerable<FortranObject> blockSubObjects, IEnumerable<ObjectGroup> objectGroups)
+        private SourceFile CreateFile(List<FileLine> lines, string pathAndFileName, IEnumerable<FortranObject> blockSubObjects, IEnumerable<ObjectGroup> objectGroups)
         {
-            return new File(pathAndFileName, blockSubObjects, lines, objectGroups);
+            return new SourceFile(pathAndFileName, blockSubObjects, lines, objectGroups);
         }
 
     }

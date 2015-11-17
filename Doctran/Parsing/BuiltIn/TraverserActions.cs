@@ -15,7 +15,12 @@
                 return new TraverserAction<Description>(
                     obj =>
                     {
-                        var linkedTo = obj.LinkedTo;
+                        var linkedTo = obj?.LinkedTo;
+
+                        if (linkedTo == null)
+                        {
+                            return;
+                        }
 
                         // If this is a description directly below the definition statement then dont move it. This is really
                         // just for function where the result name is the same as the function name.
@@ -33,7 +38,7 @@
                         if (fortranObjects.Count() > 1)
                         {
                             var curObj = obj;
-                            var file = obj.GoUpTillType<File>();
+                            var file = obj.GoUpTillType<SourceFile>();
                             Report.Warning(pub =>
                             {
                                 pub.AddWarningDescription("Description meta-data was ignored");
@@ -78,7 +83,7 @@
             }
 
             var curObj = obj;
-            var file = obj.GoUpTillType<File>();
+            var file = obj.GoUpTillType<SourceFile>();
             Report.Warning(pub =>
             {
                 pub.AddWarningDescription("Description meta-data was ignored");
@@ -98,7 +103,7 @@
             }
 
             var curObj = obj;
-            var file = obj.GoUpTillType<File>();
+            var file = obj.GoUpTillType<SourceFile>();
             if (obj.parent is Project)
             {
                 Report.Warning(pub =>

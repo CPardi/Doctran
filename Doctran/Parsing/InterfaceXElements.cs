@@ -23,7 +23,7 @@ namespace Doctran.Parsing
 
         public IEnumerable<XElement> Create(TParsed from) => this.Func(from);
 
-        IEnumerable<XElement> IInterfaceXElements.Create(object from) => this.Create((TParsed)from);
+        IEnumerable<XElement> IInterfaceXElements.Create(object from) => this.Create((TParsed) from);
     }
 
     public class TypeParameterException : ApplicationException

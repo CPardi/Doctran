@@ -14,8 +14,8 @@ namespace Doctran.Utilitys
     using System.Xml.Linq;
     using Helper;
     using MarkdownSharp;
+    using Parsing.FortranObjects;
     using Reporting;
-    using File = Parsing.FortranObjects.File;
 
     public static class HelperUtils
     {
@@ -66,7 +66,7 @@ namespace Doctran.Utilitys
             // Get the text from the file specified.
             try
             {
-                htmlText = string.Concat(from text in File.ReadFile(relativePath + filePath)
+                htmlText = string.Concat(from text in SourceFile.ReadFile(relativePath + filePath)
                     select text.Text + Environment.NewLine);
             }
             catch(IOException e)

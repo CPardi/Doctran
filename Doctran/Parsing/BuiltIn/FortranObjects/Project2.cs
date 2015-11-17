@@ -8,7 +8,7 @@
 
     public class Project2 : FortranObject
     {
-        public Project2(IEnumerable<File> parsedFiles)
+        public Project2(IEnumerable<SourceFile> parsedFiles)
             :base(parsedFiles, null)
         {
         }
@@ -24,12 +24,8 @@
                 from info in this.SubObjectsOfType<Description>()
                 select info.XEle()
                 );
-            xele.Add(new XElement("Files",
-                from file in this.SubObjectsOfType<File>().AsParallel()
-                let language = PluginLoader.GetLanguageFromExtension(file.PathAndFilename)
-                let xmlGenerator = language.XmlGenerator
-                select xmlGenerator.CreateForFile(file)
-                ));
+
+            xele.Add(new XmlGenerator(PluginLoader.AllInterfaceXElements, PluginLoader.AllObjectXElements, PluginLoader.AllObjectGroupXElements).CreateForObject(this));
 
             return xele;
         }
