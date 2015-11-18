@@ -3,7 +3,7 @@
 //  License, v. 2.0. If a copy of the MPL was not distributed with this
 //  file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-namespace Doctran.Parsing.FortranBlocks
+namespace Doctran.Parsing.BuiltIn.FortranBlocks
 {
     using System;
     using System.Collections.Generic;
@@ -49,8 +49,8 @@ namespace Doctran.Parsing.FortranBlocks
         public override bool BlockStart(string parentBlockName, List<FileLine> lines, int lineIndex)
         {
             return
-                CommentUtilitys.InfoAtDepthStart(lines[lineIndex].Text, _depth)
-                && !CommentUtilitys.NDescStart(lines[lineIndex].Text);
+                CommentUtils.InfoAtDepthStart(lines[lineIndex].Text, _depth)
+                && !CommentUtils.NDescStart(lines[lineIndex].Text);
         }
 
         public override bool BlockEnd(string parentBlockName, List<FileLine> lines, int lineIndex)
@@ -58,9 +58,9 @@ namespace Doctran.Parsing.FortranBlocks
             if (lineIndex + 1 >= lines.Count) return true;
 
             return
-                CommentUtilitys.InfoEnd(lines[lineIndex + 1].Text)
-                || (CommentUtilitys.InfoStart(lines[lineIndex + 1].Text) && CommentUtilitys.InfoDepth(lines[lineIndex + 1].Text) <= _depth)
-                || CommentUtilitys.NDescStart(lines[lineIndex + 1].Text);
+                CommentUtils.InfoEnd(lines[lineIndex + 1].Text)
+                || (CommentUtils.InfoStart(lines[lineIndex + 1].Text) && CommentUtils.InfoDepth(lines[lineIndex + 1].Text) <= _depth)
+                || CommentUtils.NDescStart(lines[lineIndex + 1].Text);
         }
 
         public override IEnumerable<FortranObject> ReturnObject(IEnumerable<FortranObject> subObjects, List<FileLine> lines)
@@ -81,7 +81,7 @@ namespace Doctran.Parsing.FortranBlocks
                 ?
                     _factories[typeName].Create(_depth, value, subObjects, lines).Cast<FortranObject>()
                 :
-                    HelperUtils.Singlet(new XInformation(_depth, typeName, value, subObjects, lines));
+                    CollectionUtils.Singlet(new XInformation(_depth, typeName, value, subObjects, lines));
             return objs.ToList();            
         }
     }

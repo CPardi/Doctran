@@ -14,7 +14,8 @@ namespace Doctran
     using Input.OptionFile;
     using Output;
     using Parsing;
-    using Parsing.FortranObjects;
+    using Parsing.BuiltIn.FortranObjects;
+    using Plugins;
     using Reporting;
     using Utilitys;
     using Parser = CommandLine.Parser;

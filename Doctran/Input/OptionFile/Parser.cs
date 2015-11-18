@@ -13,8 +13,8 @@ namespace Doctran.Input.OptionFile
     using Comments;
     using Helper;
     using Parsing;
-    using Parsing.FortranBlocks;
-    using Parsing.FortranObjects;
+    using Parsing.BuiltIn.FortranBlocks;
+    using Parsing.BuiltIn.FortranObjects;
     using Reporting;
 
     public class Parser<TOptions>
@@ -135,7 +135,7 @@ namespace Doctran.Input.OptionFile
             Parser parser = new Parser(infoList);
             try
             {
-                var result = parser.ParseFile(fileName, this.ReadAndPreProcessFile(fileName), null).SubObjects;
+                var result = parser.ParseFile(fileName, this.ReadAndPreProcessFile(fileName)).SubObjects;
                 TestParseResults(result);
                 var resultInfo = result.Cast<IInformation>();
 

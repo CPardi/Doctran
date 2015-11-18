@@ -3,7 +3,8 @@
     using System.Collections.Generic;
     using System.IO;
     using Parsing;
-    using Parsing.FortranObjects;
+    using Parsing.BuiltIn.FortranObjects;
+    using Plugins;
     using Reporting;
     using Utilitys;
 
@@ -25,7 +26,7 @@
                 // Parse source files.
                 var language = PluginLoader.GetLanguageFromExtension(path);
 
-                var parsedFile = new Parser(language.BlocksParsers).ParseFile(path, SourceFile.ReadFile(path), language.ObjectGroups);
+                var parsedFile = new Parser(language.BlocksParsers).ParseFile(path, SourceFile.ReadFile(path));
 
                 foreach (var t in language.Traversers)
                 {

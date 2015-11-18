@@ -13,7 +13,7 @@ namespace Doctran.Utilitys
     {
         public static string PluginPath => Path.Combine(ExecPath, "plugins");
 
-        public readonly static Char Slash = Path.DirectorySeparatorChar;
+        public readonly static char Slash = Path.DirectorySeparatorChar;
 
         public static string ExecPath => Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().CodeBase).LocalPath) + Slash;
 

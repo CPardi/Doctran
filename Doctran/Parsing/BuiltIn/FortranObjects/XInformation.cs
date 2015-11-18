@@ -1,4 +1,4 @@
-namespace Doctran.Parsing.FortranObjects
+namespace Doctran.Parsing.BuiltIn.FortranObjects
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -36,7 +36,7 @@ namespace Doctran.Parsing.FortranObjects
 
         public override XElement XEle()
         {
-            return (string.IsNullOrEmpty(Value)
+            return (string.IsNullOrEmpty(this.Value)
                 ?
                 new XElement(this.XElementName, this.SubObjects.Select(sinfo => (sinfo as XInformation).XEle()))
                 :

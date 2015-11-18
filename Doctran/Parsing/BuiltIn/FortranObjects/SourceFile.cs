@@ -3,7 +3,7 @@
 //  License, v. 2.0. If a copy of the MPL was not distributed with this
 //  file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-namespace Doctran.Parsing.FortranObjects
+namespace Doctran.Parsing.BuiltIn.FortranObjects
 {
     using System;
     using System.Collections.Generic;
@@ -11,7 +11,6 @@ namespace Doctran.Parsing.FortranObjects
     using System.Linq;
     using System.Text.RegularExpressions;
     using System.Xml.Linq;
-    using BuiltIn.FortranObjects;
     using ColorCode;
     using ColorCode.Formatting;
     using ColorCode.Styling.StyleSheets;
@@ -20,23 +19,28 @@ namespace Doctran.Parsing.FortranObjects
     using Reporting;
     using Utilitys;
 
-    public class SourceFile : XFortranObject, IHasName
+    public class SourceFile : XFortranObject, IHasName, IHasLines, IHasIdentifier, IHasValidName
     {
+        private readonly FileInfo _info;
+
         // Reads a file, determines its type and loads the contained procedure and/or modules.
-        public SourceFile(string pathAndFilename, IEnumerable<FortranObject> subObjects, List<FileLine> lines, IEnumerable<ObjectGroup> objectGroups)
+        public SourceFile(string pathAndFilename, IEnumerable<FortranObject> subObjects, List<FileLine> lines)
             : base(Path.GetFileName(pathAndFilename), subObjects, "File", lines)
         {
             this.PathAndFilename = pathAndFilename;
-            ObjectGroups = objectGroups;
-            this.Info = new FileInfo(this.PathAndFilename);
+            _info = new FileInfo(this.PathAndFilename);
 
             // Get the filename from the inputted string
-            Name = Path.GetFileNameWithoutExtension(pathAndFilename);
+            this.Name = Path.GetFileNameWithoutExtension(pathAndFilename);
         }
 
-        public FileInfo Info { get; }
+        public DateTime Created => _info.CreationTime;
 
-        public int NumLines => this.lines.Count - 1;
+        public string Extension => _info.Extension;
+
+        public DateTime LastModified => _info.LastWriteTime;
+
+        public int LineCount => this.lines.Count - 1;
 
         public IEnumerable<ObjectGroup> ObjectGroups { get; }
 
@@ -60,6 +64,8 @@ namespace Doctran.Parsing.FortranObjects
                             ));
             }
         }
+
+        public string ValidName => StringUtils.ValidName(this.Name);
 
         public static void AddIncludedFiles(ref List<FileLine> lines, string path)
         {
@@ -165,13 +171,13 @@ namespace Doctran.Parsing.FortranObjects
         /// <returns></returns>
         public override XElement XEle()
         {
-            this.Info.Refresh();
+            this._info.Refresh();
             var xele = base.XEle();
-            xele.AddFirst(new XElement("LineCount", this.NumLines),
-                new XElement("Created", this.Info.CreationTime.XEle()),
-                new XElement("LastModified", this.Info.LastWriteTime.XEle()),
-                new XElement("ValidName", HelperUtils.ValidName(this.Name)),
-                new XElement("Extension", this.Info.Extension)
+            xele.AddFirst(new XElement("LineCount", this.LineCount),
+                new XElement("Created", this._info.CreationTime.ToXElement()),
+                new XElement("LastModified", this._info.LastWriteTime.ToXElement()),
+                new XElement("ValidName", StringUtils.ValidName(this.Name)),
+                new XElement("Extension", this._info.Extension)
                 );
 
             return xele;
@@ -179,12 +185,12 @@ namespace Doctran.Parsing.FortranObjects
 
         protected override string GetIdentifier()
         {
-            return this.Name + this.Info.Extension;
+            return this.Name + this._info.Extension;
         }
 
         private static void CheckForPreprocessing(string filename, string line)
         {
-            if (Regex.IsMatch(HelperUtils.RemoveInlineComment(line), @"^\s*(?:#define|#elif|#elifdef|#elifndef|#else|#endif|#error|#if|#ifdef|#ifndef|#line|#pragma|#undef|#include)"))
+            if (Regex.IsMatch(StringUtils.RemoveInlineComment(line), @"^\s*(?:#define|#elif|#elifdef|#elifndef|#else|#endif|#error|#if|#ifdef|#ifndef|#line|#pragma|#undef|#include)"))
             {
                 Report.Error(
                     (pub, ex) => { pub.AddErrorDescription("Source contains preprocessor directives, please pass the code through your preprocessor and rerun Doctran upon the output."); }, new Exception("Source contains preprocessor directives."));
@@ -193,15 +199,15 @@ namespace Doctran.Parsing.FortranObjects
 
         private static string MergeContinuations(ref int lineIndex, List<FileLine> lines, bool removeComment)
         {
-            var lineTextNoComment = HelperUtils.RemoveInlineComment(lines[lineIndex].Text).TrimStart('&');
+            var lineTextNoComment = StringUtils.RemoveInlineComment(lines[lineIndex].Text).TrimStart('&');
             if (!lineTextNoComment.EndsWith("&"))
             {
                 return removeComment ? lineTextNoComment.TrimEnd('&') : lines[lineIndex].Text;
             }
 
             lineIndex++;
-            HelperUtils.SkipComment(lines, ref lineIndex);
-            if (HelperUtils.RemoveInlineComment(lines[lineIndex].Text) == "") lineIndex++;
+            OtherUtils.SkipComment(lines, ref lineIndex);
+            if (StringUtils.RemoveInlineComment(lines[lineIndex].Text) == "") lineIndex++;
             return lineTextNoComment.TrimEnd('&') + MergeContinuations(ref lineIndex, lines, true);
         }
 
@@ -209,7 +215,7 @@ namespace Doctran.Parsing.FortranObjects
         {
             var lineNocomm = line.Split('!');
 
-            var lines = HelperUtils.DelimiterExceptQuotes(lineNocomm[0].Trim(), ';');
+            var lines = StringUtils.DelimiterExceptQuotes(lineNocomm[0].Trim(), ';');
             if (lines.Count <= 0)
             {
                 return new List<string> { line };

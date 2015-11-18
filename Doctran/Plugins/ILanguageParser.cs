@@ -5,10 +5,9 @@
 
 
 
-namespace Doctran
+namespace Doctran.Plugins
 {
     using System.Collections.Generic;
-    using Output;
     using Parsing;
 
     public interface ILanguageParser
@@ -16,8 +15,6 @@ namespace Doctran
         IEnumerable<FortranBlock> BlocksParsers { get; }
 
         IEnumerable<Traverser> Traversers { get; }
-
-        IEnumerable<ObjectGroup> ObjectGroups { get; }
     }
 }
 

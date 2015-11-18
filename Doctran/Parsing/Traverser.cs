@@ -8,7 +8,7 @@ namespace Doctran.Parsing
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using FortranObjects;
+    using BuiltIn.FortranObjects;
     using Utilitys;
 
     public class Traverser
@@ -24,7 +24,7 @@ namespace Doctran.Parsing
 
         protected void Navigate(FortranObject obj)
         {
-            if (EnvVar.Verbose >= 3 && obj is SourceFile) Console.WriteLine("Post processing: " + obj.Name + ((SourceFile) obj).Info.Extension);
+            if (EnvVar.Verbose >= 3 && obj is SourceFile) Console.WriteLine("Post processing: " + obj.Name + ((SourceFile) obj).Extension);
 
             Action<object> act;
             if (_actions.TryGetValue(obj.GetType(), out act))

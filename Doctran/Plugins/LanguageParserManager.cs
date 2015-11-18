@@ -1,4 +1,4 @@
-﻿namespace Doctran
+﻿namespace Doctran.Plugins
 {
     using System.Collections.Generic;
 

@@ -9,7 +9,7 @@ namespace Doctran.Parsing
     using System.Collections.Generic;
     using System.Linq;
     using System.Xml.Linq;
-    using FortranObjects;
+    using BuiltIn.FortranObjects;
     using Helper;
     using Output;
     using Reporting;

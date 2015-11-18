@@ -4,4 +4,9 @@
     {
         string Name { get; }
     }
+
+    public interface IHasValidName
+    {
+        string ValidName { get; }
+    }
 }

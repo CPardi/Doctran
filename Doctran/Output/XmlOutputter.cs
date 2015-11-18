@@ -27,7 +27,7 @@ namespace Doctran.Output
 
         public void SaveToDisk(string relativePathAndName)
         {
-             HelperUtils.CreateDirectory(Path.GetDirectoryName(Path.GetFullPath(relativePathAndName)));
+             OtherUtils.CreateDirectory(Path.GetDirectoryName(Path.GetFullPath(relativePathAndName)));
              this.XDocument.Save(Path.GetFullPath(relativePathAndName));
         }
     }

@@ -3,7 +3,6 @@
     using System.Collections.Generic;
     using System.Linq;
     using FortranObjects;
-    using Parsing.FortranObjects;
     using Reporting;
 
     public static class TraverserActions
@@ -12,7 +11,7 @@
         {
             get
             {
-                return new TraverserAction<Description>(
+                return new TraverserAction<NamedDescription>(
                     obj =>
                     {
                         var linkedTo = obj?.LinkedTo;
@@ -44,8 +43,8 @@
                                 pub.AddWarningDescription("Description meta-data was ignored");
                                 pub.AddReason("Description specified multiple times. Using first occurence");
                                 pub.AddLocation(curObj.lines.First().Number == curObj.lines.Last().Number
-                                    ? $"At line {curObj.lines.First().Number} of '{file.Name}{file.Info.Extension}'."
-                                    : $"Within lines {curObj.lines.First().Number} to {curObj.lines.Last().Number} of '{file.Name}{file.Info.Extension}'.");
+                                    ? $"At line {curObj.lines.First().Number} of '{file.Name}{file.Extension}'."
+                                    : $"Within lines {curObj.lines.First().Number} to {curObj.lines.Last().Number} of '{file.Name}{file.Extension}'.");
                             });
                         }
 
@@ -64,7 +63,7 @@
         {
             get
             {
-                return new TraverserAction<Description>(
+                return new TraverserAction<NamedDescription>(
                     obj =>
                     {
                         CorrectName(obj);
@@ -75,7 +74,7 @@
 
         private static void CorrectName(FortranObject obj)
         {
-            var desc = (Description)obj;
+            var desc = (NamedDescription)obj;
 
             if (obj.parent.Identifier == desc.LinkedTo)
             {
@@ -89,30 +88,30 @@
                 pub.AddWarningDescription("Description meta-data was ignored");
                 pub.AddReason("Description identifier does not match parent identifier.");
                 pub.AddLocation(curObj.lines.First().Number == curObj.lines.Last().Number
-                    ? $"At line {curObj.lines.First().Number} of '{file.Name}{file.Info.Extension}'."
-                    : $"Within lines {curObj.lines.First().Number} to {curObj.lines.Last().Number} of '{file.Name}{file.Info.Extension}'.");
+                    ? $"At line {curObj.lines.First().Number} of '{file.Name}{file.Extension}'."
+                    : $"Within lines {curObj.lines.First().Number} to {curObj.lines.Last().Number} of '{file.Name}{file.Extension}'.");
             });
             obj.parent.SubObjects.Remove(obj);
         }
 
         private static void CheckUniqueness(FortranObject obj)
         {
-            if (obj.parent.SubObjectsOfType<Description>().Count <= 1)
+            if (obj.parent.SubObjectsOfType<Description2>().Count <= 1)
             {
                 return;
             }
 
             var curObj = obj;
             var file = obj.GoUpTillType<SourceFile>();
-            if (obj.parent is Project)
+            if (obj.parent is Project2)
             {
                 Report.Warning(pub =>
                 {
                     pub.AddWarningDescription("Description meta-data was ignored");
                     pub.AddReason("Multiple descriptions specified for a single block.");
                     pub.AddLocation(curObj.lines.First().Number == curObj.lines.Last().Number
-                        ? $"At line {curObj.lines.First().Number} of '{file.Name}{file.Info.Extension}'."
-                        : $"Within lines {curObj.lines.First().Number} to {curObj.lines.Last().Number} of '{file.Name}{file.Info.Extension}'.");
+                        ? $"At line {curObj.lines.First().Number} of '{file.Name}{file.Extension}'."
+                        : $"Within lines {curObj.lines.First().Number} to {curObj.lines.Last().Number} of '{file.Name}{file.Extension}'.");
                 });
             }
             else
@@ -122,8 +121,8 @@
                     pub.AddWarningDescription("Description meta-data was ignored");
                     pub.AddReason("Multiple descriptions specified for a single block.");
                     pub.AddLocation(curObj.lines.First().Number == curObj.lines.Last().Number
-                        ? $"At line {curObj.lines.First().Number} of '{file.Name}{file.Info.Extension}'."
-                        : $"Within lines {curObj.lines.First().Number} to {curObj.lines.Last().Number} of '{file.Name}{file.Info.Extension}'.");
+                        ? $"At line {curObj.lines.First().Number} of '{file.Name}{file.Extension}'."
+                        : $"Within lines {curObj.lines.First().Number} to {curObj.lines.Last().Number} of '{file.Name}{file.Extension}'.");
                 });
             }
             obj.parent.SubObjects.Remove(obj);

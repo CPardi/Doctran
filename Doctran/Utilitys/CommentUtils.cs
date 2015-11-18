@@ -7,7 +7,7 @@ namespace Doctran.Utilitys
 {
     using System.Text.RegularExpressions;
 
-    public static class CommentUtilitys
+    public static class CommentUtils
     {
         public static bool DescStart(string text) { return Regex.IsMatch(text, @"^\s*!>"); }
 

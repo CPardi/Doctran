@@ -11,14 +11,14 @@ namespace Doctran.Input.OptionFile
     using Comments;
     using Helper;
     using Parsing;
-    using Parsing.FortranObjects;
+    using Parsing.BuiltIn.FortranObjects;
     using Utilitys;
 
     public class MenuFactory : IInformationFactory
     {
         public IEnumerable<IInformation> Create(int depth, string value, IEnumerable<FortranObject> subObjects, List<FileLine> lines)
         {
-            var menu_html = HelperUtils.GetMarkUpFile(Directory.GetCurrentDirectory() + EnvVar.Slash, value);
+            var menu_html = OtherUtils.GetMarkUpFile(Directory.GetCurrentDirectory() + EnvVar.Slash, value);
             // Change any .md extensions to .html
             string menu_string = Regex.Replace(menu_html.Item2, @"(.*?\.)(?:md|markdown)", new MatchEvaluator(match => match.Groups[1].Value + "html"));
 

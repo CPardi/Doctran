@@ -10,7 +10,7 @@ namespace Doctran.Input.OptionFile
     using Comments;
     using Helper;
     using Parsing;
-    using Parsing.FortranObjects;
+    using Parsing.BuiltIn.FortranObjects;
     using Utilitys;
 
     public class UserPageFactory : IInformationFactory
@@ -20,7 +20,7 @@ namespace Doctran.Input.OptionFile
             var paths = new PathList(false) { value.Trim() };
 
             return paths
-                .Select(p => HelperUtils.GetMarkUpFile(string.Empty, p))
+                .Select(p => OtherUtils.GetMarkUpFile(string.Empty, p))
                 .Select(htmlFile => new UserPage(depth, htmlFile.Item1, htmlFile.Item2, lines));
         }
     }

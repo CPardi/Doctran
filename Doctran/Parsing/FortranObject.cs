@@ -60,15 +60,9 @@ namespace Doctran.Parsing
             this.SubObjects.AddRange(objs);
         }
 
-        public string Identifier
-		{
-			get
-			{
-				return this.GetIdentifier().ToLower();
-			}
-		}
+        public string Identifier => this.GetIdentifier().ToLower();
 
-		protected abstract string GetIdentifier();
+        protected abstract string GetIdentifier();
 	
 		public T GoUpTillType<T>() where T : FortranObject
 		{

@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using Doctran.Parsing;
-
-namespace Doctran
+﻿namespace Doctran.Plugins
 {
+    using System.Collections.Generic;
+    using Parsing;
+
     public interface IDocumentationGenerator
     {
         IEnumerable<IInterfaceXElements> InterfaceXElements { get; }

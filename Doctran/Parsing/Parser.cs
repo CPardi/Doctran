@@ -8,7 +8,7 @@ namespace Doctran.Parsing
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using FortranObjects;
+    using BuiltIn.FortranObjects;
     using Helper;
     using Output;
     using Reporting;
@@ -38,16 +38,16 @@ namespace Doctran.Parsing
         /// <param name="pathAndFileName">The full path to the code file.</param>
         /// <param name="lines">The lines of the code file to be parsed.</param>
         /// <returns></returns>
-        public SourceFile ParseFile(string pathAndFileName, List<FileLine> lines, IEnumerable<ObjectGroup> objectGroups)
+        public SourceFile ParseFile(string pathAndFileName, List<FileLine> lines)
         {
             if (EnvVar.Verbose >= 3) Console.WriteLine("Analyzing: " + pathAndFileName);
             int currentIndex = 0;
-            var file = SearchBlock(pathAndFileName, SourceFile.PreProcessFile(pathAndFileName, lines), true, 0, ref currentIndex, "File", "Project", objectGroups).Single() as SourceFile;
+            var file = SearchBlock(pathAndFileName, SourceFile.PreProcessFile(pathAndFileName, lines), true, 0, ref currentIndex, "File", "Project").Single() as SourceFile;
             file.OriginalLines = lines;
             return file;
         }
 
-        private List<FortranObject> SearchBlock(string pathAndFileName, List<FileLine> lines, bool checkInternal, int startIndex, ref int currentIndex, string blockName, string parentBlockName, IEnumerable<ObjectGroup> objectGroups)
+        private List<FortranObject> SearchBlock(string pathAndFileName, List<FileLine> lines, bool checkInternal, int startIndex, ref int currentIndex, string blockName, string parentBlockName)
         {
             // Objects defined by this block of code.
             List<FortranObject> blockObjects = new List<FortranObject>();
@@ -82,7 +82,7 @@ namespace Doctran.Parsing
                         //Console.WriteLine(lines[result_start.Index].Number + "    begin " + result_start.BlockName);
 
                         // Get any blocks that maybe defined within the current block, these will be added later.
-                        blockSubObjects.AddRange(SearchBlock(pathAndFileName, lines, _blocks[resultStart.BlockName].CheckInternal, resultStart.Index, ref currentIndex, resultStart.BlockName, blockName, objectGroups));
+                        blockSubObjects.AddRange(SearchBlock(pathAndFileName, lines, _blocks[resultStart.BlockName].CheckInternal, resultStart.Index, ref currentIndex, resultStart.BlockName, blockName));
 
                         // If the block has a unique end, then increment the index here so that the same line isn't checked again below.
                         incrementIndex = blockName != "File" && !_blocks[blockName].ExplicitEnd;
@@ -103,7 +103,7 @@ namespace Doctran.Parsing
                 // If we are at the end of a file then create and return it.
                 if (blockName == "File" && !(currentIndex < lines.Count))
                 {
-                    blockObjects.Add(CreateFile(lines, pathAndFileName, blockSubObjects, objectGroups));
+                    blockObjects.Add(CreateFile(lines, pathAndFileName, blockSubObjects));
                     return blockObjects;
                 }
 
@@ -161,9 +161,9 @@ namespace Doctran.Parsing
         /// <param name="pathAndFileName">The full path to the code file.</param>
         /// <param name="blockSubObjects">The objects defined by th code blocks found within the file's lines of code.</param>
         /// <returns>A file with its parsed contents.</returns>
-        private SourceFile CreateFile(List<FileLine> lines, string pathAndFileName, IEnumerable<FortranObject> blockSubObjects, IEnumerable<ObjectGroup> objectGroups)
+        private SourceFile CreateFile(List<FileLine> lines, string pathAndFileName, IEnumerable<FortranObject> blockSubObjects)
         {
-            return new SourceFile(pathAndFileName, blockSubObjects, lines, objectGroups);
+            return new SourceFile(pathAndFileName, blockSubObjects, lines);
         }
 
     }

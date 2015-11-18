@@ -1,4 +1,4 @@
-namespace Doctran.Parsing.ObjectGroups
+namespace Doctran.Parsing.BuiltIn.ObjectGroups
 {
     using System.Collections.Generic;
     using System.Linq;

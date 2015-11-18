@@ -30,9 +30,9 @@ namespace Doctran.Parsing
                 obj => new Func<IEnumerable<XElement>, XElement>(obj.Create));
 
             var keys =
-                from type in this._toGroupXmlDictionary.Keys
-                where !this._toXmlDictionary.Keys.Contains(type)
-                select type;
+                from groupType in this._toGroupXmlDictionary.Keys
+                where !this._toXmlDictionary.Keys.Any(objectType => IsParentOrThis(groupType, objectType))
+                select groupType;
 
             var str = string.Concat(keys.Select((k, i) => i == 0 ? $"'{k.Name}'" : $", '{k.Name}'"));
             if (str != string.Empty)
@@ -41,9 +41,23 @@ namespace Doctran.Parsing
             }
         }
 
+        private bool IsParentOrThis(Type ofThisType, Type type)
+        {
+            var cur = type;
+            while (cur != null)
+            {
+                if (cur == ofThisType)
+                {
+                    return true;
+                }
+                cur = cur.BaseType;
+            }
+            return false;
+        }
+
         public IEnumerable<XElement> CreateForObject(FortranObject sourceFile)
         {
-            return GetValue(sourceFile.GetType(), HelperUtils.Singlet(sourceFile));
+            return GetValue(sourceFile.GetType(), CollectionUtils.Singlet(sourceFile));
         }
 
         private IEnumerable<XElement> GetValue(Type objType, IEnumerable<FortranObject> objsOfType)
@@ -61,7 +75,7 @@ namespace Doctran.Parsing
 
             if (toGroupXml != null && toXml != null)
             {
-                return HelperUtils.Singlet(toGroupXml(this.GetXmlValue(objType, objsOfType, toXml)));
+                return CollectionUtils.Singlet(toGroupXml(this.GetXmlValue(objType, objsOfType, toXml)));
             }
 
             return this.SkipLevel(objsOfType);
