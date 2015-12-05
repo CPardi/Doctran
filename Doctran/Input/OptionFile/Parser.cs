@@ -88,16 +88,16 @@ namespace Doctran.Input.OptionFile
             return true;
         }
 
-        private void TestParseResults(IEnumerable<FortranObject> infos)
+        private void TestParseResults(IEnumerable<IFortranObject> infos)
         {
             TestDepth(infos);
         }
 
-        private void TestDepth(IEnumerable<FortranObject> infos, int depth = 1)
+        private void TestDepth(IEnumerable<IFortranObject> infos, int depth = 1)
         {
             foreach (var i in infos)
             {
-                if((i as IInformation).Depth != depth) throw new WrongDepthException(i.lines.First(), depth, (i as IInformation).Depth);
+                if((i as IInformation).Depth != depth) throw new WrongDepthException(i.Lines.First(), depth, (i as IInformation).Depth);
                 TestDepth(i.SubObjects, depth + 1);
             }
         }

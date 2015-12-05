@@ -15,7 +15,7 @@ namespace Doctran.Input.OptionFile
 
     public class UserPageFactory : IInformationFactory
     {
-        public IEnumerable<IInformation> Create(int depth, string value, IEnumerable<FortranObject> subObjects, List<FileLine> lines)
+        public IEnumerable<IInformation> Create(int depth, string value, IEnumerable<IFortranObject> subObjects, List<FileLine> lines)
         {
             var paths = new PathList(false) { value.Trim() };
 

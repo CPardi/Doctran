@@ -10,11 +10,11 @@ namespace Doctran.Parsing
 
     public abstract class FortranBlock
     {
-        protected FortranBlock(string name, bool check_internal = true, bool explicit_end = true, int weight = 0)
+        protected FortranBlock(string name, bool checkInternal = true, bool explicitEnd = true, int weight = 0)
         {
             this.Name = name;
-            this.CheckInternal = check_internal;
-            this.ExplicitEnd = explicit_end;
+            this.CheckInternal = checkInternal;
+            this.ExplicitEnd = explicitEnd;
             this.Weight = weight;
         }
 
@@ -25,6 +25,6 @@ namespace Doctran.Parsing
 
         public abstract bool BlockStart(string parentBlockName, List<FileLine> lines, int lineIndex);
         public abstract bool BlockEnd(string parentBlockName, List<FileLine> lines, int lineIndex);
-        public abstract IEnumerable<FortranObject> ReturnObject(IEnumerable<FortranObject> subObjects, List<FileLine> lines);
+        public abstract IEnumerable<FortranObject> ReturnObject(IEnumerable<IFortranObject> subObjects, List<FileLine> lines);
     }
 }

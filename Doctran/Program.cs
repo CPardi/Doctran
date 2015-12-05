@@ -32,8 +32,7 @@ namespace Doctran
 
             Report.SetDebugProfile();
 
-            var options = GetOptions(args);
-            
+            var options = GetOptions(args);            
             options.SourceFilePaths.KeepDistinctOnly();
             EnvVar.Verbose = options.Verbose;
            
@@ -101,13 +100,13 @@ namespace Doctran
             return options;
         }
 
-        private static Project2 GetProject(IEnumerable<string> sourceFiles)
+        private static Project GetProject(IEnumerable<string> sourceFiles)
         {
             if (EnvVar.Verbose >= 2) Console.Write("Analysing project block structure... ");
             return ProgramHelper.ParseProject(sourceFiles);
         }
 
-        private static XmlOutputter GetXmlOutputter(Project2 project, XElement xmlInformation, string outputDirectory, string saveXmlPath)
+        private static XmlOutputter GetXmlOutputter(Project project, XElement xmlInformation, string outputDirectory, string saveXmlPath)
         {
             if (EnvVar.Verbose >= 2) Console.Write("Done" + Environment.NewLine + "Generating xml... ");
             var xmlOutputter = new XmlOutputter(project.XEle(xmlInformation));

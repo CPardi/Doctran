@@ -8,9 +8,9 @@ namespace Doctran.Parsing
 
     public class XmlGenerator
     {
-        private readonly Dictionary<Type, Func<FortranObject, IEnumerable<XElement>>> _interfaceXmlDictionary;
+        private readonly Dictionary<Type, Func<IFortranObject, IEnumerable<XElement>>> _interfaceXmlDictionary;
         private readonly Dictionary<Type, Func<IEnumerable<XElement>, XElement>> _toGroupXmlDictionary;
-        private readonly Dictionary<Type, Func<FortranObject, XElement>> _toXmlDictionary;
+        private readonly Dictionary<Type, Func<IFortranObject, XElement>> _toXmlDictionary;
 
         public XmlGenerator(
             IEnumerable<IInterfaceXElements> interfaceXElements,
@@ -19,11 +19,11 @@ namespace Doctran.Parsing
         {
             _interfaceXmlDictionary = interfaceXElements.ToDictionary(
                 obj => obj.ForType,
-                obj => new Func<FortranObject, IEnumerable<XElement>>(obj.Create));
+                obj => new Func<IFortranObject, IEnumerable<XElement>>(obj.Create));
 
             _toXmlDictionary = objectXElements.ToDictionary(
                 obj => obj.ForType,
-                obj => new Func<FortranObject, XElement>(obj.Create));
+                obj => new Func<IFortranObject, XElement>(obj.Create));
 
             _toGroupXmlDictionary = toGroupXmlDictionary.ToDictionary(
                 obj => obj.ForType,
@@ -41,7 +41,12 @@ namespace Doctran.Parsing
             }
         }
 
-        private bool IsParentOrThis(Type ofThisType, Type type)
+        public IEnumerable<XElement> CreateForObject(IFortranObject sourceFile)
+        {
+            return GetValue(sourceFile.GetType(), CollectionUtils.Singlet(sourceFile));
+        }
+
+        private static bool IsParentOrThis(Type ofThisType, Type type)
         {
             var cur = type;
             while (cur != null)
@@ -55,14 +60,9 @@ namespace Doctran.Parsing
             return false;
         }
 
-        public IEnumerable<XElement> CreateForObject(FortranObject sourceFile)
+        private IEnumerable<XElement> GetValue(Type objType, IEnumerable<IFortranObject> objsOfType)
         {
-            return GetValue(sourceFile.GetType(), CollectionUtils.Singlet(sourceFile));
-        }
-
-        private IEnumerable<XElement> GetValue(Type objType, IEnumerable<FortranObject> objsOfType)
-        {
-            Func<FortranObject, XElement> toXml;
+            Func<IFortranObject, XElement> toXml;
             this._toXmlDictionary.TryGetValue(objType, out toXml);
 
             Func<IEnumerable<XElement>, XElement> toGroupXml;
@@ -81,20 +81,26 @@ namespace Doctran.Parsing
             return this.SkipLevel(objsOfType);
         }
 
-        private IEnumerable<XElement> GetXmlValue(Type objType, IEnumerable<FortranObject> objsOfType, Func<FortranObject, XElement> toXml)
+        private IEnumerable<XElement> GetXmlValue(Type objType, IEnumerable<IFortranObject> objsOfType, Func<IFortranObject, XElement> toXml)
         {
             var xElements = new List<XElement>();
             foreach (var fortranObject in objsOfType)
             {
                 var xElement = toXml(fortranObject);
-                xElement.Add(objType.GetInterfaces().Select(inter => _interfaceXmlDictionary[inter](fortranObject)));
+                xElement.Add(objType.GetInterfaces().Select(inter =>
+                {
+                    Func<IFortranObject, IEnumerable<XElement>> create;
+                    _interfaceXmlDictionary.TryGetValue(inter, out create);
+                    return create != null ? create(fortranObject) : CollectionUtils.Empty<XElement>();
+                }));
                 xElement.Add(this.Navigate(fortranObject));
                 xElements.Add(xElement);
             }
+
             return xElements.Where(xElement => xElement != null);
         }
 
-        private IEnumerable<XElement> Navigate(FortranObject obj)
+        private IEnumerable<XElement> Navigate(IFortranObject obj)
         {
             var xElements = new List<XElement>();
             var subObjects = obj.SubObjects;
@@ -107,6 +113,6 @@ namespace Doctran.Parsing
             return xElements;
         }
 
-        private IEnumerable<XElement> SkipLevel(IEnumerable<FortranObject> objsOfType) => objsOfType.SelectMany(this.Navigate);
+        private IEnumerable<XElement> SkipLevel(IEnumerable<IFortranObject> objsOfType) => objsOfType.SelectMany(this.Navigate);
     }
 }

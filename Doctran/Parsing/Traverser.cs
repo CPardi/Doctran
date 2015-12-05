@@ -22,9 +22,13 @@ namespace Doctran.Parsing
 
         public void Go(SourceFile sourceFile) => Navigate(sourceFile);
 
-        protected void Navigate(FortranObject obj)
+        protected void Navigate(IFortranObject obj)
         {
-            if (EnvVar.Verbose >= 3 && obj is SourceFile) Console.WriteLine("Post processing: " + obj.Name + ((SourceFile) obj).Extension);
+            var file = obj as SourceFile;
+            if (EnvVar.Verbose >= 3 && file != null)
+            {
+                Console.WriteLine("Post processing: " + file.Name + ((SourceFile) obj).Extension);
+            }
 
             Action<object> act;
             if (_actions.TryGetValue(obj.GetType(), out act))

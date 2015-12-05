@@ -23,16 +23,16 @@
 
                         // If this is a description directly below the definition statement then dont move it. This is really
                         // just for function where the result name is the same as the function name.
-                        if (obj.parent.Identifier == linkedTo
-                            && obj.parent.lines.Count > 1 && obj.parent.lines[1].Number == obj.lines[0].Number)
+                        if ((obj.Parent as IHasIdentifier)?.Identifier == linkedTo
+                            && obj.Parent.Lines.Count > 1 && obj.Parent.Lines[1].Number == obj.Lines[0].Number)
                             return;
 
                         var descriptions =
-                            from sObjs in obj.parent.SubObjects
-                            where sObjs.Identifier == linkedTo
+                            from sObjs in obj.Parent.SubObjects
+                            where (sObjs as IHasIdentifier)?.Identifier == linkedTo
                             select sObjs;
 
-                        var fortranObjects = descriptions as IList<FortranObject> ?? descriptions.ToList();
+                        var fortranObjects = descriptions as IList<IFortranObject> ?? descriptions.ToList();
 
                         if (fortranObjects.Count() > 1)
                         {
@@ -42,9 +42,9 @@
                             {
                                 pub.AddWarningDescription("Description meta-data was ignored");
                                 pub.AddReason("Description specified multiple times. Using first occurence");
-                                pub.AddLocation(curObj.lines.First().Number == curObj.lines.Last().Number
-                                    ? $"At line {curObj.lines.First().Number} of '{file.Name}{file.Extension}'."
-                                    : $"Within lines {curObj.lines.First().Number} to {curObj.lines.Last().Number} of '{file.Name}{file.Extension}'.");
+                                pub.AddLocation(curObj.Lines.First().Number == curObj.Lines.Last().Number
+                                    ? $"At line {curObj.Lines.First().Number} of '{file.Name}{file.Extension}'."
+                                    : $"Within lines {curObj.Lines.First().Number} to {curObj.Lines.Last().Number} of '{file.Name}{file.Extension}'.");
                             });
                         }
 
@@ -52,7 +52,7 @@
 
                         if (parSubObj != null)
                         {
-                            obj.parent.SubObjects.Remove(obj);
+                            obj.Parent.SubObjects.Remove(obj);
                             parSubObj.AddSubObject(obj);
                         }
                     });
@@ -76,7 +76,7 @@
         {
             var desc = (NamedDescription)obj;
 
-            if (obj.parent.Identifier == desc.LinkedTo)
+            if ((obj.Parent as IHasIdentifier)?.Identifier == desc.LinkedTo)
             {
                 return;
             }
@@ -87,31 +87,31 @@
             {
                 pub.AddWarningDescription("Description meta-data was ignored");
                 pub.AddReason("Description identifier does not match parent identifier.");
-                pub.AddLocation(curObj.lines.First().Number == curObj.lines.Last().Number
-                    ? $"At line {curObj.lines.First().Number} of '{file.Name}{file.Extension}'."
-                    : $"Within lines {curObj.lines.First().Number} to {curObj.lines.Last().Number} of '{file.Name}{file.Extension}'.");
+                pub.AddLocation(curObj.Lines.First().Number == curObj.Lines.Last().Number
+                    ? $"At line {curObj.Lines.First().Number} of '{file.Name}{file.Extension}'."
+                    : $"Within lines {curObj.Lines.First().Number} to {curObj.Lines.Last().Number} of '{file.Name}{file.Extension}'.");
             });
-            obj.parent.SubObjects.Remove(obj);
+            obj.Parent.SubObjects.Remove(obj);
         }
 
         private static void CheckUniqueness(FortranObject obj)
         {
-            if (obj.parent.SubObjectsOfType<Description2>().Count <= 1)
+            if (obj.Parent.SubObjectsOfType<Description>().Count <= 1)
             {
                 return;
             }
 
             var curObj = obj;
             var file = obj.GoUpTillType<SourceFile>();
-            if (obj.parent is Project2)
+            if (obj.Parent is Project)
             {
                 Report.Warning(pub =>
                 {
                     pub.AddWarningDescription("Description meta-data was ignored");
                     pub.AddReason("Multiple descriptions specified for a single block.");
-                    pub.AddLocation(curObj.lines.First().Number == curObj.lines.Last().Number
-                        ? $"At line {curObj.lines.First().Number} of '{file.Name}{file.Extension}'."
-                        : $"Within lines {curObj.lines.First().Number} to {curObj.lines.Last().Number} of '{file.Name}{file.Extension}'.");
+                    pub.AddLocation(curObj.Lines.First().Number == curObj.Lines.Last().Number
+                        ? $"At line {curObj.Lines.First().Number} of '{file.Name}{file.Extension}'."
+                        : $"Within lines {curObj.Lines.First().Number} to {curObj.Lines.Last().Number} of '{file.Name}{file.Extension}'.");
                 });
             }
             else
@@ -120,12 +120,12 @@
                 {
                     pub.AddWarningDescription("Description meta-data was ignored");
                     pub.AddReason("Multiple descriptions specified for a single block.");
-                    pub.AddLocation(curObj.lines.First().Number == curObj.lines.Last().Number
-                        ? $"At line {curObj.lines.First().Number} of '{file.Name}{file.Extension}'."
-                        : $"Within lines {curObj.lines.First().Number} to {curObj.lines.Last().Number} of '{file.Name}{file.Extension}'.");
+                    pub.AddLocation(curObj.Lines.First().Number == curObj.Lines.Last().Number
+                        ? $"At line {curObj.Lines.First().Number} of '{file.Name}{file.Extension}'."
+                        : $"Within lines {curObj.Lines.First().Number} to {curObj.Lines.Last().Number} of '{file.Name}{file.Extension}'.");
                 });
             }
-            obj.parent.SubObjects.Remove(obj);
+            obj.Parent.SubObjects.Remove(obj);
         }
     }
 }

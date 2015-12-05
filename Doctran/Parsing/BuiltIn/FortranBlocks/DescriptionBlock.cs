@@ -38,12 +38,12 @@ namespace Doctran.Parsing.BuiltIn.FortranBlocks
                 || CommentUtils.NDescStart(lines[lineIndex + 1].Text);
         }
 
-        public override IEnumerable<FortranObject> ReturnObject(IEnumerable<FortranObject> subObjects, List<FileLine> lines)
+        public override IEnumerable<FortranObject> ReturnObject(IEnumerable<IFortranObject> subObjects, List<FileLine> lines)
         {
             var basic = DescriptionBlock.ParseXmlContent("Basic", DescriptionBlock.GetBasicText(lines));
             var detailed = DescriptionBlock.ParseXmlContent("Detailed", DescriptionBlock.GetDetailText(lines));
 
-            yield return new Description2(basic, detailed, lines);
+            yield return new Description(basic, detailed, lines);
         }
 
         private static readonly Markdown Markdown = new Markdown();

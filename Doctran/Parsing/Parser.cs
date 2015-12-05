@@ -150,7 +150,7 @@ namespace Doctran.Parsing
         {
             //Console.WriteLine(lines[current_index].Number + "    end " + block_name + "    ");
             var thisBlock = _blocks[blockName].ReturnObject(blockSubObjects, lines.GetRange(startIndex, currentIndex - startIndex + 1)).ToList();
-            thisBlock.ForEach(b => b.SubObjects.ForEach(sObj => sObj.parent = b));
+            thisBlock.ForEach(b => b.SubObjects.ForEach(sObj => sObj.Parent = b));
             return thisBlock;
         }
 

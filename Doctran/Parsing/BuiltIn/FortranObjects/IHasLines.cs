@@ -5,6 +5,6 @@
 
     public interface IHasLines
     {
-        List<FileLine> lines { get; }
+        List<FileLine> Lines { get; }
     }
 }

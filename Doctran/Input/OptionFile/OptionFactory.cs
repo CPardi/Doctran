@@ -5,32 +5,34 @@
     using Helper;
     using Parsing;
 
-    class OptionFactory : IInformationFactory
+    internal class OptionFactory : IInformationFactory
     {
-        public string Name { get; private set; }
-
         public OptionFactory(string name)
         {
             this.Name = name;
         }
 
-        public IEnumerable<IInformation> Create(int depth, string value, IEnumerable<FortranObject> subObjects, List<FileLine> lines)
+        public string Name { get; }
+
+        public IEnumerable<IInformation> Create(int depth, string value, IEnumerable<IFortranObject> subObjects, List<FileLine> lines)
         {
             yield return new Option(depth, this.Name, value, lines);
         }
     }
 
-    class Option : FortranObject, IInformation
+    internal class Option : FortranObject, IInformation
     {
-        public string Value { get; private set; }
-        public int Depth { get; private set; }
-
         public Option(int depth, string name, string value, List<FileLine> lines)
-            : base(name,lines)
+            : base(lines)
         {
+            this.Name = name;
             this.Value = value;
             this.Depth = depth;
         }
+
+        public int Depth { get; }
+        public string Name { get; }
+        public string Value { get; }
 
         protected override string GetIdentifier()
         {

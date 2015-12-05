@@ -5,18 +5,17 @@
 
 namespace Doctran.Parsing.BuiltIn.FortranObjects
 {
+    using ColorCode;
+    using ColorCode.Formatting;
+    using ColorCode.Styling.StyleSheets;
+    using Helper;
+    using Reporting;
     using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Text.RegularExpressions;
     using System.Xml.Linq;
-    using ColorCode;
-    using ColorCode.Formatting;
-    using ColorCode.Styling.StyleSheets;
-    using Helper;
-    using Output;
-    using Reporting;
     using Utilitys;
 
     public class SourceFile : XFortranObject, IHasName, IHasLines, IHasIdentifier, IHasValidName
@@ -24,9 +23,11 @@ namespace Doctran.Parsing.BuiltIn.FortranObjects
         private readonly FileInfo _info;
 
         // Reads a file, determines its type and loads the contained procedure and/or modules.
-        public SourceFile(string pathAndFilename, IEnumerable<FortranObject> subObjects, List<FileLine> lines)
-            : base(Path.GetFileName(pathAndFilename), subObjects, "File", lines)
+        public SourceFile(string pathAndFilename, IEnumerable<IFortranObject> subObjects, List<FileLine> lines)
+            : base("File", subObjects, lines)
         {
+            this.Name = Path.GetFileName(pathAndFilename);
+
             this.PathAndFilename = pathAndFilename;
             _info = new FileInfo(this.PathAndFilename);
 
@@ -34,18 +35,12 @@ namespace Doctran.Parsing.BuiltIn.FortranObjects
             this.Name = Path.GetFileNameWithoutExtension(pathAndFilename);
         }
 
+        public string Name { get; }
         public DateTime Created => _info.CreationTime;
-
         public string Extension => _info.Extension;
-
         public DateTime LastModified => _info.LastWriteTime;
-
-        public int LineCount => this.lines.Count - 1;
-
-        public IEnumerable<ObjectGroup> ObjectGroups { get; }
-
+        public int LineCount => this.Lines.Count - 1;
         public List<FileLine> OriginalLines { get; set; }
-
         public string PathAndFilename { get; }
 
         public XElement SourceXEle

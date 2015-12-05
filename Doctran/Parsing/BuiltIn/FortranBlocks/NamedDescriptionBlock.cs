@@ -31,7 +31,7 @@ namespace Doctran.Parsing.BuiltIn.FortranBlocks
                 || CommentUtils.InfoStart(lines[lineIndex + 1].Text);
         }
 
-        public override IEnumerable<FortranObject> ReturnObject(IEnumerable<FortranObject> subObjects, List<FileLine> lines)
+        public override IEnumerable<FortranObject> ReturnObject(IEnumerable<IFortranObject> subObjects, List<FileLine> lines)
         {
             string name = Regex.Match(lines[0].Text, @"!>\s*(\w.*)\s*-").Groups[1].Value.Trim();
             var basic = new XElement("Basic", DescriptionBlock.GetBasicText(lines).Substring(name.Length + 1));

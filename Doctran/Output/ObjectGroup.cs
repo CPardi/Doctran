@@ -12,14 +12,14 @@ namespace Doctran.Output
 
     public abstract class ObjectGroup
     {
-        Type T;
+        Type _;
         protected ObjectGroup(Type T)
         {
-            this.T = T;
+            this._ = T;
         }
-        public bool Is(FortranObject Obj)
+        public bool Is(FortranObject obj)
         {
-            return Obj.GetType().IsSubclassOf(T) | Obj.GetType() == T;
+            return obj.GetType().IsSubclassOf(_) | obj.GetType() == _;
         }
         public XElement XEle(XElement content) { return this.XEle(new List<XElement> { content }); }
         public virtual XElement XEle(IEnumerable<XElement> content) { return null; }

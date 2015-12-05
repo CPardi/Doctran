@@ -11,9 +11,9 @@ namespace Doctran.Parsing.BuiltIn.ObjectGroups
         public NamedDescriptionGroup()
             : base(typeof(NamedDescription)) { }
 
-        public override XElement XEle(IEnumerable<XElement> Content)
+        public override XElement XEle(IEnumerable<XElement> content)
         {
-            return Content.Single();
+            return content.Single();
         }
     }
 }

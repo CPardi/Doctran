@@ -7,7 +7,7 @@ namespace Doctran.Comments
     public interface IInformation {
         string Name { get; }
         int Depth { get; }
-        List<FileLine> lines { get; }
-        List<FortranObject> SubObjects { get; }
+        List<FileLine> Lines { get; }
+        List<IFortranObject> SubObjects { get; }
     }
 }

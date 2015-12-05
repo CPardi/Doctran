@@ -16,20 +16,20 @@ namespace Doctran.Input.OptionFile
 
     public class MenuFactory : IInformationFactory
     {
-        public IEnumerable<IInformation> Create(int depth, string value, IEnumerable<FortranObject> subObjects, List<FileLine> lines)
+        public IEnumerable<IInformation> Create(int depth, string value, IEnumerable<IFortranObject> subObjects, List<FileLine> lines)
         {
-            var menu_html = OtherUtils.GetMarkUpFile(Directory.GetCurrentDirectory() + EnvVar.Slash, value);
+            var menuHtml = OtherUtils.GetMarkUpFile(Directory.GetCurrentDirectory() + EnvVar.Slash, value);
             // Change any .md extensions to .html
-            string menu_string = Regex.Replace(menu_html.Item2, @"(.*?\.)(?:md|markdown)", new MatchEvaluator(match => match.Groups[1].Value + "html"));
+            var menuString = Regex.Replace(menuHtml.Item2, @"(.*?\.)(?:md|markdown)", new MatchEvaluator(match => match.Groups[1].Value + "html"));
 
-            yield return new Menu(depth, menu_string, subObjects, lines);
+            yield return new Menu(depth, menuString, subObjects, lines);
         }
     }
 
-    public class Menu : XInformation, IInformation
+    public class Menu : XInformation
     {
-        public Menu(int depth, string menuString, IEnumerable<FortranObject> sub_objects, List<FileLine> lines)
-            : base(depth, "Menu", menuString, sub_objects, lines) { }
+        public Menu(int depth, string menuString, IEnumerable<IFortranObject> subObjects, List<FileLine> lines)
+            : base(depth, "Menu", menuString, subObjects, lines) { }
     }
 
 }
