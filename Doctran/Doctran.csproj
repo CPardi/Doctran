@@ -113,8 +113,6 @@
     <Compile Include="Parsing\BuiltIn\FortranObjects\IHasName.cs" />
     <Compile Include="Parsing\BuiltIn\FortranObjects\Project.cs" />
     <Compile Include="Parsing\BuiltIn\FortranObjects\XInformation.cs" />
-    <Compile Include="Parsing\BuiltIn\ObjectGroups\NamedDescriptionGroup.cs" />
-    <Compile Include="Parsing\BuiltIn\ObjectGroups\DescriptionGroup.cs" />
     <Compile Include="Parsing\BuiltIn\TraverserActions.cs" />
     <Compile Include="Parsing\FortranBlock.cs" />
     <Compile Include="Parsing\FortranObject.cs" />

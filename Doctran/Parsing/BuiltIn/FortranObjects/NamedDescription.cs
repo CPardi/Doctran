@@ -19,7 +19,5 @@
         public XElement Basic { get; }
 
         public XElement Detailed { get; }
-
-        protected override string GetIdentifier() => "Linked Description";
     }
 }

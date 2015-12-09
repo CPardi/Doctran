@@ -30,8 +30,6 @@ namespace Doctran.Parsing
             this.AddSubObjects(subObjects);
         }
 
-        public string Identifier => this.GetIdentifier().ToLower();
-
         public List<FileLine> Lines { get; }
 
         public IFortranObject Parent { get; set; }
@@ -89,7 +87,5 @@ namespace Doctran.Parsing
                 select (TR) obj;
             return a.ToList();
         }
-
-        protected abstract string GetIdentifier();
     }
 }

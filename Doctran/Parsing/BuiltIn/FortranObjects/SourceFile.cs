@@ -178,11 +178,6 @@ namespace Doctran.Parsing.BuiltIn.FortranObjects
             return xele;
         }
 
-        protected override string GetIdentifier()
-        {
-            return this.Name + this._info.Extension;
-        }
-
         private static void CheckForPreprocessing(string filename, string line)
         {
             if (Regex.IsMatch(StringUtils.RemoveInlineComment(line), @"^\s*(?:#define|#elif|#elifdef|#elifndef|#else|#endif|#error|#if|#ifdef|#ifndef|#line|#pragma|#undef|#include)"))
@@ -219,5 +214,7 @@ namespace Doctran.Parsing.BuiltIn.FortranObjects
             lines[lines.Count - 1] += (lineNocomm.Length > 1 ? "!" + string.Concat(lineNocomm.Skip(1)) : "");
             return lines;
         }
+
+        public string Identifier => this.Name;
     }
 }

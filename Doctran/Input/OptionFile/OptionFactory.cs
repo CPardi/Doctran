@@ -33,10 +33,5 @@
         public int Depth { get; }
         public string Name { get; }
         public string Value { get; }
-
-        protected override string GetIdentifier()
-        {
-            return "Option";
-        }
     }
 }

@@ -48,16 +48,19 @@ namespace Doctran.Parsing
 
         private static bool IsParentOrThis(Type ofThisType, Type type)
         {
-            var cur = type;
-            while (cur != null)
+            if (type == ofThisType)
             {
-                if (cur == ofThisType)
-                {
-                    return true;
-                }
-                cur = cur.BaseType;
+                return true;
             }
-            return false;
+
+            if (type.BaseType == null)
+            {
+                return false;
+            }
+
+            return
+                IsParentOrThis(ofThisType, type.BaseType)
+                || type.GetInterfaces().Count(i => IsParentOrThis(ofThisType, i)) > 0;
         }
 
         private IEnumerable<XElement> GetValue(Type objType, IEnumerable<IFortranObject> objsOfType)

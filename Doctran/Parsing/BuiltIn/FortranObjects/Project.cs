@@ -29,7 +29,5 @@
 
             return xele;
         }
-
-        protected override string GetIdentifier() => "FortranObject(Project)";
     }
 }

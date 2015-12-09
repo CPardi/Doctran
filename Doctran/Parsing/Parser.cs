@@ -10,7 +10,6 @@ namespace Doctran.Parsing
     using System.Linq;
     using BuiltIn.FortranObjects;
     using Helper;
-    using Output;
     using Reporting;
     using Utilitys;
 
@@ -19,7 +18,7 @@ namespace Doctran.Parsing
     /// </summary>
     public class Parser
     {
-        private Dictionary<string, FortranBlock> _blocks = new Dictionary<string,FortranBlock>();
+        private readonly Dictionary<string, FortranBlock> _blocks = new Dictionary<string,FortranBlock>();
 
         /// <summary>
         /// Creates an parser instance to extract the blocks from a code file.

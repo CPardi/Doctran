@@ -34,10 +34,5 @@ namespace Doctran.Parsing.BuiltIn.FortranObjects
                 ? new XElement(this.XElementName, this.SubObjects.Select(sinfo => (sinfo as XInformation).XEle()))
                 : XElement.Parse("<" + this.XElementName + ">" + this.Value + "</" + this.XElementName + ">");
         }
-
-        protected override string GetIdentifier()
-        {
-            return "Information(" + this.XElementName + ")";
-        }
     }
 }

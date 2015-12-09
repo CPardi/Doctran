@@ -18,10 +18,10 @@ namespace Doctran.Parsing
             this.Weight = weight;
         }
 
-        public bool CheckInternal { get; private set; }
-        public bool ExplicitEnd { get; private set; }
-        public int Weight { get; private set; }
-        public string Name { get; private set; }        
+        public bool CheckInternal { get; }
+        public bool ExplicitEnd { get; }
+        public string Name { get; }
+        public int Weight { get; }
 
         public abstract bool BlockStart(string parentBlockName, List<FileLine> lines, int lineIndex);
         public abstract bool BlockEnd(string parentBlockName, List<FileLine> lines, int lineIndex);
