@@ -1,24 +1,81 @@
-﻿using NUnit.Framework;
-using System.Reflection;
-using System.IO;
-using System;
-using System.Linq;
-
-namespace Doctran.Test.Common
+﻿namespace Doctran.Test.Common
 {
+    using System;
+    using System.IO;
+    using System.Linq;
     using Helper;
+    using NUnit.Framework;
 
     [TestFixture]
+    [Category("Unit")]
     public class PathCollectionTest
-    {        
+    {
         private string _originalDirectory;
-        private string _test_dir = @"C:\Documents\Programming\VisualStudio\Projects\Doctran\Doctran.Test\TestFiles\PathCollection\";
+        private readonly string _testDir = Path.GetFullPath(@"..\..\TestFiles\PathCollection\");
+
+        [Test(Description = "Add a path with a double wildcard and extension.")]
+        public void DirectoryDoubleWildcardWithExtensionMatch()
+        {
+            var pathColl = new PathList();
+            pathColl.Add(@"Folder1\**\*.txt");
+            Assert.AreEqual(4, pathColl.Count);
+        }
+
+        [Test(Description = "Add a path with a double wildcard and extension.")]
+        public void DirectoryWildcardWithExtensionMatch()
+        {
+            var pathColl = new PathList();
+            pathColl.Add(@"Folder1\*.txt");
+            Assert.AreEqual(1, pathColl.Count);
+        }
+
+        [Test(Description = "Search for a double wildcard with a non existant directory.")]
+        [ExpectedException(typeof(DirectoryNotFoundException))]
+        public void DoubleWildcardNoDirectory()
+        {
+            var pathColl = new PathList();
+            pathColl.Add(@"NoDirectory\**\*.txt");
+            Assert.AreEqual(4, pathColl.Count);
+        }
+
+        [Test(Description = "Add a path with no wildcards to a path that exists.")]
+        public void FileExistsAtNormalPath()
+        {
+            var pathColl = new PathList { "File1.txt" };
+            Assert.AreEqual(1, pathColl.Count);
+            Assert.AreEqual(Path.GetFullPath("File1.txt"), pathColl.First());
+        }
+
+        [Test(Description = "Add a path with a wildcard.")]
+        public void FileNameWildcard()
+        {
+            var pathColl = new PathList();
+            pathColl.Add("*");
+            Assert.AreEqual(2, pathColl.Count);
+        }
+
+        [Test(Description = "Add a path with no wildcards to a path that does not exist.")]
+        [ExpectedException(typeof(FileNotFoundException))]
+        public void FileNotFoundAtNormalPath()
+        {
+            var pathColl = new PathList();
+            pathColl.Add("NotExistingFile");
+        }
+
+        [Test(Description = "Try to remove an item using a path with wildcards. This should be invalid.")]
+        [ExpectedException(typeof(ArgumentException))]
+        public void RemoveWildCardPath()
+        {
+            var pathColl = new PathList();
+            pathColl.Add(@"Folder1\**\*.txt");
+            pathColl.Remove(@"Folder1\**\*.txt");
+        }
 
         [SetUp]
         public void SetUp()
         {
             _originalDirectory = Directory.GetCurrentDirectory();
-            Directory.SetCurrentDirectory(_test_dir);
+            Directory.SetCurrentDirectory(_testDir);
         }
 
         [TearDown]
@@ -27,98 +84,29 @@ namespace Doctran.Test.Common
             Directory.SetCurrentDirectory(_originalDirectory);
         }
 
-        [Test(Description = "Add a path with no wildcards to a path that exists.")]
-        [Category("Precise")]
-        public void FileExistsAtNormalPath()
+        [Test(Description = "Search for a wildcard with a non existant directory.")]
+        [ExpectedException(typeof(DirectoryNotFoundException))]
+        public void WildcardNoDirectory()
         {
-            PathList pathColl = new PathList();
-            pathColl.Add("File1.txt");
-            Assert.AreEqual(pathColl.Count, 1);
-            Assert.AreEqual(pathColl.First(), "File1.txt");
-        }
-
-        [Test(Description = "Add a path with no wildcards to a path that does not exist.")]
-        [Category("Precise")]
-        [ExpectedException(typeof(FileNotFoundException))]
-        public void FileNotFoundAtNormalPath()
-        {
-            PathList pathColl = new PathList();
-            pathColl.Add("NotExistingFile");
-        }
-
-        [Test(Description = "Add a path with a wildcard.")]
-        [Category("Precise")]
-        public void FileNameWildcard()
-        {
-            PathList pathColl = new PathList();
-            pathColl.Add("*");
-            Assert.AreEqual(pathColl.Count, 2);
+            var pathColl = new PathList();
+            pathColl.Add(@"NoDirectory\*.txt");
+            Assert.AreEqual(4, pathColl.Count);
         }
 
         [Test(Description = "Add a path with wildcard and extension, with file matches.")]
-        [Category("Precise")]
         public void WildcardWithExtensionMatch()
         {
-            PathList pathColl = new PathList();
+            var pathColl = new PathList();
             pathColl.Add("*.txt");
-            Assert.AreEqual(pathColl.Count, 2);
+            Assert.AreEqual(2, pathColl.Count);
         }
 
         [Test(Description = "Add a path with wildcard and extension, without file matches.")]
-        [Category("Precise")]
         public void WildcardWithExtensionNoMatch()
         {
-            PathList pathColl = new PathList();
+            var pathColl = new PathList();
             pathColl.Add("*.noMatch");
-            Assert.AreEqual(pathColl.Count, 0);
-        }
-
-        [Test(Description = "Add a path with a double wildcard and extension.")]
-        [Category("Precise")]
-        public void DirectoryWildcardWithExtensionMatch()
-        {
-            PathList pathColl = new PathList();
-            pathColl.Add(@"Folder1\*.txt");
-            Assert.AreEqual(pathColl.Count, 1);
-        }
-
-        [Test(Description = "Add a path with a double wildcard and extension.")]
-        [Category("Precise")]
-        public void DirectoryDoubleWildcardWithExtensionMatch()
-        {
-            PathList pathColl = new PathList();
-            pathColl.Add(@"Folder1\**\*.txt");
-            Assert.AreEqual(pathColl.Count, 4);
-        }
-
-        [Test(Description = "Search for a double wildcard with a non existant directory.")]
-        [Category("Precise")]
-        [ExpectedException(typeof(DirectoryNotFoundException))]
-        public void DoubleWildcardNoDirectory()
-        {
-            PathList pathColl = new PathList();
-            pathColl.Add(@"NoDirectory\**\*.txt");
-            Assert.AreEqual(pathColl.Count, 4);
-        }
-
-        [Test(Description = "Search for a wildcard with a non existant directory.")]
-        [ExpectedException(typeof(DirectoryNotFoundException))]
-        [Category("Precise")]
-        public void WildcardNoDirectory()
-        {
-            PathList pathColl = new PathList();
-            pathColl.Add(@"NoDirectory\*.txt");
-            Assert.AreEqual(pathColl.Count, 4);
-        }
-
-        [Test(Description = "Try to remove an item using a path with wildcards. This should be invalid.")]
-        [ExpectedException(typeof(ArgumentException))]
-        [Category("Precise")]
-        public void RemoveWildCardPath()
-        {
-            PathList pathColl = new PathList();
-            pathColl.Add(@"Folder1\**\*.txt");
-            pathColl.Remove(@"Folder1\**\*.txt");
+            Assert.AreEqual(0, pathColl.Count);
         }
     }
 }

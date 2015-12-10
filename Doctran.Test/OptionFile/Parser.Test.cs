@@ -13,16 +13,17 @@ namespace Doctran.Test.OptionFile
     using Input.OptionFile;
 
     [TestFixture]
+    [Category("Unit")]
     public class ParserTest
     {
         private string _originalDirectory;
-        private string _test_dir = @"C:\Documents\Programming\VisualStudio\Projects\Doctran\Doctran.Test\TestFiles\InfoFile\";
+        private readonly string _testDir = Path.GetFullPath(@"..\..\TestFiles\InfoFile\");
 
         [SetUp]
         public void SetUp()
         {
             _originalDirectory = Directory.GetCurrentDirectory();
-            Directory.SetCurrentDirectory(_test_dir);
+            Directory.SetCurrentDirectory(_testDir);
         }
 
         [TearDown]
@@ -32,7 +33,6 @@ namespace Doctran.Test.OptionFile
         }
 
         [Test(Description = "Checks that the parser works for well formed data.")]
-        [Category("Precise")]
         public void TestParsing()
         {
             OptionsTest options = new OptionsTest();
@@ -46,7 +46,6 @@ namespace Doctran.Test.OptionFile
         }
 
         [Test]
-        [Category("Precise")]
         [ExpectedException(typeof(WrongDepthException))]
         public void TestLoneSubInformation()
         {
@@ -60,12 +59,12 @@ namespace Doctran.Test.OptionFile
         }
 
         [Test]
-        [Category("Precise")]
+        [ExpectedException(typeof(IOException))]
         public void IncorrectFilePath()
         {
-            OptionsTest options = new OptionsTest();
+            var options = new OptionsTest();
 
-            Parser<OptionsTest> parser = new Parser<OptionsTest>();
+            var parser = new Parser<OptionsTest>();
             parser.AddRecognisedOption("Name");
 
             parser.ParseFile("NonExistant.txt", options);

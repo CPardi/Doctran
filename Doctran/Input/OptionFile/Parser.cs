@@ -104,7 +104,7 @@ namespace Doctran.Input.OptionFile
 
         private IEnumerable<IInformation> ParseLines(string path)
         {
-            string fileName = fileName = Path.GetFileName(path);
+            string fileName = Path.GetFileName(path);
 
             string currentDirectory = Directory.GetCurrentDirectory();
 

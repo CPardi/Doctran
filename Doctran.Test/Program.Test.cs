@@ -27,6 +27,7 @@
         }
 
         [Test]
+        [Ignore("Takes too long to run.")]
         [Category("Full Program")]
         [TestCase(@"mine\Vectors\")]
         [TestCase(@"mine\Timers\")]
