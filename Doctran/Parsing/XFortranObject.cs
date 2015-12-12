@@ -47,7 +47,7 @@ namespace Doctran.Parsing
 		//	return xeles;
 		//}
 
-        private IEnumerable<ObjectGroup> ObjectGroups => this.GoUpTillType<SourceFile>().ObjectGroups;
+        //private IEnumerable<ObjectGroup> ObjectGroups => this.GoUpTillType<SourceFile>().ObjectGroups;
 
   //      private List<XElement> GroupXEle(IFortranObject obj)
 		//{

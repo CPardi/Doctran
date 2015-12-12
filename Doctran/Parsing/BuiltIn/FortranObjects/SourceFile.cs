@@ -18,13 +18,13 @@ namespace Doctran.Parsing.BuiltIn.FortranObjects
     using System.Xml.Linq;
     using Utilitys;
 
-    public class SourceFile : XFortranObject, IHasName, IHasLines, IHasIdentifier, IHasValidName
+    public class SourceFile : FortranObject, IHasName, IHasLines, IHasIdentifier, IHasValidName
     {
         private readonly FileInfo _info;
 
         // Reads a file, determines its type and loads the contained procedure and/or modules.
         public SourceFile(string pathAndFilename, IEnumerable<IFortranObject> subObjects, List<FileLine> lines)
-            : base("File", subObjects, lines)
+            : base(subObjects, lines)
         {
             this.Name = Path.GetFileName(pathAndFilename);
 
@@ -164,19 +164,19 @@ namespace Doctran.Parsing.BuiltIn.FortranObjects
         ///     Outputs an XElement.
         /// </summary>
         /// <returns></returns>
-        public override XElement XEle()
-        {
-            this._info.Refresh();
-            var xele = base.XEle();
-            xele.AddFirst(new XElement("LineCount", this.LineCount),
-                new XElement("Created", this._info.CreationTime.ToXElement()),
-                new XElement("LastModified", this._info.LastWriteTime.ToXElement()),
-                new XElement("ValidName", StringUtils.ValidName(this.Name)),
-                new XElement("Extension", this._info.Extension)
-                );
+        //public XElement XEle()
+        //{
+        //    this._info.Refresh();
+        //    var xele = base.XEle();
+        //    xele.AddFirst(new XElement("LineCount", this.LineCount),
+        //        new XElement("Created", this._info.CreationTime.ToXElement()),
+        //        new XElement("LastModified", this._info.LastWriteTime.ToXElement()),
+        //        new XElement("ValidName", StringUtils.ValidName(this.Name)),
+        //        new XElement("Extension", this._info.Extension)
+        //        );
 
-            return xele;
-        }
+        //    return xele;
+        //}
 
         private static void CheckForPreprocessing(string filename, string line)
         {
