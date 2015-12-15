@@ -1,7 +1,9 @@
-﻿//  Copyright © 2015 Christopher Pardi
-//  This Source Code Form is subject to the terms of the Mozilla Public
-//  License, v. 2.0. If a copy of the MPL was not distributed with this
-//  file, You can obtain one at http://mozilla.org/MPL/2.0/.
+﻿// <copyright file="InformationBlock.cs" company="Christopher Pardi">
+//     Copyright © 2015 Christopher Pardi
+//     This Source Code Form is subject to the terms of the Mozilla Public
+//     License, v. 2.0. If a copy of the MPL was not distributed with this
+//     file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// </copyright>
 
 namespace Doctran.Parsing.BuiltIn.FortranBlocks
 {
@@ -12,13 +14,13 @@ namespace Doctran.Parsing.BuiltIn.FortranBlocks
     using Comments;
     using FortranObjects;
     using Helper;
-    using Parsing;
     using Utilitys;
 
     public class InformationBlock : FortranBlock
     {
-        private int _depth; 
-        private IDictionary<string, IInformationFactory> _factories;
+        private readonly int _depth;
+
+        private readonly IDictionary<string, IInformationFactory> _factories;
 
         public InformationBlock(int depth)
             : base("Information_" + depth, true, false, 1)
@@ -33,17 +35,33 @@ namespace Doctran.Parsing.BuiltIn.FortranBlocks
             _factories = factoryDictionary;
         }
 
-        public void AddFactory(string matchType, IInformationFactory factory)
-        {
-            if (_factories.ContainsKey(matchType)) throw new Exception(); // Change this to another exception type.
-            _factories.Add(matchType, factory);
-        }
-
         public static IEnumerable<InformationBlock> MultiDepthEnumeration(int fromDepth, int toDepth)
         {
             return
                 from i in Enumerable.Range(fromDepth, toDepth)
                 select new InformationBlock(i);
+        }
+
+        public void AddFactory(string matchType, IInformationFactory factory)
+        {
+            if (_factories.ContainsKey(matchType))
+            {
+                throw new Exception(); // Change this to another exception type.
+            }
+            _factories.Add(matchType, factory);
+        }
+
+        public override bool BlockEnd(string parentBlockName, List<FileLine> lines, int lineIndex)
+        {
+            if (lineIndex + 1 >= lines.Count)
+            {
+                return true;
+            }
+
+            return
+                CommentUtils.InfoEnd(lines[lineIndex + 1].Text)
+                || (CommentUtils.InfoStart(lines[lineIndex + 1].Text) && CommentUtils.InfoDepth(lines[lineIndex + 1].Text) <= _depth)
+                || CommentUtils.NDescStart(lines[lineIndex + 1].Text);
         }
 
         public override bool BlockStart(string parentBlockName, List<FileLine> lines, int lineIndex)
@@ -53,36 +71,24 @@ namespace Doctran.Parsing.BuiltIn.FortranBlocks
                 && !CommentUtils.NDescStart(lines[lineIndex].Text);
         }
 
-        public override bool BlockEnd(string parentBlockName, List<FileLine> lines, int lineIndex)
-        {
-            if (lineIndex + 1 >= lines.Count) return true;
-
-            return
-                CommentUtils.InfoEnd(lines[lineIndex + 1].Text)
-                || (CommentUtils.InfoStart(lines[lineIndex + 1].Text) && CommentUtils.InfoDepth(lines[lineIndex + 1].Text) <= _depth)
-                || CommentUtils.NDescStart(lines[lineIndex + 1].Text);
-        }
-
         public override IEnumerable<FortranObject> ReturnObject(IEnumerable<IFortranObject> subObjects, List<FileLine> lines)
         {
             // Regex group the type-name and it's value.
-            Match aMatch = Regex.Match(lines[0].Text.Trim(), @"!>+?\s*?(\w+)\s*?:\s*?(.*)");
+            var aMatch = Regex.Match(lines[0].Text.Trim(), @"!>+?\s*?(\w+)\s*?:\s*?(.*)");
 
             // Retrieve the type name
-            string typeName = aMatch.Groups[1].Value.Trim();
+            var typeName = aMatch.Groups[1].Value.Trim();
 
             // Retrieve the value, from the definition line and any subsequent lines.
-            string value = aMatch.Groups[2].Value.Trim()
-                + string.Concat(lines.Skip(1)
-                                .Where(line => line.Number <= (subObjects.Any() ? subObjects.First().Lines.First().Number - 1 : lines.Last().Number))
-                                .Select(line => line.Text.Substring(_depth + 1) + Environment.NewLine));
+            var value = aMatch.Groups[2].Value.Trim()
+                        + string.Concat(lines.Skip(1)
+                            .Where(line => line.Number <= (subObjects.Any() ? subObjects.First().Lines.First().Number - 1 : lines.Last().Number))
+                            .Select(line => line.Text.Substring(_depth + 1) + Environment.NewLine));
 
-            IEnumerable<FortranObject> objs = _factories.ContainsKey(typeName)
-                ?
-                    _factories[typeName].Create(_depth, value, subObjects, lines).Cast<FortranObject>()
-                :
-                    CollectionUtils.Singlet(new XInformation(_depth, typeName, value, subObjects, lines));
-            return objs.ToList();            
+            var objs = _factories.ContainsKey(typeName)
+                ? _factories[typeName].Create(_depth, value, subObjects, lines).Cast<FortranObject>()
+                : CollectionUtils.Singlet(new XInformation(_depth, typeName, value, subObjects, lines));
+            return objs.ToList();
         }
     }
 

@@ -1,3 +1,10 @@
+// <copyright file="XmlGenerator.cs" company="Christopher Pardi">
+//     Copyright © 2015 Christopher Pardi
+//     This Source Code Form is subject to the terms of the Mozilla Public
+//     License, v. 2.0. If a copy of the MPL was not distributed with this
+//     file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// </copyright>
+
 namespace Doctran.Parsing
 {
     using System;
@@ -9,7 +16,9 @@ namespace Doctran.Parsing
     public class XmlGenerator
     {
         private readonly Dictionary<Type, Func<IFortranObject, IEnumerable<XElement>>> _interfaceXmlDictionary;
+
         private readonly Dictionary<Type, Func<IEnumerable<XElement>, XElement>> _toGroupXmlDictionary;
+
         private readonly Dictionary<Type, Func<IFortranObject, XElement>> _toXmlDictionary;
 
         public XmlGenerator(
@@ -35,7 +44,7 @@ namespace Doctran.Parsing
                 select groupType;
 
             var str = string.Concat(keys.Select((k, i) => i == 0 ? $"'{k.Name}'" : $", '{k.Name}'"));
-            if (str != string.Empty)
+            if (str != "")
             {
                 throw new ApplicationException($"A group XElement exists for the types {str} for which there is no corresponding object XElement.");
             }

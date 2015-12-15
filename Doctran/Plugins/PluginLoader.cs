@@ -1,4 +1,11 @@
-﻿namespace Doctran.Plugins
+﻿// <copyright file="PluginLoader.cs" company="Christopher Pardi">
+//     Copyright © 2015 Christopher Pardi
+//     This Source Code Form is subject to the terms of the Mozilla Public
+//     License, v. 2.0. If a copy of the MPL was not distributed with this
+//     file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// </copyright>
+
+namespace Doctran.Plugins
 {
     using System;
     using System.Collections.Generic;
@@ -10,16 +17,11 @@
 
     public static class PluginLoader
     {
-        public static void Initialize()
-        {
-            var assemblyLoader = new AssemblyLoader(EnvVar.PluginPath);
-            var plugins = assemblyLoader.GetClassInstances<IPlugin>();
+        public static IEnumerable<IInterfaceXElements> AllInterfaceXElements => DocumentationElementManager.AllInterfaceXElements;
 
-            foreach (var p in plugins)
-            {
-                p.Initialize();
-            }
-        }
+        public static IEnumerable<IGroupXElement> AllObjectGroupXElements => DocumentationElementManager.AllObjectGroupXElements;
+
+        public static IEnumerable<IObjectXElement> AllObjectXElements => DocumentationElementManager.AllObjectXElements;
 
         public static ILanguageParser GetLanguageFromExtension(string path)
         {
@@ -35,10 +37,15 @@
             throw e;
         }
 
-        public static IEnumerable<IInterfaceXElements> AllInterfaceXElements => DocumentationElementManager.AllInterfaceXElements;
+        public static void Initialize()
+        {
+            var assemblyLoader = new AssemblyLoader(EnvVar.PluginPath);
+            var plugins = assemblyLoader.GetClassInstances<IPlugin>();
 
-        public static IEnumerable<IObjectXElement> AllObjectXElements => DocumentationElementManager.AllObjectXElements;
-
-        public static IEnumerable<IGroupXElement> AllObjectGroupXElements => DocumentationElementManager.AllObjectGroupXElements;
+            foreach (var p in plugins)
+            {
+                p.Initialize();
+            }
+        }
     }
 }

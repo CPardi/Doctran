@@ -1,3 +1,10 @@
+// <copyright file="StringUtils.cs" company="Christopher Pardi">
+//     Copyright © 2015 Christopher Pardi
+//     This Source Code Form is subject to the terms of the Mozilla Public
+//     License, v. 2.0. If a copy of the MPL was not distributed with this
+//     file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// </copyright>
+
 namespace Doctran.Utilitys
 {
     using System.Collections.Generic;
@@ -17,7 +24,10 @@ namespace Doctran.Utilitys
                 {
                     withinBracketsDepth++;
                 }
-                if (aChar == ')' | aChar == ']') withinBracketsDepth--;
+                if (aChar == ')' | aChar == ']')
+                {
+                    withinBracketsDepth--;
+                }
                 if (withinBracketsDepth == 0 & aChar == delimiter)
                 {
                     delimiteredText.Add(text.Substring(prevIndex, currentIndex - prevIndex).Trim());
@@ -47,8 +57,14 @@ namespace Doctran.Utilitys
                 }
                 else
                 {
-                    if (sQuotes) sQuotes = aChar != '\'';
-                    if (dQuotes) dQuotes = aChar != '"';
+                    if (sQuotes)
+                    {
+                        sQuotes = aChar != '\'';
+                    }
+                    if (dQuotes)
+                    {
+                        dQuotes = aChar != '"';
+                    }
                 }
 
                 if (!(sQuotes | dQuotes) && aChar == delimiter)
@@ -82,7 +98,7 @@ namespace Doctran.Utilitys
         {
             if (string.IsNullOrEmpty(s))
             {
-                return string.Empty;
+                return "";
             }
             return char.ToUpper(s[0]) + s.Substring(1);
         }

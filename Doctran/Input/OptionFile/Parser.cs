@@ -1,7 +1,9 @@
-﻿//  Copyright © 2015 Christopher Pardi
-//  This Source Code Form is subject to the terms of the Mozilla Public
-//  License, v. 2.0. If a copy of the MPL was not distributed with this
-//  file, You can obtain one at http://mozilla.org/MPL/2.0/.
+﻿// <copyright file="Parser.cs" company="Christopher Pardi">
+//     Copyright © 2015 Christopher Pardi
+//     This Source Code Form is subject to the terms of the Mozilla Public
+//     License, v. 2.0. If a copy of the MPL was not distributed with this
+//     file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// </copyright>
 
 namespace Doctran.Input.OptionFile
 {
@@ -40,10 +42,10 @@ namespace Doctran.Input.OptionFile
 
             var infoArray = infos as IInformation[] ?? infos.ToArray();
             var xmlPassThrough =
-                    from info in infoArray
-                    where info is XInformation
-                    let infoXml = info as XInformation
-                    select infoXml.XEle();
+                from info in infoArray
+                where info is XInformation
+                let infoXml = info as XInformation
+                select infoXml.XEle();
 
             var props = options.GetType().GetProperties();
 
@@ -62,7 +64,9 @@ namespace Doctran.Input.OptionFile
                     var list = prop.GetValue(options, null) as ICollection<string>;
                     var infoName = infoArray.Where(i => i is Option && i.Name == valueAttr.Name).Select(i => (i as Option).Value);
                     if (list == null)
+                    {
                         prop.SetValue(options, infoName.SingleOrDefault(), null);
+                    }
                     else
                     {
                         try
@@ -88,25 +92,11 @@ namespace Doctran.Input.OptionFile
             return true;
         }
 
-        private void TestParseResults(IEnumerable<IFortranObject> infos)
-        {
-            TestDepth(infos);
-        }
-
-        private void TestDepth(IEnumerable<IFortranObject> infos, int depth = 1)
-        {
-            foreach (var i in infos)
-            {
-                if((i as IInformation).Depth != depth) throw new WrongDepthException(i.Lines.First(), depth, (i as IInformation).Depth);
-                TestDepth(i.SubObjects, depth + 1);
-            }
-        }
-
         private IEnumerable<IInformation> ParseLines(string path)
         {
-            string fileName = Path.GetFileName(path);
+            var fileName = Path.GetFileName(path);
 
-            string currentDirectory = Directory.GetCurrentDirectory();
+            var currentDirectory = Directory.GetCurrentDirectory();
 
             try
             {
@@ -123,7 +113,10 @@ namespace Doctran.Input.OptionFile
                 throw;
             }
 
-            if (string.IsNullOrEmpty(path)) return new List<IInformation>();
+            if (string.IsNullOrEmpty(path))
+            {
+                return new List<IInformation>();
+            }
 
             var info = new InformationBlock(1, _factories);
 
@@ -132,7 +125,7 @@ namespace Doctran.Input.OptionFile
             infoList.AddRange(from i in Enumerable.Range(2, 4)
                 select new InformationBlock(i));
 
-            Parser parser = new Parser(infoList);
+            var parser = new Parser(infoList);
             try
             {
                 var result = parser.ParseFile(fileName, this.ReadAndPreProcessFile(fileName)).SubObjects;
@@ -158,9 +151,25 @@ namespace Doctran.Input.OptionFile
         private List<FileLine> ReadAndPreProcessFile(string path)
         {
             return (from line in SourceFile.ReadFile(path)
-                    select new FileLine(line.Number, line.Text != "" ? "!>" + line.Text : "")
-                   ).ToList();
+                select new FileLine(line.Number, line.Text != "" ? "!>" + line.Text : "")
+                ).ToList();
         }
 
+        private void TestDepth(IEnumerable<IFortranObject> infos, int depth = 1)
+        {
+            foreach (var i in infos)
+            {
+                if ((i as IInformation).Depth != depth)
+                {
+                    throw new WrongDepthException(i.Lines.First(), depth, (i as IInformation).Depth);
+                }
+                TestDepth(i.SubObjects, depth + 1);
+            }
+        }
+
+        private void TestParseResults(IEnumerable<IFortranObject> infos)
+        {
+            TestDepth(infos);
+        }
     }
 }

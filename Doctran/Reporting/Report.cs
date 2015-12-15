@@ -1,3 +1,10 @@
+// <copyright file="Report.cs" company="Christopher Pardi">
+//     Copyright © 2015 Christopher Pardi
+//     This Source Code Form is subject to the terms of the Mozilla Public
+//     License, v. 2.0. If a copy of the MPL was not distributed with this
+//     file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// </copyright>
+
 namespace Doctran.Reporting
 {
     using System;
@@ -7,7 +14,7 @@ namespace Doctran.Reporting
     using CommandLine.Text;
     using Utilitys;
 
-    public class Report
+    public static class Report
     {
         public static ReportMode ReportMode { get; set; } = ReportMode.Debug;
 
@@ -28,36 +35,19 @@ namespace Doctran.Reporting
             }
         }
 
-        public static void MessageThenExit(Action<ConsolePublisher> publish)
+        public static void Error(Exception exception)
         {
-            var publisher = new ConsolePublisher();
-            publish(publisher);
-            publisher.Publish();
-            Environment.Exit(1);
-        }
-
-        public static void Warnings<TException>(Action<ConsolePublisher, TException> publish, IEnumerable<TException> warnings)
-            where TException : Exception
-        {
-            var warningsList = warnings as IList<TException> ?? warnings.ToList();
-            if (!warningsList.Any())
+            switch (ReportMode)
             {
-                return;
+                case ReportMode.Debug:
+                    Rethrow(exception);
+                    break;
+                case ReportMode.Release:
+                {
+                    ApplicationExit();
+                    break;
+                }
             }
-
-            foreach (var warning in warningsList)
-            {
-                var publisher = new ConsolePublisher();
-                publish(publisher, warning);
-                publisher.Publish();
-            }
-        }
-
-        public static void Warning(Action<ConsolePublisher> publish)
-        {
-            var publisher = new ConsolePublisher();
-            publish(publisher);
-            publisher.Publish();
         }
 
         public static void Errors<TException>(Action<ConsolePublisher, TException> publish, IEnumerable<TException> errors, bool terminate = true)
@@ -81,17 +71,15 @@ namespace Doctran.Reporting
                 Environment.Exit(1);
             }
 
-            if (ReportMode != ReportMode.Debug)
-            {
-                return;
-            }
+            ThrowExceptions(errorList);
+        }
 
-            if (errorList.Count == 1)
-            {
-                throw errorList.Single();
-            }
-
-            throw new AggregateException(errorList);
+        public static void MessageThenExit(Action<ConsolePublisher> publish)
+        {
+            var publisher = new ConsolePublisher();
+            publish(publisher);
+            publisher.Publish();
+            Environment.Exit(1);
         }
 
         public static void SetDebugProfile()
@@ -123,19 +111,35 @@ namespace Doctran.Reporting
             return help;
         }
 
-        public void Error(Exception exception)
+        public static void Warning(Action<ConsolePublisher> publish)
         {
-            switch (ReportMode)
+            var publisher = new ConsolePublisher();
+            publish(publisher);
+            publisher.Publish();
+
+            if (ReportMode == ReportMode.Debug)
             {
-                case ReportMode.Debug:
-                    Rethrow(exception);
-                    break;
-                case ReportMode.Release:
-                    {
-                        ApplicationExit();
-                        break;
-                    }
+                throw new ApplicationException("Exception from publisher.");
             }
+        }
+
+        public static void Warnings<TException>(Action<ConsolePublisher, TException> publish, IEnumerable<TException> warnings)
+            where TException : Exception
+        {
+            var warningsList = warnings as IList<TException> ?? warnings.ToList();
+            if (!warningsList.Any())
+            {
+                return;
+            }
+
+            foreach (var warning in warningsList)
+            {
+                var publisher = new ConsolePublisher();
+                publish(publisher, warning);
+                publisher.Publish();
+            }
+
+            ThrowExceptions(warningsList);
         }
 
         private static void ApplicationExit()
@@ -146,6 +150,22 @@ namespace Doctran.Reporting
         private static void Rethrow(Exception exception)
         {
             throw exception;
+        }
+
+        private static void ThrowExceptions<TException>(IList<TException> errorList) 
+            where TException : Exception
+        {
+            if (ReportMode != ReportMode.Debug)
+            {
+                return;
+            }
+
+            if (errorList.Count == 1)
+            {
+                throw errorList.Single();
+            }
+
+            throw new AggregateException(errorList);
         }
     }
 }

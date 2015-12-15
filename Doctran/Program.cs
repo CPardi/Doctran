@@ -1,7 +1,9 @@
-﻿//  Copyright © 2015 Christopher Pardi
-//  This Source Code Form is subject to the terms of the Mozilla Public
-//  License, v. 2.0. If a copy of the MPL was not distributed with this
-//  file, You can obtain one at http://mozilla.org/MPL/2.0/.
+﻿// <copyright file="Program.cs" company="Christopher Pardi">
+//     Copyright © 2015 Christopher Pardi
+//     This Source Code Form is subject to the terms of the Mozilla Public
+//     License, v. 2.0. If a copy of the MPL was not distributed with this
+//     file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// </copyright>
 
 namespace Doctran
 {
@@ -32,24 +34,33 @@ namespace Doctran
 
             Report.SetReleaseProfile();
 
-            var options = GetOptions(args);            
+            var options = GetOptions(args);
             options.SourceFilePaths.KeepDistinctOnly();
             EnvVar.Verbose = options.Verbose;
-           
+
             var project = GetProject(options.SourceFilePaths);
 
             OutputTheme(options);
             var xmlOutputter = GetXmlOutputter(project, options.XmlInformation, options.OutputDirectory, options.SaveXmlPath);
-            //OutputHtml(project, xmlOutputter, options);
+            OutputHtml(project, xmlOutputter, options);
 
-            if (EnvVar.Verbose >= 2) Console.WriteLine("Done");
-            if (EnvVar.Verbose >= 2) Console.WriteLine(@"Documentation can be found at """ + Path.GetFullPath(options.OutputDirectory) + @"""");
-            if (EnvVar.Verbose >= 2) Console.WriteLine(@"Documentation generation complete.");
+            if (EnvVar.Verbose >= 2)
+            {
+                Console.WriteLine("Done");
+            }
+            if (EnvVar.Verbose >= 2)
+            {
+                Console.WriteLine(@"Documentation can be found at """ + Path.GetFullPath(options.OutputDirectory) + @"""");
+            }
+            if (EnvVar.Verbose >= 2)
+            {
+                Console.WriteLine(@"Documentation generation complete.");
+            }
             return 0;
         }
 
         private static Options GetOptions(string[] args)
-        {           
+        {
             var options = new Options();
 
             try
@@ -63,7 +74,8 @@ namespace Doctran
                     {
                         pub.AddErrorDescription("Invalid argument list.");
                         pub.AddReason(e.Message);
-                    }, e);
+                    },
+                    e);
             }
 
             ShowLicensing = options.ShowLicensing;
@@ -72,20 +84,13 @@ namespace Doctran
 
             if (options.ShowHelp)
             {
-                Report.MessageThenExit(
-                    pub =>
-                    {
-                        pub.AddMessage(options.GetUsage());
-                    });
+                Report.MessageThenExit(pub => { pub.AddMessage(options.GetUsage()); });
             }
 
             if (options.ShowPluginInformation)
             {
                 Report.MessageThenExit(
-                    pub =>
-                    {
-                        pub.AddMessage(PluginManager.InformationString);
-                    });
+                    pub => { pub.AddMessage(PluginManager.InformationString); });
             }
 
             var fileParser = new Parser<Options>();
@@ -102,13 +107,19 @@ namespace Doctran
 
         private static Project GetProject(IEnumerable<string> sourceFiles)
         {
-            if (EnvVar.Verbose >= 2) Console.Write("Analysing project block structure... ");
+            if (EnvVar.Verbose >= 2)
+            {
+                Console.Write("Analysing project block structure... ");
+            }
             return ProgramHelper.ParseProject(sourceFiles);
         }
 
         private static XmlOutputter GetXmlOutputter(Project project, XElement xmlInformation, string outputDirectory, string saveXmlPath)
         {
-            if (EnvVar.Verbose >= 2) Console.Write("Done" + Environment.NewLine + "Generating xml... ");
+            if (EnvVar.Verbose >= 2)
+            {
+                Console.Write("Done" + Environment.NewLine + "Generating xml... ");
+            }
             var xmlOutputter = new XmlOutputter(project.XEle(xmlInformation));
             if (saveXmlPath != null)
             {
@@ -117,21 +128,33 @@ namespace Doctran
             return xmlOutputter;
         }
 
+        private static string ModXmlPath(string saveXmlPath)
+        {
+            var ext = Path.GetExtension(saveXmlPath);
+            return saveXmlPath.Substring(0, saveXmlPath.Length - ext?.Length ?? 0) + "mod" + ext;
+        }
+
         private static void OutputHtml(FortranObject project, XmlOutputter xmlOutputter, Options options)
         {
-            var xElements = 
+            var xElements =
                 (from file in project.SubObjectsOfType<SourceFile>()
-                select file.SourceXEle).ToList();
+                    select file.SourceXEle).ToList();
             var reader = new XDocument(new XElement("Source", xElements)).CreateReader();
 
-            if (EnvVar.Verbose >= 2) Console.Write("Done" + Environment.NewLine + "Generating htmls... ");
+            if (EnvVar.Verbose >= 2)
+            {
+                Console.Write("Done" + Environment.NewLine + "Generating htmls... ");
+            }
 
             var preProcess = new XsltRunner(Path.Combine(EnvVar.ExecPath, "themes", options.ThemeName, "main_pre.xslt"));
             var preProcessResult = preProcess.Run(xmlOutputter.XDocument, Path.GetFullPath(options.OutputDirectory));
 
+            preProcessResult.Save(Path.Combine(options.OutputDirectory, ModXmlPath(options.SaveXmlPath)));
+
             var htmlOutputter = new XsltRunner(Path.Combine(EnvVar.ExecPath, "themes", options.ThemeName, "main.xslt"));
 
-            htmlOutputter.Run(preProcessResult.ToXDocument(),
+            htmlOutputter.Run(
+                preProcessResult.ToXDocument(),
                 Path.GetFullPath(options.OutputDirectory) + EnvVar.Slash,
                 new KeyValuePair<string, object>("verbose", EnvVar.Verbose),
                 new KeyValuePair<string, object>("source", reader));
@@ -139,16 +162,19 @@ namespace Doctran
 
         private static void OutputTheme(Options options)
         {
-            if (EnvVar.Verbose >= 2) Console.Write("Done" + Environment.NewLine + "Outputting theme files... ");
+            if (EnvVar.Verbose >= 2)
+            {
+                Console.Write("Done" + Environment.NewLine + "Outputting theme files... ");
+            }
             var themeOutputter = new ThemeOutputter();
             themeOutputter.Output(options);
         }
-        
+
         private static void UnhandledExceptionTrapper(object sender, UnhandledExceptionEventArgs e)
         {
             try
             {
-                var ex = (Exception) e.ExceptionObject;
+                var ex = (Exception)e.ExceptionObject;
 
                 var logPath = Path.GetFullPath("errors.log");
                 Console.WriteLine("internal error");
@@ -157,27 +183,27 @@ namespace Doctran
                 {
                     sq.WriteLine("======Exception Type======");
                     sq.WriteLine(ex.GetType().Name);
-                    sq.WriteLine("");
+                    sq.WriteLine(string.Empty);
 
                     sq.WriteLine("======Message======");
                     sq.WriteLine(ex.Message);
-                    sq.WriteLine("");
+                    sq.WriteLine(string.Empty);
 
                     sq.WriteLine("======StackTrace======");
                     sq.WriteLine(ex.StackTrace);
-                    sq.WriteLine("");
+                    sq.WriteLine(string.Empty);
 
                     sq.WriteLine("======Data======");
                     sq.WriteLine(ex.Data);
-                    sq.WriteLine("");
+                    sq.WriteLine(string.Empty);
 
                     sq.WriteLine("======InnerException======");
                     sq.WriteLine(ex.InnerException);
-                    sq.WriteLine("");
+                    sq.WriteLine(string.Empty);
 
                     sq.WriteLine("======Source======");
                     sq.WriteLine(ex.Source);
-                    sq.WriteLine("");
+                    sq.WriteLine(string.Empty);
                 }
             }
             finally

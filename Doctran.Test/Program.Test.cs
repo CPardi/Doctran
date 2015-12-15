@@ -1,7 +1,13 @@
-﻿namespace Doctran.Test
+﻿// <copyright file="Program.Test.cs" company="Christopher Pardi">
+//     Copyright © 2015 Christopher Pardi
+//     This Source Code Form is subject to the terms of the Mozilla Public
+//     License, v. 2.0. If a copy of the MPL was not distributed with this
+//     file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// </copyright>
+
+namespace Doctran.Test
 {
     using System;
-    using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using NUnit.Framework;
@@ -9,22 +15,11 @@
     [TestFixture]
     public class ProgramTest
     {
-        private string _currentDir;
         private readonly StringWriter _sw = new StringWriter();
+
         private readonly TextReader _tr = new StringReader("");
 
-        [SetUp]
-        public void Setup()
-        {
-            _currentDir = Directory.GetCurrentDirectory();
-            Directory.SetCurrentDirectory(@"C:\Documents\Programming\VirtualBox_TestBed\TestFiles");
-        }
-
-        [TearDown]
-        public void TearDown()
-        {
-            Directory.SetCurrentDirectory(_currentDir);
-        }
+        private string _currentDir;
 
         [Test]
         [Ignore("Takes too long to run.")]
@@ -50,6 +45,19 @@
             args.Add("--project_info");
             args.Add(soureDir + @"Doctran\project.info");
             Program.Main(args.ToArray());
+        }
+
+        [SetUp]
+        public void Setup()
+        {
+            _currentDir = Directory.GetCurrentDirectory();
+            Directory.SetCurrentDirectory(@"C:\Documents\Programming\VirtualBox_TestBed\TestFiles");
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            Directory.SetCurrentDirectory(_currentDir);
         }
     }
 }

@@ -1,11 +1,9 @@
-﻿//-----------------------------------------------------------------------
-// <copyright file="TitledTextBuilder.cs" company="Christopher Pardi">
-// Copyright © 2015 Christopher Pardi
-// This Source Code Form is subject to the terms of the Mozilla Public
-// License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+﻿// <copyright file="TitledTextBuilder.cs" company="Christopher Pardi">
+//     Copyright © 2015 Christopher Pardi
+//     This Source Code Form is subject to the terms of the Mozilla Public
+//     License, v. 2.0. If a copy of the MPL was not distributed with this
+//     file, You can obtain one at http://mozilla.org/MPL/2.0/.
 // </copyright>
-//-----------------------------------------------------------------------
 
 namespace Doctran.Helper
 {
@@ -18,7 +16,9 @@ namespace Doctran.Helper
     internal class TitledTextBuilder
     {
         private readonly StringBuilder _sb = new StringBuilder();
+
         private readonly List<string> _texts = new List<string>();
+
         private readonly List<string> _titles = new List<string>();
 
         public int LeftMargin { get; set; } = 1;
@@ -58,7 +58,7 @@ namespace Doctran.Helper
             var writableWidth = Math.Min(Console.BufferWidth, Console.LargestWindowWidth) - this.RightMargin;
 
             var pos = indentWidth;
-            foreach (var t in Regex.Split(text, $@"(?<=[{Regex.Escape(string.Concat(Seperators))}])").Where(t => t != string.Empty))
+            foreach (var t in Regex.Split(text, $@"(?<=[{Regex.Escape(string.Concat(Seperators))}])").Where(t => t != ""))
             {
                 pos += t.Length;
 

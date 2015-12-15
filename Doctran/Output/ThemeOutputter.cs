@@ -1,7 +1,9 @@
-﻿//  Copyright © 2015 Christopher Pardi
-//  This Source Code Form is subject to the terms of the Mozilla Public
-//  License, v. 2.0. If a copy of the MPL was not distributed with this
-//  file, You can obtain one at http://mozilla.org/MPL/2.0/.
+﻿// <copyright file="ThemeOutputter.cs" company="Christopher Pardi">
+//     Copyright © 2015 Christopher Pardi
+//     This Source Code Form is subject to the terms of the Mozilla Public
+//     License, v. 2.0. If a copy of the MPL was not distributed with this
+//     file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// </copyright>
 
 namespace Doctran.Output
 {
@@ -39,11 +41,15 @@ namespace Doctran.Output
 
             // Copy user's extra files.
             foreach (var filePath in options.CopyPaths)
+            {
                 CopyFile(options.OverwriteExisting, false, outputDirectory, relativeDirectory, relativeDirectory + filePath);
+            }
 
             // Copy and parse user's extra files.
             foreach (var filePath in options.CopyAndParsePaths)
+            {
                 CopyFile(options.OverwriteExisting, true, outputDirectory, relativeDirectory, relativeDirectory + filePath);
+            }
 
             // Copy theme files.
             CopyFilesFromDir(options.OverwriteExisting, true, true, outputDirectory, EnvVar.ThemeDirectory(options.ThemeName), "");
@@ -65,7 +71,9 @@ namespace Doctran.Output
         private void CopyFilesFromDir(bool overwrite, bool parse, bool recursive, string outputDirectory, string relativeDirectory, string directoryPath)
         {
             foreach (var filePath in Directory.GetFiles(relativeDirectory + directoryPath, "*", recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly))
+            {
                 CopyFile(overwrite, parse, outputDirectory, relativeDirectory, filePath);
+            }
         }
 
         internal class FileCopier
@@ -74,7 +82,10 @@ namespace Doctran.Output
             {
                 var outputFilePath = copyToDirectory + filePath.Substring(relativePath.Length);
                 Directory.CreateDirectory(Path.GetDirectoryName(Path.GetFullPath(outputFilePath)));
-                if (!File.Exists(outputFilePath) || overwrite) File.Copy(filePath, outputFilePath, overwrite);
+                if (!File.Exists(outputFilePath) || overwrite)
+                {
+                    File.Copy(filePath, outputFilePath, overwrite);
+                }
             }
         }
 
@@ -131,6 +142,7 @@ namespace Doctran.Output
             }
 
             public string Extension { get; }
+
             public string NewExtension { get; }
 
             public override void Run(string relativePath, string filePath, string copyToDirectory, bool overwrite)
@@ -138,13 +150,19 @@ namespace Doctran.Output
                 var outputFilePath = copyToDirectory + filePath.Substring(relativePath.Length);
                 Directory.CreateDirectory(Path.GetDirectoryName(outputFilePath));
                 var outputPath = ChangeExtension(outputFilePath);
-                if (overwrite || !File.Exists(outputPath)) File.WriteAllText(outputPath, this.ReadFile(filePath));
+                if (overwrite || !File.Exists(outputPath))
+                {
+                    File.WriteAllText(outputPath, this.ReadFile(filePath));
+                }
             }
 
             protected string ChangeExtension(string filePath)
             {
                 var actualExtension = Path.GetExtension(filePath);
-                if (actualExtension != Extension) throw new FormatException("File path has the extension " + actualExtension + ", expected " + Extension);
+                if (actualExtension != Extension)
+                {
+                    throw new FormatException("File path has the extension " + actualExtension + ", expected " + Extension);
+                }
                 return filePath.Substring(0, filePath.Length - Extension.Length) + NewExtension;
             }
 

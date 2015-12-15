@@ -1,10 +1,27 @@
-﻿namespace Doctran.Reporting
+﻿// <copyright file="ConsolePublisher.cs" company="Christopher Pardi">
+//     Copyright © 2015 Christopher Pardi
+//     This Source Code Form is subject to the terms of the Mozilla Public
+//     License, v. 2.0. If a copy of the MPL was not distributed with this
+//     file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// </copyright>
+
+namespace Doctran.Reporting
 {
     using System;
     using Helper;
 
     public class ConsolePublisher
     {
+        private string ErrorDescription { get; set; }
+
+        private string Location { get; set; }
+
+        private string Message { get; set; }
+
+        private string Reason { get; set; }
+
+        private string WarningDescription { get; set; }
+
         public void AddErrorDescription(string description)
         {
             if (ErrorDescription != null)
@@ -18,31 +35,6 @@
             }
 
             ErrorDescription = description;
-        }
-
-        public void AddWarningDescription(string description)
-        {
-            if (ErrorDescription != null)
-            {
-                throw new InvalidOperationException("Cannot specify both an error and a warning description.");
-            }
-
-            if (WarningDescription != null)
-            {
-                throw new InvalidOperationException("Cannot specify more than one warning description.");
-            }
-
-            WarningDescription = description;
-        }
-
-        public void AddReason(string reason)
-        {
-            if (Reason != null)
-            {
-                throw new InvalidOperationException("Cannot specify more than one error reason.");
-            }
-
-            Reason = reason;
         }
 
         public void AddLocation(string location)
@@ -63,6 +55,31 @@
             }
 
             Message = message;
+        }
+
+        public void AddReason(string reason)
+        {
+            if (Reason != null)
+            {
+                throw new InvalidOperationException("Cannot specify more than one error reason.");
+            }
+
+            Reason = reason;
+        }
+
+        public void AddWarningDescription(string description)
+        {
+            if (ErrorDescription != null)
+            {
+                throw new InvalidOperationException("Cannot specify both an error and a warning description.");
+            }
+
+            if (WarningDescription != null)
+            {
+                throw new InvalidOperationException("Cannot specify more than one warning description.");
+            }
+
+            WarningDescription = description;
         }
 
         public void Publish()
@@ -93,16 +110,6 @@
 
             Console.WriteLine(ttb.ToString());
         }
-
-        private string WarningDescription { get; set; }
-
-        private string ErrorDescription { get; set; }
-
-        private string Reason { get; set; }
-
-        private string Location { get; set; }
-
-        private string Message { get; set; }
 
         private static void AddNewLine()
         {

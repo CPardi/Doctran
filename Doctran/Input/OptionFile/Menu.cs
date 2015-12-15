@@ -1,7 +1,9 @@
-﻿//  Copyright © 2015 Christopher Pardi
-//  This Source Code Form is subject to the terms of the Mozilla Public
-//  License, v. 2.0. If a copy of the MPL was not distributed with this
-//  file, You can obtain one at http://mozilla.org/MPL/2.0/.
+﻿// <copyright file="Menu.cs" company="Christopher Pardi">
+//     Copyright © 2015 Christopher Pardi
+//     This Source Code Form is subject to the terms of the Mozilla Public
+//     License, v. 2.0. If a copy of the MPL was not distributed with this
+//     file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// </copyright>
 
 namespace Doctran.Input.OptionFile
 {
@@ -19,8 +21,9 @@ namespace Doctran.Input.OptionFile
         public IEnumerable<IInformation> Create(int depth, string value, IEnumerable<IFortranObject> subObjects, List<FileLine> lines)
         {
             var menuHtml = OtherUtils.GetMarkUpFile(Directory.GetCurrentDirectory() + EnvVar.Slash, value);
+
             // Change any .md extensions to .html
-            var menuString = Regex.Replace(menuHtml.Item2, @"(.*?\.)(?:md|markdown)", new MatchEvaluator(match => match.Groups[1].Value + "html"));
+            var menuString = Regex.Replace(menuHtml.Item2, @"(.*?\.)(?:md|markdown)", match => match.Groups[1].Value + "html");
 
             yield return new Menu(depth, menuString, subObjects, lines);
         }
@@ -29,7 +32,8 @@ namespace Doctran.Input.OptionFile
     public class Menu : XInformation
     {
         public Menu(int depth, string menuString, IEnumerable<IFortranObject> subObjects, List<FileLine> lines)
-            : base(depth, "Menu", menuString, subObjects, lines) { }
+            : base(depth, "Menu", menuString, subObjects, lines)
+        {
+        }
     }
-
 }

@@ -1,21 +1,23 @@
-﻿//  Copyright © 2015 Christopher Pardi
-//  This Source Code Form is subject to the terms of the Mozilla Public
-//  License, v. 2.0. If a copy of the MPL was not distributed with this
-//  file, You can obtain one at http://mozilla.org/MPL/2.0/.
+﻿// <copyright file="SourceFile.cs" company="Christopher Pardi">
+//     Copyright © 2015 Christopher Pardi
+//     This Source Code Form is subject to the terms of the Mozilla Public
+//     License, v. 2.0. If a copy of the MPL was not distributed with this
+//     file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// </copyright>
 
 namespace Doctran.Parsing.BuiltIn.FortranObjects
 {
-    using ColorCode;
-    using ColorCode.Formatting;
-    using ColorCode.Styling.StyleSheets;
-    using Helper;
-    using Reporting;
     using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Text.RegularExpressions;
     using System.Xml.Linq;
+    using ColorCode;
+    using ColorCode.Formatting;
+    using ColorCode.Styling.StyleSheets;
+    using Helper;
+    using Reporting;
     using Utilitys;
 
     public class SourceFile : FortranObject, IHasName, IHasLines, IHasIdentifier, IHasValidName
@@ -35,12 +37,20 @@ namespace Doctran.Parsing.BuiltIn.FortranObjects
             this.Name = Path.GetFileNameWithoutExtension(pathAndFilename);
         }
 
-        public string Name { get; }
         public DateTime Created => _info.CreationTime;
+
         public string Extension => _info.Extension;
+
+        public string Identifier => $"{this.Name}{this.Extension}";
+
         public DateTime LastModified => _info.LastWriteTime;
+
         public int LineCount => this.Lines.Count - 1;
+
+        public string Name { get; }
+
         public List<FileLine> OriginalLines { get; set; }
+
         public string PathAndFilename { get; }
 
         public XElement SourceXEle
@@ -177,7 +187,6 @@ namespace Doctran.Parsing.BuiltIn.FortranObjects
 
         //    return xele;
         //}
-
         private static void CheckForPreprocessing(string filename, string line)
         {
             if (Regex.IsMatch(StringUtils.RemoveInlineComment(line), @"^\s*(?:#define|#elif|#elifdef|#elifndef|#else|#endif|#error|#if|#ifdef|#ifndef|#line|#pragma|#undef|#include)"))
@@ -197,7 +206,10 @@ namespace Doctran.Parsing.BuiltIn.FortranObjects
 
             lineIndex++;
             OtherUtils.SkipComment(lines, ref lineIndex);
-            if (StringUtils.RemoveInlineComment(lines[lineIndex].Text) == "") lineIndex++;
+            if (StringUtils.RemoveInlineComment(lines[lineIndex].Text) == "")
+            {
+                lineIndex++;
+            }
             return lineTextNoComment.TrimEnd('&') + MergeContinuations(ref lineIndex, lines, true);
         }
 
@@ -211,10 +223,8 @@ namespace Doctran.Parsing.BuiltIn.FortranObjects
                 return new List<string> { line };
             }
 
-            lines[lines.Count - 1] += (lineNocomm.Length > 1 ? "!" + string.Concat(lineNocomm.Skip(1)) : "");
+            lines[lines.Count - 1] += lineNocomm.Length > 1 ? "!" + string.Concat(lineNocomm.Skip(1)) : "";
             return lines;
         }
-
-        public string Identifier => this.Name;
     }
 }

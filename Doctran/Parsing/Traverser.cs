@@ -1,7 +1,9 @@
-﻿//  Copyright © 2015 Christopher Pardi
-//  This Source Code Form is subject to the terms of the Mozilla Public
-//  License, v. 2.0. If a copy of the MPL was not distributed with this
-//  file, You can obtain one at http://mozilla.org/MPL/2.0/.
+﻿// <copyright file="Traverser.cs" company="Christopher Pardi">
+//     Copyright © 2015 Christopher Pardi
+//     This Source Code Form is subject to the terms of the Mozilla Public
+//     License, v. 2.0. If a copy of the MPL was not distributed with this
+//     file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// </copyright>
 
 namespace Doctran.Parsing
 {
@@ -15,10 +17,13 @@ namespace Doctran.Parsing
     {
         private readonly Dictionary<Type, Action<object>> _actions;
 
-        public Traverser(params ITraverserAction[] actions)
+        public Traverser(string name, params ITraverserAction[] actions)
         {
+            this.Name = name;
             _actions = actions.ToDictionary(a => a.ForType, a => a.Act);
         }
+
+        public string Name { get; }
 
         public void Go(SourceFile sourceFile) => Navigate(sourceFile);
 
@@ -27,7 +32,7 @@ namespace Doctran.Parsing
             var file = obj as SourceFile;
             if (EnvVar.Verbose >= 3 && file != null)
             {
-                Console.WriteLine("Post processing: " + file.Name + ((SourceFile) obj).Extension);
+                Console.WriteLine("Post processing: " + file.Name + ((SourceFile)obj).Extension);
             }
 
             Action<object> act;

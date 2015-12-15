@@ -1,7 +1,9 @@
-﻿//  Copyright © 2015 Christopher Pardi
-//  This Source Code Form is subject to the terms of the Mozilla Public
-//  License, v. 2.0. If a copy of the MPL was not distributed with this
-//  file, You can obtain one at http://mozilla.org/MPL/2.0/.
+﻿// <copyright file="FortranObject.cs" company="Christopher Pardi">
+//     Copyright © 2015 Christopher Pardi
+//     This Source Code Form is subject to the terms of the Mozilla Public
+//     License, v. 2.0. If a copy of the MPL was not distributed with this
+//     file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// </copyright>
 
 namespace Doctran.Parsing
 {
@@ -49,7 +51,7 @@ namespace Doctran.Parsing
             {
                 o.Parent = this;
             }
-            
+
             this.SubObjects.AddRange(objList);
         }
 
@@ -62,7 +64,7 @@ namespace Doctran.Parsing
                 obj = obj.Parent;
             }
 
-            return (T) obj;
+            return (T)obj;
         }
 
         public void OrderSubObjectsBy(Func<IFortranObject, int> keySelector)
@@ -84,7 +86,7 @@ namespace Doctran.Parsing
         {
             var a = from obj in this.SubObjects
                 where obj is TR
-                select (TR) obj;
+                select (TR)obj;
             return a.ToList();
         }
     }

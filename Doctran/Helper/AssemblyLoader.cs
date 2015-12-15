@@ -1,7 +1,9 @@
-﻿//  Copyright © 2015 Christopher Pardi
-//  This Source Code Form is subject to the terms of the Mozilla Public
-//  License, v. 2.0. If a copy of the MPL was not distributed with this
-//  file, You can obtain one at http://mozilla.org/MPL/2.0/.
+﻿// <copyright file="AssemblyLoader.cs" company="Christopher Pardi">
+//     Copyright © 2015 Christopher Pardi
+//     This Source Code Form is subject to the terms of the Mozilla Public
+//     License, v. 2.0. If a copy of the MPL was not distributed with this
+//     file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// </copyright>
 
 namespace Doctran.Helper
 {
@@ -61,37 +63,22 @@ namespace Doctran.Helper
 
         public List<T> GetClassInstances<T>()
         {
-            return GetClassInstances<T>(new Func<T,int>(weight => 0), name => true);
+            return GetClassInstances<T>(weight => 0, name => true);
         }
 
         public List<T> GetClassInstances<T>(Func<T, int> ordering)
         {
-            return GetClassInstances<T>(ordering, name => true);
+            return GetClassInstances(ordering, name => true);
         }
 
         public List<T> GetClassInstances<T>(string fromNamespace)
         {
-            return GetClassInstances<T>(new Func<T, int>(weight => 0), name => name.StartsWith(fromNamespace));
-        }
-
-        private List<T> GetClassInstances<T>(Func<T, int> ordering, Func<string, bool> namespaceWhere)
-        {
-            List<T> instances = new List<T>();
-            var typesOfT = this._assemblyTypes.Where(t => !t.IsAbstract && (t.IsSubclassOf(typeof(T)) | t.GetInterfaces().Contains(typeof(T)) ));
-            instances.AddRange(
-                from t in typesOfT
-                where namespaceWhere(t.Namespace)
-                where !t.IsInterface
-                let instOfT = (T)Activator.CreateInstance(t)
-                orderby ordering(instOfT)
-                select instOfT
-            );
-            return instances;
+            return GetClassInstances<T>(weight => 0, name => name.StartsWith(fromNamespace));
         }
 
         public List<Type> GetClassTypes<T>()
         {
-            return GetClassTypes<T>(new Func<Type, int>(weight => 0), name => true);
+            return GetClassTypes<T>(weight => 0, name => true);
         }
 
         public List<Type> GetClassTypes<T>(Func<Type, int> ordering)
@@ -99,23 +86,37 @@ namespace Doctran.Helper
             return GetClassTypes<T>(ordering, name => true);
         }
 
-        public List<Type> GetClassTypes<T>(string fromNamespace = "")
+        public List<Type> GetClassTypes<T>(string fromNamespace)
         {
-            return GetClassTypes<T>(new Func<Type, int>(weight => 0), name => name.StartsWith(fromNamespace));
+            return GetClassTypes<T>(weight => 0, name => name.StartsWith(fromNamespace));
+        }
+
+        private List<T> GetClassInstances<T>(Func<T, int> ordering, Func<string, bool> namespaceWhere)
+        {
+            var instances = new List<T>();
+            var typesOfT = this._assemblyTypes.Where(t => !t.IsAbstract && (t.IsSubclassOf(typeof(T)) | t.GetInterfaces().Contains(typeof(T))));
+            instances.AddRange(
+                from t in typesOfT
+                where namespaceWhere(t.Namespace)
+                where !t.IsInterface
+                let instOfT = (T)Activator.CreateInstance(t)
+                orderby ordering(instOfT)
+                select instOfT
+                );
+            return instances;
         }
 
         private List<Type> GetClassTypes<T>(Func<Type, int> ordering, Func<string, bool> namespaceWhere)
         {
-            List<Type> types = new List<Type>();
+            var types = new List<Type>();
             var typesOfT = this._assemblyTypes.Where(t => !t.IsAbstract && t.IsSubclassOf(typeof(T)));
             types.AddRange(
                 from t in typesOfT
                 where namespaceWhere(t.Namespace)
                 orderby ordering(t)
                 select t
-            );
+                );
             return types;
         }
     }
 }
-

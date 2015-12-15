@@ -35,6 +35,9 @@
     <WarningLevel>4</WarningLevel>
     <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>Always</RunPostBuildEvent>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="ColorCode">
       <HintPath>..\..\colorcodefortran\ColorCode-mono\bin\Release\ColorCode.dll</HintPath>
@@ -181,8 +184,8 @@
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy /I /Y /S "$(ProjectDir)themes\Default" "$(SolutionDir)Doctran\bin\$(ConfigurationName)\themes\Default"
-xcopy /I /Y /S "$(ProjectDir)defaults" "$(TargetDir)\defaults"</PostBuildEvent>
+    <PostBuildEvent>xcopy /I /Y /S /d "$(ProjectDir)themes\Default" "$(SolutionDir)Doctran\bin\$(ConfigurationName)\themes\Default"
+xcopy /I /Y /S /d "$(ProjectDir)defaults" "$(TargetDir)\defaults"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
