@@ -32,7 +32,7 @@ namespace Doctran
             AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionTrapper;
 #endif
 
-            Report.SetReleaseProfile();
+            Report.SetDebugProfile();
 
             var options = GetOptions(args);
             options.SourceFilePaths.KeepDistinctOnly();

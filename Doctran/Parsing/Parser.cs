@@ -7,206 +7,188 @@
 
 namespace Doctran.Parsing
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
+    using BuiltIn.FortranBlocks;
     using BuiltIn.FortranObjects;
     using Helper;
-    using Reporting;
-    using Utilitys;
 
-    /// <summary>
-    ///     This class parses a code file.
-    /// </summary>
     public class Parser
     {
-        private readonly Dictionary<string, FortranBlock> _blocks = new Dictionary<string, FortranBlock>();
+        private readonly Dictionary<string, FortranBlock> _blockParsers = new Dictionary<string, FortranBlock>();
 
-        /// <summary>
-        ///     Creates an parser instance to extract the blocks from a code file.
-        /// </summary>
-        /// <param name="blocks">An array of blocks classes that defines the coding language.</param>
-        public Parser(IEnumerable<FortranBlock> blocks)
+        public Parser(IEnumerable<FortranBlock> blockParsers)
         {
-            foreach (var b in blocks)
+            // Add the text factory for the passed text.
+            var textFactory = new SourceBlock();
+            _blockParsers.Add(textFactory.Name, textFactory);
+
+            foreach (var bp in blockParsers)
             {
-                _blocks.Add(b.Name, b);
+                _blockParsers.Add(bp.Name, bp);
             }
         }
 
-        /// <summary>
-        ///     Parses a code file.
-        /// </summary>
-        /// <param name="pathAndFileName">The full path to the code file.</param>
-        /// <param name="lines">The lines of the code file to be parsed.</param>
-        /// <returns></returns>
-        public SourceFile ParseFile(string pathAndFileName, List<FileLine> lines)
+        public SourceFile ParseFile(string pathAndFilename, List<FileLine> lines)
         {
-            if (EnvVar.Verbose >= 3)
+            var parsedSource = ParseLines(SourceFile.PreProcessFile(pathAndFilename, lines));
+            var sourceFile = new SourceFile(pathAndFilename, parsedSource.SubObjects, parsedSource.Lines)
             {
-                Console.WriteLine("Analyzing: " + pathAndFileName);
-            }
+                OriginalLines = lines
+            };
+
+            return sourceFile;
+        }
+
+        public Source ParseLines(List<FileLine> lines)
+        {
+            // Set the current index to 0 and parse the lines set in the constructor.
             var currentIndex = 0;
-            var file = SearchBlock(pathAndFileName, SourceFile.PreProcessFile(pathAndFileName, lines), true, 0, ref currentIndex, "File", "Project").Single() as SourceFile;
-            file.OriginalLines = lines;
-            return file;
+            var blockNameStack = new Stack<string>();
+            blockNameStack.Push("Source");
+            var parserForLines = new ParserForLines(lines, _blockParsers);
+
+            var parsedSource = (Source)parserForLines.SearchBlock(0, ref currentIndex, blockNameStack).Single();
+
+            // Remove the blank line that was added in constructor and return the parsed text.
+            parsedSource.Lines.RemoveAt(0);
+
+            return parsedSource;
         }
 
-        /// <summary>
-        ///     This should be called after all lines have been read. A file object is returned.
-        /// </summary>
-        /// <param name="lines">All lines within the code file.</param>
-        /// <param name="pathAndFileName">The full path to the code file.</param>
-        /// <param name="blockSubObjects">The objects defined by th code blocks found within the file's lines of code.</param>
-        /// <returns>A file with its parsed contents.</returns>
-        private SourceFile CreateFile(List<FileLine> lines, string pathAndFileName, IEnumerable<FortranObject> blockSubObjects)
+        private class ParserForLines
         {
-            return new SourceFile(pathAndFileName, blockSubObjects, lines);
-        }
+            private readonly Dictionary<string, FortranBlock> _blockParsers;
 
-        /// <summary>
-        ///     This should be called after the end of the current code block has been detected. The objects defined by the current
-        ///     code are returned.
-        /// </summary>
-        /// <param name="lines">All lines within the code file.</param>
-        /// <param name="currentIndex">The current code line index.</param>
-        /// <param name="startIndex">The code line index that the block began.</param>
-        /// <param name="blockName">The current block's name.</param>
-        /// <param name="blockSubObjects">The sub-objects defined by the code blocks contained within this code block.</param>
-        /// <returns>The objects defined by the current code.</returns>
-        private IEnumerable<FortranObject> CreateObject(List<FileLine> lines, int currentIndex, int startIndex, string blockName, IEnumerable<FortranObject> blockSubObjects)
-        {
-            //Console.WriteLine(lines[current_index].Number + "    end " + block_name + "    ");
-            var thisBlock = _blocks[blockName].ReturnObject(blockSubObjects, lines.GetRange(startIndex, currentIndex - startIndex + 1)).ToList();
-            thisBlock.ForEach(b => b.SubObjects.ForEach(sObj => sObj.Parent = b));
-            return thisBlock;
-        }
+            private readonly List<FileLine> _lines;
 
-        /// <summary>
-        ///     Checks the current line to see if it defines the start of a new block of code.
-        /// </summary>
-        /// <param name="lines">All lines within the code file.</param>
-        /// <param name="parentBlockName">The name of the current block, ie the parent of the potential new block.</param>
-        /// <param name="currentIndex">The current code line index.</param>
-        /// <returns></returns>
-        private SearchResults IsBlockStart(List<FileLine> lines, string parentBlockName, ref int currentIndex)
-        {
-            foreach (var block in _blocks.Values)
+            public ParserForLines(List<FileLine> lines, Dictionary<string, FortranBlock> blockParsers)
             {
-                if (block.BlockStart(parentBlockName, lines, currentIndex))
-                {
-                    return new SearchResults(currentIndex, block.Name);
-                }
+                _lines = lines;
+
+                // Store the snippet and insert a blank line at the start to simplify the parsing algorithm.
+                _lines.Insert(0, new FileLine(0, string.Empty));
+
+                _blockParsers = blockParsers;
             }
-            return new SearchResults();
-        }
 
-        private List<FortranObject> SearchBlock(string pathAndFileName, List<FileLine> lines, bool checkInternal, int startIndex, ref int currentIndex, string blockName, string parentBlockName)
-        {
-            // Objects defined by this block of code.
-            var blockObjects = new List<FortranObject>();
-
-            // Objects defined within this block of code.
-            var blockSubObjects = new List<FortranObject>();
-
-            // If this block is a one liner then create the objects and exit.
-            if (blockName != "File" && _blocks[blockName].BlockEnd(parentBlockName, lines, currentIndex))
+            public IEnumerable<IFortranObject> SearchBlock(int startIndex, ref int currentIndex, Stack<string> blockNameStack)
             {
-                blockObjects.AddRange(CreateObject(lines, currentIndex, startIndex, blockName, blockSubObjects));
+                var thisBlockName = blockNameStack.Peek();
+
+                var currentFactory = _blockParsers[thisBlockName];
+
+                // Objects defined by this block of code.
+                var blockObjects = new List<IFortranObject>();
+
+                // Objects defined within this block of code.
+                var blockSubObjects = new List<IFortranObject>();
+
+                // If this block is a one liner then create the objects and exit.
+                if (EndBlock(startIndex, currentIndex, blockNameStack, currentFactory, blockObjects, blockSubObjects))
+                {
+                    return blockObjects;
+                }
+
+                // The first line of this block has already been analysed, in the previous recursion level, so move to the next.
+                currentIndex++;
+
+                // Iterate over lines until this block is terminated.
+                do
+                {
+                    // The line index is incremented by default. See AddSubBlocks for description of when this is false.
+                    var incrementIndex = true;
+
+                    // If this block of code contains sub-blockParsers, then search for them.
+                    if (currentFactory.CheckInternal)
+                    {
+                        // Any internal blockParsers starting at this line will be added to the blockSubObjects list.
+                        // The lineIndex and incrementIndex flag are set as follows:
+                        // * Block has an explicit end - (LineIndex) the line after the last line of the last subblock. (incrementIndex) is set to false because AddSubBlocks has already incremented the index.
+                        // * Block does not have an explicit end - (LineIndex) the last line of the last subblock. (incrementIndex) is set to true.
+                        // This is to ensure that blockParsers without an explicit ending can be closed by the subsequent code.
+                        AddSubBlocks(ref incrementIndex, ref currentIndex, currentFactory, blockNameStack, blockSubObjects);
+                    }
+
+                    // If this block is at the end then create it, add its sub objects and exit.
+                    if (EndBlock(startIndex, currentIndex, blockNameStack, currentFactory, blockObjects, blockSubObjects))
+                    {
+                        break;
+                    }
+
+                    // Go to the next line if required.
+                    if (incrementIndex)
+                    {
+                        currentIndex++;
+                    }
+                }
+                while (true);
+
                 return blockObjects;
             }
 
-            // If we not a new file, then the first line of this block has already been analysed, in the previous recusion level, so move to the next.
-            if (blockName != "File")
+            private void AddSubBlocks(
+                ref bool incrementIndex,
+                ref int currentIndex,
+                FortranBlock currentFactory,
+                Stack<string> blockNameStack,
+                List<IFortranObject> blockSubObjects)
             {
-                currentIndex++;
-            }
-
-            // Iterate over lines until this block is terminated.
-            do
-            {
-                var incrementIndex = true;
-
-                // If this block of code contains sub-blocks, then search for them.
-                if (checkInternal)
+                foreach (var block in _blockParsers.Values)
                 {
-                    // Does a block start on the current line.
-                    var resultStart = IsBlockStart(lines, blockName, ref currentIndex);
-
-                    // Search within this block for any sub-blocks.
-                    if (resultStart.Found)
+                    // If this isn't the start of a new block then check the next block parser.
+                    if (!block.BlockStart(blockNameStack.Peek(), _lines, currentIndex))
                     {
-                        //Console.WriteLine(lines[result_start.Index].Number + "    begin " + result_start.BlockName);
-
-                        // Get any blocks that maybe defined within the current block, these will be added later.
-                        blockSubObjects.AddRange(SearchBlock(pathAndFileName, lines, _blocks[resultStart.BlockName].CheckInternal, resultStart.Index, ref currentIndex, resultStart.BlockName, blockName));
-
-                        // If the block has a unique end, then increment the index here so that the same line isn't checked again below.
-                        incrementIndex = blockName != "File" && !_blocks[blockName].ExplicitEnd;
-                        if (!incrementIndex)
-                        {
-                            currentIndex++;
-                        }
+                        continue;
                     }
-                }
 
-                // If this block is at the end then create it, add its sub objects and exit.
-                if (blockName != "File" && _blocks[blockName].BlockEnd(parentBlockName, lines, currentIndex))
-                {
-                    blockObjects.AddRange(CreateObject(lines, currentIndex, startIndex, blockName, blockSubObjects));
-                    break;
-                }
+                    blockNameStack.Push(block.Name);
 
-                // Go to the next line if required.
-                if (incrementIndex)
-                {
-                    currentIndex++;
-                }
+                    // The start index of this block is the current index.
+                    var startIndex = currentIndex;
 
-                // If we are at the end of a file then create and return it.
-                if (blockName == "File" && !(currentIndex < lines.Count))
-                {
-                    blockObjects.Add(CreateFile(lines, pathAndFileName, blockSubObjects));
-                    return blockObjects;
+                    // Get any blockParsers that maybe defined within the current block, these will be added later.
+                    blockSubObjects.AddRange(SearchBlock(startIndex, ref currentIndex, blockNameStack));
+
+                    // If the block does not have an explicit end, then stay on the same line to check for a block end and go to next line later.
+                    incrementIndex = !currentFactory.ExplicitEnd;
+
+                    // If the block has a unique end, then increment the index here so that the same line isn't checked again below.
+                    if (currentFactory.ExplicitEnd)
+                    {
+                        currentIndex++;
+                    }
+
+                    return;
                 }
             }
-            while (true);
 
-            if (!blockObjects.Any())
+            private bool EndBlock(
+                int startIndex,
+                int currentIndex,
+                Stack<string> blockNameStack,
+                FortranBlock currentFactory,
+                List<IFortranObject> blockObjects, IEnumerable<IFortranObject> blockSubObjects)
             {
-                Report.Error((pub, ex) =>
+                var blockSubObjectsList = blockSubObjects as List<IFortranObject> ?? blockSubObjects.ToList();
+
+                if (!currentFactory.BlockEnd(blockNameStack.Peek(), _lines, currentIndex))
                 {
-                    pub.AddErrorDescription("Error parsing source file.");
-                    pub.AddReason("The " + blockName.ToLower() + " beggining at line " + lines[startIndex].Number + " has not been closed");
-                    pub.AddLocation(pathAndFileName);
-                }, new Exception("Parser Exception."));
+                    return false;
+                }
+
+                var parsingResult = currentFactory.ReturnObject(
+                    blockSubObjectsList,
+                    _lines.GetRange(startIndex, currentIndex - startIndex + 1));
+
+                if (parsingResult != null)
+                {
+                    blockObjects.AddRange(parsingResult);
+                }
+
+                blockNameStack.Pop();
+                return true;
             }
-
-            return blockObjects;
         }
-    }
-
-    /// <summary>
-    ///     A simple container for the results of analysing a line of code for starts of code blocks.
-    /// </summary>
-    internal class SearchResults
-    {
-        public SearchResults()
-        {
-            this.Found = false;
-        }
-
-        public SearchResults(int index, string blockName)
-        {
-            this.Found = true;
-            this.Index = index;
-            this.BlockName = blockName;
-        }
-
-        public string BlockName { get; }
-
-        public bool Found { get; }
-
-        public int Index { get; }
     }
 }

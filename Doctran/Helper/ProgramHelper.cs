@@ -26,7 +26,6 @@ namespace Doctran.Helper
                 {
                     var e = new FileNotFoundException();
                     Report.Error((pub, ex) => { pub.AddErrorDescription("Source file path does not exist."); }, e);
-                    throw e;
                 }
 
                 // Parse source files.

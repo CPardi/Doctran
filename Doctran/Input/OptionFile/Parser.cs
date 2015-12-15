@@ -128,7 +128,7 @@ namespace Doctran.Input.OptionFile
             var parser = new Parser(infoList);
             try
             {
-                var result = parser.ParseFile(fileName, this.ReadAndPreProcessFile(fileName)).SubObjects;
+                var result = parser.ParseLines(this.ReadAndPreProcessFile(fileName)).SubObjects;
                 TestParseResults(result);
                 var resultInfo = result.Cast<IInformation>();
 
@@ -136,7 +136,7 @@ namespace Doctran.Input.OptionFile
 
                 return resultInfo;
             }
-            catch (Exception e)
+            catch (IOException e)
             {
                 Report.Error(
                     (pub, ex) =>

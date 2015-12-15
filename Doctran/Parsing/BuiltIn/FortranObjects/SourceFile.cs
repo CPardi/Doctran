@@ -20,7 +20,15 @@ namespace Doctran.Parsing.BuiltIn.FortranObjects
     using Reporting;
     using Utilitys;
 
-    public class SourceFile : FortranObject, IHasName, IHasLines, IHasIdentifier, IHasValidName
+    public class Source : FortranObject, ISource
+    {
+        public Source(IEnumerable<IFortranObject> subObjects, List<FileLine> lines)
+            :base(subObjects, lines)
+        {
+        }
+    }
+
+    public class SourceFile : FortranObject, IHasName, IHasLines, IHasIdentifier, IHasValidName, ISource
     {
         private readonly FileInfo _info;
 
@@ -170,23 +178,6 @@ namespace Doctran.Parsing.BuiltIn.FortranObjects
             lines.AddRange(modifyingLines);
         }
 
-        /// <summary>
-        ///     Outputs an XElement.
-        /// </summary>
-        /// <returns></returns>
-        //public XElement XEle()
-        //{
-        //    this._info.Refresh();
-        //    var xele = base.XEle();
-        //    xele.AddFirst(new XElement("LineCount", this.LineCount),
-        //        new XElement("Created", this._info.CreationTime.ToXElement()),
-        //        new XElement("LastModified", this._info.LastWriteTime.ToXElement()),
-        //        new XElement("ValidName", StringUtils.ValidName(this.Name)),
-        //        new XElement("Extension", this._info.Extension)
-        //        );
-
-        //    return xele;
-        //}
         private static void CheckForPreprocessing(string filename, string line)
         {
             if (Regex.IsMatch(StringUtils.RemoveInlineComment(line), @"^\s*(?:#define|#elif|#elifdef|#elifndef|#else|#endif|#error|#if|#ifdef|#ifndef|#line|#pragma|#undef|#include)"))
