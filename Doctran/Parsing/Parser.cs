@@ -7,18 +7,25 @@
 
 namespace Doctran.Parsing
 {
+    using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using BuiltIn.FortranBlocks;
     using BuiltIn.FortranObjects;
     using Helper;
+    using Plugins;
 
     public class Parser
     {
+        private readonly IPreprocessor _preprocessor;
+
         private readonly Dictionary<string, FortranBlock> _blockParsers = new Dictionary<string, FortranBlock>();
 
-        public Parser(IEnumerable<FortranBlock> blockParsers)
+        public Parser(IEnumerable<FortranBlock> blockParsers, IPreprocessor preprocessor)
         {
+            _preprocessor = preprocessor;
+
             // Add the text factory for the passed text.
             var textFactory = new SourceBlock();
             _blockParsers.Add(textFactory.Name, textFactory);
@@ -29,10 +36,10 @@ namespace Doctran.Parsing
             }
         }
 
-        public SourceFile ParseFile(string pathAndFilename, List<FileLine> lines)
+        public SourceFile ParseFile(string filePath, List<FileLine> lines)
         {
-            var parsedSource = ParseLines(SourceFile.PreProcessFile(pathAndFilename, lines));
-            var sourceFile = new SourceFile(pathAndFilename, parsedSource.SubObjects, parsedSource.Lines)
+            var parsedSource = ParseLines(lines, Path.GetDirectoryName(filePath));
+            var sourceFile = new SourceFile(filePath, parsedSource.SubObjects, parsedSource.Lines)
             {
                 OriginalLines = lines
             };
@@ -40,20 +47,24 @@ namespace Doctran.Parsing
             return sourceFile;
         }
 
-        public Source ParseLines(List<FileLine> lines)
+        public Source ParseLines(List<FileLine> lines, string includeDirectory = ":invalid:")
         {
             // Set the current index to 0 and parse the lines set in the constructor.
             var currentIndex = 0;
             var blockNameStack = new Stack<string>();
             blockNameStack.Push("Source");
-            var parserForLines = new ParserForLines(lines, _blockParsers);
 
-            var parsedSource = (Source)parserForLines.SearchBlock(0, ref currentIndex, blockNameStack).Single();
+            // Store the snippet and insert a blank line at the start to simplify the parsing algorithm.
+            var linesForParse = new List<FileLine>()
+            {
+                new FileLine(0, string.Empty)
+            };
 
-            // Remove the blank line that was added in constructor and return the parsed text.
-            parsedSource.Lines.RemoveAt(0);
+            linesForParse.AddRange(_preprocessor.Preprocess(lines, includeDirectory));
 
-            return parsedSource;
+            var parserForLines = new ParserForLines(linesForParse, _blockParsers);
+            var parsingResult = parserForLines.SearchBlock(0, ref currentIndex, blockNameStack).Single();            
+            return new Source(parsingResult.SubObjects, parsingResult.Lines.Skip(1).ToList());
         }
 
         private class ParserForLines
@@ -64,11 +75,7 @@ namespace Doctran.Parsing
 
             public ParserForLines(List<FileLine> lines, Dictionary<string, FortranBlock> blockParsers)
             {
-                _lines = lines;
-
-                // Store the snippet and insert a blank line at the start to simplify the parsing algorithm.
-                _lines.Insert(0, new FileLine(0, string.Empty));
-
+                _lines = lines;                
                 _blockParsers = blockParsers;
             }
 

@@ -80,53 +80,6 @@ namespace Doctran.Parsing.BuiltIn.FortranObjects
 
         public string ValidName => StringUtils.ValidName(this.Name);
 
-        public static void AddIncludedFiles(ref List<FileLine> lines, string path)
-        {
-            var modifyingLines = new List<FileLine>();
-
-            foreach (var line in lines)
-            {
-                CheckForPreprocessing(Path.GetFileName(path), line.Text);
-                var matchInclude = Regex.Match(line.Text.Trim(), @"^(?i)include\s+['""](.*)['""]");
-                if (matchInclude.Success)
-                {
-                    var includePath = path + EnvVar.Slash + matchInclude.Groups[1].Value.Replace('\\', EnvVar.Slash).Replace('/', EnvVar.Slash);
-                    try
-                    {
-                        modifyingLines.AddRange(ReadFile(includePath).Select(l => new FileLine(line.Number, l.Text)));
-                    }
-                    catch
-                    {
-                        Console.WriteLine("Warning: The following file was not found: " + includePath);
-                    }
-                }
-                else
-                {
-                    modifyingLines.Add(line);
-                }
-            }
-            lines.Clear();
-            lines.AddRange(modifyingLines);
-        }
-
-        public static List<FileLine> PreProcessFile(string pathAndFilename, List<FileLine> lines)
-        {
-            var modLines = new List<FileLine>();
-
-            modLines.AddRange(lines);
-
-            // Search the source for any include statements and add their content to this file.
-            AddIncludedFiles(ref modLines, Path.GetDirectoryName(pathAndFilename));
-
-            // Remove any line coninuations by joining onto a single line.
-            RemoveContinuationLines(ref modLines);
-
-            // Add a blank line to simplify the <FortranObject>.Seach method.
-            modLines.Insert(0, new FileLine(0, ""));
-
-            return modLines;
-        }
-
         public static List<FileLine> ReadFile(string pathAndFilename)
         {
             var lines = new List<FileLine>();
@@ -140,7 +93,6 @@ namespace Doctran.Parsing.BuiltIn.FortranObjects
                     var lineIndex = 1;
                     while ((line = fileReader.ReadLine()) != null)
                     {
-                        CheckForPreprocessing(Path.GetFileName(pathAndFilename), line);
                         lines.Add(new FileLine(lineIndex, line));
                         lineIndex++;
                     }
@@ -158,63 +110,6 @@ namespace Doctran.Parsing.BuiltIn.FortranObjects
                 throw;
             }
 
-            return lines;
-        }
-
-        public static void RemoveContinuationLines(ref List<FileLine> lines)
-        {
-            var modifyingLines = new List<FileLine>();
-
-            var lineIndex = 0;
-            while (lineIndex < lines.Count)
-            {
-                var num = lines[lineIndex].Number;
-                modifyingLines.AddRange(
-                    from l in SplitEndings(MergeContinuations(ref lineIndex, lines, false))
-                    select new FileLine(num, l));
-                lineIndex++;
-            }
-            lines.Clear();
-            lines.AddRange(modifyingLines);
-        }
-
-        private static void CheckForPreprocessing(string filename, string line)
-        {
-            if (Regex.IsMatch(StringUtils.RemoveInlineComment(line), @"^\s*(?:#define|#elif|#elifdef|#elifndef|#else|#endif|#error|#if|#ifdef|#ifndef|#line|#pragma|#undef|#include)"))
-            {
-                Report.Error(
-                    (pub, ex) => { pub.AddErrorDescription("Source contains preprocessor directives, please pass the code through your preprocessor and rerun Doctran upon the output."); }, new Exception("Source contains preprocessor directives."));
-            }
-        }
-
-        private static string MergeContinuations(ref int lineIndex, List<FileLine> lines, bool removeComment)
-        {
-            var lineTextNoComment = StringUtils.RemoveInlineComment(lines[lineIndex].Text).TrimStart('&');
-            if (!lineTextNoComment.EndsWith("&"))
-            {
-                return removeComment ? lineTextNoComment.TrimEnd('&') : lines[lineIndex].Text;
-            }
-
-            lineIndex++;
-            OtherUtils.SkipComment(lines, ref lineIndex);
-            if (StringUtils.RemoveInlineComment(lines[lineIndex].Text) == "")
-            {
-                lineIndex++;
-            }
-            return lineTextNoComment.TrimEnd('&') + MergeContinuations(ref lineIndex, lines, true);
-        }
-
-        private static IEnumerable<string> SplitEndings(string line)
-        {
-            var lineNocomm = line.Split('!');
-
-            var lines = StringUtils.DelimiterExceptQuotes(lineNocomm[0].Trim(), ';');
-            if (lines.Count <= 0)
-            {
-                return new List<string> { line };
-            }
-
-            lines[lines.Count - 1] += lineNocomm.Length > 1 ? "!" + string.Concat(lineNocomm.Skip(1)) : "";
             return lines;
         }
     }

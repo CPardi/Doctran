@@ -17,6 +17,7 @@ namespace Doctran.Input.OptionFile
     using Parsing;
     using Parsing.BuiltIn.FortranBlocks;
     using Parsing.BuiltIn.FortranObjects;
+    using Plugins;
     using Reporting;
 
     public class Parser<TOptions>
@@ -125,7 +126,7 @@ namespace Doctran.Input.OptionFile
             infoList.AddRange(from i in Enumerable.Range(2, 4)
                 select new InformationBlock(i));
 
-            var parser = new Parser(infoList);
+            var parser = new Parser(infoList, new Preprocessor());
             try
             {
                 var result = parser.ParseLines(this.ReadAndPreProcessFile(fileName)).SubObjects;

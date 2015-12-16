@@ -30,7 +30,7 @@ namespace Doctran.Helper
 
                 // Parse source files.
                 var language = PluginLoader.GetLanguageFromExtension(path);
-                var parsedFile = new Parser(language.BlocksParsers).ParseFile(path, SourceFile.ReadFile(path));
+                var parsedFile = new Parser(language.BlocksParsers, language.Preprocessor).ParseFile(path, SourceFile.ReadFile(path));
                 foreach (var t in language.Traversers)
                 {
                     t.Go(parsedFile);

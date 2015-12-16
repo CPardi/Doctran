@@ -98,6 +98,10 @@
     <Reference Include="System" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Xml" />
+    <Reference Include="Z.ExtensionMethods, Version=2.0.10.0, Culture=neutral, PublicKeyToken=59b66d028979105b, processorArchitecture=MSIL">
+      <HintPath>..\packages\Z.ExtensionMethods.2.0.10\lib\net40\Z.ExtensionMethods.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Helper\ProgramHelper.cs" />
@@ -105,6 +109,7 @@
     <Compile Include="Parsing\BuiltIn\FortranObjects\IHasValidName.cs" />
     <Compile Include="Parsing\BuiltIn\FortranObjects\ISource.cs" />
     <Compile Include="Parsing\BuiltIn\FortranObjects\NamedDescription.cs" />
+    <Compile Include="Utilitys\PreprocessorUtils.cs" />
     <Compile Include="Parsing\IFortranObject.cs" />
     <Compile Include="Plugins\IDocumentationGenerator.cs" />
     <Compile Include="Plugins\ILanguageParser.cs" />

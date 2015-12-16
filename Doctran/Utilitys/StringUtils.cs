@@ -7,12 +7,28 @@
 
 namespace Doctran.Utilitys
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Text.RegularExpressions;
+    using Helper;
 
     public static class StringUtils
     {
+        public static List<FileLine> ConvertToFileLineList(string linesString)
+        {
+            var lines = new List<FileLine>();
+            lines.AddRange(
+                linesString
+                    .Split('\n')
+                    .Select((l, i) => new FileLine(i, l))
+                );
+            return lines;
+        }
+
+        public static string ConvertFromFileLineList(List<FileLine> lines) 
+            => string.Concat(lines.Select((line, index) => index == 0 ? line.Text : $"\n{line.Text}"));
+
         public static List<string> DelimiterExceptBrackets(string text, char delimiter)
         {
             var delimiteredText = new List<string>();
