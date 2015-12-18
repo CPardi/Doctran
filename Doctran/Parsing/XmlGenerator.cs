@@ -50,9 +50,10 @@ namespace Doctran.Parsing
             }
         }
 
-        public IEnumerable<XElement> CreateForObject(IFortranObject sourceFile)
+        public XElement CreateForObject(IFortranObject obj)
         {
-            return GetValue(sourceFile.GetType(), CollectionUtils.Singlet(sourceFile));
+            var objType = obj.GetType();
+            return GetXmlValue(objType, new[] { obj }, _toXmlDictionary[objType]).Single();
         }
 
         private static bool IsParentOrThis(Type ofThisType, Type type)

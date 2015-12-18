@@ -126,7 +126,7 @@ namespace Doctran.Input.OptionFile
             infoList.AddRange(from i in Enumerable.Range(2, 4)
                 select new InformationBlock(i));
 
-            var parser = new Parser(infoList, new Preprocessor());
+            var parser = new Parser("ProjectFile", infoList);
             try
             {
                 var result = parser.ParseLines(this.ReadAndPreProcessFile(fileName)).SubObjects;

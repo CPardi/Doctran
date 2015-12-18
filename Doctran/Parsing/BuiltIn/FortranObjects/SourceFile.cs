@@ -22,28 +22,35 @@ namespace Doctran.Parsing.BuiltIn.FortranObjects
 
     public class Source : FortranObject, ISource
     {
-        public Source(IEnumerable<IFortranObject> subObjects, List<FileLine> lines)
+        public Source(string language, IEnumerable<IFortranObject> subObjects, List<FileLine> lines)
             :base(subObjects, lines)
         {
+            this.Language = language;
         }
+
+        public string Language { get; }
     }
 
-    public class SourceFile : FortranObject, IHasName, IHasLines, IHasIdentifier, IHasValidName, ISource
+    public class SourceFile : FortranObject, IHasName, IHasLines, IHasIdentifier, IHasValidName, ISource, ISourceFile
     {
         private readonly FileInfo _info;
 
         // Reads a file, determines its type and loads the contained procedure and/or modules.
-        public SourceFile(string pathAndFilename, IEnumerable<IFortranObject> subObjects, List<FileLine> lines)
+        public SourceFile(string language, string pathAndFilename, IEnumerable<IFortranObject> subObjects, List<FileLine> originalLines, List<FileLine> lines)
             : base(subObjects, lines)
         {
             this.Name = Path.GetFileName(pathAndFilename);
 
             this.PathAndFilename = pathAndFilename;
+            this.OriginalLines = originalLines;
+            this.Language = language;
             _info = new FileInfo(this.PathAndFilename);
 
             // Get the filename from the inputted string
             this.Name = Path.GetFileNameWithoutExtension(pathAndFilename);
         }
+
+        public List<FileLine> OriginalLines { get; }
 
         public DateTime Created => _info.CreationTime;
 
@@ -56,27 +63,23 @@ namespace Doctran.Parsing.BuiltIn.FortranObjects
         public int LineCount => this.Lines.Count - 1;
 
         public string Name { get; }
-
-        public List<FileLine> OriginalLines { get; set; }
-
+        
         public string PathAndFilename { get; }
 
-        public XElement SourceXEle
+        public XElement SourceXEle(List<FileLine> lines)
         {
-            get
-            {
-                var str = string.Concat(this.OriginalLines.Select(line => line.Text + Environment.NewLine));
+            var str = string.Concat(lines.Select(line => line.Text + Environment.NewLine));
 
-                // Return a syntax highlighted source code.
-                var cc = new CodeColorizer();
-                return
-                    new XElement("File",
-                        new XElement("Name", this.Name),
-                        new XElement("Lines",
-                            XElement.Parse(cc.Colorize(str, Languages.Fortran, new HtmlLinedClassFormatter(), new LinedStyleSheet()).Replace(Environment.NewLine, ""), LoadOptions.PreserveWhitespace)
-                            ));
-            }
+            // Return a syntax highlighted source code.
+            var cc = new CodeColorizer();
+            return
+                new XElement("File",
+                    new XElement("Name", this.Name),
+                    new XElement("Lines",
+                        XElement.Parse(cc.Colorize(str, Languages.Fortran, new HtmlLinedClassFormatter(), new LinedStyleSheet()).Replace(Environment.NewLine, ""), LoadOptions.PreserveWhitespace)
+                        ));
         }
+
 
         public string ValidName => StringUtils.ValidName(this.Name);
 
@@ -112,5 +115,7 @@ namespace Doctran.Parsing.BuiltIn.FortranObjects
 
             return lines;
         }
+
+        public string Language { get; }
     }
 }

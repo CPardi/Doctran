@@ -13,9 +13,12 @@ namespace Doctran.Parsing.BuiltIn.FortranBlocks
 
     public class SourceBlock : FortranBlock
     {
-        public SourceBlock()
+        private readonly string _language;
+
+        public SourceBlock(string language)
             : base("Source", true, false)
         {
+            _language = language;
         }
 
         public override bool BlockStart(string parentBlockName, List<FileLine> lines, int lineIndex)
@@ -30,7 +33,7 @@ namespace Doctran.Parsing.BuiltIn.FortranBlocks
 
         public override IEnumerable<FortranObject> ReturnObject(IEnumerable<IFortranObject> subObjects, List<FileLine> lines)
         {
-            yield return new Source(subObjects, lines);
+            yield return new Source(_language ,subObjects, lines);
         }
     }
 }

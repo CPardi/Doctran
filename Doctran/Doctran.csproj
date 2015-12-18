@@ -98,22 +98,19 @@
     <Reference Include="System" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Xml" />
-    <Reference Include="Z.ExtensionMethods, Version=2.0.10.0, Culture=neutral, PublicKeyToken=59b66d028979105b, processorArchitecture=MSIL">
-      <HintPath>..\packages\Z.ExtensionMethods.2.0.10\lib\net40\Z.ExtensionMethods.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Helper\ProgramHelper.cs" />
     <Compile Include="Parsing\BuiltIn\FortranBlocks\SourceBlock.cs" />
     <Compile Include="Parsing\BuiltIn\FortranObjects\IHasValidName.cs" />
     <Compile Include="Parsing\BuiltIn\FortranObjects\ISource.cs" />
+    <Compile Include="Parsing\BuiltIn\FortranObjects\ISourceFile.cs" />
     <Compile Include="Parsing\BuiltIn\FortranObjects\NamedDescription.cs" />
     <Compile Include="Utilitys\PreprocessorUtils.cs" />
     <Compile Include="Parsing\IFortranObject.cs" />
     <Compile Include="Plugins\IDocumentationGenerator.cs" />
     <Compile Include="Plugins\ILanguageParser.cs" />
-    <Compile Include="Plugins\LanguageParserManager.cs" />
+    <Compile Include="Plugins\ParserManager.cs" />
     <Compile Include="Parsing\BuiltIn\FortranBlocks\DescriptionBlock.cs" />
     <Compile Include="Parsing\BuiltIn\FortranBlocks\NamedDescriptionBlock.cs" />
     <Compile Include="Comments\IInformation.cs" />
@@ -140,7 +137,7 @@
     <Compile Include="Parsing\Traverser.cs" />
     <Compile Include="Parsing\XFortranObject.cs" />
     <Compile Include="Parsing\XmlGenerator.cs" />
-    <Compile Include="Plugins\DocumentationElementManager.cs" />
+    <Compile Include="Plugins\DocumentationManager.cs" />
     <Compile Include="Utilitys\CollectionUtils.cs" />
     <Compile Include="Utilitys\CommentUtils.cs" />
     <Compile Include="Parsing\BuiltIn\FortranObjects\Description.cs" />
@@ -150,7 +147,6 @@
     <Compile Include="Utilitys\OtherUtils.cs" />
     <Compile Include="Helper\Options.cs" />
     <Compile Include="Utilitys\PathUtilitys.cs" />
-    <Compile Include="Plugins\PluginLoader.cs" />
     <Compile Include="Plugins\PluginManager.cs" />
     <Compile Include="Utilitys\EnvVar.cs" />
     <Compile Include="Helper\PathList.cs" />

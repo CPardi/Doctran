@@ -1,6 +1,7 @@
 ﻿namespace Doctran.Parsing.BuiltIn.FortranObjects
 {
-    public interface ISource : IHasLines
-    {        
+    public interface ISource : IFortranObject
+    {
+        string Language { get; }
     }
 }

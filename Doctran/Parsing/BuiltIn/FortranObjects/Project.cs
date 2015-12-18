@@ -9,6 +9,7 @@ namespace Doctran.Parsing.BuiltIn.FortranObjects
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.Linq;
     using System.Xml.Linq;
     using Plugins;
@@ -16,25 +17,38 @@ namespace Doctran.Parsing.BuiltIn.FortranObjects
 
     public class Project : FortranObject
     {
-        public Project(IEnumerable<SourceFile> parsedFiles)
-            : base(parsedFiles, null)
+        public Project(IEnumerable<ISourceFile> parsedFiles)
+            : base()
         {
+            var parsedFilesList = parsedFiles as IList<ISourceFile> ?? parsedFiles.ToList();
+            this.Sources = parsedFilesList.ToList().AsReadOnly();
+            this.AddSubObjects(parsedFilesList);
         }
+
+        public ReadOnlyCollection<ISourceFile> Sources { get; }
 
         public XElement XEle(XElement xmlPassthrough)
         {
-            var xele = new XElement("Project");
+            var xEle = new XElement("Project");
 
-            xele.Add(xmlPassthrough);
-            xele.Add(new XElement("DocCreated", DateTime.Now.ToXElement()));
-            xele.Add(
+            xEle.Add(xmlPassthrough);
+            xEle.Add(new XElement("DocCreated", DateTime.Now.ToXElement()));
+            xEle.Add(
                 from info in this.SubObjectsOfType<Description>()
                 select new XElement("Description", info.Basic, info.Detailed)
                 );
 
-            xele.Add(new XmlGenerator(PluginLoader.AllInterfaceXElements, PluginLoader.AllObjectXElements, PluginLoader.AllObjectGroupXElements).CreateForObject(this));
+            var sourceXEle = new XElement(this.SourcesXmlHead);
+            foreach (var source in this.Sources)
+            {
+                var generator = DocumentationManager.TryGetDefinitionByIdentifier(source.Language);
+                sourceXEle.Add(generator.ParsedSourcesToXml(source));
+            }
 
-            return xele;
+            xEle.Add(sourceXEle);
+            return xEle;
         }
+
+        public XName SourcesXmlHead => "Files";
     }
 }

@@ -33,14 +33,14 @@ namespace Doctran.Plugins
             }
         }
 
-        public static AssemblyLoader PluginLoader { get; } = new AssemblyLoader(EnvVar.ExecPath + @"plugins");
+        public static AssemblyLoader AssemblyLoader { get; } = new AssemblyLoader(EnvVar.ExecPath + @"plugins");
 
         public static List<IPlugin> Plugins { get; private set; }
 
         public static void Initialize()
         {
             //Initialize plugins.
-            Plugins = PluginLoader.GetClassInstances<IPlugin>();
+            Plugins = AssemblyLoader.GetClassInstances<IPlugin>();
             foreach (var plugin in Plugins.OrderBy(p => p.LoadOrder()))
             {
                 plugin.Initialize();

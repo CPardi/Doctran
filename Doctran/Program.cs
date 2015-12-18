@@ -21,7 +21,7 @@ namespace Doctran
     using Reporting;
     using Utilitys;
     using Parser = CommandLine.Parser;
-
+    
     public class Program
     {
         public static bool ShowLicensing { get; private set; }
@@ -31,7 +31,7 @@ namespace Doctran
 #if RELEASE
             AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionTrapper;
 #endif
-
+            
             Report.SetDebugProfile();
 
             var options = GetOptions(args);
@@ -134,11 +134,13 @@ namespace Doctran
             return saveXmlPath.Substring(0, saveXmlPath.Length - ext?.Length ?? 0) + "mod" + ext;
         }
 
-        private static void OutputHtml(FortranObject project, XmlOutputter xmlOutputter, Options options)
+        private static void OutputHtml(Project project, XmlOutputter xmlOutputter, Options options)
         {
             var xElements =
-                (from file in project.SubObjectsOfType<SourceFile>()
-                    select file.SourceXEle).ToList();
+                from source in project.Sources
+                let highlighter = DocumentationManager.TryGetDefinitionByIdentifier(source.Language)
+                select new XElement("File", new XElement("Name", source.PathAndFilename), highlighter.HighlightLines(source.OriginalLines));
+
             var reader = new XDocument(new XElement("Source", xElements)).CreateReader();
 
             if (EnvVar.Verbose >= 2)

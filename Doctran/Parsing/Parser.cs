@@ -9,7 +9,6 @@ namespace Doctran.Parsing
 {
     using System;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using BuiltIn.FortranBlocks;
     using BuiltIn.FortranObjects;
@@ -18,16 +17,16 @@ namespace Doctran.Parsing
 
     public class Parser
     {
-        private readonly IPreprocessor _preprocessor;
+        private readonly string _language;
 
         private readonly Dictionary<string, FortranBlock> _blockParsers = new Dictionary<string, FortranBlock>();
 
-        public Parser(IEnumerable<FortranBlock> blockParsers, IPreprocessor preprocessor)
+        public Parser(string language, IEnumerable<FortranBlock> blockParsers)
         {
-            _preprocessor = preprocessor;
+            _language = language;
 
             // Add the text factory for the passed text.
-            var textFactory = new SourceBlock();
+            var textFactory = new SourceBlock(_language);
             _blockParsers.Add(textFactory.Name, textFactory);
 
             foreach (var bp in blockParsers)
@@ -35,19 +34,8 @@ namespace Doctran.Parsing
                 _blockParsers.Add(bp.Name, bp);
             }
         }
-
-        public SourceFile ParseFile(string filePath, List<FileLine> lines)
-        {
-            var parsedSource = ParseLines(lines, Path.GetDirectoryName(filePath));
-            var sourceFile = new SourceFile(filePath, parsedSource.SubObjects, parsedSource.Lines)
-            {
-                OriginalLines = lines
-            };
-
-            return sourceFile;
-        }
-
-        public Source ParseLines(List<FileLine> lines, string includeDirectory = ":invalid:")
+        
+        public ISource ParseLines(List<FileLine> lines)
         {
             // Set the current index to 0 and parse the lines set in the constructor.
             var currentIndex = 0;
@@ -60,11 +48,11 @@ namespace Doctran.Parsing
                 new FileLine(0, string.Empty)
             };
 
-            linesForParse.AddRange(_preprocessor.Preprocess(lines, includeDirectory));
+            linesForParse.AddRange(lines);
 
             var parserForLines = new ParserForLines(linesForParse, _blockParsers);
             var parsingResult = parserForLines.SearchBlock(0, ref currentIndex, blockNameStack).Single();            
-            return new Source(parsingResult.SubObjects, parsingResult.Lines.Skip(1).ToList());
+            return new Source(_language, parsingResult.SubObjects, parsingResult.Lines.Skip(1).ToList());
         }
 
         private class ParserForLines

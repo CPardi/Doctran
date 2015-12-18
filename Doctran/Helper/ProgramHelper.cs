@@ -18,7 +18,7 @@ namespace Doctran.Helper
     {
         public static Project ParseProject(IEnumerable<string> sourceFiles)
         {
-            var parsedFiles = new List<SourceFile>();
+            var parsedFiles = new List<ISourceFile>();
 
             foreach (var path in sourceFiles)
             {
@@ -29,13 +29,10 @@ namespace Doctran.Helper
                 }
 
                 // Parse source files.
-                var language = PluginLoader.GetLanguageFromExtension(path);
-                var parsedFile = new Parser(language.BlocksParsers, language.Preprocessor).ParseFile(path, SourceFile.ReadFile(path));
-                foreach (var t in language.Traversers)
-                {
-                    t.Go(parsedFile);
-                }
+                var language = ParserManager.GetParserByExtension(Path.GetExtension(path));
 
+                var lines = SourceFile.ReadFile(path);
+                var parsedFile = language.Parse(path, lines);                
                 parsedFiles.Add(parsedFile);
             }
 

@@ -25,9 +25,9 @@ namespace Doctran.Parsing
 
         public string Name { get; }
 
-        public void Go(SourceFile sourceFile) => Navigate(sourceFile);
+        public void Go(ISource source) => Navigate(source);
 
-        protected void Navigate(IFortranObject obj)
+        private void Navigate(IFortranObject obj)
         {
             var file = obj as SourceFile;
             if (EnvVar.Verbose >= 3 && file != null)

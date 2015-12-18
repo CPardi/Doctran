@@ -7,40 +7,13 @@
 
 namespace Doctran.Plugins
 {
-    using System;
     using System.Collections.Generic;
-    using System.Linq;
     using Helper;
     using Parsing;
+    using Parsing.BuiltIn.FortranObjects;
 
     public interface ILanguageParser
     {
-        IPreprocessor Preprocessor { get; }
-
-        IEnumerable<FortranBlock> BlocksParsers { get; }
-
-        IEnumerable<Traverser> Traversers { get; }
-    }
-
-    public interface IPreprocessor
-    {
-        List<FileLine> Preprocess(List<FileLine> lines, string currentDirectory);
-    }
-
-    public class Preprocessor : IPreprocessor
-    {
-        private readonly IEnumerable<Func<List<FileLine>, string, List<FileLine>>> _preprocesses;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="preprocesses">The preprocessors to be applied. The order given will be the order of application.</param>
-        public Preprocessor(params Func<List<FileLine>, string, List<FileLine>>[] preprocesses)
-        {
-            _preprocesses = preprocesses;
-        }
-
-        public List<FileLine> Preprocess(List<FileLine> lines, string currentDirectory)
-            => _preprocesses.Aggregate(lines, (current, preprocess) => preprocess(current, currentDirectory));
+        ISourceFile Parse(string sourceName, List<FileLine> lines);
     }
 }

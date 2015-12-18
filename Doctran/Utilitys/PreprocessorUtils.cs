@@ -6,7 +6,7 @@ namespace Doctran.Utilitys
 
     public static class PreprocessorUtils
     {
-        public static List<FileLine> TrimLines(List<FileLine> lines, string currentDirectory)
+        public static List<FileLine> TrimLines(List<FileLine> lines)
         {
             return lines
                 .Select(line => new FileLine(line.Number, line.Text.Trim()))

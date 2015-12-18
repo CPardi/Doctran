@@ -125,14 +125,14 @@ namespace Doctran.Parsing.BuiltIn
             }
 
             var curObj = obj;
-            var file = obj.GoUpTillType<SourceFile>();
+            var file = obj.GoUpTillType<ISource>();
             Report.Warning(pub =>
             {
                 pub.AddWarningDescription("Description meta-data was ignored");
                 pub.AddReason("Description identifier does not match parent identifier.");
                 pub.AddLocation(curObj.Lines.First().Number == curObj.Lines.Last().Number
-                    ? $"At line {curObj.Lines.First().Number} of '{file.Name}{file.Extension}'."
-                    : $"Within lines {curObj.Lines.First().Number} to {curObj.Lines.Last().Number} of '{file.Name}{file.Extension}'.");
+                    ? $"At line {curObj.Lines.First().Number} of '{(file as SourceFile)?.Name}{(file as SourceFile)?.Extension}'."
+                    : $"Within lines {curObj.Lines.First().Number} to {curObj.Lines.Last().Number} of '{(file as SourceFile)?.Name}{(file as SourceFile)?.Extension}'.");
             });
             obj.Parent.SubObjects.Remove(obj);
         }

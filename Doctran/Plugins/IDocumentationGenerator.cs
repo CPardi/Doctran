@@ -8,14 +8,15 @@
 namespace Doctran.Plugins
 {
     using System.Collections.Generic;
+    using System.Xml.Linq;
+    using Helper;
     using Parsing;
+    using Parsing.BuiltIn.FortranObjects;
 
     public interface IDocumentationGenerator
     {
-        IEnumerable<IInterfaceXElements> InterfaceXElements { get; }
+        XElement ParsedSourcesToXml(IFortranObject source);
 
-        IEnumerable<IGroupXElement> ObjectGroupXElements { get; }
-
-        IEnumerable<IObjectXElement> ObjectXElements { get; }
+        XElement HighlightLines(List<FileLine> lines);
     }
 }
