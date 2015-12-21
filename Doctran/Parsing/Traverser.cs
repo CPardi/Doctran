@@ -36,9 +36,18 @@ namespace Doctran.Parsing
             }
 
             Action<object> act;
+            
             if (_actions.TryGetValue(obj.GetType(), out act))
             {
                 act(obj);
+            }
+
+            foreach(var inter in obj.GetType().GetInterfaces())
+            {
+                if (_actions.TryGetValue(inter, out act))
+                {
+                    act(obj);
+                }
             }
 
             for (var i = obj.SubObjects.Count - 1; i >= 0; i--)

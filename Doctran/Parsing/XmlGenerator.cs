@@ -50,11 +50,7 @@ namespace Doctran.Parsing
             }
         }
 
-        public XElement CreateForObject(IFortranObject obj)
-        {
-            var objType = obj.GetType();
-            return GetXmlValue(objType, new[] { obj }, _toXmlDictionary[objType]).Single();
-        }
+        public XElement CreateForObject(IFortranObject obj) => this.GetXmlValue(new[] { obj }).Single();
 
         private static bool IsParentOrThis(Type ofThisType, Type type)
         {
@@ -73,58 +69,62 @@ namespace Doctran.Parsing
                 || type.GetInterfaces().Count(i => IsParentOrThis(ofThisType, i)) > 0;
         }
 
-        private IEnumerable<XElement> GetValue(Type objType, IEnumerable<IFortranObject> objsOfType)
+        private IEnumerable<XElement> GetValue(Type groupType, IEnumerable<IFortranObject> objsOfType)
         {
-            Func<IFortranObject, XElement> toXml;
-            this._toXmlDictionary.TryGetValue(objType, out toXml);
-
             Func<IEnumerable<XElement>, XElement> toGroupXml;
-            this._toGroupXmlDictionary.TryGetValue(objType, out toGroupXml);
+            this._toGroupXmlDictionary.TryGetValue(groupType, out toGroupXml);
 
-            if (toGroupXml == null && toXml != null)
-            {
-                return this.GetXmlValue(objType, objsOfType, toXml);
-            }
+            var objsOfTypeList = objsOfType as IList<IFortranObject> ?? objsOfType.ToList();
 
-            if (toGroupXml != null && toXml != null)
-            {
-                return CollectionUtils.Singlet(toGroupXml(this.GetXmlValue(objType, objsOfType, toXml)));
-            }
+            var objHasXml =
+                (from obj in objsOfTypeList
+                    let objType = obj.GetType()
+                    where _toXmlDictionary.ContainsKey(objType) || objType.GetInterfaces().Any(inter => _toXmlDictionary.ContainsKey(inter))
+                    select objsOfTypeList).Any();
 
-            return this.SkipLevel(objsOfType);
+            return objHasXml
+                ? toGroupXml != null
+                    ? CollectionUtils.Singlet(toGroupXml(this.GetXmlValue(objsOfTypeList)))
+                    : this.GetXmlValue(objsOfTypeList)
+                : this.SkipLevel(objsOfTypeList);
         }
 
-        private IEnumerable<XElement> GetXmlValue(Type objType, IEnumerable<IFortranObject> objsOfType, Func<IFortranObject, XElement> toXml)
+        private IEnumerable<XElement> GetXmlValue(IEnumerable<IFortranObject> objsOfType)
         {
             var xElements = new List<XElement>();
-            foreach (var fortranObject in objsOfType)
+            foreach (var obj in objsOfType)
             {
-                var xElement = toXml(fortranObject);
+                var objType = obj.GetType();
+                Func<IFortranObject, XElement> toXml;
+                this._toXmlDictionary.TryGetValue(objType, out toXml);
+                if (toXml == null)
+                {
+                    continue;
+                }
+
+                var xElement = toXml(obj);
                 xElement.Add(objType.GetInterfaces().Select(inter =>
                 {
                     Func<IFortranObject, IEnumerable<XElement>> create;
                     _interfaceXmlDictionary.TryGetValue(inter, out create);
-                    return create != null ? create(fortranObject) : CollectionUtils.Empty<XElement>();
+                    return create != null ? create(obj) : CollectionUtils.Empty<XElement>();
                 }));
-                xElement.Add(this.Navigate(fortranObject));
+
+                xElement.Add(this.Navigate(obj));
                 xElements.Add(xElement);
             }
 
             return xElements.Where(xElement => xElement != null);
         }
 
-        private IEnumerable<XElement> Navigate(IFortranObject obj)
+        private Type KeySelector(IFortranObject obj)
         {
-            var xElements = new List<XElement>();
-            var subObjects = obj.SubObjects;
-
-            xElements.AddRange(
-                from objsOfType in subObjects.GroupBy(sObj => sObj.GetType())
-                from xElement in this.GetValue(objsOfType.Key, objsOfType)
-                select xElement);
-
-            return xElements;
+            var objType = obj.GetType();
+            return objType.GetInterfaces().SingleOrDefault(inter => _toGroupXmlDictionary.ContainsKey(inter)) ?? objType;
         }
+
+        private IEnumerable<XElement> Navigate(IFortranObject obj)
+            => obj.SubObjects.GroupBy(this.KeySelector).SelectMany(objsOfType => this.GetValue(objsOfType.Key, objsOfType));
 
         private IEnumerable<XElement> SkipLevel(IEnumerable<IFortranObject> objsOfType) => objsOfType.SelectMany(this.Navigate);
     }

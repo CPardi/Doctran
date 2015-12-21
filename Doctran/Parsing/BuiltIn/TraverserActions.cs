@@ -7,13 +7,15 @@
 
 namespace Doctran.Parsing.BuiltIn
 {
-    using System.Collections.Generic;
     using System.Linq;
     using FortranObjects;
     using Reporting;
 
     public static class TraverserActions
     {
+        /// <summary>
+        ///     Moves named descriptions in to the container or containers with identifier specified by linkedTo.
+        /// </summary>
         public static ITraverserAction AssignDescriptions
         {
             get
@@ -36,33 +38,14 @@ namespace Doctran.Parsing.BuiltIn
                             return;
                         }
 
-                        var descriptions =
-                            from sObjs in obj.Parent.SubObjects
-                            where (sObjs as IHasIdentifier)?.Identifier == linkedTo
-                            select sObjs;
+                        var objsForDescription =
+                            obj.Parent.SubObjects
+                                .Where(sObjs => (sObjs as IHasIdentifier)?.Identifier == linkedTo);
 
-                        var fortranObjects = descriptions as IList<IFortranObject> ?? descriptions.ToList();
-
-                        if (fortranObjects.Count() > 1)
+                        obj.Parent.SubObjects.Remove(obj);
+                        foreach (var match in objsForDescription)
                         {
-                            var curObj = obj;
-                            var file = obj.GoUpTillType<SourceFile>();
-                            Report.Warning(pub =>
-                            {
-                                pub.AddWarningDescription("Description meta-data was ignored");
-                                pub.AddReason("Description specified multiple times. Using first occurence");
-                                pub.AddLocation(curObj.Lines.First().Number == curObj.Lines.Last().Number
-                                    ? $"At line {curObj.Lines.First().Number} of '{file.Name}{file.Extension}'."
-                                    : $"Within lines {curObj.Lines.First().Number} to {curObj.Lines.Last().Number} of '{file.Name}{file.Extension}'.");
-                            });
-                        }
-
-                        var parSubObj = fortranObjects.FirstOrDefault();
-
-                        if (parSubObj != null)
-                        {
-                            obj.Parent.SubObjects.Remove(obj);
-                            parSubObj.AddSubObject(obj);
+                            match.AddSubObject(obj);
                         }
                     });
             }
@@ -81,15 +64,15 @@ namespace Doctran.Parsing.BuiltIn
             }
         }
 
-        private static void CheckUniqueness(FortranObject obj)
+        private static void CheckUniqueness(IFortranObject obj)
         {
-            if (obj.Parent.SubObjectsOfType<Description>().Count <= 1)
+            if (obj.Parent.SubObjects.OfType<IDescription>().Count() <= 1)
             {
                 return;
             }
 
             var curObj = obj;
-            var file = obj.GoUpTillType<SourceFile>();
+            var file = obj.GoUpTillType<ISource>() as SourceFile;
             if (obj.Parent is Project)
             {
                 Report.Warning(pub =>
@@ -97,8 +80,8 @@ namespace Doctran.Parsing.BuiltIn
                     pub.AddWarningDescription("Description meta-data was ignored");
                     pub.AddReason("Multiple descriptions specified for a single block.");
                     pub.AddLocation(curObj.Lines.First().Number == curObj.Lines.Last().Number
-                        ? $"At line {curObj.Lines.First().Number} of '{file.Name}{file.Extension}'."
-                        : $"Within lines {curObj.Lines.First().Number} to {curObj.Lines.Last().Number} of '{file.Name}{file.Extension}'.");
+                        ? $"At line {curObj.Lines.First().Number} of '{file?.Name}{file?.Extension}'."
+                        : $"Within lines {curObj.Lines.First().Number} to {curObj.Lines.Last().Number} of '{file?.Name}{file?.Extension}'.");
                 });
             }
             else
@@ -108,8 +91,8 @@ namespace Doctran.Parsing.BuiltIn
                     pub.AddWarningDescription("Description meta-data was ignored");
                     pub.AddReason("Multiple descriptions specified for a single block.");
                     pub.AddLocation(curObj.Lines.First().Number == curObj.Lines.Last().Number
-                        ? $"At line {curObj.Lines.First().Number} of '{file.Name}{file.Extension}'."
-                        : $"Within lines {curObj.Lines.First().Number} to {curObj.Lines.Last().Number} of '{file.Name}{file.Extension}'.");
+                        ? $"At line {curObj.Lines.First().Number} of '{file?.Name}{file?.Extension}'."
+                        : $"Within lines {curObj.Lines.First().Number} to {curObj.Lines.Last().Number} of '{file?.Name}{file?.Extension}'.");
                 });
             }
             obj.Parent.SubObjects.Remove(obj);

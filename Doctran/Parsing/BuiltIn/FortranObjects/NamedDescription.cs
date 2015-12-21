@@ -11,7 +11,7 @@ namespace Doctran.Parsing.BuiltIn.FortranObjects
     using System.Xml.Linq;
     using Helper;
 
-    public class NamedDescription : FortranObject
+    public class NamedDescription : FortranObject, IDescription
     {
         public NamedDescription(string linkedTo, XElement basic, XElement detailed, List<FileLine> lines)
             : base(lines)

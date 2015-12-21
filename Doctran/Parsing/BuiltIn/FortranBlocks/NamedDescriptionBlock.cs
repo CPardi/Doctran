@@ -45,9 +45,14 @@ namespace Doctran.Parsing.BuiltIn.FortranBlocks
         public override IEnumerable<FortranObject> ReturnObject(IEnumerable<IFortranObject> subObjects, List<FileLine> lines)
         {
             var name = Regex.Match(lines[0].Text, @"!>\s*(\w.*)\s*-").Groups[1].Value.Trim();
-            var basic = new XElement("Basic", DescriptionBlock.GetBasicText(lines).Substring(name.Length + 1));
-            var detailed = new XElement("Detailed", DescriptionBlock.GetDetailText(lines));
-            yield return new NamedDescription(name.ToLower(), basic, detailed, lines);
+            var basic = ParseXmlContent("Basic", DescriptionBlock.GetBasicText(lines).Substring(name.Length + 1).TrimStart(' ', '-'));
+            var detailed = ParseXmlContent("Detailed", DescriptionBlock.GetDetailText(lines));
+            yield return new NamedDescription(name.ToLower(), basic, detailed, lines); 
+        }
+
+        private static XElement ParseXmlContent(string name, string text)
+        {
+            return XElement.Parse("<" + name + ">" + text + "</" + name + ">", LoadOptions.PreserveWhitespace);
         }
     }
 }

@@ -102,9 +102,10 @@
   <ItemGroup>
     <Compile Include="Helper\ProgramHelper.cs" />
     <Compile Include="Parsing\BuiltIn\FortranBlocks\SourceBlock.cs" />
-    <Compile Include="Parsing\BuiltIn\FortranObjects\IHasValidName.cs" />
-    <Compile Include="Parsing\BuiltIn\FortranObjects\ISource.cs" />
-    <Compile Include="Parsing\BuiltIn\FortranObjects\ISourceFile.cs" />
+    <Compile Include="Parsing\BuiltIn\IDescription.cs" />
+    <Compile Include="Parsing\BuiltIn\IHasValidName.cs" />
+    <Compile Include="Parsing\BuiltIn\ISource.cs" />
+    <Compile Include="Parsing\BuiltIn\ISourceFile.cs" />
     <Compile Include="Parsing\BuiltIn\FortranObjects\NamedDescription.cs" />
     <Compile Include="Utilitys\PreprocessorUtils.cs" />
     <Compile Include="Parsing\IFortranObject.cs" />
@@ -115,9 +116,9 @@
     <Compile Include="Parsing\BuiltIn\FortranBlocks\NamedDescriptionBlock.cs" />
     <Compile Include="Comments\IInformation.cs" />
     <Compile Include="Comments\IInformationFactory.cs" />
-    <Compile Include="Parsing\BuiltIn\FortranObjects\IHasLines.cs" />
-    <Compile Include="Parsing\BuiltIn\FortranObjects\IHasIdentifier.cs" />
-    <Compile Include="Parsing\BuiltIn\FortranObjects\IHasName.cs" />
+    <Compile Include="Parsing\BuiltIn\IHasLines.cs" />
+    <Compile Include="Parsing\BuiltIn\IHasIdentifier.cs" />
+    <Compile Include="Parsing\BuiltIn\IHasName.cs" />
     <Compile Include="Parsing\BuiltIn\FortranObjects\Project.cs" />
     <Compile Include="Parsing\BuiltIn\FortranObjects\XInformation.cs" />
     <Compile Include="Parsing\BuiltIn\TraverserActions.cs" />

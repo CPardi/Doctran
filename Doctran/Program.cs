@@ -15,7 +15,6 @@ namespace Doctran
     using Helper;
     using Input.OptionFile;
     using Output;
-    using Parsing;
     using Parsing.BuiltIn.FortranObjects;
     using Plugins;
     using Reporting;
@@ -32,7 +31,7 @@ namespace Doctran
             AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionTrapper;
 #endif
             
-            Report.SetDebugProfile();
+            Report.SetReleaseProfile();
 
             var options = GetOptions(args);
             options.SourceFilePaths.KeepDistinctOnly();
@@ -140,7 +139,7 @@ namespace Doctran
                 from source in project.Sources
                 let highlighter = DocumentationManager.TryGetDefinitionByIdentifier(source.Language)
                 select new XElement("File", new XElement("Name", source.PathAndFilename), highlighter.HighlightLines(source.OriginalLines));
-
+            
             var reader = new XDocument(new XElement("Source", xElements)).CreateReader();
 
             if (EnvVar.Verbose >= 2)
