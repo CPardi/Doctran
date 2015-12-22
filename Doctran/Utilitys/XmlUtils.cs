@@ -48,5 +48,10 @@ namespace Doctran.Utilitys
                 return xmlDoc;
             }
         }
+
+        public static XElement WrapAndParse(string name, string text)
+        {
+            return XElement.Parse("<" + name + ">" + text + "</" + name + ">", LoadOptions.PreserveWhitespace);
+        }
     }
 }

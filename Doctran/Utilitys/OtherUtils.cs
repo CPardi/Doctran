@@ -18,6 +18,14 @@ namespace Doctran.Utilitys
 
     public static class OtherUtils
     {
+        public static void ConsoleGotoNewLine()
+        {
+            if (Console.CursorLeft != 0)
+            {
+                Console.WriteLine(string.Empty);
+            }
+        }
+
         public static void CreateDirectory(string relativePath)
         {
             if (!Directory.Exists(Path.GetFullPath(relativePath)))
@@ -50,12 +58,7 @@ namespace Doctran.Utilitys
             }
             catch (IOException e)
             {
-                Report.Error((pub, ex) =>
-                {
-                    pub.AddWarningDescription("Error in markup file path.");
-                    pub.AddReason(e.Message);
-                    pub.AddLocation(filePath);
-                }, e);
+                Report.Error(pub => pub.DescriptionReasonLocation(ReportGenre.FileRead, $"Error in markup file path. {e.Message}", filePath), e);
             }
 
             // Check if a Markdown is specified and if so parse it to get the html. The Path information should specified the 

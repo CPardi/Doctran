@@ -31,11 +31,11 @@ namespace Doctran
             AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionTrapper;
 #endif
             
-            Report.SetReleaseProfile();
+            Report.SetDebugProfile();
 
             var options = GetOptions(args);
             options.SourceFilePaths.KeepDistinctOnly();
-            EnvVar.Verbose = options.Verbose;
+            Report.Verbose = options.Verbose;
 
             var project = GetProject(options.SourceFilePaths);
 
@@ -43,18 +43,9 @@ namespace Doctran
             var xmlOutputter = GetXmlOutputter(project, options.XmlInformation, options.OutputDirectory, options.SaveXmlPath);
             OutputHtml(project, xmlOutputter, options);
 
-            if (EnvVar.Verbose >= 2)
-            {
-                Console.WriteLine("Done");
-            }
-            if (EnvVar.Verbose >= 2)
-            {
-                Console.WriteLine(@"Documentation can be found at """ + Path.GetFullPath(options.OutputDirectory) + @"""");
-            }
-            if (EnvVar.Verbose >= 2)
-            {
-                Console.WriteLine(@"Documentation generation complete.");
-            }
+            // Verbose >= 2
+            Report.NewStatus($@"Documentation can be found at '{Path.GetFullPath(options.OutputDirectory)}'");
+            Report.NewStatus(@"Documentation generation complete.");
             return 0;
         }
 
@@ -68,13 +59,7 @@ namespace Doctran
             }
             catch (IOException e)
             {
-                Report.Error(
-                    (pub, ex) =>
-                    {
-                        pub.AddErrorDescription("Invalid argument list.");
-                        pub.AddReason(e.Message);
-                    },
-                    e);
+                Report.Error(pub => pub.DescriptionReason(ReportGenre.Argument, e.Message), e);
             }
 
             ShowLicensing = options.ShowLicensing;
@@ -83,13 +68,12 @@ namespace Doctran
 
             if (options.ShowHelp)
             {
-                Report.MessageThenExit(pub => { pub.AddMessage(options.GetUsage()); });
+                Report.MessageAndExit(options.GetUsage());
             }
 
             if (options.ShowPluginInformation)
             {
-                Report.MessageThenExit(
-                    pub => { pub.AddMessage(PluginManager.InformationString); });
+                Report.MessageAndExit(PluginManager.InformationString);
             }
 
             var fileParser = new Parser<Options>();
@@ -105,25 +89,24 @@ namespace Doctran
         }
 
         private static Project GetProject(IEnumerable<string> sourceFiles)
-        {
-            if (EnvVar.Verbose >= 2)
-            {
-                Console.Write("Analysing project block structure... ");
-            }
-            return ProgramHelper.ParseProject(sourceFiles);
+        {            
+            Report.NewStatus("Analysing project block structure... ");            
+            var proj = ProgramHelper.ParseProject(sourceFiles);
+            Report.ContinueStatus("Done");
+            return proj;
         }
 
         private static XmlOutputter GetXmlOutputter(Project project, XElement xmlInformation, string outputDirectory, string saveXmlPath)
         {
-            if (EnvVar.Verbose >= 2)
-            {
-                Console.Write("Done" + Environment.NewLine + "Generating xml... ");
-            }
+            Report.NewStatus("Generating xml... ");   
+                     
             var xmlOutputter = new XmlOutputter(project.XEle(xmlInformation));
             if (saveXmlPath != null)
             {
                 xmlOutputter.SaveToDisk(Path.Combine(outputDirectory, saveXmlPath));
             }
+
+            Report.ContinueStatus("Done");
             return xmlOutputter;
         }
 
@@ -135,17 +118,18 @@ namespace Doctran
 
         private static void OutputHtml(Project project, XmlOutputter xmlOutputter, Options options)
         {
+            Report.NewStatus("Generating htmls... ");
+
             var xElements =
                 from source in project.Sources
                 let highlighter = DocumentationManager.TryGetDefinitionByIdentifier(source.Language)
-                select new XElement("File", new XElement("Name", source.PathAndFilename), highlighter.HighlightLines(source.OriginalLines));
-            
+                select new XElement("File",
+                    new XElement("Identifier", source.Identifier),
+                    highlighter.HighlightLines(source.OriginalLines));
+
             var reader = new XDocument(new XElement("Source", xElements)).CreateReader();
 
-            if (EnvVar.Verbose >= 2)
-            {
-                Console.Write("Done" + Environment.NewLine + "Generating htmls... ");
-            }
+            new XDocument(new XElement("Source", xElements)).Save(Path.Combine(options.OutputDirectory, "source.xml"));
 
             var preProcess = new XsltRunner(Path.Combine(EnvVar.ExecPath, "themes", options.ThemeName, "main_pre.xslt"));
             var preProcessResult = preProcess.Run(xmlOutputter.XDocument, Path.GetFullPath(options.OutputDirectory));
@@ -157,18 +141,18 @@ namespace Doctran
             htmlOutputter.Run(
                 preProcessResult.ToXDocument(),
                 Path.GetFullPath(options.OutputDirectory) + EnvVar.Slash,
-                new KeyValuePair<string, object>("verbose", EnvVar.Verbose),
+                new KeyValuePair<string, object>("verbose", Report.Verbose),
                 new KeyValuePair<string, object>("source", reader));
+
+            Report.ContinueStatus("Done");
         }
 
         private static void OutputTheme(Options options)
         {
-            if (EnvVar.Verbose >= 2)
-            {
-                Console.Write("Done" + Environment.NewLine + "Outputting theme files... ");
-            }
+            Report.NewStatus("Outputting theme files... ");
             var themeOutputter = new ThemeOutputter();
             themeOutputter.Output(options);
+            Report.ContinueStatus("Done");
         }
 
         private static void UnhandledExceptionTrapper(object sender, UnhandledExceptionEventArgs e)

@@ -77,15 +77,10 @@ namespace Doctran.Parsing.BuiltIn.FortranBlocks
 
         public override IEnumerable<FortranObject> ReturnObject(IEnumerable<IFortranObject> subObjects, List<FileLine> lines)
         {
-            var basic = ParseXmlContent("Basic", GetBasicText(lines));
-            var detailed = ParseXmlContent("Detailed", GetDetailText(lines));
+            var basic = XmlUtils.WrapAndParse("Basic", GetBasicText(lines));
+            var detailed = XmlUtils.WrapAndParse("Detailed", GetDetailText(lines));
 
             yield return new Description(basic, detailed, lines);
-        }
-
-        private static XElement ParseXmlContent(string name, string text)
-        {
-            return XElement.Parse("<" + name + ">" + text + "</" + name + ">", LoadOptions.PreserveWhitespace);
         }
     }
 }

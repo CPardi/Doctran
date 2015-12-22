@@ -14,7 +14,12 @@ namespace Doctran.Utilitys
     using Helper;
 
     public static class StringUtils
-    {
+    {        
+        public static bool IsNullOrEmpty(this string @this)
+        {
+            return string.IsNullOrEmpty(@this);
+        }
+
         public static List<FileLine> ConvertToFileLineList(string linesString)
         {
             var lines = new List<FileLine>();

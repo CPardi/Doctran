@@ -12,20 +12,30 @@ namespace Doctran.Reporting
     using System.Linq;
     using System.Reflection;
     using CommandLine.Text;
+    using Helper;
     using Utilitys;
 
     public static class Report
     {
         public static ReportMode ReportMode { get; set; } = ReportMode.Debug;
 
-        public static void Error<TException>(Action<ConsolePublisher, TException> publish, TException error)
+        public static int Verbose { get; set; }
+
+        public static void ContinueStatus(string message)
+        {
+            Console.Write(message);
+            OtherUtils.ConsoleGotoNewLine();
+        }
+
+        public static void Error<TException>(Action<ConsolePublisher> publish, TException error)
             where TException : Exception
         {
             var publisher = new ConsolePublisher();
-            publish(publisher, error);
+            publish(publisher);
+
             if (ReportMode == ReportMode.Release)
             {
-                publisher.Publish();
+                publisher.Publish(ReportSeverity.Error);
                 Environment.Exit(1);
             }
 
@@ -65,7 +75,7 @@ namespace Doctran.Reporting
                 {
                     var publisher = new ConsolePublisher();
                     publish(publisher, error);
-                    publisher.Publish();
+                    publisher.Publish(ReportSeverity.Error);
                 }
 
                 Environment.Exit(1);
@@ -74,16 +84,43 @@ namespace Doctran.Reporting
             ThrowExceptions(errorList);
         }
 
-        public static void MessageThenExit(Action<ConsolePublisher> publish)
+        public static void Message(string title, string text)
         {
-            var publisher = new ConsolePublisher();
-            publish(publisher);
-            publisher.Publish();
+            if (Verbose < 3)
+            {
+                return;
+            }
+
+            var ttb = new TitledTextBuilder();
+            ttb.Append(title, text);
+            OtherUtils.ConsoleGotoNewLine();
+            Console.Write(ttb.ToString());
+        }
+
+        public static void MessageAndExit(string message)
+        {
+            OtherUtils.ConsoleGotoNewLine();
+            Console.WriteLine(message);
             Environment.Exit(1);
+        }
+
+        public static void NewStatus(string message)
+        {
+            if (Verbose < 2)
+            {
+                return;
+            }
+
+            Console.Write(message);
         }
 
         public static void SetDebugProfile()
         {
+            if (Verbose < 2)
+            {
+                return;
+            }
+
             ReportMode = ReportMode.Debug;
         }
 
@@ -115,7 +152,7 @@ namespace Doctran.Reporting
         {
             var publisher = new ConsolePublisher();
             publish(publisher);
-            publisher.Publish();
+            publisher.Publish(ReportSeverity.Warning);
 
             if (ReportMode == ReportMode.Debug)
             {
@@ -136,7 +173,7 @@ namespace Doctran.Reporting
             {
                 var publisher = new ConsolePublisher();
                 publish(publisher, warning);
-                publisher.Publish();
+                publisher.Publish(ReportSeverity.Warning);
             }
 
             ThrowExceptions(warningsList);
@@ -152,7 +189,7 @@ namespace Doctran.Reporting
             throw exception;
         }
 
-        private static void ThrowExceptions<TException>(IList<TException> errorList) 
+        private static void ThrowExceptions<TException>(IList<TException> errorList)
             where TException : Exception
         {
             if (ReportMode != ReportMode.Debug)

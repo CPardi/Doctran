@@ -11,6 +11,7 @@ namespace Doctran.Parsing
     using System.Collections.Generic;
     using System.Linq;
     using BuiltIn.FortranObjects;
+    using Reporting;
     using Utilitys;
 
     public class Traverser
@@ -25,16 +26,15 @@ namespace Doctran.Parsing
 
         public string Name { get; }
 
-        public void Go(ISource source) => Navigate(source);
+        public void Go(ISource source)
+        {
+            var file = source as ISourceFile;
+            Report.Message("Post processing", $"Applying '{this.Name}' on '{file?.AbsolutePath}'");
+            Navigate(source);
+        }
 
         private void Navigate(IFortranObject obj)
         {
-            var file = obj as SourceFile;
-            if (EnvVar.Verbose >= 3 && file != null)
-            {
-                Console.WriteLine("Post processing: " + file.Name + ((SourceFile)obj).Extension);
-            }
-
             Action<object> act;
             
             if (_actions.TryGetValue(obj.GetType(), out act))

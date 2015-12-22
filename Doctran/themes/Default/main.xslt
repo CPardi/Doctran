@@ -5,8 +5,8 @@
     <!-- Applies all the templates within the project. -->
     <xsl:import href="base/include.xslt"/>
     <xsl:import href="f95/include.xslt"/>
-    <xsl:import href="f03/include.xslt"/>
-    <xsl:import href="f03/RunAll.xslt"/>
+    <!--<xsl:import href="f03/include.xslt"/>-->
+    <!--<xsl:import href="f03/RunAll.xslt"/>-->
 
     <xsl:param name="verbose" as="xs:integer"/>
     <xsl:param name="workingDirectory" as="xs:string"/>

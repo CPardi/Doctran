@@ -29,25 +29,27 @@ namespace Doctran.Parsing.BuiltIn.FortranObjects
         }
 
         public string Language { get; }
+
+        public string Identifier => $"{Language} source";
     }
 
-    public class SourceFile : FortranObject, IHasName, IHasLines, IHasIdentifier, IHasValidName, ISource, ISourceFile
+    public class SourceFile : FortranObject, IHasName, IHasLines, IHasValidName, ISourceFile
     {
         private readonly FileInfo _info;
 
         // Reads a file, determines its type and loads the contained procedure and/or modules.
-        public SourceFile(string language, string pathAndFilename, IEnumerable<IFortranObject> subObjects, List<FileLine> originalLines, List<FileLine> lines)
+        public SourceFile(string language, string absolutePath, IEnumerable<IFortranObject> subObjects, List<FileLine> originalLines, List<FileLine> lines)
             : base(subObjects, lines)
         {
-            this.Name = Path.GetFileName(pathAndFilename);
+            this.Name = Path.GetFileName(absolutePath);
 
-            this.PathAndFilename = pathAndFilename;
+            this.AbsolutePath = absolutePath;
             this.OriginalLines = originalLines;
             this.Language = language;
-            _info = new FileInfo(this.PathAndFilename);
+            _info = new FileInfo(this.AbsolutePath);
 
             // Get the filename from the inputted string
-            this.Name = Path.GetFileNameWithoutExtension(pathAndFilename);
+            this.Name = Path.GetFileNameWithoutExtension(absolutePath);
         }
 
         public List<FileLine> OriginalLines { get; }
@@ -64,7 +66,7 @@ namespace Doctran.Parsing.BuiltIn.FortranObjects
 
         public string Name { get; }
         
-        public string PathAndFilename { get; }
+        public string AbsolutePath { get; }
 
         public XElement SourceXEle(List<FileLine> lines)
         {
@@ -103,14 +105,7 @@ namespace Doctran.Parsing.BuiltIn.FortranObjects
             }
             catch (IOException e)
             {
-                Report.Warning(
-                    pub =>
-                    {
-                        pub.AddErrorDescription("Could not read file.");
-                        pub.AddReason(e.Message);
-                    });
-
-                throw;
+                Report.Error(pub => pub.DescriptionReason(ReportGenre.FileRead, e.Message), e);
             }
 
             return lines;

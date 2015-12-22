@@ -73,29 +73,18 @@ namespace Doctran.Parsing.BuiltIn
 
             var curObj = obj;
             var file = obj.GoUpTillType<ISource>() as SourceFile;
-            if (obj.Parent is Project)
-            {
-                Report.Warning(pub =>
-                {
-                    pub.AddWarningDescription("Description meta-data was ignored");
-                    pub.AddReason("Multiple descriptions specified for a single block.");
-                    pub.AddLocation(curObj.Lines.First().Number == curObj.Lines.Last().Number
-                        ? $"At line {curObj.Lines.First().Number} of '{file?.Name}{file?.Extension}'."
-                        : $"Within lines {curObj.Lines.First().Number} to {curObj.Lines.Last().Number} of '{file?.Name}{file?.Extension}'.");
-                });
-            }
-            else
-            {
-                Report.Warning(pub =>
-                {
-                    pub.AddWarningDescription("Description meta-data was ignored");
-                    pub.AddReason("Multiple descriptions specified for a single block.");
-                    pub.AddLocation(curObj.Lines.First().Number == curObj.Lines.Last().Number
-                        ? $"At line {curObj.Lines.First().Number} of '{file?.Name}{file?.Extension}'."
-                        : $"Within lines {curObj.Lines.First().Number} to {curObj.Lines.Last().Number} of '{file?.Name}{file?.Extension}'.");
-                });
-            }
+
+            Report.Warning(
+                pub => pub.DescriptionReasonLocation(ReportGenre.Parsing, "Multiple descriptions specified for a single block. Description meta-data was ignored.", LocationString(curObj, file)));
+            
             obj.Parent.SubObjects.Remove(obj);
+        }
+
+        private static string LocationString(IFortranObject curObj, SourceFile file)
+        {
+            return curObj.Lines.First().Number == curObj.Lines.Last().Number
+                ? $"At line {curObj.Lines.First().Number} of '{file?.Name}{file?.Extension}'."
+                : $"Within lines {curObj.Lines.First().Number} to {curObj.Lines.Last().Number} of '{file?.Name}{file?.Extension}'.";
         }
 
         private static void CorrectName(FortranObject obj)
@@ -108,15 +97,11 @@ namespace Doctran.Parsing.BuiltIn
             }
 
             var curObj = obj;
-            var file = obj.GoUpTillType<ISource>();
-            Report.Warning(pub =>
-            {
-                pub.AddWarningDescription("Description meta-data was ignored");
-                pub.AddReason("Description identifier does not match parent identifier.");
-                pub.AddLocation(curObj.Lines.First().Number == curObj.Lines.Last().Number
-                    ? $"At line {curObj.Lines.First().Number} of '{(file as SourceFile)?.Name}{(file as SourceFile)?.Extension}'."
-                    : $"Within lines {curObj.Lines.First().Number} to {curObj.Lines.Last().Number} of '{(file as SourceFile)?.Name}{(file as SourceFile)?.Extension}'.");
-            });
+            var file = obj.GoUpTillType<ISource>() as SourceFile;
+
+            Report.Warning(
+                pub => pub.DescriptionReasonLocation(ReportGenre.Parsing, "Description meta-data was ignored. Description identifier does not match parent identifier.", LocationString(curObj, file)));
+
             obj.Parent.SubObjects.Remove(obj);
         }
     }

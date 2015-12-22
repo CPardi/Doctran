@@ -100,89 +100,40 @@ namespace Doctran.Output
             return destination.XmlDocument;
         }
 
+        private string LocationString(SourceLocator sourceLocator)
+        {
+            return sourceLocator == null
+                ? $"In '{this.StylesheetPath}'."
+                : $"At line '{sourceLocator.getLineNumber()}', column '{sourceLocator.getColumnNumber()}' of '{sourceLocator.getSystemId()}'.";
+        }
+
         private void ReportCompilerErrors(TransformerErrorListener listener)
         {
-            // Need to hold exception within another because TransformerException is a base type.
             Report.Warnings(
-                (publisher, warning) =>
-                {
-                    var sourceLocator = warning.getLocator();
-                    publisher.AddWarningDescription("XSLT compilation warning");
-                    publisher.AddReason(warning.getCause().Message);
-                    publisher.AddLocation(
-                        sourceLocator == null
-                            ? $"In '{StylesheetPath}'."
-                            : $"At line '{sourceLocator.getLineNumber()}', column '{sourceLocator.getColumnNumber()}' of '{StylesheetPath}'.");
-                },
+                (pub, w) => pub.DescriptionReasonLocation(ReportGenre.XsltCompilation, w.getCause().Message, this.LocationString(w.getLocator())),
                 listener.Warnings);
 
             Report.Warnings(
-                (publisher, error) =>
-                {
-                    var sourceLocator = error.getLocator();
-                    publisher.AddWarningDescription("Non-fatal XSLT stylesheet error.");
-                    publisher.AddReason(error.getCause().Message);
-                    publisher.AddLocation(
-                        sourceLocator == null
-                            ? $"In '{StylesheetPath}'."
-                            : $"At line '{sourceLocator.getLineNumber()}', column '{sourceLocator.getColumnNumber()}' of '{StylesheetPath}'.");
-                },
-                listener.Errors);
-
-            Report.Errors(
-                (publisher, fatalError) =>
-                {
-                    var sourceLocator = fatalError.getLocator();
-                    publisher.AddErrorDescription("Fatal XSLT stylesheet error.");
-                    publisher.AddReason(fatalError.getMessage());
-                    publisher.AddLocation(
-                        sourceLocator == null
-                            ? $"In '{StylesheetPath}'."
-                            : $"At line '{sourceLocator.getLineNumber()}', column '{sourceLocator.getColumnNumber()}' of '{sourceLocator.getSystemId()}'.");
-                },
+                (pub, e) => pub.DescriptionReasonLocation(ReportGenre.XsltCompilation, e.getCause().Message, this.LocationString(e.getLocator())),
+                listener.Errors);                                     
+                                                                      
+            Report.Errors(                                            
+                (pub, e) => pub.DescriptionReasonLocation(ReportGenre.XsltCompilation, e.getCause().Message, this.LocationString(e.getLocator())),
                 listener.FatalErrors);
         }
 
         private void ReportCompilerErrors(DynamicErrorListener listener)
         {
-            // Need to hold exception within another because TransformerException is a base type.
             Report.Warnings(
-                (publisher, warning) =>
-                {
-                    var sourceLocator = warning.getLocator();
-                    publisher.AddWarningDescription("XSLT runtime warning");
-                    publisher.AddReason(warning.Message);
-                    publisher.AddLocation(
-                        sourceLocator == null
-                            ? $"In '{StylesheetPath}'."
-                            : $"At line '{sourceLocator.getLineNumber()}', column '{sourceLocator.getColumnNumber()}' of '{sourceLocator.getSystemId()}'.");
-                },
+                (pub, w) => pub.DescriptionReasonLocation(ReportGenre.XsltRuntime, w.Message, this.LocationString(w.getLocator())),
                 listener.Warnings);
 
             Report.Warnings(
-                (publisher, error) =>
-                {
-                    var sourceLocator = error.getLocator();
-                    publisher.AddWarningDescription("Non-fatal XSLT runtime error.");
-                    publisher.AddReason(error.Message);
-                    publisher.AddLocation(
-                        sourceLocator == null
-                            ? $"In '{StylesheetPath}'."
-                            : $"At line '{sourceLocator.getLineNumber()}', column '{sourceLocator.getColumnNumber()}' of '{sourceLocator.getSystemId()}'.");
-                },
+                (pub, e) => pub.DescriptionReasonLocation(ReportGenre.XsltRuntime, e.Message, this.LocationString(e.getLocator())),
                 listener.Errors);
 
             Report.Errors(
-                (publisher, fatalError) =>
-                {
-                    var sourceLocator = fatalError.getLocator();
-                    publisher.AddErrorDescription("Fatal XSLT runtime error.");
-                    publisher.AddReason(fatalError.Message);
-                    publisher.AddLocation(
-                        sourceLocator == null
-                            ? $"In '{StylesheetPath}'."
-                            : $"At line '{sourceLocator.getLineNumber()}', column '{sourceLocator.getColumnNumber()}' of '{sourceLocator.getSystemId()}'.");
-                },
+                (pub, e) => pub.DescriptionReasonLocation(ReportGenre.XsltRuntime, e.Message, this.LocationString(e.getLocator())),
                 listener.FatalErrors);
         }
 

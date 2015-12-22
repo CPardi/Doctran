@@ -35,7 +35,7 @@ namespace Doctran.Parsing
             }
         }
         
-        public ISource ParseLines(List<FileLine> lines)
+        public ISourceFile Parse(string absolutePath, List<FileLine> lines)
         {
             // Set the current index to 0 and parse the lines set in the constructor.
             var currentIndex = 0;
@@ -52,7 +52,7 @@ namespace Doctran.Parsing
 
             var parserForLines = new ParserForLines(linesForParse, _blockParsers);
             var parsingResult = parserForLines.SearchBlock(0, ref currentIndex, blockNameStack).Single();            
-            return new Source(_language, parsingResult.SubObjects, parsingResult.Lines.Skip(1).ToList());
+            return new SourceFile(_language, absolutePath, parsingResult.SubObjects, lines, parsingResult.Lines.Skip(1).ToList());
         }
 
         private class ParserForLines

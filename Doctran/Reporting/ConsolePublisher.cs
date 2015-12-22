@@ -8,115 +8,119 @@
 namespace Doctran.Reporting
 {
     using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
     using Helper;
+    using Utilitys;
+
+    public enum ReportGenre
+    {
+        Licensing,
+        Unlicensed,
+        Argument,
+        FileRead,
+        Parsing,
+        Plugin,
+        ProjectFile,
+        XsltCompilation,
+        XsltRuntime
+    }
+
+    public enum ReportSeverity
+    {
+        Undefined,
+
+        Error,
+
+        Warning,
+
+        Message,
+
+        Status
+    }
 
     public class ConsolePublisher
     {
-        private string ErrorDescription { get; set; }
+        private readonly Dictionary<ReportSeverity, string> _reportTitles = new Dictionary<ReportSeverity, string>
+        {
+            { ReportSeverity.Error, "Error" },
+            { ReportSeverity.Warning, "Warning" },
+            { ReportSeverity.Message, "Message" }
+        };
+
+        private readonly Dictionary<ReportGenre, string> _genreDescriptions = new Dictionary<ReportGenre, string>
+        {
+            { ReportGenre.Licensing, "A licensing issue has occured." },
+            { ReportGenre.Unlicensed, "Unlicensed plugin in use." },
+            { ReportGenre.Argument, "Argument list issue." },
+            { ReportGenre.FileRead, "File read issue." },
+            { ReportGenre.Parsing, "Parsing issue." },
+            { ReportGenre.Plugin, "Plugin loading issue." },
+            { ReportGenre.ProjectFile, "Project file contains an issue." },
+            { ReportGenre.XsltCompilation, "Fatal XSLT stylesheet compilation issue." },
+            { ReportGenre.XsltRuntime, "Fatal XSLT stylesheet runtime issue." },
+        };
+
+        private ReportGenre ReportGenre { get; set; }
 
         private string Location { get; set; }
 
-        private string Message { get; set; }
-
         private string Reason { get; set; }
 
-        private string WarningDescription { get; set; }
-
-        public void AddErrorDescription(string description)
+        public void DescriptionReasonLocation(ReportGenre reportGenre, string reason, string location)
         {
-            if (ErrorDescription != null)
-            {
-                throw new InvalidOperationException("Cannot specify more than one error description.");
-            }
-
-            if (WarningDescription != null)
-            {
-                throw new InvalidOperationException("Cannot specify both an error and a warning description.");
-            }
-
-            ErrorDescription = description;
+            AddReportGenre(reportGenre);
+            AddReason(reason);
+            AddLocation(location);
+        }
+        
+        public void DescriptionReason(ReportGenre reportGenre, string reason)
+        {
+            AddReportGenre(reportGenre);
+            AddReason(reason);
+        }
+        
+        private void AddReportGenre(ReportGenre reportGenre)
+        {            
+            this.ReportGenre = reportGenre;
         }
 
-        public void AddLocation(string location)
+        private void AddLocation(string location)
         {
-            if (Location != null)
-            {
-                throw new InvalidOperationException("Cannot specify more than one error location.");
-            }
+            Debug.Assert(Location.IsNullOrEmpty(), "Cannot specify more than one error location.");
 
-            Location = location;
+            this.Location = location;
         }
 
-        public void AddMessage(string message)
+        private void AddReason(string reason)
         {
-            if (Message != null)
-            {
-                throw new InvalidOperationException("Cannot specify more than one message.");
-            }
-
-            Message = message;
+            Debug.Assert(Reason.IsNullOrEmpty(), "Cannot specify more than one error reason.");
+            
+            this.Reason = reason;
         }
-
-        public void AddReason(string reason)
-        {
-            if (Reason != null)
-            {
-                throw new InvalidOperationException("Cannot specify more than one error reason.");
-            }
-
-            Reason = reason;
-        }
-
-        public void AddWarningDescription(string description)
-        {
-            if (ErrorDescription != null)
-            {
-                throw new InvalidOperationException("Cannot specify both an error and a warning description.");
-            }
-
-            if (WarningDescription != null)
-            {
-                throw new InvalidOperationException("Cannot specify more than one warning description.");
-            }
-
-            WarningDescription = description;
-        }
-
-        public void Publish()
+     
+        public void Publish(ReportSeverity reportSeverity)
         {
             // If we need a new line then add it.
-            AddNewLine();
-
-            // Check for a simple message first.
-            if (Message != null)
-            {
-                Console.Write(Message);
-                return;
-            }
+            OtherUtils.ConsoleGotoNewLine();
 
             // Give errors or warnings in standard form.
             var ttb = new TitledTextBuilder();
-            ttb.Append(ErrorDescription != null ? "Error" : "Warning", ErrorDescription ?? WarningDescription);
+            ttb.Append(_reportTitles[reportSeverity], _genreDescriptions[this.ReportGenre]);
 
-            if (Reason != null)
+            // If given, write reason.
+            if (!Reason.IsNullOrEmpty())
             {
                 ttb.Append("Reason", Reason);
             }
 
-            if (Location != null)
+            // If given, write location.
+            if (!Location.IsNullOrEmpty())
             {
                 ttb.Append("Location", Location);
             }
 
-            Console.WriteLine(ttb.ToString());
-        }
-
-        private static void AddNewLine()
-        {
-            if (Console.CursorLeft != 0)
-            {
-                Console.WriteLine(string.Empty);
-            }
+            Console.Write(ttb.ToString());
         }
     }
 }

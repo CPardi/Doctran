@@ -79,12 +79,7 @@ namespace Doctran.Input.OptionFile
                         }
                         catch (Exception e)
                         {
-                            Report.Error(
-                                (pub, ex) =>
-                                {
-                                    pub.AddErrorDescription("Error within project file.");
-                                    pub.AddReason(e.Message);
-                                }, e);
+                            Report.Error(pub => pub.DescriptionReason(ReportGenre.ProjectFile, e.Message), e);
                         }
                     }
                 }
@@ -105,13 +100,7 @@ namespace Doctran.Input.OptionFile
             }
             catch (IOException e)
             {
-                Report.Error(
-                    (pub, ex) =>
-                    {
-                        pub.AddErrorDescription("Could not locate project file.");
-                        pub.AddReason(e.Message);
-                    }, e);
-                throw;
+                Report.Error(pub => { pub.DescriptionReason(ReportGenre.FileRead, "Could not locate project file. {e.Message}"); }, e);
             }
 
             if (string.IsNullOrEmpty(path))
@@ -129,7 +118,7 @@ namespace Doctran.Input.OptionFile
             var parser = new Parser("ProjectFile", infoList);
             try
             {
-                var result = parser.ParseLines(this.ReadAndPreProcessFile(fileName)).SubObjects;
+                var result = parser.Parse(path, this.ReadAndPreProcessFile(fileName)).SubObjects;
                 TestParseResults(result);
                 var resultInfo = result.Cast<IInformation>();
 
@@ -139,12 +128,7 @@ namespace Doctran.Input.OptionFile
             }
             catch (IOException e)
             {
-                Report.Error(
-                    (pub, ex) =>
-                    {
-                        pub.AddErrorDescription("Error within project file.");
-                        pub.AddReason(e.Message);
-                    }, e);
+                Report.Error( pub => pub.DescriptionReason(ReportGenre.ProjectFile, e.Message), e);
                 throw;
             }
         }

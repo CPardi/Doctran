@@ -25,7 +25,7 @@ namespace Doctran.Helper
                 if (!File.Exists(path))
                 {
                     var e = new FileNotFoundException();
-                    Report.Error((pub, ex) => { pub.AddErrorDescription("Source file path does not exist."); }, e);
+                    Report.Error(pub => pub.DescriptionReason(ReportGenre.FileRead, $"Source file path does not exist at '{path}'."), e);
                 }
 
                 // Parse source files.

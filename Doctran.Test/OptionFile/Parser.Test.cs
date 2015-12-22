@@ -20,7 +20,7 @@ namespace Doctran.Test.OptionFile
         private string _originalDirectory;
 
         [Test]
-        [ExpectedException(typeof(IOException))]
+        [ExpectedException(typeof(FileNotFoundException))]
         public void IncorrectFilePath()
         {
             var options = new OptionsTest();

@@ -7,7 +7,7 @@ Copyright © 2015 Christopher Pardi
     <!-- Applies all the templates within the project. -->
     <xsl:import href="base/PreProcess/include.xslt"/>
     <xsl:import href="f95/PreProcess/include.xslt"/>
-    <xsl:import href="f03/PreProcess/include.xslt"/>
+    <!--<xsl:import href="f03/PreProcess/include.xslt"/>-->
 
     <xsl:output method="xml" indent="no" encoding="utf-8"/>
 

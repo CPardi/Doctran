@@ -29,13 +29,7 @@ namespace Doctran.Helper
             }
             catch (IOException e)
             {
-                Report.Warning(pub =>
-                {
-                    pub.AddWarningDescription("Plugin directory is invalid.");
-                    pub.AddReason(e.Message);
-                    pub.AddLocation(pluginPath);
-                });
-
+                Report.Warning(pub => pub.DescriptionReasonLocation(ReportGenre.Plugin, $"Plugin directory is invalid. {e.Message}", pluginPath));
                 return;
             }
 
@@ -48,12 +42,7 @@ namespace Doctran.Helper
                 }
                 catch (IOException e)
                 {
-                    Report.Warning(pub =>
-                    {
-                        pub.AddWarningDescription("Could not load plugin.");
-                        pub.AddReason(e.Message);
-                        pub.AddLocation(pluginPath);
-                    });
+                    Report.Warning(pub => pub.DescriptionReasonLocation(ReportGenre.Plugin, $"Could not load plugin. {e.Message}", pluginPath));
                     return;
                 }
             }

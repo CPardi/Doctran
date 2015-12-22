@@ -35,22 +35,14 @@ namespace Doctran.Output
             // Load a stylesheet at a from text reader, v9.6 doesent like using a Uri for some reason.            
             compiler.BaseUri = new Uri(xsltPathAndName);
 
-            TextReader textreader = File.OpenText(xsltPathAndName + "_pre.xslt");
-            var executable = compiler.Compile(textreader);
-            _transformerPreprocess = executable.Load();
+            // Create transformer for preprocess.
+            TextReader textreaderPreprocess = File.OpenText(xsltPathAndName + "_pre.xslt");
+            var executablePreprocess = compiler.Compile(textreaderPreprocess);
+            _transformerPreprocess = executablePreprocess.Load();
 
-            textreader = File.OpenText(xsltPathAndName + ".xslt");
-            try
-            {
-                executable = compiler.Compile(textreader);
-            }
-            finally
-            {
-                foreach (var i in compiler.ErrorList)
-                {
-                    Console.WriteLine(Environment.NewLine + i);
-                }
-            }
+            // Create transformer for Html output.
+            var textreader = File.OpenText(xsltPathAndName + ".xslt");
+            var executable = compiler.Compile(textreader);            
             _transformer = executable.Load();
 
             _builder = _processor.NewDocumentBuilder();
@@ -58,9 +50,10 @@ namespace Doctran.Output
 
         public void SaveToDisk(XDocument xDocument, string outputDirectory)
         {
-            ///
-            /// PRE-PROCESS
-            ///
+            //
+            // PRE-PROCESS
+            //
+
             // The transformation destination variable.
             var destinationPreprocess = new DomDestination();
 

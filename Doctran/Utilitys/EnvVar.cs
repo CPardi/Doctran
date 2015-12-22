@@ -21,8 +21,6 @@ namespace Doctran.Utilitys
 
         public static string PluginPath => Path.Combine(ExecPath, "plugins");
 
-        public static int Verbose { get; set; }
-
         public static string ThemeDirectory(string themeName) => Path.Combine(ExecPath, @"themes", themeName);
 
         public static string XsltFullPathAndName(string themeName) => Path.Combine(ThemeDirectory(themeName), "main");
