@@ -22,6 +22,8 @@ namespace Doctran.Helper
 
             foreach (var path in sourceFiles)
             {
+                Report.Message("Parsing", path);
+
                 if (!File.Exists(path))
                 {
                     var e = new FileNotFoundException();

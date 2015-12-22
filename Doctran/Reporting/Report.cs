@@ -23,8 +23,12 @@ namespace Doctran.Reporting
 
         public static void ContinueStatus(string message)
         {
+            if (Verbose < 2)
+            {
+                return;
+            }
+
             Console.Write(message);
-            OtherUtils.ConsoleGotoNewLine();
         }
 
         public static void Error<TException>(Action<ConsolePublisher> publish, TException error)
@@ -110,24 +114,13 @@ namespace Doctran.Reporting
             {
                 return;
             }
-
+            OtherUtils.ConsoleGotoNewLine(); 
             Console.Write(message);
         }
 
-        public static void SetDebugProfile()
-        {
-            if (Verbose < 2)
-            {
-                return;
-            }
+        public static void SetDebugProfile() => ReportMode = ReportMode.Debug;
 
-            ReportMode = ReportMode.Debug;
-        }
-
-        public static void SetReleaseProfile()
-        {
-            ReportMode = ReportMode.Release;
-        }
+        public static void SetReleaseProfile() => ReportMode = ReportMode.Release;
 
         public static string UsageString<TOptions>(TOptions options)
         {
@@ -150,6 +143,11 @@ namespace Doctran.Reporting
 
         public static void Warning(Action<ConsolePublisher> publish)
         {
+            if (Verbose < 2)
+            {
+                return;
+            }
+
             var publisher = new ConsolePublisher();
             publish(publisher);
             publisher.Publish(ReportSeverity.Warning);
@@ -164,7 +162,7 @@ namespace Doctran.Reporting
             where TException : Exception
         {
             var warningsList = warnings as IList<TException> ?? warnings.ToList();
-            if (!warningsList.Any())
+            if (Verbose < 2 && !warningsList.Any())
             {
                 return;
             }

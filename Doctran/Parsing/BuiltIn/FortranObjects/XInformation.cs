@@ -16,7 +16,7 @@ namespace Doctran.Parsing.BuiltIn.FortranObjects
     public class XInformation : XFortranObject, IInformation
     {
         public XInformation(int depth, string name, string value, List<FileLine> lines)
-            : base(name, lines)
+            : base(name, lines) 
         {
             this.Name = name;
             this.Value = value;

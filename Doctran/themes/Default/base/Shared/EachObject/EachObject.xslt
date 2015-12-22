@@ -13,10 +13,6 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
         <xsl:param name="AdditionalContent-head"/>
         <xsl:param name="AdditionalContent-body"/>
 
-        <xsl:if test="$verbose >= 3">
-            <xsl:message select="concat('Outputting: ',ancestor::File/Name, ancestor::File/Extension, ' : ', local-name(),' - ',Name,Extension)"/>
-        </xsl:if>
-
         <xsl:apply-templates mode="EachObject" select="$Object">
             <xsl:with-param name="AdditionalContent-head" select="$AdditionalContent-head"/>
             <xsl:with-param name="AdditionalContent-body" select="$AdditionalContent-body"/>

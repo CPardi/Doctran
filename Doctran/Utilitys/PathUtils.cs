@@ -12,7 +12,7 @@ namespace Doctran.Utilitys
     /// <summary>
     ///     A collection of function relating to path operations.
     /// </summary>
-    public class PathUtilitys
+    public class PathUtils
     {
         /// <summary>
         ///     If required, adds a leading period to a file extension.

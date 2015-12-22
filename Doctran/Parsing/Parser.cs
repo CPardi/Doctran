@@ -7,13 +7,11 @@
 
 namespace Doctran.Parsing
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using BuiltIn.FortranBlocks;
     using BuiltIn.FortranObjects;
     using Helper;
-    using Plugins;
 
     public class Parser
     {

@@ -8,9 +8,16 @@
 namespace Doctran.Utilitys
 {
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.Linq;
 
     public static class CollectionUtils
     {
+        public static ReadOnlyCollection<T> ToReadOnlyCollection<T>(this IEnumerable<T> @this)
+        {
+            return @this.ToList().AsReadOnly();
+        }
+
         public static IEnumerable<T> Empty<T>()
         {
             return new List<T>();

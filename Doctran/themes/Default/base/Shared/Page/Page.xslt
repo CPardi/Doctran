@@ -17,6 +17,10 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
         <xsl:param name="title"/>
         <xsl:param name="prefix" select="Prefix"/>
 
+        <xsl:if test="$verbose >= 3">
+            <xsl:message select="concat('Outputting: ',href)"/>
+        </xsl:if>
+
         <xsl:call-template name="PostProcessLinks">
             <xsl:with-param name="prefix" select="$prefix"/>
             <xsl:with-param name="article">

@@ -14,7 +14,7 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
 
     <xsl:template mode="Each" match="UserPage">
 
-        <xsl:result-document href="{Path}">
+        <xsl:result-document href="{href}">
 
             <xsl:call-template name="Page">
                 <xsl:with-param name="title" select="Content/(h1|h2|h3)[1]"/>

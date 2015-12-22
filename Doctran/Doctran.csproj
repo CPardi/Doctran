@@ -101,6 +101,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Helper\ProgramHelper.cs" />
+    <Compile Include="Output\Themes\DefaultCopier.cs" />
+    <Compile Include="Output\Themes\IFileCopier.cs" />
+    <Compile Include="Output\Themes\LessFileCopier.cs" />
+    <Compile Include="Output\Themes\MarkdownFileCopier.cs" />
+    <Compile Include="Output\Themes\TextFileCopier.cs" />
+    <Compile Include="Output\Html\XsltFileIgnorer.cs" />
     <Compile Include="Parsing\BuiltIn\FortranBlocks\SourceBlock.cs" />
     <Compile Include="Parsing\BuiltIn\IDescription.cs" />
     <Compile Include="Parsing\BuiltIn\IHasValidName.cs" />
@@ -125,7 +131,6 @@
     <Compile Include="Parsing\FortranBlock.cs" />
     <Compile Include="Parsing\FortranObject.cs" />
     <Compile Include="Plugins\IPlugin.cs" />
-    <Compile Include="Output\ObjectGroup.cs" />
     <Compile Include="Parsing\IGroupXElement.cs" />
     <Compile Include="Parsing\IInterfaceXElements.cs" />
     <Compile Include="Parsing\InterfaceXElements.cs" />
@@ -147,15 +152,15 @@
     <Compile Include="Helper\FileLine.cs" />
     <Compile Include="Utilitys\OtherUtils.cs" />
     <Compile Include="Helper\Options.cs" />
-    <Compile Include="Utilitys\PathUtilitys.cs" />
+    <Compile Include="Utilitys\PathUtils.cs" />
     <Compile Include="Plugins\PluginManager.cs" />
     <Compile Include="Utilitys\EnvVar.cs" />
     <Compile Include="Helper\PathList.cs" />
     <Compile Include="Helper\TitledTextBuilder.cs" />
-    <Compile Include="Output\DynamicErrorListener.cs" />
-    <Compile Include="Output\TransformerErrorListener.cs" />
-    <Compile Include="Output\XsltCompilerException.cs" />
-    <Compile Include="Output\XsltRunner.cs" />
+    <Compile Include="Output\Html\DynamicErrorListener.cs" />
+    <Compile Include="Output\Html\TransformerErrorListener.cs" />
+    <Compile Include="Output\Html\XsltCompilerException.cs" />
+    <Compile Include="Output\Html\XsltRunner.cs" />
     <Compile Include="Reporting\Report.cs" />
     <Compile Include="Parsing\BuiltIn\FortranObjects\SourceFile.cs" />
     <Compile Include="Input\OptionFile\Exceptions.cs" />
@@ -165,9 +170,9 @@
     <Compile Include="Input\OptionFile\UserPage.cs" />
     <Compile Include="Input\OptionFile\ValueAttribute.cs" />
     <Compile Include="Input\OptionFile\XmlPassThroughOptionsAttribute.cs" />
-    <Compile Include="Output\HtmlOutputter.cs" />
-    <Compile Include="Output\ThemeOutputter.cs" />
-    <Compile Include="Output\XmlOutputter.cs" />
+    <Compile Include="Output\Themes\HtmlOutputter.cs" />
+    <Compile Include="Output\Themes\ThemeOutputter.cs" />
+    <Compile Include="Output\Html\XmlOutputter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Reporting\ConsolePublisher.cs" />

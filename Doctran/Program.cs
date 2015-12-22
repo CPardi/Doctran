@@ -15,6 +15,7 @@ namespace Doctran
     using Helper;
     using Input.OptionFile;
     using Output;
+    using Output.Themes;
     using Parsing.BuiltIn.FortranObjects;
     using Plugins;
     using Reporting;
@@ -31,7 +32,7 @@ namespace Doctran
             AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionTrapper;
 #endif
             
-            Report.SetDebugProfile();
+            Report.SetReleaseProfile();
 
             var options = GetOptions(args);
             options.SourceFilePaths.KeepDistinctOnly();
@@ -45,7 +46,7 @@ namespace Doctran
 
             // Verbose >= 2
             Report.NewStatus($@"Documentation can be found at '{Path.GetFullPath(options.OutputDirectory)}'");
-            Report.NewStatus(@"Documentation generation complete.");
+            Report.NewStatus("Documentation generation complete.\n");
             return 0;
         }
 

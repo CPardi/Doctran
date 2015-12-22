@@ -36,10 +36,6 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
 
     <xsl:template mode="AddNavigation" match="Project">
         <xsl:copy>
-            <Prefix/>
-            <href>
-                <xsl:value-of select="'index.html'"/>
-            </href>
             <xsl:apply-templates mode="AddNavigation" select="@* | node()"/>
         </xsl:copy>
     </xsl:template>
