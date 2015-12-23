@@ -13,18 +13,24 @@ namespace Doctran.Parsing.BuiltIn.FortranObjects
     using Comments;
     using Helper;
 
-    public class XInformation : XFortranObject, IInformation
+    public class InformationGroup : FortranObject, IInformationGroup
     {
-        public XInformation(int depth, string name, string value, List<FileLine> lines)
-            : base(name, lines) 
+        public InformationGroup(int depth, string name, IEnumerable<IFortranObject> subObjects, List<FileLine> lines)
+            : base(subObjects, lines)
         {
             this.Name = name;
-            this.Value = value;
             this.Depth = depth;
         }
 
-        public XInformation(int depth, string name, string value, IEnumerable<IFortranObject> subObjects, List<FileLine> lines)
-            : base(name, subObjects, lines)
+        public int Depth { get; }
+
+        public string Name { get; }  
+    }
+
+    public class InformationValue : FortranObject, IInformationValue
+    {
+        public InformationValue(int depth, string name, string value, List<FileLine> lines)
+            : base(lines) 
         {
             this.Name = name;
             this.Value = value;
@@ -35,13 +41,6 @@ namespace Doctran.Parsing.BuiltIn.FortranObjects
 
         public string Name { get; }
 
-        public string Value { get; }
-
-        public override XElement XEle()
-        {
-            return string.IsNullOrEmpty(this.Value)
-                ? new XElement(this.XElementName, this.SubObjects.Select(sinfo => (sinfo as XInformation).XEle()))
-                : XElement.Parse("<" + this.XElementName + ">" + this.Value + "</" + this.XElementName + ">");
-        }
+        public string Value { get; }        
     }
 }

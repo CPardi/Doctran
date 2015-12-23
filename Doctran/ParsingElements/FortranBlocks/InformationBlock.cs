@@ -42,14 +42,14 @@ namespace Doctran.Parsing.BuiltIn.FortranBlocks
                 select new InformationBlock(i);
         }
 
-        public void AddFactory(string matchType, IInformationFactory factory)
-        {
-            if (_factories.ContainsKey(matchType))
-            {
-                throw new Exception(); // Change this to another exception type.
-            }
-            _factories.Add(matchType, factory);
-        }
+        //public void AddFactory(string matchType, IInformationFactory factory)
+        //{
+        //    if (_factories.ContainsKey(matchType))
+        //    {
+        //        throw new Exception(); // Change this to another exception type.
+        //    }
+        //    _factories.Add(matchType, factory);
+        //}
 
         public override bool BlockEnd(string parentBlockName, List<FileLine> lines, int lineIndex)
         {
@@ -79,16 +79,26 @@ namespace Doctran.Parsing.BuiltIn.FortranBlocks
             // Retrieve the type name
             var typeName = aMatch.Groups[1].Value.Trim();
 
+            if (subObjects.Any())
+            {
+                return CollectionUtils.Singlet(new InformationGroup(_depth, typeName, subObjects, lines));
+            }
+
             // Retrieve the value, from the definition line and any subsequent lines.
             var value = aMatch.Groups[2].Value.Trim()
                         + string.Concat(lines.Skip(1)
                             .Where(line => line.Number <= (subObjects.Any() ? subObjects.First().Lines.First().Number - 1 : lines.Last().Number))
                             .Select(line => line.Text.Substring(_depth + 1) + Environment.NewLine));
 
-            var objs = _factories.ContainsKey(typeName)
-                ? _factories[typeName].Create(_depth, value, subObjects, lines).Cast<FortranObject>()
-                : CollectionUtils.Singlet(new XInformation(_depth, typeName, value, subObjects, lines));
-            return objs.ToList();
+            if (!value.IsNullOrEmpty())
+            {
+                return
+                    _factories.ContainsKey(typeName)
+                        ? _factories[typeName].Create(_depth, value, subObjects, lines).Cast<FortranObject>()
+                        : CollectionUtils.Singlet(new InformationValue(_depth, typeName, value, lines));
+            }
+
+            throw new Exception();
         }
     }
 

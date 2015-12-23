@@ -64,7 +64,7 @@ namespace Doctran.Output.Themes
             IFileCopier copier;
             _copiers.TryGetValue(extension, out copier);
 
-            var outputFilePath = ChangeExtension(Path.Combine(outputDirectory, PathUtils.PathRelativeTo(relativeDirectory, filePath)), copier?.ToExtension);
+            var outputFilePath = PathUtils.ChangeExtension(Path.Combine(outputDirectory, PathUtils.PathRelativeTo(relativeDirectory, filePath)), copier?.ToExtension);
 
             if (!(copier is FileIgnorer))
             {
@@ -80,18 +80,7 @@ namespace Doctran.Output.Themes
                 copier.Run(filePath, outputFilePath, overwrite);
             }
         }
-
-        private static string ChangeExtension(string filePath, string toExtension)
-        {
-            if (toExtension == null)
-            {
-                return filePath;
-            }
-
-            var actualExtension = Path.GetExtension(filePath) ?? string.Empty;
-            return filePath.Substring(0, filePath.Length - actualExtension.Length) + toExtension;
-        }
-
+        
         private void CopyFilesFromDir(bool overwrite, bool parse, bool recursive, string outputDirectory, string relativeDirectory, string directoryPath)
         {
             var from = Path.Combine(relativeDirectory, directoryPath);

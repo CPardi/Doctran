@@ -14,7 +14,24 @@ namespace Doctran.Utilitys
     using Helper;
 
     public static class StringUtils
-    {        
+    {
+        /// <summary>
+        ///     If convertable, a string value is converted to the specified type.
+        /// </summary>
+        /// <param name="this">The converted object.</param>
+        /// <param name="propertyType">The type to convert the meta-data to.</param>
+        public static object ToIConvertable(this string @this, Type propertyType)
+        {
+            if (propertyType.GetInterface(typeof(IConvertible).Name) == null)
+            {
+                throw new ArgumentException(
+                    $"Must derive from base type '{typeof(IConvertible).Name}'",
+                    nameof(propertyType));
+            }
+
+            return Convert.ChangeType(@this, propertyType);
+        }
+
         public static bool IsNullOrEmpty(this string @this)
         {
             return string.IsNullOrEmpty(@this);

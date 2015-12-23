@@ -13,6 +13,7 @@ namespace Doctran.Helper
     using Parsing.BuiltIn.FortranObjects;
     using Plugins;
     using Reporting;
+    using Utilitys;
 
     internal static class ProgramHelper
     {
@@ -33,7 +34,7 @@ namespace Doctran.Helper
                 // Parse source files.
                 var language = ParserManager.GetParserByExtension(Path.GetExtension(path));
 
-                var lines = SourceFile.ReadFile(path);
+                var lines = OtherUtils.ReadFile(path);
                 var parsedFile = language.Parse(path, lines);                
                 parsedFiles.Add(parsedFile);
             }

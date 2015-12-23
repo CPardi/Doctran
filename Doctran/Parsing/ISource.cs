@@ -1,5 +1,7 @@
-﻿namespace Doctran.Parsing.BuiltIn.FortranObjects
+﻿namespace Doctran.Parsing
 {
+    using BuiltIn.FortranObjects;
+
     public interface ISource : IFortranObject, IHasIdentifier
     {
         string Language { get; }

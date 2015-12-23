@@ -35,8 +35,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Common\PathCollection.Test.cs" />
-    <Compile Include="OptionFile\OptionsTest.cs" />
-    <Compile Include="OptionFile\Parser.Test.cs" />
     <Compile Include="Program.Test.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

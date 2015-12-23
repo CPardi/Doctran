@@ -20,19 +20,6 @@ namespace Doctran.Parsing.BuiltIn.FortranObjects
     using Reporting;
     using Utilitys;
 
-    public class Source : FortranObject, ISource
-    {
-        public Source(string language, IEnumerable<IFortranObject> subObjects, List<FileLine> lines)
-            :base(subObjects, lines)
-        {
-            this.Language = language;
-        }
-
-        public string Language { get; }
-
-        public string Identifier => $"{Language} source";
-    }
-
     public class SourceFile : FortranObject, IHasName, IHasLines, IHasValidName, ISourceFile
     {
         private readonly FileInfo _info;
@@ -84,33 +71,7 @@ namespace Doctran.Parsing.BuiltIn.FortranObjects
 
 
         public string ValidName => StringUtils.ValidName(this.Name);
-
-        public static List<FileLine> ReadFile(string pathAndFilename)
-        {
-            var lines = new List<FileLine>();
-
-            try
-            {
-                // Open the file at the file path and load into a streamreader. Then, loop through each line and add it to a List.
-                using (var fileReader = new StreamReader(pathAndFilename))
-                {
-                    string line;
-                    var lineIndex = 1;
-                    while ((line = fileReader.ReadLine()) != null)
-                    {
-                        lines.Add(new FileLine(lineIndex, line));
-                        lineIndex++;
-                    }
-                }
-            }
-            catch (IOException e)
-            {
-                Report.Error(pub => pub.DescriptionReason(ReportGenre.FileRead, e.Message), e);
-            }
-
-            return lines;
-        }
-
+        
         public string Language { get; }
     }
 }

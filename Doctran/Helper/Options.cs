@@ -8,20 +8,21 @@
 namespace Doctran.Helper
 {
     using System;
+    using System.Collections.Generic;
     using System.Reflection;
     using System.Xml.Linq;
     using CommandLine;
     using CommandLine.Text;
-    using Input.OptionFile;
+    using Input.ProjectFileCore;
     using Utilitys;
 
     public class Options
     {
-        [Value("CopyAndParse")]
-        public PathList CopyAndParsePaths { get; set; } = new PathList(false);
+        [Input.OptionsReaderCore.OptionList("CopyAndParse", typeof(PathList))]
+        public PathList CopyAndParsePaths { get; set; } = new PathList();
 
-        [Value("Copy")]
-        public PathList CopyPaths { get; set; } = new PathList(false);
+        [Input.OptionsReaderCore.OptionList("Copy", typeof(PathList))]
+        public PathList CopyPaths { get; set; } = new PathList();
 
         [Option('o', "output", DefaultValue = "Docs", MetaValue = "PATH", HelpText = "PATH is the output directory for the documentation.")]
         public string OutputDirectory { get; set; }
@@ -45,7 +46,7 @@ namespace Doctran.Helper
         public bool ShowPluginInformation { get; set; }
 
         [ValueList(typeof(PathList))]
-        [Value("Source")]
+        [Input.OptionsReaderCore.OptionList("Source", typeof(PathList))]
         public PathList SourceFilePaths { get; set; }
 
         [Option('t', "theme", DefaultValue = "Default", MetaValue = "NAME", HelpText = "NAME is the name of the theme to be applied.")]
@@ -54,8 +55,13 @@ namespace Doctran.Helper
         [Option("verbose", DefaultValue = 2, MetaValue = "VALUE", HelpText = "Set how much output is generated.")]
         public int Verbose { get; set; }
 
-        [XmlPassThroughOptions("Information")]
-        public XElement XmlInformation { get; set; } = new XElement("Information");
+        /// <summary>
+        ///     Additional XML elements to be appended to the project's XML file.
+        /// </summary>
+        [XmlDefaultOption(InitializeAsDefault = true)]
+        [MenuOption]
+        [UserPageOption]
+        public List<XElement> XmlInformation { get; set; }
 
         public string GetUsage()
         {

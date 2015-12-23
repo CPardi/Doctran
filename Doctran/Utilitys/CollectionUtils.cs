@@ -12,7 +12,7 @@ namespace Doctran.Utilitys
     using System.Linq;
 
     public static class CollectionUtils
-    {
+    {        
         public static ReadOnlyCollection<T> ToReadOnlyCollection<T>(this IEnumerable<T> @this)
         {
             return @this.ToList().AsReadOnly();

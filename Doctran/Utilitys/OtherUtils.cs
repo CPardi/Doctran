@@ -18,6 +18,32 @@ namespace Doctran.Utilitys
 
     public static class OtherUtils
     {
+        public static List<FileLine> ReadFile(string path)
+        {
+            var lines = new List<FileLine>();
+
+            try
+            {
+                // Open the file at the file path and load into a streamreader. Then, loop through each line and add it to a List.
+                using (var fileReader = new StreamReader(path))
+                {
+                    string line;
+                    var lineIndex = 1;
+                    while ((line = fileReader.ReadLine()) != null)
+                    {
+                        lines.Add(new FileLine(lineIndex, line));
+                        lineIndex++;
+                    }
+                }
+            }
+            catch (IOException e)
+            {
+                Report.Error(pub => pub.DescriptionReason(ReportGenre.FileRead, e.Message), e);
+            }
+
+            return lines;
+        }
+
         public static void ConsoleGotoNewLine()
         {
             if (Console.CursorLeft != 0)
@@ -53,7 +79,7 @@ namespace Doctran.Utilitys
             // Get the text from the file specified.
             try
             {
-                htmlText = string.Concat(from text in SourceFile.ReadFile(relativePath + filePath)
+                htmlText = string.Concat(from text in ReadFile(relativePath + filePath)
                     select text.Text + Environment.NewLine);
             }
             catch (IOException e)

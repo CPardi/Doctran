@@ -31,13 +31,6 @@ namespace Doctran.Output
             }
         }
 
-        protected string ChangeExtension(string filePath)
-        {
-            var actualExtension = Path.GetExtension(filePath) ?? string.Empty;
-            Debug.Assert(this.FromExtensions.Contains(actualExtension), $"The file path has the unexpected extension '{actualExtension}'.");
-            return filePath.Substring(0, filePath.Length - actualExtension.Length) + this.ToExtension;
-        }
-
         protected virtual string ReadFile(string filePath)
         {
             using (var fileReader = new StreamReader(filePath))

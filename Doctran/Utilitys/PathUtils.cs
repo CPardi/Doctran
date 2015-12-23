@@ -8,6 +8,7 @@
 namespace Doctran.Utilitys
 {
     using System;
+    using System.IO;
 
     /// <summary>
     ///     A collection of function relating to path operations.
@@ -61,6 +62,17 @@ namespace Doctran.Utilitys
             Environment.CurrentDirectory = dir;
             action();
             Environment.CurrentDirectory = currentDirectory;
+        }
+
+        public static string ChangeExtension(string path, string newExtension)
+        {
+            if (newExtension == null)
+            {
+                return path;
+            }
+
+            var actualExtension = Path.GetExtension(path) ?? string.Empty;
+            return $"{path.Substring(0, path.Length - actualExtension.Length)}{DottedExtension(newExtension)}";
         }
     }
 }

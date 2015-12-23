@@ -13,7 +13,7 @@ namespace Doctran
     using System.Linq;
     using System.Xml.Linq;
     using Helper;
-    using Input.OptionFile;
+    using Input;
     using Output;
     using Output.Themes;
     using Parsing.BuiltIn.FortranObjects;
@@ -35,13 +35,12 @@ namespace Doctran
             Report.SetReleaseProfile();
 
             var options = GetOptions(args);
-            options.SourceFilePaths.KeepDistinctOnly();
             Report.Verbose = options.Verbose;
 
             var project = GetProject(options.SourceFilePaths);
 
             OutputTheme(options);
-            var xmlOutputter = GetXmlOutputter(project, options.XmlInformation, options.OutputDirectory, options.SaveXmlPath);
+            var xmlOutputter = GetXmlOutputter(project, new XElement("Information", options.XmlInformation), options.OutputDirectory, options.SaveXmlPath);
             OutputHtml(project, xmlOutputter, options);
 
             // Verbose >= 2
@@ -77,17 +76,15 @@ namespace Doctran
                 Report.MessageAndExit(PluginManager.InformationString);
             }
 
-            var fileParser = new Parser<Options>();
-            fileParser.AddRecognisedOption("Source");
-            fileParser.AddRecognisedOption("Copy");
-            fileParser.AddRecognisedOption("CopyAndParse");
-            fileParser.AddRecognisedOption("UserPage", new UserPageFactory());
-            fileParser.AddRecognisedOption("Menu", new MenuFactory());
-
-            fileParser.ParseFile(options.ProjectFilePath ?? EnvVar.DefaultInfoPath, options);
+            var projectFileReader = new OptionsReader<Options>(5, "Project file");
+            var projFilePath = options.ProjectFilePath ?? EnvVar.DefaultInfoPath;
+            var projFileLines = OtherUtils.ReadFile(projFilePath);
+            PathUtils.RunInDirectory(
+                Path.GetDirectoryName(projFilePath),
+                () => projectFileReader.Parse(options, projFilePath, projFileLines));
 
             return options;
-        }
+        } 
 
         private static Project GetProject(IEnumerable<string> sourceFiles)
         {            
