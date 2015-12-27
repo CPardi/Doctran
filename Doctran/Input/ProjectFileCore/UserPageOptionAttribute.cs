@@ -17,6 +17,7 @@ namespace Doctran.Input.ProjectFileCore
     using Comments;
     using MarkdownSharp;
     using OptionsReaderCore;
+    using Parsing;
     using Utilitys;
 
     internal class UserPageOptionAttribute : OptionListAttribute

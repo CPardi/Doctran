@@ -12,6 +12,7 @@ namespace Doctran.Input.OptionsReaderCore
     using System;
     using System.Linq;
     using Comments;
+    using Parsing;
     using Utilitys;
 
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = true)]

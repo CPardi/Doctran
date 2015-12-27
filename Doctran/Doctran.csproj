@@ -117,6 +117,7 @@
     <Compile Include="Input\OptionsReaderCore\OptionListAttribute.cs" />
     <Compile Include="Input\OptionsReaderCore\OptionListBaseAttribute.cs" />
     <Compile Include="Input\OptionsReaderCore\ParserConversionException.cs" />
+    <Compile Include="Parsing\ParserException.cs" />
     <Compile Include="Input\ProjectFileCore\UserPageOptionAttribute.cs" />
     <Compile Include="Input\ProjectFileCore\MenuOptionAttribute.cs" />
     <Compile Include="Input\ProjectFileCore\XmlDefaultOptionAttribute.cs" />
@@ -131,6 +132,7 @@
     <Compile Include="ParsingElements\FortranBlocks\SourceBlock.cs" />
     <Compile Include="ParsingElements\IDescription.cs" />
     <Compile Include="ParsingElements\IHasValidName.cs" />
+    <Compile Include="Parsing\BlockParserException.cs" />
     <Compile Include="Parsing\ISource.cs" />
     <Compile Include="ParsingElements\ISourceFile.cs" />
     <Compile Include="ParsingElements\FortranObjects\NamedDescription.cs" />

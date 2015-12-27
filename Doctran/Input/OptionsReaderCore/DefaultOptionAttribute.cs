@@ -12,6 +12,7 @@ namespace Doctran.Input.OptionsReaderCore
     using System;
     using System.Linq;
     using Comments;
+    using Parsing;
     using Utilitys;
 
     public class DefaultOptionAttribute : OptionListBaseAttribute, IDefaultOptionAttribute

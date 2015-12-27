@@ -16,22 +16,27 @@ namespace Doctran.Parsing.BuiltIn.FortranBlocks
         private readonly string _language;
 
         public SourceBlock(string language)
-            : base("Source", true, false)
         {
             _language = language;
         }
 
-        public override bool BlockStart(string parentBlockName, List<FileLine> lines, int lineIndex)
+        public  bool BlockStart(string parentBlockName, List<FileLine> lines, int lineIndex)
         {
             return lineIndex == 0;
         }
 
-        public override bool BlockEnd(string parentBlockName, List<FileLine> lines, int lineIndex)
+        public bool CheckInternal => true;
+
+        public bool ExplicitEnd => false;
+
+        public string Name => "Source";
+
+        public  bool BlockEnd(string parentBlockName, List<FileLine> lines, int lineIndex)
         {
             return lineIndex + 1 >= lines.Count;
         }
 
-        public override IEnumerable<FortranObject> ReturnObject(IEnumerable<IFortranObject> subObjects, List<FileLine> lines)
+        public  IEnumerable<FortranObject> ReturnObject(IEnumerable<IFortranObject> subObjects, List<FileLine> lines)
         {
             yield return new Source(_language ,subObjects, lines);
         }

@@ -11,7 +11,6 @@ namespace Doctran.Parsing.BuiltIn.FortranBlocks
     using System.Linq;
     using System.Net;
     using System.Text.RegularExpressions;
-    using System.Xml.Linq;
     using FortranObjects;
     using Helper;
     using MarkdownSharp;
@@ -21,12 +20,11 @@ namespace Doctran.Parsing.BuiltIn.FortranBlocks
     {
         private static readonly Markdown Markdown = new Markdown();
 
-        public DescriptionBlock()
-            : base("Description", false, false, 3)
-        {
-        }
+        public bool CheckInternal => false;
 
-        public static string BlockName => "Description";
+        public bool ExplicitEnd => false;
+
+        public string Name => "Description";
 
         public static string GetBasicText(IEnumerable<FileLine> lines)
         {
@@ -49,7 +47,7 @@ namespace Doctran.Parsing.BuiltIn.FortranBlocks
                 );
         }
 
-        public override bool BlockEnd(string parentBlockName, List<FileLine> lines, int lineIndex)
+        public  bool BlockEnd(string parentBlockName, List<FileLine> lines, int lineIndex)
         {
             if (lines.Count == lineIndex + 1)
             {
@@ -61,9 +59,9 @@ namespace Doctran.Parsing.BuiltIn.FortranBlocks
                 || CommentUtils.NDescStart(lines[lineIndex + 1].Text);
         }
 
-        public override bool BlockStart(string parentBlockName, List<FileLine> lines, int lineIndex)
+        public  bool BlockStart(string parentBlockName, List<FileLine> lines, int lineIndex)
         {
-            if (parentBlockName == BlockName)
+            if (parentBlockName == Name)
             {
                 return false;
             }
@@ -75,7 +73,7 @@ namespace Doctran.Parsing.BuiltIn.FortranBlocks
                 && !CommentUtils.InfoStart(lines[lineIndex].Text);
         }
 
-        public override IEnumerable<FortranObject> ReturnObject(IEnumerable<IFortranObject> subObjects, List<FileLine> lines)
+        public  IEnumerable<FortranObject> ReturnObject(IEnumerable<IFortranObject> subObjects, List<FileLine> lines)
         {
             var basic = XmlUtils.WrapAndParse("Basic", GetBasicText(lines));
             var detailed = XmlUtils.WrapAndParse("Detailed", GetDetailText(lines));

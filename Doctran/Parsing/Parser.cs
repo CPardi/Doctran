@@ -12,6 +12,7 @@ namespace Doctran.Parsing
     using BuiltIn.FortranBlocks;
     using BuiltIn.FortranObjects;
     using Helper;
+    using Input.OptionsReaderCore;
 
     public class Parser
     {
@@ -48,21 +49,26 @@ namespace Doctran.Parsing
 
             linesForParse.AddRange(lines);
 
-            var parserForLines = new ParserForLines(linesForParse, _blockParsers);
+            var parserForLines = new ParserForLines(linesForParse, _blockParsers, this.ErrorListener);
             var parsingResult = parserForLines.SearchBlock(0, ref currentIndex, blockNameStack).Single();            
             return new SourceFile(_language, absolutePath, parsingResult.SubObjects, lines, parsingResult.Lines.Skip(1).ToList());
         }
+
+        public IErrorListener<ParserException> ErrorListener { get; set; } = new StandardErrorListener<ParserException>();
 
         private class ParserForLines
         {
             private readonly Dictionary<string, FortranBlock> _blockParsers;
 
+            private readonly IErrorListener<ParserException> _errorListener;
+
             private readonly List<FileLine> _lines;
 
-            public ParserForLines(List<FileLine> lines, Dictionary<string, FortranBlock> blockParsers)
+            public ParserForLines(List<FileLine> lines, Dictionary<string, FortranBlock> blockParsers, IErrorListener<ParserException> errorListener)
             {
                 _lines = lines;                
                 _blockParsers = blockParsers;
+                _errorListener = errorListener;
             }
 
             public IEnumerable<IFortranObject> SearchBlock(int startIndex, ref int currentIndex, Stack<string> blockNameStack)
@@ -165,15 +171,25 @@ namespace Doctran.Parsing
             {
                 var blockSubObjectsList = blockSubObjects as List<IFortranObject> ?? blockSubObjects.ToList();
 
+                // If block has not ended yet then return.
                 if (!currentFactory.BlockEnd(blockNameStack.Peek(), _lines, currentIndex))
                 {
                     return false;
                 }
 
-                var parsingResult = currentFactory.ReturnObject(
-                    blockSubObjectsList,
-                    _lines.GetRange(startIndex, currentIndex - startIndex + 1));
+                // At this point we assumn the block has ended and create the object represented by it.
+                var blockLines = _lines.GetRange(startIndex, currentIndex - startIndex + 1);
+                IEnumerable<FortranObject> parsingResult = null;
+                try
+                {
+                    parsingResult = currentFactory.ReturnObject(blockSubObjectsList, blockLines);
+                }
+                catch (BlockParserException e)
+                {
+                    _errorListener.Error(new ParserException(blockLines.First().Number, blockLines.Last().Number, e.Message));
+                }                
 
+                // If we have created a valid block then add it to the list and return.
                 if (parsingResult != null)
                 {
                     blockObjects.AddRange(parsingResult);

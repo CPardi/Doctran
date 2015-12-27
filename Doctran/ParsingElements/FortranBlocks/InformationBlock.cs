@@ -23,7 +23,6 @@ namespace Doctran.Parsing.BuiltIn.FortranBlocks
         private readonly IDictionary<string, IInformationFactory> _factories;
 
         public InformationBlock(int depth)
-            : base("Information_" + depth, true, false, 1)
         {
             _depth = depth;
             _factories = new Dictionary<string, IInformationFactory>();
@@ -34,6 +33,12 @@ namespace Doctran.Parsing.BuiltIn.FortranBlocks
         {
             _factories = factoryDictionary;
         }
+        
+        public bool CheckInternal => true;
+
+        public bool ExplicitEnd => false;
+
+        public string Name => $"Information({_depth})";
 
         public static IEnumerable<InformationBlock> MultiDepthEnumeration(int fromDepth, int toDepth)
         {
@@ -42,16 +47,7 @@ namespace Doctran.Parsing.BuiltIn.FortranBlocks
                 select new InformationBlock(i);
         }
 
-        //public void AddFactory(string matchType, IInformationFactory factory)
-        //{
-        //    if (_factories.ContainsKey(matchType))
-        //    {
-        //        throw new Exception(); // Change this to another exception type.
-        //    }
-        //    _factories.Add(matchType, factory);
-        //}
-
-        public override bool BlockEnd(string parentBlockName, List<FileLine> lines, int lineIndex)
+        public bool BlockEnd(string parentBlockName, List<FileLine> lines, int lineIndex)
         {
             if (lineIndex + 1 >= lines.Count)
             {
@@ -64,14 +60,14 @@ namespace Doctran.Parsing.BuiltIn.FortranBlocks
                 || CommentUtils.NDescStart(lines[lineIndex + 1].Text);
         }
 
-        public override bool BlockStart(string parentBlockName, List<FileLine> lines, int lineIndex)
+        public bool BlockStart(string parentBlockName, List<FileLine> lines, int lineIndex)
         {
             return
                 CommentUtils.InfoAtDepthStart(lines[lineIndex].Text, _depth)
                 && !CommentUtils.NDescStart(lines[lineIndex].Text);
         }
 
-        public override IEnumerable<FortranObject> ReturnObject(IEnumerable<IFortranObject> subObjects, List<FileLine> lines)
+        public IEnumerable<FortranObject> ReturnObject(IEnumerable<IFortranObject> subObjects, List<FileLine> lines)
         {
             // Regex group the type-name and it's value.
             var aMatch = Regex.Match(lines[0].Text.Trim(), @"!>+?\s*?(\w+)\s*?:\s*?(.*)");
@@ -79,55 +75,36 @@ namespace Doctran.Parsing.BuiltIn.FortranBlocks
             // Retrieve the type name
             var typeName = aMatch.Groups[1].Value.Trim();
 
-            if (subObjects.Any())
-            {
-                return CollectionUtils.Singlet(new InformationGroup(_depth, typeName, subObjects, lines));
-            }
-
+            var subObjectList = subObjects as IList<IFortranObject> ?? subObjects.ToList();
             // Retrieve the value, from the definition line and any subsequent lines.
             var value = aMatch.Groups[2].Value.Trim()
                         + string.Concat(lines.Skip(1)
-                            .Where(line => line.Number <= (subObjects.Any() ? subObjects.First().Lines.First().Number - 1 : lines.Last().Number))
+                            .Where(line => line.Number <= (subObjectList.Any() ? subObjectList.First().Lines.First().Number - 1 : lines.Last().Number))
                             .Select(line => line.Text.Substring(_depth + 1) + Environment.NewLine));
 
-            if (!value.IsNullOrEmpty())
-            {
-                return
-                    _factories.ContainsKey(typeName)
-                        ? _factories[typeName].Create(_depth, value, subObjects, lines).Cast<FortranObject>()
-                        : CollectionUtils.Singlet(new InformationValue(_depth, typeName, value, lines));
-            }
+            // Seperate cases.
+            //  0 - NO subobjects, NO value.
+            //  1 - HAS subobjects, NO value.
+            //  2 - HAS value, NO subobjects.
+            //  3 - HAS value, HAS subobjects.
+            var caseNum = Convert.ToInt32(subObjectList.Any()) + 2*Convert.ToInt32(value.IsNullOrEmpty());
 
-            throw new Exception();
+            switch (caseNum)
+            {
+                case 0:
+                    throw new BlockParserException("An information block must contain either a value or sub-information elements.");
+                case 1:
+                    return
+                        _factories.ContainsKey(typeName)
+                            ? _factories[typeName].Create(_depth, value, subObjectList, lines).Cast<FortranObject>()
+                            : CollectionUtils.Singlet(new InformationValue(_depth, typeName, value, lines));
+                case 2:
+                    return CollectionUtils.Singlet(new InformationGroup(_depth, typeName, subObjectList, lines));
+                case 3:
+                    throw new BlockParserException("An information block cannot contain both a value and sub-information elements.");
+                default:
+                    throw new ApplicationException("Unknown error in informational element.");
+            }
         }
     }
-
-    //public class SubInformation : XFortranObject
-    //{
-    //    public string Value { get; private set; }
-
-    //    public SubInformation(string typename, string value)
-    //        : base(typename, new List<FileLine>())
-    //    {
-    //        Value = value;
-    //    }
-
-    //    public SubInformation(string typename, string value, IEnumerable<FortranObject> sub_objects, List<FileLine> lines)
-    //        : base(typename, sub_objects, lines)
-    //    {
-    //        Value = value;
-    //    }
-
-    //    protected override string GetIdentifier()
-    //    {
-    //        return "SubInformation(" + this.XElement_Name + ")";
-    //    }
-
-    //    public override XElement XEle()
-    //    {
-    //        return Value != "" ?
-    //            XElement.Parse("<" + this.XElement_Name + ">" + Value + @"</" + this.XElement_Name + ">")
-    //            : new XElement(this.XElement_Name, this.SubObjects.Select(sinfo => (sinfo as SubInformation).XEle()));
-    //    }
-    //}
 }

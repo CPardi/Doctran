@@ -16,12 +16,13 @@ namespace Doctran.Parsing.BuiltIn.FortranBlocks
 
     public class NamedDescriptionBlock : FortranBlock
     {
-        public NamedDescriptionBlock()
-            : base("Named Description", false, false, 0)
-        {
-        }
+        public bool CheckInternal => false;
 
-        public override bool BlockEnd(string parentBlockName, List<FileLine> lines, int lineIndex)
+        public bool ExplicitEnd => false;
+
+        public string Name => "Named Description";
+
+        public  bool BlockEnd(string parentBlockName, List<FileLine> lines, int lineIndex)
         {
             if (lineIndex + 1 >= lines.Count)
             {
@@ -33,7 +34,7 @@ namespace Doctran.Parsing.BuiltIn.FortranBlocks
                 || CommentUtils.InfoStart(lines[lineIndex + 1].Text);
         }
 
-        public override bool BlockStart(string parentBlockName, List<FileLine> lines, int lineIndex)
+        public  bool BlockStart(string parentBlockName, List<FileLine> lines, int lineIndex)
         {
             return
                 CommentUtils.NDescStart(lines[lineIndex].Text)
@@ -42,7 +43,7 @@ namespace Doctran.Parsing.BuiltIn.FortranBlocks
                 && !CommentUtils.InfoStart(lines[lineIndex].Text);
         }
 
-        public override IEnumerable<FortranObject> ReturnObject(IEnumerable<IFortranObject> subObjects, List<FileLine> lines)
+        public  IEnumerable<FortranObject> ReturnObject(IEnumerable<IFortranObject> subObjects, List<FileLine> lines)
         {
             var name = Regex.Match(lines[0].Text, @"!>\s*(\w.*)\s*-").Groups[1].Value.Trim();
             var basic = XmlUtils.WrapAndParse("Basic", DescriptionBlock.GetBasicText(lines).Substring(name.Length + 1).TrimStart(' ', '-'));

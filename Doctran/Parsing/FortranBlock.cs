@@ -10,28 +10,25 @@ namespace Doctran.Parsing
     using System.Collections.Generic;
     using Helper;
 
-    public abstract class FortranBlock
+    public interface FortranBlock
     {
-        protected FortranBlock(string name, bool checkInternal = true, bool explicitEnd = true, int weight = 0)
-        {
-            this.Name = name;
-            this.CheckInternal = checkInternal;
-            this.ExplicitEnd = explicitEnd;
-            this.Weight = weight;
-        }
+        bool CheckInternal { get; }
 
-        public bool CheckInternal { get; }
+        bool ExplicitEnd { get; }
 
-        public bool ExplicitEnd { get; }
+        string Name { get; }
 
-        public string Name { get; }
+        bool BlockEnd(string parentBlockName, List<FileLine> lines, int lineIndex);
 
-        public int Weight { get; }
+        bool BlockStart(string parentBlockName, List<FileLine> lines, int lineIndex);
 
-        public abstract bool BlockEnd(string parentBlockName, List<FileLine> lines, int lineIndex);
-
-        public abstract bool BlockStart(string parentBlockName, List<FileLine> lines, int lineIndex);
-
-        public abstract IEnumerable<FortranObject> ReturnObject(IEnumerable<IFortranObject> subObjects, List<FileLine> lines);
+        /// <summary>
+        ///     Returns one or more <see cref="FortranObject" />, that represent the block specified by <paramref name="lines" />.
+        /// </summary>
+        /// <param name="subObjects">The enumeration of <see cref="FortranObject" /> that are defined with the current block.</param>
+        /// <param name="lines">Lines defining the object's creation.</param>
+        /// <returns>An enumeration of <see cref="FortranObject" />.</returns>
+        /// <exception cref="BlockParserException">This exception is thrown invalid content within <paramref name="lines" />.</exception>
+        IEnumerable<FortranObject> ReturnObject(IEnumerable<IFortranObject> subObjects, List<FileLine> lines);
     }
 }
