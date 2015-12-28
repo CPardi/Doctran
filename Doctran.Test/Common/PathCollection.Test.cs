@@ -41,8 +41,7 @@ namespace Doctran.Test.Common
         [ExpectedException(typeof(DirectoryNotFoundException))]
         public void DoubleWildcardNoDirectory()
         {
-            var pathColl = new PathList();
-            pathColl.Add(@"NoDirectory\**\*.txt");
+            var pathColl = new PathList { @"NoDirectory\**\*.txt" };
             Assert.AreEqual(4, pathColl.Count);
         }
 

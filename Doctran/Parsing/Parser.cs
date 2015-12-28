@@ -12,13 +12,12 @@ namespace Doctran.Parsing
     using BuiltIn.FortranBlocks;
     using BuiltIn.FortranObjects;
     using Helper;
-    using Input.OptionsReaderCore;
 
     public class Parser
     {
-        private readonly string _language;
-
         private readonly Dictionary<string, FortranBlock> _blockParsers = new Dictionary<string, FortranBlock>();
+
+        private readonly string _language;
 
         public Parser(string language, IEnumerable<FortranBlock> blockParsers)
         {
@@ -33,8 +32,10 @@ namespace Doctran.Parsing
                 _blockParsers.Add(bp.Name, bp);
             }
         }
-        
-        public ISourceFile Parse(string absolutePath, List<FileLine> lines)
+
+        public IErrorListener<ParserException> ErrorListener { get; set; } = new StandardErrorListener<ParserException>();
+
+        public ISourceFile Parse(string sourceName, List<FileLine> lines)
         {
             // Set the current index to 0 and parse the lines set in the constructor.
             var currentIndex = 0;
@@ -42,7 +43,7 @@ namespace Doctran.Parsing
             blockNameStack.Push("Source");
 
             // Store the snippet and insert a blank line at the start to simplify the parsing algorithm.
-            var linesForParse = new List<FileLine>()
+            var linesForParse = new List<FileLine>
             {
                 new FileLine(0, string.Empty)
             };
@@ -50,11 +51,9 @@ namespace Doctran.Parsing
             linesForParse.AddRange(lines);
 
             var parserForLines = new ParserForLines(linesForParse, _blockParsers, this.ErrorListener);
-            var parsingResult = parserForLines.SearchBlock(0, ref currentIndex, blockNameStack).Single();            
-            return new SourceFile(_language, absolutePath, parsingResult.SubObjects, lines, parsingResult.Lines.Skip(1).ToList());
+            var parsingResult = parserForLines.SearchBlock(0, ref currentIndex, blockNameStack).Single();
+            return new SourceFile(_language, sourceName, parsingResult.SubObjects, lines, parsingResult.Lines.Skip(1).ToList());
         }
-
-        public IErrorListener<ParserException> ErrorListener { get; set; } = new StandardErrorListener<ParserException>();
 
         private class ParserForLines
         {
@@ -66,7 +65,7 @@ namespace Doctran.Parsing
 
             public ParserForLines(List<FileLine> lines, Dictionary<string, FortranBlock> blockParsers, IErrorListener<ParserException> errorListener)
             {
-                _lines = lines;                
+                _lines = lines;
                 _blockParsers = blockParsers;
                 _errorListener = errorListener;
             }
@@ -187,7 +186,7 @@ namespace Doctran.Parsing
                 catch (BlockParserException e)
                 {
                     _errorListener.Error(new ParserException(blockLines.First().Number, blockLines.Last().Number, e.Message));
-                }                
+                }
 
                 // If we have created a valid block then add it to the list and return.
                 if (parsingResult != null)

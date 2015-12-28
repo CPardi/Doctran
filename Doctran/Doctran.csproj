@@ -103,9 +103,10 @@
     <Compile Include="Helper\AbstractList.cs" />
     <Compile Include="Helper\IErrorListener.cs" />
     <Compile Include="Helper\ReportException.cs" />
+    <Compile Include="Helper\ListenerAndAggregater.cs" />
     <Compile Include="Helper\StandardErrorListener.cs" />
     <Compile Include="Input\OptionsReader.cs" />
-    <Compile Include="Input\OptionsReaderCore\ConversionException.cs" />
+    <Compile Include="Input\OptionsReaderCore\OptionReaderException.cs" />
     <Compile Include="Input\OptionsReaderCore\DefaultOptionAttribute.cs" />
     <Compile Include="Input\OptionsReaderCore\IDefaultOptionAttribute.cs" />
     <Compile Include="Input\OptionsReaderCore\InvalidAttributesException.cs" />
@@ -116,7 +117,6 @@
     <Compile Include="Input\OptionsReaderCore\OptionAttribute.cs" />
     <Compile Include="Input\OptionsReaderCore\OptionListAttribute.cs" />
     <Compile Include="Input\OptionsReaderCore\OptionListBaseAttribute.cs" />
-    <Compile Include="Input\OptionsReaderCore\ParserConversionException.cs" />
     <Compile Include="Parsing\ParserException.cs" />
     <Compile Include="Input\ProjectFileCore\UserPageOptionAttribute.cs" />
     <Compile Include="Input\ProjectFileCore\MenuOptionAttribute.cs" />

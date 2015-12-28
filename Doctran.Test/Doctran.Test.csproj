@@ -35,6 +35,17 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Common\PathCollection.Test.cs" />
+    <Compile Include="Input\OptionsReader\InvalidAttributeOptions.cs" />
+    <Compile Include="Input\OptionsReader\InvalidDefaultOptions.cs" />
+    <Compile Include="Input\OptionsReader\InvalidMultipleAttributesOptionsList.cs" />
+    <Compile Include="Input\OptionsReader\MultiListOptions.cs" />
+    <Compile Include="Input\OptionsReader\MultiListOptionsWithDefault.cs" />
+    <Compile Include="Input\OptionsReader\NoIConvertableOptions.cs" />
+    <Compile Include="Input\OptionsReader\NoIListOptions.cs" />
+    <Compile Include="Input\OptionsReader\Options.cs" />
+    <Compile Include="Input\OptionsReader\Parser\ParseTest.cs" />
+    <Compile Include="Input\OptionsReader\TwiceSpecifiedOptions.cs" />
+    <Compile Include="Input\OptionsReader\TwiceSpecifiedOptionsList.cs" />
     <Compile Include="Program.Test.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

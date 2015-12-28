@@ -12,16 +12,17 @@ namespace Doctran
     using System.IO;
     using System.Linq;
     using System.Xml.Linq;
+    using CommandLine;
     using Helper;
     using Input;
+    using Input.OptionsReaderCore;
     using Output;
     using Output.Themes;
     using Parsing.BuiltIn.FortranObjects;
     using Plugins;
     using Reporting;
     using Utilitys;
-    using Parser = CommandLine.Parser;
-    
+
     public class Program
     {
         public static bool ShowLicensing { get; private set; }
@@ -31,7 +32,7 @@ namespace Doctran
 #if RELEASE
             AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionTrapper;
 #endif
-            
+
             Report.SetReleaseProfile();
 
             var options = GetOptions(args);
@@ -76,19 +77,35 @@ namespace Doctran
                 Report.MessageAndExit(PluginManager.InformationString);
             }
 
-            var projectFileReader = new OptionsReader<Options>(5, "Project file");
+            var parserExceptions = new ListenerAndAggregater<OptionReaderException>();
+            var projectFileReader = new OptionsReader<Options>(5, "Project file") { ErrorListener = parserExceptions };
             var projFilePath = options.ProjectFilePath ?? EnvVar.DefaultInfoPath;
             var projFileLines = OtherUtils.ReadFile(projFilePath);
             PathUtils.RunInDirectory(
                 Path.GetDirectoryName(projFilePath),
                 () => projectFileReader.Parse(options, projFilePath, projFileLines));
+            var ws = parserExceptions.Warnings;
+            var es = parserExceptions.Errors;
+
+            // Report any errors to the user.
+            Action<ConsolePublisher, OptionReaderException> action
+                = (pub, w) => pub.DescriptionReasonLocation(ReportGenre.ProjectFile, w.Message, StringUtils.LocationString(w.StartLine, w.EndLine, projFilePath));
+            if (ws.Any())
+            {
+                Report.Warnings(action, ws);
+            }
+
+            if (es.Any())
+            {
+                Report.Errors(action, es);
+            }
 
             return options;
-        } 
+        }
 
         private static Project GetProject(IEnumerable<string> sourceFiles)
-        {            
-            Report.NewStatus("Analysing project block structure... ");            
+        {
+            Report.NewStatus("Analysing project block structure... ");
             var proj = ProgramHelper.ParseProject(sourceFiles);
             Report.ContinueStatus("Done");
             return proj;
@@ -96,8 +113,8 @@ namespace Doctran
 
         private static XmlOutputter GetXmlOutputter(Project project, XElement xmlInformation, string outputDirectory, string saveXmlPath)
         {
-            Report.NewStatus("Generating xml... ");   
-                     
+            Report.NewStatus("Generating xml... ");
+
             var xmlOutputter = new XmlOutputter(project.XEle(xmlInformation));
             if (saveXmlPath != null)
             {

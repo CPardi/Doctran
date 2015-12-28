@@ -20,6 +20,7 @@ namespace Doctran.Reporting
         Argument,
         FileRead,
         Parsing,
+        ParsingPost,
         Plugin,
         ProjectFile,
         XsltCompilation,
@@ -55,6 +56,7 @@ namespace Doctran.Reporting
             { ReportGenre.Argument, "Argument list issue." },
             { ReportGenre.FileRead, "File read issue." },
             { ReportGenre.Parsing, "Parsing issue." },
+            { ReportGenre.ParsingPost, "Parsing post-processing issue." },
             { ReportGenre.Plugin, "Plugin loading issue." },
             { ReportGenre.ProjectFile, "Project file contains an issue." },
             { ReportGenre.XsltCompilation, "Fatal XSLT stylesheet compilation issue." },
@@ -120,7 +122,7 @@ namespace Doctran.Reporting
                 ttb.Append("Location", Location);
             }
 
-            Console.Write(ttb.ToString());
+            Console.Write($"\n{ttb}");
         }
     }
 }

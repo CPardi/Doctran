@@ -54,8 +54,7 @@ namespace Doctran.Reporting
             switch (ReportMode)
             {
                 case ReportMode.Debug:
-                    Rethrow(exception);
-                    break;
+                    throw exception;
                 case ReportMode.Release:
                 {
                     ApplicationExit();
@@ -181,13 +180,8 @@ namespace Doctran.Reporting
         {
             Environment.Exit(-1);
         }
-
-        private static void Rethrow(Exception exception)
-        {
-            throw exception;
-        }
-
-        private static void ThrowExceptions<TException>(IList<TException> errorList)
+        
+        private static void ThrowExceptions<TException>(ICollection<TException> errorList)
             where TException : Exception
         {
             if (ReportMode != ReportMode.Debug)

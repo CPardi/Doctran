@@ -13,7 +13,6 @@ namespace Doctran.Input.OptionsReaderCore
     using System.Collections;
     using System.Collections.Generic;
     using Comments;
-    using Parsing.BuiltIn.FortranObjects;    
 
     [AttributeUsage(AttributeTargets.Property)]
     public abstract class OptionListBaseAttribute : Attribute, IOptionListAttribute
@@ -22,24 +21,31 @@ namespace Doctran.Input.OptionsReaderCore
         {
             if (initializationType.IsAbstract)
             {
-                throw new ArgumentException("Cannot be of abstract type.", nameof(initializationType));
+                throw new ArgumentException($"'{nameof(initializationType)}' is an abstract type ({initializationType}).");
             }
 
             if (initializationType.GetInterface(typeof(IEnumerable<>).Name) == null)
             {
-                throw new ArgumentException($"Must derive from base type '{typeof(IEnumerable<>).Name}'.", nameof(initializationType));
+                throw new ArgumentException($"'{nameof(initializationType)}' is an abstract type ({initializationType}).");
             }
 
             if (initializationType.GetInterface(typeof(IList).Name) == null)
             {
-                throw new ArgumentException($"Must derive from base type '{typeof(IList).Name}'.", nameof(initializationType));
+                throw new ArgumentException($"'{nameof(initializationType)}' must derive from '{typeof(IList).Name}'.");
             }
 
             this.InitializationType = initializationType;
         }
 
+        /// <summary>
+        ///     The concrete type that the property should be initialized to.
+        /// </summary>
         public Type InitializationType { get; }
 
+        /// <summary>
+        ///     If true, then the property will be initialized as <see cref="InitializationType" />. If false, then
+        ///     it will be assumned that the property is already initialized before parsing.
+        /// </summary>
         public bool InitializeAsDefault { get; set; } = false;
 
         public abstract object MetaDataToProperty(IInformation metaData, Type propertyType);

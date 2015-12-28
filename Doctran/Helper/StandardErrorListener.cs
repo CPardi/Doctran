@@ -1,21 +1,42 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Doctran.Helper
+﻿namespace Doctran.Helper
 {
+    using System;
+
     public class StandardErrorListener<TException> : IErrorListener<TException>
         where TException : Exception
     {
-        ReportException<TException> IErrorListener<TException>.Error
+        public void Error(TException exception)
         {
-            get { return ex => { throw ex; }; }
+            throw exception;
         }
 
-        ReportException<TException> IErrorListener<TException>.Warning
+        public void Warning(TException exception)
         {
-            get { return ex => { throw ex; }; }
+            throw exception;
+        }
+    }
+
+    public class ErrorListener<TException> : IErrorListener<TException>
+        where TException : Exception
+    {
+        private readonly Action<TException> _error;
+
+        private readonly Action<TException> _warning;
+
+        public ErrorListener(Action<TException> warning, Action<TException> error)
+        {
+            _warning = warning;
+            _error = error;
+        }
+
+        public void Error(TException exception)
+        {
+            _error(exception);
+        }
+
+        public void Warning(TException exception)
+        {
+            _warning(exception);
         }
     }
 }

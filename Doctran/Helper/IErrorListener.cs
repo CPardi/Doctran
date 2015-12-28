@@ -2,11 +2,17 @@
 {
     using System;
 
-    public interface IErrorListener<TException>
+    public interface IErrorListener<in TException>
         where TException : Exception
     {
-        ReportException<TException> Error { get; }
+        /// <summary>
+        ///     Report an error to the listener.
+        /// </summary>
+        void Error(TException exception);
 
-        ReportException<TException> Warning { get; }
+        /// <summary>
+        ///     Report an warning to the listener.
+        /// </summary>
+        void Warning(TException exception);
     }
 }

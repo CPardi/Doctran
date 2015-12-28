@@ -121,12 +121,12 @@ namespace Doctran.Helper
 
             if (searchPattern == string.Empty && !File.Exists(path))
             {
-                throw new IOException($"The file '{Path.GetFullPath(path)}' does not exist.");
+                throw new FileNotFoundException($"The file '{Path.GetFullPath(path)}' does not exist.");
             }
 
             if (searchPattern != string.Empty && !Directory.Exists(path))
             {
-                throw new IOException($"The directory '{Path.GetFullPath(path)}' does not exist.");
+                throw new DirectoryNotFoundException($"The directory '{Path.GetFullPath(path)}' does not exist.");
             }
 
             var paths =

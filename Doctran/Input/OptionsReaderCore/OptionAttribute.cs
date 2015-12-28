@@ -32,7 +32,7 @@ namespace Doctran.Input.OptionsReaderCore
             var value = metaData as IInformationValue;
             if (value == null)
             {
-                throw new ParserException(metaData.Lines.First().Number, metaData.Lines.Last().Number, $"'{metaData.Name}' can only be a value type and not a group.");
+                throw new OptionReaderException(metaData.Lines.First().Number, metaData.Lines.Last().Number, $"'{metaData.Name}' can only be a value type and not a group.");
             }
 
             try
@@ -41,7 +41,7 @@ namespace Doctran.Input.OptionsReaderCore
             }
             catch (FormatException e)
             {
-                throw new ConversionException(metaData.Lines.First().Number, metaData.Lines.Last().Number, metaData.Name, e.Message);
+                throw new OptionReaderException(metaData.Lines.First().Number, metaData.Lines.Last().Number, e.Message);
             }
         }
     }

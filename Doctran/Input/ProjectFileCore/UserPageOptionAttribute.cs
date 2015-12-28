@@ -32,7 +32,7 @@ namespace Doctran.Input.ProjectFileCore
             var value = metaData as IInformationValue;
             if (value == null)
             {
-                throw new ParserException(metaData.Lines.First().Number, metaData.Lines.Last().Number, $"'{metaData.Name}' must be a value type.");
+                throw new OptionReaderException(metaData.Lines.First().Number, metaData.Lines.Last().Number, $"'{metaData.Name}' must be a value type.");
             }
 
             try
@@ -45,7 +45,7 @@ namespace Doctran.Input.ProjectFileCore
             }
             catch (Exception e)
             {
-                throw new ConversionException(metaData.Lines.First().Number, metaData.Lines.Last().Number, metaData.Name, e.Message);
+                throw new OptionReaderException(metaData.Lines.First().Number, metaData.Lines.Last().Number, e.Message);
             }
         }
     }

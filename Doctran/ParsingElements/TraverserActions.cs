@@ -51,58 +51,44 @@ namespace Doctran.Parsing.BuiltIn
             }
         }
 
-        public static ITraverserAction CheckDescriptionValidity
+        public static ITraverserAction CheckDescriptionLinkage
         {
             get
             {
                 return new TraverserAction<NamedDescription>(
                     obj =>
                     {
-                        CorrectName(obj);
-                        CheckUniqueness(obj);
+                        // Return if OK.
+                        if ((obj.Parent as IHasIdentifier)?.Identifier == obj.LinkedTo)
+                        {
+                            return;
+                        }
+
+                        // Throw exception if not.
+                        obj.Parent.SubObjects.Remove(obj);
+                        throw new TraverserException(obj, "Description meta-data was ignored. Description identifier does not match parent identifier.");
                     });
             }
         }
 
-        private static void CheckUniqueness(IFortranObject obj)
+        public static ITraverserAction CheckDescriptionUniqueness
         {
-            if (obj.Parent.SubObjects.OfType<IDescription>().Count() <= 1)
+            get
             {
-                return;
+                return new TraverserAction<IDescription>(
+                    obj =>
+                    {
+                        // Return if OK.
+                        if (obj.Parent.SubObjects.OfType<IDescription>().Count() <= 1)
+                        {
+                            return;
+                        }
+
+                        // Throw exception if not.
+                        obj.Parent.SubObjects.Remove(obj);
+                        throw new TraverserException(obj, "Multiple descriptions specified for a single block. Description meta-data was ignored.");
+                    });
             }
-
-            var curObj = obj;
-            var file = obj.GoUpTillType<ISource>() as SourceFile;
-
-            Report.Warning(
-                pub => pub.DescriptionReasonLocation(ReportGenre.Parsing, "Multiple descriptions specified for a single block. Description meta-data was ignored.", LocationString(curObj, file)));
-            
-            obj.Parent.SubObjects.Remove(obj);
-        }
-
-        private static string LocationString(IFortranObject curObj, SourceFile file)
-        {
-            return curObj.Lines.First().Number == curObj.Lines.Last().Number
-                ? $"At line {curObj.Lines.First().Number} of '{file?.Name}{file?.Extension}'."
-                : $"Within lines {curObj.Lines.First().Number} to {curObj.Lines.Last().Number} of '{file?.Name}{file?.Extension}'.";
-        }
-
-        private static void CorrectName(FortranObject obj)
-        {
-            var desc = (NamedDescription)obj;
-
-            if ((obj.Parent as IHasIdentifier)?.Identifier == desc.LinkedTo)
-            {
-                return;
-            }
-
-            var curObj = obj;
-            var file = obj.GoUpTillType<ISource>() as SourceFile;
-
-            Report.Warning(
-                pub => pub.DescriptionReasonLocation(ReportGenre.Parsing, "Description meta-data was ignored. Description identifier does not match parent identifier.", LocationString(curObj, file)));
-
-            obj.Parent.SubObjects.Remove(obj);
         }
     }
 }

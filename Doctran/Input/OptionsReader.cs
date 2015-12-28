@@ -12,6 +12,7 @@ namespace Doctran.Input
     using System;
     using System.Collections;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Linq;
     using System.Reflection;
     using Comments;
@@ -29,43 +30,47 @@ namespace Doctran.Input
     {
         private readonly int _maxDepth;
 
+        private readonly Parser _parser;
+
         /// <summary>
         ///     Hold the intermediary instances of <see cref="IMetaData" /> that are generated while parsing.
         /// </summary>
         private List<IInformation> _metaDatas;
-
-        private readonly Parser _parser;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="OptionsReader{TOptions}" /> class.
         /// </summary>
         /// <param name="maxDepth">The maximun depth of the option groups to be searched for.</param>
         /// <param name="name">The parser's name to be used within any exceptions.</param>
-        /// <param name="lines">The lines of text to be parsed.</param>
         public OptionsReader(int maxDepth, string name)
         {
             _maxDepth = maxDepth;
             this.Name = name;
 
-            _parser = new Parser("DoctranOptions", InformationBlock.MultiDepthEnumeration(0, _maxDepth));
-            //this.ErrorListener = new StandardErrorListener<ParserException>();            
+            _parser = new Parser("DoctranOptions", InformationBlock.MultiDepthEnumeration(1, _maxDepth))
+            {
+                ErrorListener = new ErrorListener<ParserException>(
+                    warn => this.ErrorListener.Warning(new OptionReaderException(warn.StartLine, warn.EndLine, warn.Message)),
+                    err => this.ErrorListener.Error(new OptionReaderException(err.StartLine, err.EndLine, err.Message)))
+            };
         }
+
+        /// <summary>
+        ///     The error listener to be used to report parsing errors.
+        /// </summary>
+        public IErrorListener<OptionReaderException> ErrorListener { get; set; } = new StandardErrorListener<OptionReaderException>();
 
         /// <summary>
         ///     The name of the parser to be used within any exceptions.
         /// </summary>
         public string Name { get; }
 
-        //public IErrorListener<ParserException> ErrorListener
-        //{
-        //    get { return _parser.ErrorListener; }
-        //    set { _parser.ErrorListener = value; }
-        //}
-
         /// <summary>
         ///     Parses the lines of text, supplied from the constructor.
         /// </summary>
         /// <param name="options">The instance of <see cref="TOptions" /> to be populated.</param>
+        /// <param name="sourceName">The name of the source. If from a file use file path.</param>
+        /// <param name="lines">The lines of text to be parsed.</param>
         /// <exception cref="ParserException">Thrown when the text being parsed contains an exception.</exception>
         /// <exception cref="InvalidPropertyTypeException">
         ///     Throw when the developer has applied an attribute to a property of an
@@ -92,7 +97,7 @@ namespace Doctran.Input
 
                 foreach (var option in propOptions)
                 {
-                    if (analysedOptions.Contains(option.Name))
+                    if(analysedOptions.Contains(option.Name))
                     {
                         throw new InvalidAttributesException($"The attribute for options of name '{option.Name}' was applied twice.");
                     }
@@ -108,7 +113,7 @@ namespace Doctran.Input
                     {
                         if (optionList != null && optionList.InitializeAsDefault)
                         {
-                            prop.SetValue(options, (IEnumerable) Activator.CreateInstance(optionList.InitializationType),
+                            prop.SetValue(options, (IEnumerable)Activator.CreateInstance(optionList.InitializationType),
                                 null);
                         }
                         else if (scalarOption?.DefaultValue != null)
@@ -143,13 +148,6 @@ namespace Doctran.Input
                 AssignList(defaultInfo.Item2.MetaDataToProperty, options, _metaDatas, defaultInfo.Item1,
                     defaultInfo.Item2.InitializationType);
             }
-        }
-
-        private List<FileLine> PreProcess(IEnumerable<FileLine> lines)
-        {
-            return (from line in lines
-                    select new FileLine(line.Number, line.Text != "" ? "!>" + line.Text : "")
-                   ).ToList();
         }
 
         private static void CheckMultiOptions(IEnumerable<IOptionAttribute> propOptions)
@@ -209,11 +207,11 @@ namespace Doctran.Input
             // If the property has not been initialized, then do it.
             if (propertyInfo.GetValue(options, null) == null)
             {
-                propertyInfo.SetValue(options, (IEnumerable) Activator.CreateInstance(initializationType), null);
+                propertyInfo.SetValue(options, (IEnumerable)Activator.CreateInstance(initializationType), null);
             }
 
             // Get the property list.
-            var propList = (IList) propertyInfo.GetValue(options, null);
+            var propList = (IList)propertyInfo.GetValue(options, null);
 
             // Get the type of generic parameter to initialize to, within the enumeration.
             var initTo = initializationType.GetInterface(typeof(IEnumerable<>).Name).GetGenericArguments()[0];
@@ -227,15 +225,15 @@ namespace Doctran.Input
                     continue;
                 }
 
-                //try
-                //{
+                try
+                {
                     propList.Add(c);
-                //}
-                //catch (Exception e)
-                //{
-                //    ErrorListener.Error(new ParserException(v.Lines.First().Number, v.Lines.Last().Number,
-                //        e.Message));
-                //}
+
+                }
+                catch (Exception e)
+                {
+                    ErrorListener.Error(new OptionReaderException(v.Lines.First().Number, v.Lines.Last().Number, e.Message));
+                }
             }
         }
 
@@ -261,8 +259,7 @@ namespace Doctran.Input
             {
                 foreach (var md in valuesOfName)
                 {
-                    //ErrorListener.Error(new ParserException(md.Lines.First().Number, md.Lines.Last().Number,
-                    //    UniquenessExceptionString(md.Name)));
+                    this.ErrorListener.Error(new OptionReaderException(md.Lines.First().Number, md.Lines.Last().Number, UniquenessExceptionString(md.Name)));
                 }
 
                 return;
@@ -293,9 +290,9 @@ namespace Doctran.Input
             {
                 return convert(metaData, type);
             }
-            catch (ConversionException e)
+            catch (OptionReaderException e)
             {
-                //ErrorListener.Error(new ParserConversionException(e.StartLine, e.EndLine, this.Name, e.ValueName, e.Message));
+                ErrorListener.Error(e);
                 return null;
             }
         }
@@ -336,6 +333,13 @@ namespace Doctran.Input
             }
 
             return valuesOfName;
+        }
+
+        private List<FileLine> PreProcess(IEnumerable<FileLine> lines)
+        {
+            return (from line in lines
+                select new FileLine(line.Number, line.Text != "" ? "!>" + line.Text : "")
+                ).ToList();
         }
     }
 }

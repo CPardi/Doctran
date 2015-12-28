@@ -1,0 +1,3 @@
+﻿SourcePath : File1.txt
+SourcePath : Folder2\*.txt
+SourcePath : Folder1\**\*.txt

@@ -31,10 +31,17 @@ namespace Doctran.Input.OptionsReaderCore
             var infoV = metaData as IInformationValue;
             if (infoV == null)
             {
-                throw new ParserException(metaData.Lines.First().Number, metaData.Lines.Last().Number, $"'{metaData.Name}' can only be a value type and not a group.");
+                throw new OptionReaderException(metaData.Lines.First().Number, metaData.Lines.Last().Number, $"'{metaData.Name}' can only be a value type and not a group.");
             }
 
-            return infoV.Value.ToIConvertable(propertyType);
+            try
+            {
+                return infoV.Value.ToIConvertable(propertyType);
+            }
+            catch (FormatException e)
+            {
+                throw new OptionReaderException(metaData.Lines.First().Number, metaData.Lines.Last().Number, e.Message);
+            }            
         } 
     }
 }

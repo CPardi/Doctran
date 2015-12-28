@@ -9,6 +9,7 @@ namespace Doctran.Parsing.BuiltIn.FortranBlocks
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Linq;
     using System.Text.RegularExpressions;
     using Comments;
@@ -42,6 +43,8 @@ namespace Doctran.Parsing.BuiltIn.FortranBlocks
 
         public static IEnumerable<InformationBlock> MultiDepthEnumeration(int fromDepth, int toDepth)
         {
+            Debug.Assert(fromDepth > 0, $"'{nameof(fromDepth)}' must be greater than or equal to 0.");
+
             return
                 from i in Enumerable.Range(fromDepth, toDepth)
                 select new InformationBlock(i);
@@ -87,19 +90,19 @@ namespace Doctran.Parsing.BuiltIn.FortranBlocks
             //  1 - HAS subobjects, NO value.
             //  2 - HAS value, NO subobjects.
             //  3 - HAS value, HAS subobjects.
-            var caseNum = Convert.ToInt32(subObjectList.Any()) + 2*Convert.ToInt32(value.IsNullOrEmpty());
+            var caseNum = Convert.ToInt32(subObjectList.Any()) + 2*Convert.ToInt32(!value.IsNullOrEmpty());
 
             switch (caseNum)
             {
                 case 0:
                     throw new BlockParserException("An information block must contain either a value or sub-information elements.");
                 case 1:
+                    return CollectionUtils.Singlet(new InformationGroup(_depth, typeName, subObjectList, lines));
+                case 2:
                     return
                         _factories.ContainsKey(typeName)
                             ? _factories[typeName].Create(_depth, value, subObjectList, lines).Cast<FortranObject>()
                             : CollectionUtils.Singlet(new InformationValue(_depth, typeName, value, lines));
-                case 2:
-                    return CollectionUtils.Singlet(new InformationGroup(_depth, typeName, subObjectList, lines));
                 case 3:
                     throw new BlockParserException("An information block cannot contain both a value and sub-information elements.");
                 default:

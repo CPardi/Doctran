@@ -11,8 +11,8 @@ namespace Doctran.Parsing
     using System.Collections.Generic;
     using System.Linq;
     using BuiltIn.FortranObjects;
+    using Helper;
     using Reporting;
-    using Utilitys;
 
     public class Traverser
     {
@@ -24,6 +24,8 @@ namespace Doctran.Parsing
             _actions = actions.ToDictionary(a => a.ForType, a => a.Act);
         }
 
+        public IErrorListener<TraverserException> ErrorListener { get; set; } = new StandardErrorListener<TraverserException>();
+
         public string Name { get; }
 
         public void Go(ISource source)
@@ -33,21 +35,30 @@ namespace Doctran.Parsing
             Navigate(source);
         }
 
-        private void Navigate(IFortranObject obj)
+        private void DoActions(IFortranObject obj, Type type)
         {
             Action<object> act;
-            
-            if (_actions.TryGetValue(obj.GetType(), out act))
+            if (!_actions.TryGetValue(type, out act))
+            {
+                return;
+            }
+
+            try
             {
                 act(obj);
             }
-
-            foreach(var inter in obj.GetType().GetInterfaces())
+            catch (TraverserException e)
             {
-                if (_actions.TryGetValue(inter, out act))
-                {
-                    act(obj);
-                }
+                this.ErrorListener.Error(e);
+            }
+        }
+
+        private void Navigate(IFortranObject obj)
+        {
+            this.DoActions(obj, obj.GetType());
+            foreach (var inter in obj.GetType().GetInterfaces())
+            {
+                this.DoActions(obj, inter);
             }
 
             for (var i = obj.SubObjects.Count - 1; i >= 0; i--)
@@ -55,5 +66,16 @@ namespace Doctran.Parsing
                 Navigate(obj.SubObjects[i]);
             }
         }
+    }
+
+    public class TraverserException : ApplicationException
+    {
+        public TraverserException(IFortranObject fortranObject, string message)
+            : base(message)
+        {
+            this.FortranObject = fortranObject;
+        }
+
+        public IFortranObject FortranObject { get; }
     }
 }

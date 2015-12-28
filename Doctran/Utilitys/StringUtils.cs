@@ -15,27 +15,8 @@ namespace Doctran.Utilitys
 
     public static class StringUtils
     {
-        /// <summary>
-        ///     If convertable, a string value is converted to the specified type.
-        /// </summary>
-        /// <param name="this">The converted object.</param>
-        /// <param name="propertyType">The type to convert the meta-data to.</param>
-        public static object ToIConvertable(this string @this, Type propertyType)
-        {
-            if (propertyType.GetInterface(typeof(IConvertible).Name) == null)
-            {
-                throw new ArgumentException(
-                    $"Must derive from base type '{typeof(IConvertible).Name}'",
-                    nameof(propertyType));
-            }
-
-            return Convert.ChangeType(@this, propertyType);
-        }
-
-        public static bool IsNullOrEmpty(this string @this)
-        {
-            return string.IsNullOrEmpty(@this);
-        }
+        public static string ConvertFromFileLineList(List<FileLine> lines)
+            => string.Concat(lines.Select((line, index) => index == 0 ? line.Text : $"\n{line.Text}"));
 
         public static List<FileLine> ConvertToFileLineList(string linesString)
         {
@@ -47,9 +28,6 @@ namespace Doctran.Utilitys
                 );
             return lines;
         }
-
-        public static string ConvertFromFileLineList(List<FileLine> lines) 
-            => string.Concat(lines.Select((line, index) => index == 0 ? line.Text : $"\n{line.Text}"));
 
         public static List<string> DelimiterExceptBrackets(string text, char delimiter)
         {
@@ -122,6 +100,26 @@ namespace Doctran.Utilitys
             return delimiteredText;
         }
 
+        public static bool IsNullOrEmpty(this string @this)
+        {
+            return string.IsNullOrEmpty(@this);
+        }
+
+        /// <summary>
+        ///     Return a string describing the location of lines within a file path.
+        /// </summary>
+        /// <param name="start">The first line to locate.</param>
+        /// <param name="end">The last line to locate.</param>
+        /// <param name="path">The file path of the file.</param>
+        /// <returns></returns>
+        public static string LocationString(int start, int end, string path)
+        {
+            return
+                start == end
+                    ? $"At line {start} of '{path}'."
+                    : $"Within lines {start} to {end} of '{path}'.";
+        }
+
         public static string NoWhitespace(string text)
         {
             return Regex.Replace(text, @"\s+", "");
@@ -132,11 +130,28 @@ namespace Doctran.Utilitys
             return s.Split('!')[0].Trim();
         }
 
+        /// <summary>
+        ///     If convertable, a string value is converted to the specified type.
+        /// </summary>
+        /// <param name="this">The converted object.</param>
+        /// <param name="propertyType">The type to convert the meta-data to.</param>
+        public static object ToIConvertable(this string @this, Type propertyType)
+        {
+            if (propertyType.GetInterface(typeof(IConvertible).Name) == null)
+            {
+                throw new ArgumentException(
+                    $"Must derive from base type '{typeof(IConvertible).Name}'",
+                    nameof(propertyType));
+            }
+
+            return Convert.ChangeType(@this, propertyType);
+        }
+
         public static string ToUpperFirstLowerRest(this string s)
         {
             if (string.IsNullOrEmpty(s))
             {
-                return "";
+                return string.Empty;
             }
             return char.ToUpper(s[0]) + s.Substring(1);
         }
