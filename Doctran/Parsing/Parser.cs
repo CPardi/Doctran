@@ -166,7 +166,8 @@ namespace Doctran.Parsing
                 int currentIndex,
                 Stack<string> blockNameStack,
                 FortranBlock currentFactory,
-                List<IFortranObject> blockObjects, IEnumerable<IFortranObject> blockSubObjects)
+                List<IFortranObject> blockObjects, 
+                IEnumerable<IFortranObject> blockSubObjects)
             {
                 var blockSubObjectsList = blockSubObjects as List<IFortranObject> ?? blockSubObjects.ToList();
 

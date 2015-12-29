@@ -35,7 +35,9 @@ namespace Doctran
 
             Report.SetReleaseProfile();
 
-            var options = GetOptions(args);
+            var options = new Options();
+            GetCommandLineOptions(args, options);
+            GetOptions(options.ProjectFilePath ?? EnvVar.DefaultInfoPath, options);
             Report.Verbose = options.Verbose;
 
             var project = GetProject(options.SourceFilePaths);
@@ -44,28 +46,43 @@ namespace Doctran
             var xmlOutputter = GetXmlOutputter(project, new XElement("Information", options.XmlInformation), options.OutputDirectory, options.SaveXmlPath);
             OutputHtml(project, xmlOutputter, options);
 
-            // Verbose >= 2
             Report.NewStatus($@"Documentation can be found at '{Path.GetFullPath(options.OutputDirectory)}'");
             Report.NewStatus("Documentation generation complete.\n");
             return 0;
         }
 
-        private static Options GetOptions(string[] args)
+        private static void GetOptions(string path, Options options)
+        {            
+            var parserExceptions = new ListenerAndAggregater<OptionReaderException>();
+            var projectFileReader = new OptionsReader<Options>(5, "Project file") { ErrorListener = parserExceptions };
+            var projFileLines = OtherUtils.ReadFile(path);
+            PathUtils.RunInDirectory(
+                Path.GetDirectoryName(path),
+                () => projectFileReader.Parse(options, path, projFileLines));
+            var ws = parserExceptions.Warnings;
+            var es = parserExceptions.Errors;
+
+            // Report any errors to the user.
+            Action<ConsolePublisher, OptionReaderException> action
+                = (pub, w) => pub.DescriptionReasonLocation(ReportGenre.ProjectFile, w.Message, StringUtils.LocationString(w.StartLine, w.EndLine, path));
+            if (ws.Any())
+            {
+                Report.Warnings(action, ws);
+            }
+
+            if (es.Any())
+            {
+                Report.Errors(action, es);
+            }
+        }
+
+        private static void GetCommandLineOptions(string[] args, Options options)
         {
-            var options = new Options();
-
-            try
-            {
-                Parser.Default.ParseArgumentsStrict(args, options);
-            }
-            catch (IOException e)
-            {
-                Report.Error(pub => pub.DescriptionReason(ReportGenre.Argument, e.Message), e);
-            }
-
+            Parser.Default.ParseArgumentsStrict(args, options);
+            
             ShowLicensing = options.ShowLicensing;
 
-            PluginManager.Initialize();
+            PluginManager.Initialize(); // Must come after show licensing.
 
             if (options.ShowHelp)
             {
@@ -76,31 +93,6 @@ namespace Doctran
             {
                 Report.MessageAndExit(PluginManager.InformationString);
             }
-
-            var parserExceptions = new ListenerAndAggregater<OptionReaderException>();
-            var projectFileReader = new OptionsReader<Options>(5, "Project file") { ErrorListener = parserExceptions };
-            var projFilePath = options.ProjectFilePath ?? EnvVar.DefaultInfoPath;
-            var projFileLines = OtherUtils.ReadFile(projFilePath);
-            PathUtils.RunInDirectory(
-                Path.GetDirectoryName(projFilePath),
-                () => projectFileReader.Parse(options, projFilePath, projFileLines));
-            var ws = parserExceptions.Warnings;
-            var es = parserExceptions.Errors;
-
-            // Report any errors to the user.
-            Action<ConsolePublisher, OptionReaderException> action
-                = (pub, w) => pub.DescriptionReasonLocation(ReportGenre.ProjectFile, w.Message, StringUtils.LocationString(w.StartLine, w.EndLine, projFilePath));
-            if (ws.Any())
-            {
-                Report.Warnings(action, ws);
-            }
-
-            if (es.Any())
-            {
-                Report.Errors(action, es);
-            }
-
-            return options;
         }
 
         private static Project GetProject(IEnumerable<string> sourceFiles)
