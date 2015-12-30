@@ -5,7 +5,7 @@
 //     file, You can obtain one at http://mozilla.org/MPL/2.0/.
 // </copyright>
 
-namespace Doctran.Output
+namespace Doctran.Output.Html
 {
     using System;
     using System.Collections.Generic;
@@ -29,7 +29,7 @@ namespace Doctran.Output
 
         public XsltRunner(string stylesheetPath)
         {
-            StylesheetPath = stylesheetPath;
+            this.StylesheetPath = stylesheetPath;
 
             // Save a builder for later.
             _builder = _processor.NewDocumentBuilder();
@@ -38,7 +38,7 @@ namespace Doctran.Output
             var compiler = _processor.NewXsltCompiler();
 
             // Load a stylesheet at a from text reader, v9.6 doesent like using a Uri for some reason.
-            compiler.BaseUri = new Uri(Path.GetFullPath(StylesheetPath));
+            compiler.BaseUri = new Uri(Path.GetFullPath(this.StylesheetPath));
 
             TextReader textreader = File.OpenText(stylesheetPath);
 
@@ -50,7 +50,7 @@ namespace Doctran.Output
             }
             catch (TransformerException)
             {
-                ReportCompilerErrors(errorListener);
+                this.ReportCompilerErrors(errorListener);
             }
         }
 
@@ -91,7 +91,7 @@ namespace Doctran.Output
             }
             catch (DynamicError)
             {
-                ReportCompilerErrors(listener);
+                this.ReportCompilerErrors(listener);
             }
 
             // Clear any set parameters.

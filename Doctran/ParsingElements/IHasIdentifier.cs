@@ -5,7 +5,7 @@
 //     file, You can obtain one at http://mozilla.org/MPL/2.0/.
 // </copyright>
 
-namespace Doctran.Parsing.BuiltIn.FortranObjects
+namespace Doctran.ParsingElements
 {
     public interface IHasIdentifier
     {

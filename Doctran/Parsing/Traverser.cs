@@ -10,8 +10,8 @@ namespace Doctran.Parsing
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using BuiltIn.FortranObjects;
     using Helper;
+    using ParsingElements;
     using Reporting;
 
     public class Traverser
@@ -66,16 +66,5 @@ namespace Doctran.Parsing
                 Navigate(obj.SubObjects[i]);
             }
         }
-    }
-
-    public class TraverserException : ApplicationException
-    {
-        public TraverserException(IFortranObject fortranObject, string message)
-            : base(message)
-        {
-            this.FortranObject = fortranObject;
-        }
-
-        public IFortranObject FortranObject { get; }
     }
 }

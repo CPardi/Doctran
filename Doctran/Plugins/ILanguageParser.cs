@@ -10,7 +10,7 @@ namespace Doctran.Plugins
     using System.Collections.Generic;
     using Helper;
     using Parsing;
-    using Parsing.BuiltIn.FortranObjects;
+    using ParsingElements;
 
     public interface ILanguageParser
     {

@@ -5,7 +5,7 @@
 //     file, You can obtain one at http://mozilla.org/MPL/2.0/.
 // </copyright>
 
-namespace Doctran.Output
+namespace Doctran.Output.Html
 {
     using System.Collections.Generic;
     using javax.xml.transform;
@@ -21,17 +21,17 @@ namespace Doctran.Output
 
         public void error(TransformerException te)
         {
-            Errors.Add(te);
+            this.Errors.Add(te);
         }
 
         public void fatalError(TransformerException te)
         {
-            FatalErrors.Add(te);
+            this.FatalErrors.Add(te);
         }
 
         public void warning(TransformerException te)
         {
-            Warnings.Add(te);
+            this.Warnings.Add(te);
         }
     }
 }

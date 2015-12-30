@@ -1,7 +1,8 @@
-namespace Doctran.Parsing.BuiltIn.FortranObjects
+namespace Doctran.ParsingElements.FortranObjects
 {
     using System.Collections.Generic;
     using Helper;
+    using Parsing;
 
     public class Source : FortranObject, ISource
     {

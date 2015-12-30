@@ -5,11 +5,11 @@
 //     file, You can obtain one at http://mozilla.org/MPL/2.0/.
 // </copyright>
 
-namespace Doctran.Parsing.BuiltIn
+namespace Doctran.ParsingElements
 {
     using System.Linq;
     using FortranObjects;
-    using Reporting;
+    using Parsing;
 
     public static class TraverserActions
     {

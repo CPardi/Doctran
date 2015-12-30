@@ -9,8 +9,8 @@
 
 namespace Doctran.Test.Input.OptionsReader
 {
-    using Doctran.Input.OptionsReaderCore;
-    using Parsing.BuiltIn.FortranObjects;
+    using Doctran.Input.Options;
+    using ParsingElements.FortranObjects;
 
     internal class NoIConvertableOptions
     {

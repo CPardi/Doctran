@@ -34,7 +34,7 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Common\PathCollection.Test.cs" />
+    <Compile Include="Common\PathCollectionTest.cs" />
     <Compile Include="Input\OptionsReader\InvalidAttributeOptions.cs" />
     <Compile Include="Input\OptionsReader\InvalidDefaultOptions.cs" />
     <Compile Include="Input\OptionsReader\InvalidMultipleAttributesOptionsList.cs" />
@@ -46,7 +46,7 @@
     <Compile Include="Input\OptionsReader\Parser\ParseTest.cs" />
     <Compile Include="Input\OptionsReader\TwiceSpecifiedOptions.cs" />
     <Compile Include="Input\OptionsReader\TwiceSpecifiedOptionsList.cs" />
-    <Compile Include="Program.Test.cs" />
+    <Compile Include="ProgramTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -13,15 +13,15 @@ namespace Doctran.Helper
     using System.Xml.Linq;
     using CommandLine;
     using CommandLine.Text;
-    using Input.ProjectFileCore;
+    using Input.ProjectFileOptions;
     using Utilitys;
 
     public class Options
     {
-        [Input.OptionsReaderCore.OptionList("CopyAndParse", typeof(PathList))]
+        [Input.Options.OptionList("CopyAndParse", typeof(PathList))]
         public PathList CopyAndParsePaths { get; set; } = new PathList();
 
-        [Input.OptionsReaderCore.OptionList("Copy", typeof(PathList))]
+        [Input.Options.OptionList("Copy", typeof(PathList))]
         public PathList CopyPaths { get; set; } = new PathList();
 
         [Option('o', "output", DefaultValue = "Docs", MetaValue = "PATH", HelpText = "PATH is the output directory for the documentation.")]
@@ -46,7 +46,7 @@ namespace Doctran.Helper
         public bool ShowPluginInformation { get; set; }
 
         [ValueList(typeof(PathList))]
-        [Input.OptionsReaderCore.OptionList("Source", typeof(PathList))]
+        [Input.Options.OptionList("Source", typeof(PathList))]
         public PathList SourceFilePaths { get; set; }
 
         [Option('t', "theme", DefaultValue = "Default", MetaValue = "NAME", HelpText = "NAME is the name of the theme to be applied.")]

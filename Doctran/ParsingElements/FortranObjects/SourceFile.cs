@@ -5,19 +5,18 @@
 //     file, You can obtain one at http://mozilla.org/MPL/2.0/.
 // </copyright>
 
-namespace Doctran.Parsing.BuiltIn.FortranObjects
+namespace Doctran.ParsingElements.FortranObjects
 {
     using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
-    using System.Text.RegularExpressions;
     using System.Xml.Linq;
     using ColorCode;
     using ColorCode.Formatting;
     using ColorCode.Styling.StyleSheets;
     using Helper;
-    using Reporting;
+    using Parsing;
     using Utilitys;
 
     public class SourceFile : FortranObject, IHasName, IHasLines, IHasValidName, ISourceFile

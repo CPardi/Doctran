@@ -5,11 +5,10 @@
 //     file, You can obtain one at http://mozilla.org/MPL/2.0/.
 // </copyright>
 
-namespace Doctran.Comments
+namespace Doctran.ParsingElements
 {
     using System.Collections.Generic;
     using Helper;
-    using Parsing;
 
     public interface IInformation
     {
@@ -18,15 +17,5 @@ namespace Doctran.Comments
         List<FileLine> Lines { get; }
 
         string Name { get; }
-    }
-
-    public interface IInformationValue : IInformation
-    {
-        string Value { get; }
-    }
-
-    public interface IInformationGroup : IInformation
-    {
-        List<IFortranObject> SubObjects { get; }
     }
 }

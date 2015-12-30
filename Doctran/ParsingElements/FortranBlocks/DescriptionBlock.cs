@@ -5,7 +5,7 @@
 //     file, You can obtain one at http://mozilla.org/MPL/2.0/.
 // </copyright>
 
-namespace Doctran.Parsing.BuiltIn.FortranBlocks
+namespace Doctran.ParsingElements.FortranBlocks
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -14,6 +14,7 @@ namespace Doctran.Parsing.BuiltIn.FortranBlocks
     using FortranObjects;
     using Helper;
     using MarkdownSharp;
+    using Parsing;
     using Utilitys;
 
     public class DescriptionBlock : FortranBlock
@@ -63,7 +64,7 @@ namespace Doctran.Parsing.BuiltIn.FortranBlocks
         {
             var parentName = ancestors.FirstOrDefault()?.Name;
 
-            if (parentName == Name)
+            if (parentName == this.Name)
             {
                 return false;
             }

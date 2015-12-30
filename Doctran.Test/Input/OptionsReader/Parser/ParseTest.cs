@@ -13,7 +13,7 @@ namespace Doctran.Test.Input.OptionsReader.Parser
     using System.Collections.Generic;
     using System.Linq;
     using Doctran.Input;
-    using Doctran.Input.OptionsReaderCore;
+    using Doctran.Input.Options;
     using Helper;
     using NUnit.Framework;
     using Parsing;

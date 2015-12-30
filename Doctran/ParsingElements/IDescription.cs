@@ -1,7 +1,8 @@
-﻿using System.Xml.Linq;
-
-namespace Doctran.Parsing.BuiltIn.FortranObjects
+﻿namespace Doctran.ParsingElements
 {
+    using System.Xml.Linq;
+    using Parsing;
+
     public interface IDescription : IFortranObject
     {
         XElement Basic { get; }

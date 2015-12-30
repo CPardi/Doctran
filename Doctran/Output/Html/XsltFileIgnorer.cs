@@ -1,7 +1,8 @@
-namespace Doctran.Output
+namespace Doctran.Output.Html
 {
     using System.Collections.ObjectModel;
     using System.Linq;
+    using Assets;
 
     internal class XsltFileIgnorer : FileIgnorer
     {

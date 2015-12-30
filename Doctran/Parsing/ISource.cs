@@ -1,6 +1,6 @@
 ﻿namespace Doctran.Parsing
 {
-    using BuiltIn.FortranObjects;
+    using ParsingElements;
 
     public interface ISource : IFortranObject, IHasIdentifier
     {

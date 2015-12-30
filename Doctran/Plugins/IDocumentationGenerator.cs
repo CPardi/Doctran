@@ -11,7 +11,6 @@ namespace Doctran.Plugins
     using System.Xml.Linq;
     using Helper;
     using Parsing;
-    using Parsing.BuiltIn.FortranObjects;
 
     public interface IDocumentationGenerator
     {

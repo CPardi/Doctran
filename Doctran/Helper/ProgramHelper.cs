@@ -10,7 +10,8 @@ namespace Doctran.Helper
     using System.Collections.Generic;
     using System.IO;
     using Parsing;
-    using Parsing.BuiltIn.FortranObjects;
+    using ParsingElements;
+    using ParsingElements.FortranObjects;
     using Plugins;
     using Reporting;
     using Utilitys;

@@ -1,6 +1,6 @@
 ﻿namespace Doctran.Test.Input.OptionsReader
 {
-    using Doctran.Input.OptionsReaderCore;
+    using Doctran.Input.Options;
 
     internal class TwiceSpecifiedOptions
     {

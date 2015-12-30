@@ -23,9 +23,5 @@ namespace Doctran.Parsing
         void AddSubObjects(IEnumerable<IFortranObject> objs);
 
         T GoUpTillType<T>() where T : IFortranObject;
-
-        List<IFortranObject> SubObjectsNotOfType<T>() where T : IFortranObject;
-
-        List<T> SubObjectsOfType<T>() where T : IFortranObject;
     }
 }

@@ -5,16 +5,16 @@
 //     file, You can obtain one at http://mozilla.org/MPL/2.0/.
 // </copyright>
 
-namespace Doctran.Parsing.BuiltIn.FortranBlocks
+namespace Doctran.ParsingElements.FortranBlocks
 {
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Linq;
     using System.Text.RegularExpressions;
-    using Comments;
     using FortranObjects;
     using Helper;
+    using Parsing;
     using Utilitys;
 
     public class InformationBlock : FortranBlock

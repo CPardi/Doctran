@@ -5,13 +5,14 @@
 //     file, You can obtain one at http://mozilla.org/MPL/2.0/.
 // </copyright>
 
-namespace Doctran.Parsing.BuiltIn.FortranObjects
+namespace Doctran.ParsingElements.FortranObjects
 {
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Linq;
     using System.Xml.Linq;
+    using Parsing;
     using Plugins;
     using Utilitys;
 
@@ -34,7 +35,7 @@ namespace Doctran.Parsing.BuiltIn.FortranObjects
             xEle.Add(xmlPassthrough);
             xEle.Add(new XElement("DocCreated", DateTime.Now.ToXElement()));
             xEle.Add(
-                from info in this.SubObjectsOfType<Description>()
+                from info in this.SubObjects.OfType<Description>()
                 select new XElement("Description", info.Basic, info.Detailed)
                 );
 

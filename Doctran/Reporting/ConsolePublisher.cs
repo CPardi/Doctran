@@ -13,33 +13,6 @@ namespace Doctran.Reporting
     using Helper;
     using Utilitys;
 
-    public enum ReportGenre
-    {
-        Licensing,
-        Unlicensed,
-        Argument,
-        FileRead,
-        Parsing,
-        ParsingPost,
-        Plugin,
-        ProjectFile,
-        XsltCompilation,
-        XsltRuntime
-    }
-
-    public enum ReportSeverity
-    {
-        Undefined,
-
-        Error,
-
-        Warning,
-
-        Message,
-
-        Status
-    }
-
     public class ConsolePublisher
     {
         private readonly Dictionary<ReportSeverity, string> _reportTitles = new Dictionary<ReportSeverity, string>

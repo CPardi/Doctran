@@ -10,7 +10,6 @@ namespace Doctran.Parsing
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Xml.Serialization;
     using Helper;
 
     public abstract class FortranObject : IFortranObject
@@ -71,24 +70,6 @@ namespace Doctran.Parsing
         public void OrderSubObjectsBy(Func<IFortranObject, int> keySelector)
         {
             this.SubObjects = this.SubObjects.OrderBy(keySelector).ToList();
-        }
-
-        public List<IFortranObject> SubObjectsNotOfType<TR>()
-            where TR : IFortranObject
-        {
-            var a = from obj in this.SubObjects
-                where !(obj is TR)
-                select obj;
-            return a.ToList();
-        }
-
-        public List<TR> SubObjectsOfType<TR>()
-            where TR : IFortranObject
-        {
-            var a = from obj in this.SubObjects
-                where obj is TR
-                select (TR)obj;
-            return a.ToList();
         }
     }
 }

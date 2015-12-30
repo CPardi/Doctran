@@ -13,7 +13,6 @@ namespace Doctran.Utilitys
     using System.Linq;
     using Helper;
     using MarkdownSharp;
-    using Parsing.BuiltIn.FortranObjects;
     using Reporting;
 
     public static class OtherUtils

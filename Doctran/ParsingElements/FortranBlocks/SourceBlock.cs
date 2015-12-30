@@ -5,11 +5,12 @@
 //     file, You can obtain one at http://mozilla.org/MPL/2.0/.
 // </copyright>
 
-namespace Doctran.Parsing.BuiltIn.FortranBlocks
+namespace Doctran.ParsingElements.FortranBlocks
 {
     using System.Collections.Generic;
     using FortranObjects;
     using Helper;
+    using Parsing;
 
     public class SourceBlock : FortranBlock
     {

@@ -10,9 +10,10 @@ namespace Doctran.Parsing
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Linq;
-    using BuiltIn.FortranBlocks;
-    using BuiltIn.FortranObjects;
     using Helper;
+    using ParsingElements;
+    using ParsingElements.FortranBlocks;
+    using ParsingElements.FortranObjects;
 
     public class Parser
     {

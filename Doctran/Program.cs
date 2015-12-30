@@ -15,10 +15,11 @@ namespace Doctran
     using CommandLine;
     using Helper;
     using Input;
-    using Input.OptionsReaderCore;
+    using Input.Options;
     using Output;
-    using Output.Themes;
-    using Parsing.BuiltIn.FortranObjects;
+    using Output.Assets;
+    using Output.Html;
+    using ParsingElements.FortranObjects;
     using Plugins;
     using Reporting;
     using Utilitys;
@@ -157,7 +158,7 @@ namespace Doctran
         private static void OutputTheme(Options options)
         {
             Report.NewStatus("Outputting theme files... ");
-            var themeOutputter = new ThemeOutputter();
+            var themeOutputter = new AssetOutputter();
             themeOutputter.Output(options);
             Report.ContinueStatus("Done");
         }

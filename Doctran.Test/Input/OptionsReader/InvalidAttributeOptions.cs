@@ -10,7 +10,7 @@
 namespace Doctran.Test.Input.OptionsReader
 {
     using System.Collections.Generic;
-    using Doctran.Input.OptionsReaderCore;
+    using Doctran.Input.Options;
 
     internal class InvalidAttributeOptions
     {
