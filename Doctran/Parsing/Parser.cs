@@ -8,6 +8,7 @@
 namespace Doctran.Parsing
 {
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.Linq;
     using BuiltIn.FortranBlocks;
     using BuiltIn.FortranObjects;
@@ -39,8 +40,8 @@ namespace Doctran.Parsing
         {
             // Set the current index to 0 and parse the lines set in the constructor.
             var currentIndex = 0;
-            var blockNameStack = new Stack<string>();
-            blockNameStack.Push("Source");
+            var blockNameStack = new Stack<FortranBlock>();
+            blockNameStack.Push(_blockParsers["Source"]);
 
             // Store the snippet and insert a blank line at the start to simplify the parsing algorithm.
             var linesForParse = new List<FileLine>
@@ -70,11 +71,9 @@ namespace Doctran.Parsing
                 _errorListener = errorListener;
             }
 
-            public IEnumerable<IFortranObject> SearchBlock(int startIndex, ref int currentIndex, Stack<string> blockNameStack)
+            public IEnumerable<IFortranObject> SearchBlock(int startIndex, ref int currentIndex, Stack<FortranBlock> blockNameStack)
             {
-                var thisBlockName = blockNameStack.Peek();
-
-                var currentFactory = _blockParsers[thisBlockName];
+                var currentFactory = blockNameStack.Peek();
 
                 // Objects defined by this block of code.
                 var blockObjects = new List<IFortranObject>();
@@ -129,18 +128,18 @@ namespace Doctran.Parsing
                 ref bool incrementIndex,
                 ref int currentIndex,
                 FortranBlock currentFactory,
-                Stack<string> blockNameStack,
+                Stack<FortranBlock> blockNameStack,
                 List<IFortranObject> blockSubObjects)
             {
                 foreach (var block in _blockParsers.Values)
                 {
                     // If this isn't the start of a new block then check the next block parser.
-                    if (!block.BlockStart(blockNameStack.Peek(), _lines, currentIndex))
+                    if (!block.BlockStart(blockNameStack, _lines, currentIndex))
                     {
                         continue;
                     }
 
-                    blockNameStack.Push(block.Name);
+                    blockNameStack.Push(block);
 
                     // The start index of this block is the current index.
                     var startIndex = currentIndex;
@@ -164,7 +163,7 @@ namespace Doctran.Parsing
             private bool EndBlock(
                 int startIndex,
                 int currentIndex,
-                Stack<string> blockNameStack,
+                Stack<FortranBlock> blockNameStack,
                 FortranBlock currentFactory,
                 List<IFortranObject> blockObjects, 
                 IEnumerable<IFortranObject> blockSubObjects)
@@ -172,7 +171,7 @@ namespace Doctran.Parsing
                 var blockSubObjectsList = blockSubObjects as List<IFortranObject> ?? blockSubObjects.ToList();
 
                 // If block has not ended yet then return.
-                if (!currentFactory.BlockEnd(blockNameStack.Peek(), _lines, currentIndex))
+                if (!currentFactory.BlockEnd(blockNameStack.Skip(1), _lines, currentIndex))
                 {
                     return false;
                 }

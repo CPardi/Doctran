@@ -8,6 +8,7 @@
 namespace Doctran.Parsing.BuiltIn.FortranBlocks
 {
     using System.Collections.Generic;
+    using System.Linq;
     using System.Text.RegularExpressions;
     using System.Xml.Linq;
     using FortranObjects;
@@ -22,23 +23,26 @@ namespace Doctran.Parsing.BuiltIn.FortranBlocks
 
         public string Name => "Named Description";
 
-        public  bool BlockEnd(string parentBlockName, List<FileLine> lines, int lineIndex)
+        public  bool BlockEnd(IEnumerable<FortranBlock> ancestors, List<FileLine> lines, int lineIndex)
         {
             if (lineIndex + 1 >= lines.Count)
             {
                 return true;
             }
+
+            var parentAncestors = ancestors.Skip(1);
             return
                 CommentUtils.NDescEnd(lines[lineIndex + 1].Text)
-                || this.BlockStart(parentBlockName, lines, lineIndex + 1)
+                || this.BlockStart(parentAncestors, lines, lineIndex + 1)
                 || CommentUtils.InfoStart(lines[lineIndex + 1].Text);
         }
 
-        public  bool BlockStart(string parentBlockName, List<FileLine> lines, int lineIndex)
+        public  bool BlockStart(IEnumerable<FortranBlock> ancestors, List<FileLine> lines, int lineIndex)
         {
+            var parentName = ancestors.FirstOrDefault()?.Name;
             return
                 CommentUtils.NDescStart(lines[lineIndex].Text)
-                && !parentBlockName.StartsWith("Information_")
+                && !(parentName ?? string.Empty).StartsWith("Information_")
                 && !CommentUtils.DetailLine(lines[lineIndex].Text)
                 && !CommentUtils.InfoStart(lines[lineIndex].Text);
         }

@@ -47,7 +47,7 @@ namespace Doctran.Parsing.BuiltIn.FortranBlocks
                 );
         }
 
-        public  bool BlockEnd(string parentBlockName, List<FileLine> lines, int lineIndex)
+        public  bool BlockEnd(IEnumerable<FortranBlock> ancestors, List<FileLine> lines, int lineIndex)
         {
             if (lines.Count == lineIndex + 1)
             {
@@ -59,15 +59,17 @@ namespace Doctran.Parsing.BuiltIn.FortranBlocks
                 || CommentUtils.NDescStart(lines[lineIndex + 1].Text);
         }
 
-        public  bool BlockStart(string parentBlockName, List<FileLine> lines, int lineIndex)
+        public  bool BlockStart(IEnumerable<FortranBlock> ancestors, List<FileLine> lines, int lineIndex)
         {
-            if (parentBlockName == Name)
+            var parentName = ancestors.FirstOrDefault()?.Name;
+
+            if (parentName == Name)
             {
                 return false;
             }
             return
                 CommentUtils.DescStart(lines[lineIndex].Text)
-                && !parentBlockName.StartsWith("Information_")
+                && !(parentName ?? string.Empty).StartsWith("Information_")
                 && !CommentUtils.DetailLine(lines[lineIndex].Text)
                 && !CommentUtils.NDescStart(lines[lineIndex].Text)
                 && !CommentUtils.InfoStart(lines[lineIndex].Text);

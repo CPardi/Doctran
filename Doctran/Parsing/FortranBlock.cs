@@ -8,6 +8,7 @@
 namespace Doctran.Parsing
 {
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using Helper;
 
     public interface FortranBlock
@@ -18,9 +19,9 @@ namespace Doctran.Parsing
 
         string Name { get; }
 
-        bool BlockEnd(string parentBlockName, List<FileLine> lines, int lineIndex);
+        bool BlockEnd(IEnumerable<FortranBlock> ancestors, List<FileLine> lines, int lineIndex);
 
-        bool BlockStart(string parentBlockName, List<FileLine> lines, int lineIndex);
+        bool BlockStart(IEnumerable<FortranBlock> ancestors, List<FileLine> lines, int lineIndex);
 
         /// <summary>
         ///     Returns one or more <see cref="FortranObject" />, that represent the block specified by <paramref name="lines" />.

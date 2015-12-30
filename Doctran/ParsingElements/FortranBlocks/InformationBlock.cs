@@ -50,7 +50,7 @@ namespace Doctran.Parsing.BuiltIn.FortranBlocks
                 select new InformationBlock(i);
         }
 
-        public bool BlockEnd(string parentBlockName, List<FileLine> lines, int lineIndex)
+        public bool BlockEnd(IEnumerable<FortranBlock> ancestors, List<FileLine> lines, int lineIndex)
         {
             if (lineIndex + 1 >= lines.Count)
             {
@@ -63,7 +63,7 @@ namespace Doctran.Parsing.BuiltIn.FortranBlocks
                 || CommentUtils.NDescStart(lines[lineIndex + 1].Text);
         }
 
-        public bool BlockStart(string parentBlockName, List<FileLine> lines, int lineIndex)
+        public bool BlockStart(IEnumerable<FortranBlock> ancestors, List<FileLine> lines, int lineIndex)
         {
             return
                 CommentUtils.InfoAtDepthStart(lines[lineIndex].Text, _depth)

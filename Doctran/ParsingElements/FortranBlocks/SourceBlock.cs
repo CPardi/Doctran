@@ -20,10 +20,7 @@ namespace Doctran.Parsing.BuiltIn.FortranBlocks
             _language = language;
         }
 
-        public  bool BlockStart(string parentBlockName, List<FileLine> lines, int lineIndex)
-        {
-            return lineIndex == 0;
-        }
+        public  bool BlockStart(IEnumerable<FortranBlock> ancestors, List<FileLine> lines, int lineIndex) => lineIndex == 0;
 
         public bool CheckInternal => true;
 
@@ -31,10 +28,7 @@ namespace Doctran.Parsing.BuiltIn.FortranBlocks
 
         public string Name => "Source";
 
-        public  bool BlockEnd(string parentBlockName, List<FileLine> lines, int lineIndex)
-        {
-            return lineIndex + 1 >= lines.Count;
-        }
+        public  bool BlockEnd(IEnumerable<FortranBlock> ancestors, List<FileLine> lines, int lineIndex) => lineIndex + 1 >= lines.Count;
 
         public  IEnumerable<FortranObject> ReturnObject(IEnumerable<IFortranObject> subObjects, List<FileLine> lines)
         {
