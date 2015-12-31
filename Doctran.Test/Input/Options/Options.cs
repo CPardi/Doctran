@@ -7,7 +7,7 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-namespace Doctran.Test.Input.OptionsReader
+namespace Doctran.Test.Input.Options
 {
     using System.Collections.Generic;
     using Doctran.Input.Options;

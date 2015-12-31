@@ -5,13 +5,13 @@
 //     file, You can obtain one at http://mozilla.org/MPL/2.0/.
 // </copyright>
 
-namespace Doctran.ParsingElements
+namespace Doctran.ParsingElements.Traversal
 {
     using System.Linq;
     using FortranObjects;
     using Parsing;
 
-    public static class TraverserActions
+    public static partial class TraverserActions
     {
         /// <summary>
         ///     Moves named descriptions in to the container or containers with identifier specified by linkedTo.
@@ -47,46 +47,6 @@ namespace Doctran.ParsingElements
                         {
                             match.AddSubObject(obj);
                         }
-                    });
-            }
-        }
-
-        public static ITraverserAction CheckDescriptionLinkage
-        {
-            get
-            {
-                return new TraverserAction<NamedDescription>(
-                    obj =>
-                    {
-                        // Return if OK.
-                        if ((obj.Parent as IHasIdentifier)?.Identifier == obj.LinkedTo)
-                        {
-                            return;
-                        }
-
-                        // Throw exception if not.
-                        obj.Parent.SubObjects.Remove(obj);
-                        throw new TraverserException(obj, "Description meta-data was ignored. Description identifier does not match parent identifier.");
-                    });
-            }
-        }
-
-        public static ITraverserAction CheckDescriptionUniqueness
-        {
-            get
-            {
-                return new TraverserAction<IDescription>(
-                    obj =>
-                    {
-                        // Return if OK.
-                        if (obj.Parent.SubObjects.OfType<IDescription>().Count() <= 1)
-                        {
-                            return;
-                        }
-
-                        // Throw exception if not.
-                        obj.Parent.SubObjects.Remove(obj);
-                        throw new TraverserException(obj, "Multiple descriptions specified for a single block. Description meta-data was ignored.");
                     });
             }
         }

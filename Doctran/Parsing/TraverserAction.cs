@@ -10,7 +10,6 @@ namespace Doctran.Parsing
     using System;
 
     public class TraverserAction<T> : ITraverserAction<T>
-        where T : IFortranObject
     {
         public TraverserAction(Action<T> act)
         {

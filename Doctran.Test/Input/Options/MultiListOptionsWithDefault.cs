@@ -1,12 +1,13 @@
-﻿namespace Doctran.Test.Input.OptionsReader
+﻿namespace Doctran.Test.Input.Options
 {
     using System.Collections.Generic;
     using Doctran.Input.Options;
 
-    internal class MultiListOptions
+    internal class MultiListOptionsWithDefault
     {
         [OptionList("MultiOptionList1", typeof(List<int>))]
         [OptionList("MultiOptionList2", typeof(List<int>))]
-        public IList<int> MultiOptionList { get; set; }
+        [DefaultOption(typeof(List<int>))]
+        public IList<int> MultiOptionListWithDefault { get; set; }
     }
 }

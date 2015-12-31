@@ -7,14 +7,14 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-namespace Doctran.Test.Input.OptionsReader
+namespace Doctran.Test.Input.Options
 {
     using System.Collections.Generic;
     using Doctran.Input.Options;
 
-    internal class InvalidDefaultOptions
+    internal class InvalidAttributeOptions
     {
-        [DefaultOption(typeof(List<string>))]
-        public string DefaultOption { get; set; }
+        [OptionList("AbstractAssign", typeof(IList<string>))]
+        public IEnumerable<string> AbstractAssign { get; set; }
     }
 }

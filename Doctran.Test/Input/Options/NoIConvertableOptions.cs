@@ -7,14 +7,14 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-namespace Doctran.Test.Input.OptionsReader
+namespace Doctran.Test.Input.Options
 {
-    using System.Collections.Generic;
     using Doctran.Input.Options;
+    using Doctran.ParsingElements.FortranObjects;
 
-    internal class InvalidAttributeOptions
+    internal class NoIConvertableOptions
     {
-        [OptionList("AbstractAssign", typeof(IList<string>))]
-        public IEnumerable<string> AbstractAssign { get; set; }
+        [Option("NoIConvertable")]
+        public InformationGroup NoIConvertable { get; set; }
     }
 }

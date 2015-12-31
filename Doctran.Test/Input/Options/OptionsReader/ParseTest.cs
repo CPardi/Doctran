@@ -7,18 +7,17 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-namespace Doctran.Test.Input.OptionsReader.Parser
+namespace Doctran.Test.Input.Options.OptionsReader
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using Doctran.Input;
+    using Doctran.Helper;
     using Doctran.Input.Options;
     using Helper;
     using NUnit.Framework;
-    using Parsing;
     using Utilitys;
-    using Options = OptionsReader.Options;
+    using Options = Input.Options.Options;
 
     [TestFixture]
     [Category("Unit")]

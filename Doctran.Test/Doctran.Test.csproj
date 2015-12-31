@@ -34,18 +34,19 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Common\PathCollectionTest.cs" />
-    <Compile Include="Input\OptionsReader\InvalidAttributeOptions.cs" />
-    <Compile Include="Input\OptionsReader\InvalidDefaultOptions.cs" />
-    <Compile Include="Input\OptionsReader\InvalidMultipleAttributesOptionsList.cs" />
-    <Compile Include="Input\OptionsReader\MultiListOptions.cs" />
-    <Compile Include="Input\OptionsReader\MultiListOptionsWithDefault.cs" />
-    <Compile Include="Input\OptionsReader\NoIConvertableOptions.cs" />
-    <Compile Include="Input\OptionsReader\NoIListOptions.cs" />
-    <Compile Include="Input\OptionsReader\Options.cs" />
-    <Compile Include="Input\OptionsReader\Parser\ParseTest.cs" />
-    <Compile Include="Input\OptionsReader\TwiceSpecifiedOptions.cs" />
-    <Compile Include="Input\OptionsReader\TwiceSpecifiedOptionsList.cs" />
+    <Compile Include="Helper\PathListTest.cs" />
+    <Compile Include="Input\Options\InvalidAttributeOptions.cs" />
+    <Compile Include="Input\Options\InvalidDefaultOptions.cs" />
+    <Compile Include="Input\Options\InvalidMultipleAttributesOptionsList.cs" />
+    <Compile Include="Input\Options\MultiListOptions.cs" />
+    <Compile Include="Input\Options\MultiListOptionsWithDefault.cs" />
+    <Compile Include="Input\Options\NoIConvertableOptions.cs" />
+    <Compile Include="Input\Options\NoIListOptions.cs" />
+    <Compile Include="Input\Options\Options.cs" />
+    <Compile Include="Input\Options\OptionsReader\ParseTest.cs" />
+    <Compile Include="Input\Options\TwiceSpecifiedOptions.cs" />
+    <Compile Include="Input\Options\TwiceSpecifiedOptionsList.cs" />
+    <Compile Include="ParsingElements\Traversal\TraverserActions\CheckNamesTest.cs" />
     <Compile Include="ProgramTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -82,6 +83,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>

@@ -5,12 +5,12 @@
 //     file, You can obtain one at http://mozilla.org/MPL/2.0/.
 // </copyright>
 
-namespace Doctran.Test.Common
+namespace Doctran.Test.Helper
 {
     using System;
     using System.IO;
     using System.Linq;
-    using Helper;
+    using Doctran.Helper;
     using NUnit.Framework;
 
     [TestFixture]

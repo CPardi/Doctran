@@ -1,4 +1,4 @@
-﻿namespace Doctran.Test.Input.OptionsReader
+﻿namespace Doctran.Test.Input.Options
 {
     using Doctran.Input.Options;
 
