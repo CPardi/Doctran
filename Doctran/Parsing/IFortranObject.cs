@@ -14,14 +14,14 @@ namespace Doctran.Parsing
     {
         List<FileLine> Lines { get; }
 
-        IFortranObject Parent { get; set; }
+        //IFortranObject Parent { get; set; }
 
-        List<IFortranObject> SubObjects { get; }
+        //List<IFortranObject> SubObjects { get; }
 
-        void AddSubObject(IFortranObject obj);
+        //void AddSubObject(IFortranObject obj);
 
-        void AddSubObjects(IEnumerable<IFortranObject> objs);
+        //void AddSubObjects(IEnumerable<IFortranObject> objs);
 
-        T GoUpTillType<T>() where T : IFortranObject;
+        //T GoUpTillType<T>() where T : IFortranObject;
     }
 }

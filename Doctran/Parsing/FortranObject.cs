@@ -11,12 +11,13 @@ namespace Doctran.Parsing
     using System.Collections.Generic;
     using System.Linq;
     using Helper;
+    using ParsingElements;
 
-    public abstract class FortranObject : IFortranObject
+    public abstract class FortranObject : IFortranObject, IContainer, IContained
     {
         protected FortranObject()
         {
-            this.SubObjects = new List<IFortranObject>();
+            this.SubObjects = new List<IContained>();
             this.Lines = new List<FileLine>();
         }
 
@@ -26,7 +27,7 @@ namespace Doctran.Parsing
             this.Lines = lines;
         }
 
-        protected FortranObject(IEnumerable<IFortranObject> subObjects, List<FileLine> lines)
+        protected FortranObject(IEnumerable<IContained> subObjects, List<FileLine> lines)
             : this(lines)
         {
             this.AddSubObjects(subObjects);
@@ -34,19 +35,32 @@ namespace Doctran.Parsing
 
         public List<FileLine> Lines { get; }
 
-        public IFortranObject Parent { get; set; }
+        public IContainer Parent { get; set; }
 
-        public List<IFortranObject> SubObjects { get; private set; }
+        public List<IContained> SubObjects { get; private set; }
 
-        public void AddSubObject(IFortranObject obj)
+        public void AddSubObject(IContained obj)
         {
             obj.Parent = this;
             this.SubObjects.Add(obj);
         }
 
-        public void AddSubObjects(IEnumerable<IFortranObject> objs)
+        public void RemoveSubObject(IContained obj)
         {
-            var objList = objs as IList<IFortranObject> ?? objs.ToList();
+            this.SubObjects.Remove(obj);
+        }
+
+        public void RemoveSubObjects(IEnumerable<IContained> objs)
+        {
+            foreach (var obj in objs)
+            {
+                this.RemoveSubObject(obj);
+            }
+        }
+
+        public void AddSubObjects(IEnumerable<IContained> objs)
+        {
+            var objList = objs as IList<IContained> ?? objs.ToList();
             foreach (var o in objList)
             {
                 o.Parent = this;
@@ -56,20 +70,20 @@ namespace Doctran.Parsing
         }
 
         public T GoUpTillType<T>()
-            where T : IFortranObject
+            where T : class, IContainer
         {
-            IFortranObject obj = this;
-            while (!(obj is T))
+            IContained obj = this;
+            while (obj != null && !(obj is T))
             {
-                obj = obj.Parent;
+                obj = obj.Parent as IContained;
             }
 
-            return (T)obj;
+            return obj as T;
         }
 
-        public void OrderSubObjectsBy(Func<IFortranObject, int> keySelector)
-        {
-            this.SubObjects = this.SubObjects.OrderBy(keySelector).ToList();
-        }
+        //public void OrderSubObjectsBy(Func<IFortranObject, int> keySelector)
+        //{
+        //    this.SubObjects = this.SubObjects.OrderBy(keySelector).ToList();
+        //}
     }
 }

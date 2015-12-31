@@ -13,7 +13,7 @@ namespace Doctran.ParsingElements.FortranObjects
 
     public class InformationGroup : FortranObject, IInformationGroup
     {
-        public InformationGroup(int depth, string name, IEnumerable<IFortranObject> subObjects, List<FileLine> lines)
+        public InformationGroup(int depth, string name, IEnumerable<IContained> subObjects, List<FileLine> lines)
             : base(subObjects, lines)
         {
             this.Name = name;
@@ -22,6 +22,6 @@ namespace Doctran.ParsingElements.FortranObjects
 
         public int Depth { get; }
 
-        public string Name { get; }  
+        public string Name { get; }
     }
 }

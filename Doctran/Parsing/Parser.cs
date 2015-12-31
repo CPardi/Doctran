@@ -53,7 +53,7 @@ namespace Doctran.Parsing
             linesForParse.AddRange(lines);
 
             var parserForLines = new ParserForLines(linesForParse, _blockParsers, this.ErrorListener);
-            var parsingResult = parserForLines.SearchBlock(0, ref currentIndex, blockNameStack).Single();
+            var parsingResult = (Source)parserForLines.SearchBlock(0, ref currentIndex, blockNameStack).Single();
             return new SourceFile(_language, sourceName, parsingResult.SubObjects, lines, parsingResult.Lines.Skip(1).ToList());
         }
 
@@ -72,15 +72,15 @@ namespace Doctran.Parsing
                 _errorListener = errorListener;
             }
 
-            public IEnumerable<IFortranObject> SearchBlock(int startIndex, ref int currentIndex, Stack<FortranBlock> blockNameStack)
+            public IEnumerable<IContained> SearchBlock(int startIndex, ref int currentIndex, Stack<FortranBlock> blockNameStack)
             {
                 var currentFactory = blockNameStack.Peek();
 
                 // Objects defined by this block of code.
-                var blockObjects = new List<IFortranObject>();
+                var blockObjects = new List<IContained>();
 
                 // Objects defined within this block of code.
-                var blockSubObjects = new List<IFortranObject>();
+                var blockSubObjects = new List<IContained>();
 
                 // If this block is a one liner then create the objects and exit.
                 if (EndBlock(startIndex, currentIndex, blockNameStack, currentFactory, blockObjects, blockSubObjects))
@@ -130,7 +130,7 @@ namespace Doctran.Parsing
                 ref int currentIndex,
                 FortranBlock currentFactory,
                 Stack<FortranBlock> blockNameStack,
-                List<IFortranObject> blockSubObjects)
+                List<IContained> blockSubObjects)
             {
                 foreach (var block in _blockParsers.Values)
                 {
@@ -166,10 +166,10 @@ namespace Doctran.Parsing
                 int currentIndex,
                 Stack<FortranBlock> blockNameStack,
                 FortranBlock currentFactory,
-                List<IFortranObject> blockObjects, 
-                IEnumerable<IFortranObject> blockSubObjects)
+                List<IContained> blockObjects, 
+                IEnumerable<IContained> blockSubObjects)
             {
-                var blockSubObjectsList = blockSubObjects as List<IFortranObject> ?? blockSubObjects.ToList();
+                var blockSubObjectsList = blockSubObjects as List<IContained> ?? blockSubObjects.ToList();
 
                 // If block has not ended yet then return.
                 if (!currentFactory.BlockEnd(blockNameStack.Skip(1), _lines, currentIndex))

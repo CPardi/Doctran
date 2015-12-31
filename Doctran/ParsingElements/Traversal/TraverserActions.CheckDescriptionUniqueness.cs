@@ -20,13 +20,14 @@ namespace Doctran.ParsingElements.Traversal
                     obj =>
                     {
                         // Return if OK.
-                        if (obj.Parent.SubObjects.OfType<IDescription>().Count() <= 1)
+                        var asContained = (obj as IContained);
+                        if (asContained?.Parent.SubObjects.OfType<IDescription>().Count() <= 1)
                         {
                             return;
                         }
 
                         // Throw exception if not.
-                        obj.Parent.SubObjects.Remove(obj);
+                        asContained.Parent.RemoveSubObject(obj as IContained);
                         throw new TraverserException(obj, "Multiple descriptions specified for a single block. Description meta-data was ignored.");
                     });
             }

@@ -70,7 +70,7 @@ namespace Doctran.ParsingElements.FortranBlocks
                 && !CommentUtils.NDescStart(lines[lineIndex].Text);
         }
 
-        public IEnumerable<FortranObject> ReturnObject(IEnumerable<IFortranObject> subObjects, List<FileLine> lines)
+        public IEnumerable<FortranObject> ReturnObject(IEnumerable<IContained> subObjects, List<FileLine> lines)
         {
             // Regex group the type-name and it's value.
             var aMatch = Regex.Match(lines[0].Text.Trim(), @"!>+?\s*?(\w+)\s*?:\s*?(.*)");
@@ -78,7 +78,7 @@ namespace Doctran.ParsingElements.FortranBlocks
             // Retrieve the type name
             var typeName = aMatch.Groups[1].Value.Trim();
 
-            var subObjectList = subObjects as IList<IFortranObject> ?? subObjects.ToList();
+            var subObjectList = subObjects as IList<IContained> ?? subObjects.ToList();
             // Retrieve the value, from the definition line and any subsequent lines.
             var value = aMatch.Groups[2].Value.Trim()
                         + string.Concat(lines.Skip(1)

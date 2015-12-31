@@ -46,6 +46,7 @@
     <Compile Include="Input\Options\OptionsReader\ParseTest.cs" />
     <Compile Include="Input\Options\TwiceSpecifiedOptions.cs" />
     <Compile Include="Input\Options\TwiceSpecifiedOptionsList.cs" />
+    <Compile Include="ParsingElements\Traversal\TraverserActions\AssignDescriptionsTest.cs" />
     <Compile Include="ParsingElements\Traversal\TraverserActions\CheckNamesTest.cs" />
     <Compile Include="ProgramTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

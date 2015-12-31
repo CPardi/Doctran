@@ -31,7 +31,7 @@ namespace Doctran.ParsingElements.FortranBlocks
 
         public  bool BlockEnd(IEnumerable<FortranBlock> ancestors, List<FileLine> lines, int lineIndex) => lineIndex + 1 >= lines.Count;
 
-        public  IEnumerable<FortranObject> ReturnObject(IEnumerable<IFortranObject> subObjects, List<FileLine> lines)
+        public  IEnumerable<FortranObject> ReturnObject(IEnumerable<IContained> subObjects, List<FileLine> lines)
         {
             yield return new Source(_language ,subObjects, lines);
         }

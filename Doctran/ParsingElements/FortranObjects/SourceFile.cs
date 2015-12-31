@@ -24,7 +24,7 @@ namespace Doctran.ParsingElements.FortranObjects
         private readonly FileInfo _info;
 
         // Reads a file, determines its type and loads the contained procedure and/or modules.
-        public SourceFile(string language, string absolutePath, IEnumerable<IFortranObject> subObjects, List<FileLine> originalLines, List<FileLine> lines)
+        public SourceFile(string language, string absolutePath, IEnumerable<IContained> subObjects, List<FileLine> originalLines, List<FileLine> lines)
             : base(subObjects, lines)
         {
             this.Name = Path.GetFileName(absolutePath);

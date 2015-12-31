@@ -11,6 +11,8 @@ namespace Doctran.XmlSerialization
     using System.Collections.Generic;
     using System.Linq;
     using System.Xml.Linq;
+    using Parsing;
+    using ParsingElements;
     using IFortranObject = Parsing.IFortranObject;
     using Utilitys;
 
@@ -125,7 +127,7 @@ namespace Doctran.XmlSerialization
         }
 
         private IEnumerable<XElement> Navigate(IFortranObject obj)
-            => obj.SubObjects.GroupBy(this.KeySelector).SelectMany(objsOfType => this.GetValue(objsOfType.Key, objsOfType));
+            => (obj as IContainer)?.SubObjects.GroupBy(this.KeySelector).SelectMany(objsOfType => this.GetValue(objsOfType.Key, objsOfType)) ?? new XElement[] { };
 
         private IEnumerable<XElement> SkipLevel(IEnumerable<IFortranObject> objsOfType) => objsOfType.SelectMany(this.Navigate);
     }

@@ -33,7 +33,7 @@ namespace Doctran.ParsingElements.Traversal
                         // If this is a description directly below the definition statement then dont move it. This is really
                         // just for function where the result name is the same as the function name.
                         if ((obj.Parent as IHasIdentifier)?.Identifier == linkedTo
-                            && obj.Parent.Lines.Count > 1 && obj.Parent.Lines[1].Number == obj.Lines[0].Number)
+                            && (obj.Parent as IHasLines)?.Lines.Count > 1 && (obj.Parent as IHasLines)?.Lines[1].Number == obj.Lines[0].Number)
                         {
                             return;
                         }
@@ -42,8 +42,8 @@ namespace Doctran.ParsingElements.Traversal
                             obj.Parent.SubObjects
                                 .Where(sObjs => (sObjs as IHasIdentifier)?.Identifier == linkedTo);
 
-                        obj.Parent.SubObjects.Remove(obj);
-                        foreach (var match in objsForDescription)
+                        obj.Parent.RemoveSubObject(obj);
+                        foreach (var match in objsForDescription.OfType<IContainer>())
                         {
                             match.AddSubObject(obj);
                         }

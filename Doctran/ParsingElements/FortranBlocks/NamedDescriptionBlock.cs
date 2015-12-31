@@ -47,7 +47,7 @@ namespace Doctran.ParsingElements.FortranBlocks
                 && !CommentUtils.InfoStart(lines[lineIndex].Text);
         }
 
-        public  IEnumerable<FortranObject> ReturnObject(IEnumerable<IFortranObject> subObjects, List<FileLine> lines)
+        public  IEnumerable<FortranObject> ReturnObject(IEnumerable<IContained> subObjects, List<FileLine> lines)
         {
             var name = Regex.Match(lines[0].Text, @"!>\s*(\w.*)\s*-").Groups[1].Value.Trim();
             var basic = XmlUtils.WrapAndParse("Basic", DescriptionBlock.GetBasicText(lines).Substring(name.Length + 1).TrimStart(' ', '-'));

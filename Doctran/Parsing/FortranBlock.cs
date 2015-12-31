@@ -10,6 +10,7 @@ namespace Doctran.Parsing
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using Helper;
+    using ParsingElements;
 
     public interface FortranBlock
     {
@@ -30,6 +31,6 @@ namespace Doctran.Parsing
         /// <param name="lines">Lines defining the object's creation.</param>
         /// <returns>An enumeration of <see cref="FortranObject" />.</returns>
         /// <exception cref="BlockParserException">This exception is thrown invalid content within <paramref name="lines" />.</exception>
-        IEnumerable<FortranObject> ReturnObject(IEnumerable<IFortranObject> subObjects, List<FileLine> lines);
+        IEnumerable<FortranObject> ReturnObject(IEnumerable<IContained> subObjects, List<FileLine> lines);
     }
 }

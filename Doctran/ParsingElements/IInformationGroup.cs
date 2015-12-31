@@ -5,6 +5,6 @@ namespace Doctran.ParsingElements
 
     public interface IInformationGroup : IInformation
     {
-        List<IFortranObject> SubObjects { get; }
+        List<IContained> SubObjects { get; }
     }
 }

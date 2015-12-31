@@ -61,9 +61,15 @@ namespace Doctran.Parsing
                 this.DoActions(obj, inter);
             }
 
-            for (var i = obj.SubObjects.Count - 1; i >= 0; i--)
+            var asContainer = (obj as IContainer)?.SubObjects;
+            if (asContainer == null)
             {
-                Navigate(obj.SubObjects[i]);
+                return;
+            }
+
+            for (var i = asContainer.Count - 1; i >= 0; i--)
+            {
+                Navigate(asContainer[i]);
             }
         }
     }

@@ -6,7 +6,7 @@ namespace Doctran.ParsingElements.FortranObjects
 
     public class Source : FortranObject, ISource
     {
-        public Source(string language, IEnumerable<IFortranObject> subObjects, List<FileLine> lines)
+        public Source(string language, IEnumerable<IContained> subObjects, List<FileLine> lines)
             :base(subObjects, lines)
         {
             this.Language = language;

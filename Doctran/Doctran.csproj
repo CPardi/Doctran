@@ -120,6 +120,7 @@
     <Compile Include="Input\Options\OptionListBaseAttribute.cs" />
     <Compile Include="Output\Assets\FileIgnorer.cs" />
     <Compile Include="ParsingElements\FortranObjects\InformationValue.cs" />
+    <Compile Include="Parsing\IHasSubObjects.cs" />
     <Compile Include="ParsingElements\IInformationGroup.cs" />
     <Compile Include="ParsingElements\IInformationValue.cs" />
     <Compile Include="ParsingElements\Traversal\TraverserActions.AssignDescriptions.cs" />
