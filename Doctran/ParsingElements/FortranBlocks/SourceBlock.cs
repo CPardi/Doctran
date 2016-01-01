@@ -1,4 +1,4 @@
-// <copyright file="DescriptionBlock.cs" company="Christopher Pardi">
+// <copyright file="SourceBlock.cs" company="Christopher Pardi">
 //     Copyright © 2015 Christopher Pardi
 //     This Source Code Form is subject to the terms of the Mozilla Public
 //     License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -12,7 +12,7 @@ namespace Doctran.ParsingElements.FortranBlocks
     using Helper;
     using Parsing;
 
-    public class SourceBlock : FortranBlock
+    public class SourceBlock : IFortranBlock
     {
         private readonly string _language;
 
@@ -21,19 +21,19 @@ namespace Doctran.ParsingElements.FortranBlocks
             _language = language;
         }
 
-        public  bool BlockStart(IEnumerable<FortranBlock> ancestors, List<FileLine> lines, int lineIndex) => lineIndex == 0;
-
         public bool CheckInternal => true;
 
         public bool ExplicitEnd => false;
 
         public string Name => "Source";
 
-        public  bool BlockEnd(IEnumerable<FortranBlock> ancestors, List<FileLine> lines, int lineIndex) => lineIndex + 1 >= lines.Count;
+        public bool BlockEnd(IEnumerable<IFortranBlock> ancestors, List<FileLine> lines, int lineIndex) => lineIndex + 1 >= lines.Count;
 
-        public  IEnumerable<FortranObject> ReturnObject(IEnumerable<IContained> subObjects, List<FileLine> lines)
+        public bool BlockStart(IEnumerable<IFortranBlock> ancestors, List<FileLine> lines, int lineIndex) => lineIndex == 0;
+
+        public IEnumerable<FortranObject> ReturnObject(IEnumerable<IContained> subObjects, List<FileLine> lines)
         {
-            yield return new Source(_language ,subObjects, lines);
+            yield return new Source(_language, subObjects, lines);
         }
     }
 }

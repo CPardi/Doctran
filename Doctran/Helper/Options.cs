@@ -24,25 +24,25 @@ namespace Doctran.Helper
         [Input.Options.OptionList("Copy", typeof(PathList))]
         public PathList CopyPaths { get; set; } = new PathList();
 
-        [Option('o', "output", DefaultValue = "Docs", MetaValue = "PATH", HelpText = "PATH is the output directory for the documentation.")]
+        [CommandLine.Option('o', "output", DefaultValue = "Docs", MetaValue = "PATH", HelpText = "PATH is the output directory for the documentation.")]
         public string OutputDirectory { get; set; }
 
-        [Option("overwrite", HelpText = "If this option is specified, then the auxiliary files (css, scripts, etc.) and html files in the output directory will be overwritten. If not, then just the html files will be overwritten.")]
+        [CommandLine.Option("overwrite", HelpText = "If this option is specified, then the auxiliary files (css, scripts, etc.) and html files in the output directory will be overwritten. If not, then just the html files will be overwritten.")]
         public bool OverwriteExisting { get; set; }
 
-        [Option('p', "project_info", MetaValue = "PATH", HelpText = "PATH is the location of the project's information file.")]
+        [CommandLine.Option('p', "project_info", MetaValue = "PATH", HelpText = "PATH is the location of the project's information file.")]
         public string ProjectFilePath { get; set; }
 
-        [Option("save_xml", MetaValue = "PATH", HelpText = "Specifies a path to save the intermediary XML document generated. The document is not saved by default.")]
+        [CommandLine.Option("save_xml", MetaValue = "PATH", HelpText = "Specifies a path to save the intermediary XML document generated. The document is not saved by default.")]
         public string SaveXmlPath { get; set; }
 
-        [Option("help", HelpText = "Show this help and exit.")]
+        [CommandLine.Option("help", HelpText = "Show this help and exit.")]
         public bool ShowHelp { get; set; }
 
-        [Option("license", DefaultValue = false, HelpText = "Run Doctran with this option to enter a license key and view license information.")]
+        [CommandLine.Option("license", DefaultValue = false, HelpText = "Run Doctran with this option to enter a license key and view license information.")]
         public bool ShowLicensing { get; set; }
 
-        [Option("plugins", HelpText = "This option forces Doctran to check the plugins folder for any shared libraries present and write their names and version numbers.")]
+        [CommandLine.Option("plugins", HelpText = "This option forces Doctran to check the plugins folder for any shared libraries present and write their names and version numbers.")]
         public bool ShowPluginInformation { get; set; }
 
         [ValueList(typeof(PathList))]
@@ -56,7 +56,7 @@ namespace Doctran.Helper
         public int Verbose { get; set; }
 
         /// <summary>
-        ///     Additional XML elements to be appended to the project's XML file.
+        ///     Gets or sets the additional XML elements to be appended to the project's XML file.
         /// </summary>
         [XmlDefaultOption(InitializeAsDefault = true)]
         [MenuOption]

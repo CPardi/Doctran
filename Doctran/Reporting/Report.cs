@@ -113,7 +113,8 @@ namespace Doctran.Reporting
             {
                 return;
             }
-            OtherUtils.ConsoleGotoNewLine(); 
+
+            OtherUtils.ConsoleGotoNewLine();
             Console.Write(message);
         }
 
@@ -180,7 +181,7 @@ namespace Doctran.Reporting
         {
             Environment.Exit(-1);
         }
-        
+
         private static void ThrowExceptions<TException>(ICollection<TException> errorList)
             where TException : Exception
         {

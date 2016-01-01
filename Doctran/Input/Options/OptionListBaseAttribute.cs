@@ -1,11 +1,9 @@
-﻿//-----------------------------------------------------------------------
-// <copyright file="OptionListBaseAttribute.cs" company="Christopher Pardi">
-// Copyright © 2015 Christopher Pardi
-// This Source Code Form is subject to the terms of the Mozilla Public
-// License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+﻿// <copyright file="OptionListBaseAttribute.cs" company="Christopher Pardi">
+//     Copyright © 2015 Christopher Pardi
+//     This Source Code Form is subject to the terms of the Mozilla Public
+//     License, v. 2.0. If a copy of the MPL was not distributed with this
+//     file, You can obtain one at http://mozilla.org/MPL/2.0/.
 // </copyright>
-//-----------------------------------------------------------------------
 
 namespace Doctran.Input.Options
 {
@@ -38,13 +36,12 @@ namespace Doctran.Input.Options
         }
 
         /// <summary>
-        ///     The concrete type that the property should be initialized to.
+        ///     Gets the concrete type that the property will be initialized to.
         /// </summary>
         public Type InitializationType { get; }
 
         /// <summary>
-        ///     If true, then the property will be initialized as <see cref="InitializationType" />. If false, then
-        ///     it will be assumned that the property is already initialized before parsing.
+        ///     Gets or sets a value indicating whether will be initialized by the <see cref="OptionsReader{TOptions}"/>.
         /// </summary>
         public bool InitializeAsDefault { get; set; } = false;
 

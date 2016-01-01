@@ -115,9 +115,9 @@ namespace Doctran.Output.Html
 
             Report.Warnings(
                 (pub, e) => pub.DescriptionReasonLocation(ReportGenre.XsltCompilation, e.getCause().Message, this.LocationString(e.getLocator())),
-                listener.Errors);                                     
-                                                                      
-            Report.Errors(                                            
+                listener.Errors);
+
+            Report.Errors(
                 (pub, e) => pub.DescriptionReasonLocation(ReportGenre.XsltCompilation, e.getCause().Message, this.LocationString(e.getLocator())),
                 listener.FatalErrors);
         }

@@ -8,7 +8,6 @@
 namespace Doctran.Parsing
 {
     using System.Collections.Generic;
-    using System.Collections.ObjectModel;
     using System.Linq;
     using Helper;
     using ParsingElements;
@@ -17,11 +16,11 @@ namespace Doctran.Parsing
 
     public class Parser
     {
-        private readonly Dictionary<string, FortranBlock> _blockParsers = new Dictionary<string, FortranBlock>();
+        private readonly Dictionary<string, IFortranBlock> _blockParsers = new Dictionary<string, IFortranBlock>();
 
         private readonly string _language;
 
-        public Parser(string language, IEnumerable<FortranBlock> blockParsers)
+        public Parser(string language, IEnumerable<IFortranBlock> blockParsers)
         {
             _language = language;
 
@@ -41,7 +40,7 @@ namespace Doctran.Parsing
         {
             // Set the current index to 0 and parse the lines set in the constructor.
             var currentIndex = 0;
-            var blockNameStack = new Stack<FortranBlock>();
+            var blockNameStack = new Stack<IFortranBlock>();
             blockNameStack.Push(_blockParsers["Source"]);
 
             // Store the snippet and insert a blank line at the start to simplify the parsing algorithm.
@@ -59,20 +58,20 @@ namespace Doctran.Parsing
 
         private class ParserForLines
         {
-            private readonly Dictionary<string, FortranBlock> _blockParsers;
+            private readonly Dictionary<string, IFortranBlock> _blockParsers;
 
             private readonly IErrorListener<ParserException> _errorListener;
 
             private readonly List<FileLine> _lines;
 
-            public ParserForLines(List<FileLine> lines, Dictionary<string, FortranBlock> blockParsers, IErrorListener<ParserException> errorListener)
+            public ParserForLines(List<FileLine> lines, Dictionary<string, IFortranBlock> blockParsers, IErrorListener<ParserException> errorListener)
             {
                 _lines = lines;
                 _blockParsers = blockParsers;
                 _errorListener = errorListener;
             }
 
-            public IEnumerable<IContained> SearchBlock(int startIndex, ref int currentIndex, Stack<FortranBlock> blockNameStack)
+            public IEnumerable<IContained> SearchBlock(int startIndex, ref int currentIndex, Stack<IFortranBlock> blockNameStack)
             {
                 var currentFactory = blockNameStack.Peek();
 
@@ -83,7 +82,7 @@ namespace Doctran.Parsing
                 var blockSubObjects = new List<IContained>();
 
                 // If this block is a one liner then create the objects and exit.
-                if (EndBlock(startIndex, currentIndex, blockNameStack, currentFactory, blockObjects, blockSubObjects))
+                if (this.EndBlock(startIndex, currentIndex, blockNameStack, currentFactory, blockObjects, blockSubObjects))
                 {
                     return blockObjects;
                 }
@@ -105,11 +104,11 @@ namespace Doctran.Parsing
                         // * Block has an explicit end - (LineIndex) the line after the last line of the last subblock. (incrementIndex) is set to false because AddSubBlocks has already incremented the index.
                         // * Block does not have an explicit end - (LineIndex) the last line of the last subblock. (incrementIndex) is set to true.
                         // This is to ensure that blockParsers without an explicit ending can be closed by the subsequent code.
-                        AddSubBlocks(ref incrementIndex, ref currentIndex, currentFactory, blockNameStack, blockSubObjects);
+                        this.AddSubBlocks(ref incrementIndex, ref currentIndex, currentFactory, blockNameStack, blockSubObjects);
                     }
 
                     // If this block is at the end then create it, add its sub objects and exit.
-                    if (EndBlock(startIndex, currentIndex, blockNameStack, currentFactory, blockObjects, blockSubObjects))
+                    if (this.EndBlock(startIndex, currentIndex, blockNameStack, currentFactory, blockObjects, blockSubObjects))
                     {
                         break;
                     }
@@ -128,8 +127,8 @@ namespace Doctran.Parsing
             private void AddSubBlocks(
                 ref bool incrementIndex,
                 ref int currentIndex,
-                FortranBlock currentFactory,
-                Stack<FortranBlock> blockNameStack,
+                IFortranBlock currentFactory,
+                Stack<IFortranBlock> blockNameStack,
                 List<IContained> blockSubObjects)
             {
                 foreach (var block in _blockParsers.Values)
@@ -146,7 +145,7 @@ namespace Doctran.Parsing
                     var startIndex = currentIndex;
 
                     // Get any blockParsers that maybe defined within the current block, these will be added later.
-                    blockSubObjects.AddRange(SearchBlock(startIndex, ref currentIndex, blockNameStack));
+                    blockSubObjects.AddRange(this.SearchBlock(startIndex, ref currentIndex, blockNameStack));
 
                     // If the block does not have an explicit end, then stay on the same line to check for a block end and go to next line later.
                     incrementIndex = !currentFactory.ExplicitEnd;
@@ -164,9 +163,9 @@ namespace Doctran.Parsing
             private bool EndBlock(
                 int startIndex,
                 int currentIndex,
-                Stack<FortranBlock> blockNameStack,
-                FortranBlock currentFactory,
-                List<IContained> blockObjects, 
+                Stack<IFortranBlock> blockNameStack,
+                IFortranBlock currentFactory,
+                List<IContained> blockObjects,
                 IEnumerable<IContained> blockSubObjects)
             {
                 var blockSubObjectsList = blockSubObjects as List<IContained> ?? blockSubObjects.ToList();

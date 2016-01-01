@@ -9,8 +9,9 @@ namespace Doctran.ParsingElements
 {
     using System.Collections.Generic;
     using Helper;
+    using Parsing;
 
-    public interface IInformation
+    public interface IInformation : IContained
     {
         int Depth { get; }
 

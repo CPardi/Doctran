@@ -1,4 +1,4 @@
-﻿// <copyright file="PathUtilitys.cs" company="Christopher Pardi">
+﻿// <copyright file="PathUtils.cs" company="Christopher Pardi">
 //     Copyright © 2015 Christopher Pardi
 //     This Source Code Form is subject to the terms of the Mozilla Public
 //     License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -15,6 +15,17 @@ namespace Doctran.Utilitys
     /// </summary>
     public class PathUtils
     {
+        public static string ChangeExtension(string path, string newExtension)
+        {
+            if (newExtension == null)
+            {
+                return path;
+            }
+
+            var actualExtension = Path.GetExtension(path) ?? string.Empty;
+            return $"{path.Substring(0, path.Length - actualExtension.Length)}{DottedExtension(newExtension)}";
+        }
+
         /// <summary>
         ///     If required, adds a leading period to a file extension.
         /// </summary>
@@ -62,17 +73,6 @@ namespace Doctran.Utilitys
             Environment.CurrentDirectory = dir;
             action();
             Environment.CurrentDirectory = currentDirectory;
-        }
-
-        public static string ChangeExtension(string path, string newExtension)
-        {
-            if (newExtension == null)
-            {
-                return path;
-            }
-
-            var actualExtension = Path.GetExtension(path) ?? string.Empty;
-            return $"{path.Substring(0, path.Length - actualExtension.Length)}{DottedExtension(newExtension)}";
         }
     }
 }

@@ -9,8 +9,9 @@ namespace Doctran.ParsingElements
 {
     using System.Collections.Generic;
     using Helper;
+    using Parsing;
 
-    public interface IHasLines
+    public interface IHasLines : IFortranObject
     {
         List<FileLine> Lines { get; }
     }

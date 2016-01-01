@@ -7,21 +7,7 @@
 
 namespace Doctran.Parsing
 {
-    using System.Collections.Generic;
-    using Helper;
-
     public interface IFortranObject
     {
-        List<FileLine> Lines { get; }
-
-        //IFortranObject Parent { get; set; }
-
-        //List<IFortranObject> SubObjects { get; }
-
-        //void AddSubObject(IFortranObject obj);
-
-        //void AddSubObjects(IEnumerable<IFortranObject> objs);
-
-        //T GoUpTillType<T>() where T : IFortranObject;
     }
 }

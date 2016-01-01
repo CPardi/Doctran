@@ -17,7 +17,7 @@ namespace Doctran.ParsingElements.FortranBlocks
     using Parsing;
     using Utilitys;
 
-    public class InformationBlock : FortranBlock
+    public class InformationBlock : IFortranBlock
     {
         private readonly int _depth;
 
@@ -34,7 +34,7 @@ namespace Doctran.ParsingElements.FortranBlocks
         {
             _factories = factoryDictionary;
         }
-        
+
         public bool CheckInternal => true;
 
         public bool ExplicitEnd => false;
@@ -50,7 +50,7 @@ namespace Doctran.ParsingElements.FortranBlocks
                 select new InformationBlock(i);
         }
 
-        public bool BlockEnd(IEnumerable<FortranBlock> ancestors, List<FileLine> lines, int lineIndex)
+        public bool BlockEnd(IEnumerable<IFortranBlock> ancestors, List<FileLine> lines, int lineIndex)
         {
             if (lineIndex + 1 >= lines.Count)
             {
@@ -63,7 +63,7 @@ namespace Doctran.ParsingElements.FortranBlocks
                 || CommentUtils.NDescStart(lines[lineIndex + 1].Text);
         }
 
-        public bool BlockStart(IEnumerable<FortranBlock> ancestors, List<FileLine> lines, int lineIndex)
+        public bool BlockStart(IEnumerable<IFortranBlock> ancestors, List<FileLine> lines, int lineIndex)
         {
             return
                 CommentUtils.InfoAtDepthStart(lines[lineIndex].Text, _depth)
@@ -78,7 +78,8 @@ namespace Doctran.ParsingElements.FortranBlocks
             // Retrieve the type name
             var typeName = aMatch.Groups[1].Value.Trim();
 
-            var subObjectList = subObjects as IList<IContained> ?? subObjects.ToList();
+            var subObjectList = subObjects.Cast<IInformation>().ToList();
+
             // Retrieve the value, from the definition line and any subsequent lines.
             var value = aMatch.Groups[2].Value.Trim()
                         + string.Concat(lines.Skip(1)
@@ -90,7 +91,7 @@ namespace Doctran.ParsingElements.FortranBlocks
             //  1 - HAS subobjects, NO value.
             //  2 - HAS value, NO subobjects.
             //  3 - HAS value, HAS subobjects.
-            var caseNum = Convert.ToInt32(subObjectList.Any()) + 2*Convert.ToInt32(!value.IsNullOrEmpty());
+            var caseNum = Convert.ToInt32(subObjectList.Any()) + (2 * Convert.ToInt32(!value.IsNullOrEmpty()));
 
             switch (caseNum)
             {

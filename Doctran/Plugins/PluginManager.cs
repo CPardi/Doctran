@@ -16,6 +16,8 @@ namespace Doctran.Plugins
 
     public static class PluginManager
     {
+        public static AssemblyLoader AssemblyLoader { get; } = new AssemblyLoader(EnvVar.ExecPath + @"plugins");
+
         public static string InformationString
         {
             get
@@ -33,13 +35,11 @@ namespace Doctran.Plugins
             }
         }
 
-        public static AssemblyLoader AssemblyLoader { get; } = new AssemblyLoader(EnvVar.ExecPath + @"plugins");
-
         public static List<IPlugin> Plugins { get; private set; }
 
         public static void Initialize()
         {
-            //Initialize plugins.
+            // Initialize plugins.
             Plugins = AssemblyLoader.GetClassInstances<IPlugin>();
             foreach (var plugin in Plugins.OrderBy(p => p.LoadOrder()))
             {

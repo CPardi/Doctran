@@ -7,7 +7,9 @@
 
 namespace Doctran.ParsingElements
 {
-    public interface IHasIdentifier
+    using Parsing;
+
+    public interface IHasIdentifier : IFortranObject
     {
         string Identifier { get; }
     }

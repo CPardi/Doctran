@@ -14,8 +14,8 @@ namespace Doctran.Plugins
 
     public interface IDocumentationGenerator
     {
-        XElement ParsedSourcesToXml(IFortranObject source);
-
         XElement HighlightLines(List<FileLine> lines);
+
+        XElement ParsedSourcesToXml(IFortranObject source);
     }
 }

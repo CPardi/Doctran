@@ -9,7 +9,6 @@ namespace Doctran.Plugins
 {
     using System.Collections.Generic;
     using Helper;
-    using Parsing;
     using ParsingElements;
 
     public interface ILanguageParser

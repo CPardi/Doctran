@@ -17,6 +17,64 @@ namespace Doctran.Utilitys
 
     public static class OtherUtils
     {
+        public static void ConsoleGotoNewLine()
+        {
+            if (Console.CursorLeft != 0)
+            {
+                Console.WriteLine(string.Empty);
+            }
+        }
+
+        public static void CreateDirectory(string relativePath)
+        {
+            if (!Directory.Exists(Path.GetFullPath(relativePath)))
+            {
+                Directory.CreateDirectory(Path.GetFullPath(relativePath));
+            }
+        }
+
+        /// <summary>
+        ///     Return a html file path and html content for a html or markdown file.
+        /// </summary>
+        /// <param name="relativePath">The path the <paramref name="filePath"/> is relative to.</param>
+        /// <param name="filePath">The path to the html or markdown file.</param>
+        /// <returns>
+        ///     In the first string is the file path for the html file. In the second string in the html content that the file
+        ///     should contain.
+        /// </returns>
+        public static Tuple<string, string> GetMarkUpFile(string relativePath, string filePath)
+        {
+            var mdParser = new Markdown();
+
+            // Store the file's path and contents in these variables initially, and if its a markdown file then reassign after.
+            var htmlPath = filePath;
+            var htmlText = string.Empty;
+
+            // Get the text from the file specified.
+            try
+            {
+                htmlText = string.Concat(from text in ReadFile(relativePath + filePath)
+                    select text.Text + Environment.NewLine);
+            }
+            catch (IOException e)
+            {
+                Report.Error(pub => pub.DescriptionReasonLocation(ReportGenre.FileRead, $"Error in markup file path. {e.Message}", filePath), e);
+            }
+
+            // Check if a Markdown is specified and if so parse it to get the html. The Path information should specified the
+            // path in the documentation to the file. So change its externsion to html.
+            var ext = Path.GetExtension(filePath);
+            if (ext != ".md" && ext != ".markdown")
+            {
+                return new Tuple<string, string>(htmlPath, htmlText);
+            }
+
+            htmlPath = filePath.Remove(filePath.LastIndexOf('.')) + ".html";
+            htmlText = mdParser.Transform(htmlText);
+
+            return new Tuple<string, string>(htmlPath, htmlText);
+        }
+
         public static List<FileLine> ReadFile(string path)
         {
             var lines = new List<FileLine>();
@@ -43,87 +101,6 @@ namespace Doctran.Utilitys
             return lines;
         }
 
-        public static void ConsoleGotoNewLine()
-        {
-            if (Console.CursorLeft != 0)
-            {
-                Console.WriteLine(string.Empty);
-            }
-        }
-
-        public static void CreateDirectory(string relativePath)
-        {
-            if (!Directory.Exists(Path.GetFullPath(relativePath)))
-            {
-                Directory.CreateDirectory(Path.GetFullPath(relativePath));
-            }
-        }
-
-        /// <summary>
-        ///     Return a html file path and html content for a html or markdown file.
-        /// </summary>
-        /// <param name="filePath">The path to the html or markdown file.</param>
-        /// <returns>
-        ///     In the first string is the file path for the html file. In the second string in the html content that the file
-        ///     should contain.
-        /// </returns>
-        public static Tuple<string, string> GetMarkUpFile(string relativePath, string filePath)
-        {
-            var mdParser = new Markdown();
-
-            // Store the file's path and contents in these variables initially, and if its a markdown file then reassign after.
-            var htmlPath = filePath;
-            var htmlText = "";
-
-            // Get the text from the file specified.
-            try
-            {
-                htmlText = string.Concat(from text in ReadFile(relativePath + filePath)
-                    select text.Text + Environment.NewLine);
-            }
-            catch (IOException e)
-            {
-                Report.Error(pub => pub.DescriptionReasonLocation(ReportGenre.FileRead, $"Error in markup file path. {e.Message}", filePath), e);
-            }
-
-            // Check if a Markdown is specified and if so parse it to get the html. The Path information should specified the 
-            // path in the documentation to the file. So change its externsion to html.
-            var ext = Path.GetExtension(filePath);
-            if (ext != ".md" && ext != ".markdown")
-            {
-                return new Tuple<string, string>(htmlPath, htmlText);
-            }
-
-            htmlPath = filePath.Remove(filePath.LastIndexOf('.')) + ".html";
-            htmlText = mdParser.Transform(htmlText);
-
-            return new Tuple<string, string>(htmlPath, htmlText);
-        }
-
-        /// <summary>
-        ///     Moves to the next line in the file which is not white space nor a fortran Description.
-        /// </summary>
-        public static bool GotoNextUsefulLine(List<FileLine> lines, ref int lineIndex)
-        {
-            if (lineIndex >= lines.Count)
-            {
-                return true;
-            }
-            string textNowhitespace;
-            while (
-                (textNowhitespace = lines[lineIndex].Text.Trim()) == ""
-                | (textNowhitespace.StartsWith("!") & !textNowhitespace.StartsWith("!>"))
-                )
-            {
-                lineIndex++;
-                if (lineIndex >= lines.Count)
-                {
-                    break;
-                }
-            }
-            return lineIndex == lines.Count;
-        }
-
         public static string RegexMultipleOr(IEnumerable<string> regexes)
         {
             var regexArray = regexes as string[] ?? regexes.ToArray();
@@ -131,8 +108,10 @@ namespace Doctran.Utilitys
         }
 
         /// <summary>
-        ///     Moves to the next code line. This means comments and doctran comments are skipped.
+        /// Moves to the next code line. This means comments and doctran comments are skipped.
         /// </summary>
+        /// <param name="lines">The lines to consider.</param>
+        /// <param name="lineNumber">The current line number should be passed in. The new line number will be passed out.</param>
         public static void SkipComment(List<FileLine> lines, ref int lineNumber)
         {
             while (lines[lineNumber].Text.Trim().StartsWith("!"))

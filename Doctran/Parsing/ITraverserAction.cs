@@ -17,6 +17,7 @@ namespace Doctran.Parsing
     }
 
     public interface ITraverserAction<in T> : ITraverserAction
+        where T : IFortranObject
     {
         new Action<T> Act { get; }
     }

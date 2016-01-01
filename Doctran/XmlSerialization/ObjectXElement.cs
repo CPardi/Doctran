@@ -12,7 +12,7 @@ namespace Doctran.XmlSerialization
     using Parsing;
 
     public class ObjectXElement<TParsed> : IObjectXElement, IObjectXElement<TParsed>
-        where TParsed : FortranObject
+        where TParsed : IFortranObject
     {
         public ObjectXElement(string name)
         {

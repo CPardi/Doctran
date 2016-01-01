@@ -1,11 +1,9 @@
-﻿//-----------------------------------------------------------------------
-// <copyright file="XmlDefaultOptionAttribute.cs" company="Christopher Pardi">
-// Copyright © 2015 Christopher Pardi
-// This Source Code Form is subject to the terms of the Mozilla Public
-// License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+﻿// <copyright file="XmlDefaultOptionAttribute.cs" company="Christopher Pardi">
+//     Copyright © 2015 Christopher Pardi
+//     This Source Code Form is subject to the terms of the Mozilla Public
+//     License, v. 2.0. If a copy of the MPL was not distributed with this
+//     file, You can obtain one at http://mozilla.org/MPL/2.0/.
 // </copyright>
-//-----------------------------------------------------------------------
 
 namespace Doctran.Input.ProjectFileOptions
 {
@@ -63,7 +61,7 @@ namespace Doctran.Input.ProjectFileOptions
                 return new XElement(value.Name, value.Value);
             }
 
-            var group = (IInformationGroup) metaData;
+            var group = (IInformationGroup)metaData;
             return new XElement(group.Name, group.SubObjects.OfType<IInformation>().Select(ToXml));
         }
     }

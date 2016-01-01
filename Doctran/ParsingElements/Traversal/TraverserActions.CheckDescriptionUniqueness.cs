@@ -1,4 +1,4 @@
-﻿// <copyright file="TraverserActions.cs" company="Christopher Pardi">
+﻿// <copyright file="TraverserActions.CheckDescriptionUniqueness.cs" company="Christopher Pardi">
 //     Copyright © 2015 Christopher Pardi
 //     This Source Code Form is subject to the terms of the Mozilla Public
 //     License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -20,7 +20,7 @@ namespace Doctran.ParsingElements.Traversal
                     obj =>
                     {
                         // Return if OK.
-                        var asContained = (obj as IContained);
+                        var asContained = obj as IContained;
                         if (asContained?.Parent.SubObjects.OfType<IDescription>().Count() <= 1)
                         {
                             return;

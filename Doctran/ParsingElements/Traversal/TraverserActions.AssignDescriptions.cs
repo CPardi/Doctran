@@ -1,4 +1,4 @@
-﻿// <copyright file="TraverserActions.cs" company="Christopher Pardi">
+﻿// <copyright file="TraverserActions.AssignDescriptions.cs" company="Christopher Pardi">
 //     Copyright © 2015 Christopher Pardi
 //     This Source Code Form is subject to the terms of the Mozilla Public
 //     License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -14,7 +14,7 @@ namespace Doctran.ParsingElements.Traversal
     public static partial class TraverserActions
     {
         /// <summary>
-        ///     Moves named descriptions in to the container or containers with identifier specified by linkedTo.
+        ///     Gets an <see cref="ITraverserAction"/> that moves named descriptions in to the container or containers with identifier specified by linkedTo.
         /// </summary>
         public static ITraverserAction AssignDescriptions
         {

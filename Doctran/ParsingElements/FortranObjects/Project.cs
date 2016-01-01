@@ -19,7 +19,6 @@ namespace Doctran.ParsingElements.FortranObjects
     public class Project : FortranObject
     {
         public Project(IEnumerable<ISourceFile> parsedFiles)
-            : base()
         {
             var parsedFilesList = parsedFiles as IList<ISourceFile> ?? parsedFiles.ToList();
             this.Sources = parsedFilesList.ToList().AsReadOnly();
@@ -27,6 +26,8 @@ namespace Doctran.ParsingElements.FortranObjects
         }
 
         public ReadOnlyCollection<ISourceFile> Sources { get; }
+
+        public XName SourcesXmlHead => "Files";
 
         public XElement XEle(XElement xmlPassthrough)
         {
@@ -36,8 +37,7 @@ namespace Doctran.ParsingElements.FortranObjects
             xEle.Add(new XElement("DocCreated", DateTime.Now.ToXElement()));
             xEle.Add(
                 from info in this.SubObjects.OfType<Description>()
-                select new XElement("Description", info.Basic, info.Detailed)
-                );
+                select new XElement("Description", info.Basic, info.Detailed));
 
             var sourceXEle = new XElement(this.SourcesXmlHead);
             foreach (var source in this.Sources)
@@ -49,7 +49,5 @@ namespace Doctran.ParsingElements.FortranObjects
             xEle.Add(sourceXEle);
             return xEle;
         }
-
-        public XName SourcesXmlHead => "Files";
     }
 }

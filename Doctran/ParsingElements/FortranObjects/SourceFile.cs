@@ -38,7 +38,7 @@ namespace Doctran.ParsingElements.FortranObjects
             this.Name = Path.GetFileNameWithoutExtension(absolutePath);
         }
 
-        public List<FileLine> OriginalLines { get; }
+        public string AbsolutePath { get; }
 
         public DateTime Created => _info.CreationTime;
 
@@ -46,13 +46,17 @@ namespace Doctran.ParsingElements.FortranObjects
 
         public string Identifier => $"{this.Name}{this.Extension}";
 
+        public string Language { get; }
+
         public DateTime LastModified => _info.LastWriteTime;
 
         public int LineCount => this.Lines.Count - 1;
 
         public string Name { get; }
-        
-        public string AbsolutePath { get; }
+
+        public List<FileLine> OriginalLines { get; }
+
+        public string ValidName => StringUtils.ValidName(this.Name);
 
         public XElement SourceXEle(List<FileLine> lines)
         {
@@ -60,17 +64,18 @@ namespace Doctran.ParsingElements.FortranObjects
 
             // Return a syntax highlighted source code.
             var cc = new CodeColorizer();
+            var coloredLines = cc.Colorize(
+                str,
+                Languages.Fortran,
+                new HtmlLinedClassFormatter(),
+                new LinedStyleSheet())
+                .Replace(Environment.NewLine, string.Empty);
+
             return
-                new XElement("File",
+                new XElement(
+                    "File",
                     new XElement("Name", this.Name),
-                    new XElement("Lines",
-                        XElement.Parse(cc.Colorize(str, Languages.Fortran, new HtmlLinedClassFormatter(), new LinedStyleSheet()).Replace(Environment.NewLine, ""), LoadOptions.PreserveWhitespace)
-                        ));
+                    new XElement("Lines", XElement.Parse(coloredLines, LoadOptions.PreserveWhitespace)));
         }
-
-
-        public string ValidName => StringUtils.ValidName(this.Name);
-        
-        public string Language { get; }
     }
 }

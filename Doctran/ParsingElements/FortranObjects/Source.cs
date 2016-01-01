@@ -1,3 +1,10 @@
+// <copyright file="Source.cs" company="Christopher Pardi">
+//     Copyright © 2015 Christopher Pardi
+//     This Source Code Form is subject to the terms of the Mozilla Public
+//     License, v. 2.0. If a copy of the MPL was not distributed with this
+//     file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// </copyright>
+
 namespace Doctran.ParsingElements.FortranObjects
 {
     using System.Collections.Generic;
@@ -7,13 +14,13 @@ namespace Doctran.ParsingElements.FortranObjects
     public class Source : FortranObject, ISource
     {
         public Source(string language, IEnumerable<IContained> subObjects, List<FileLine> lines)
-            :base(subObjects, lines)
+            : base(subObjects, lines)
         {
             this.Language = language;
         }
 
-        public string Language { get; }
-
         public string Identifier => $"{this.Language} source";
+
+        public string Language { get; }
     }
 }

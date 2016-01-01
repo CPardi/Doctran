@@ -10,8 +10,10 @@ namespace Doctran.XmlSerialization
     using System;
     using System.Collections.Generic;
     using System.Xml.Linq;
+    using Parsing;
 
     public class GroupXElement<TParsed> : IGroupXElement
+        where TParsed : IFortranObject
     {
         public GroupXElement(string name)
         {

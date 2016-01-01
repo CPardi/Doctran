@@ -52,59 +52,57 @@ namespace Doctran.Helper
 
         public List<T> GetClassInstances<T>()
         {
-            return GetClassInstances<T>(weight => 0, name => true);
+            return this.GetClassInstances<T>(weight => 0, name => true);
         }
 
         public List<T> GetClassInstances<T>(Func<T, int> ordering)
         {
-            return GetClassInstances(ordering, name => true);
+            return this.GetClassInstances(ordering, name => true);
         }
 
         public List<T> GetClassInstances<T>(string fromNamespace)
         {
-            return GetClassInstances<T>(weight => 0, name => name.StartsWith(fromNamespace));
+            return this.GetClassInstances<T>(weight => 0, name => name.StartsWith(fromNamespace));
         }
 
         public List<Type> GetClassTypes<T>()
         {
-            return GetClassTypes<T>(weight => 0, name => true);
+            return this.GetClassTypes<T>(weight => 0, name => true);
         }
 
         public List<Type> GetClassTypes<T>(Func<Type, int> ordering)
         {
-            return GetClassTypes<T>(ordering, name => true);
+            return this.GetClassTypes<T>(ordering, name => true);
         }
 
         public List<Type> GetClassTypes<T>(string fromNamespace)
         {
-            return GetClassTypes<T>(weight => 0, name => name.StartsWith(fromNamespace));
+            return this.GetClassTypes<T>(weight => 0, name => name.StartsWith(fromNamespace));
         }
 
         private List<T> GetClassInstances<T>(Func<T, int> ordering, Func<string, bool> namespaceWhere)
         {
             var instances = new List<T>();
-            var typesOfT = this._assemblyTypes.Where(t => !t.IsAbstract && (t.IsSubclassOf(typeof(T)) | t.GetInterfaces().Contains(typeof(T))));
+            var typesOfT = _assemblyTypes.Where(t => !t.IsAbstract && (t.IsSubclassOf(typeof(T)) | t.GetInterfaces().Contains(typeof(T))));
             instances.AddRange(
                 from t in typesOfT
                 where namespaceWhere(t.Namespace)
                 where !t.IsInterface
                 let instOfT = (T)Activator.CreateInstance(t)
                 orderby ordering(instOfT)
-                select instOfT
-                );
+                select instOfT);
             return instances;
         }
 
         private List<Type> GetClassTypes<T>(Func<Type, int> ordering, Func<string, bool> namespaceWhere)
         {
             var types = new List<Type>();
-            var typesOfT = this._assemblyTypes.Where(t => !t.IsAbstract && t.IsSubclassOf(typeof(T)));
+            var typesOfT = _assemblyTypes.Where(t => !t.IsAbstract && t.IsSubclassOf(typeof(T)));
             types.AddRange(
                 from t in typesOfT
                 where namespaceWhere(t.Namespace)
                 orderby ordering(t)
-                select t
-                );
+                select t);
             return types;
         }
     }

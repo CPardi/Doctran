@@ -12,12 +12,7 @@ namespace Doctran.Utilitys
     using System.Linq;
 
     public static class CollectionUtils
-    {        
-        public static ReadOnlyCollection<T> ToReadOnlyCollection<T>(this IEnumerable<T> @this)
-        {
-            return @this.ToList().AsReadOnly();
-        }
-
+    {
         public static IEnumerable<T> Empty<T>()
         {
             return new List<T>();
@@ -34,6 +29,11 @@ namespace Doctran.Utilitys
         public static IEnumerable<T> Singlet<T>(T tInstance)
         {
             yield return tInstance;
+        }
+
+        public static ReadOnlyCollection<T> ToReadOnlyCollection<T>(this IEnumerable<T> @this)
+        {
+            return @this.ToList().AsReadOnly();
         }
     }
 }

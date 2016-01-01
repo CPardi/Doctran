@@ -8,7 +8,6 @@
 namespace Doctran.Helper
 {
     using System;
-    using System.Collections;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
@@ -24,8 +23,14 @@ namespace Doctran.Helper
         public enum PathStorageMode
         {
             Absolute,
+
             Relative
         }
+
+        /// <summary>
+        ///     Gets or sets the mode of which paths are added to the path list.
+        /// </summary>
+        public PathStorageMode PathStorage { get; set; } = PathStorageMode.Absolute;
 
         /// <summary>
         ///     Adds a path to the list. Wildcards are expanded and resulting paths
@@ -34,16 +39,11 @@ namespace Doctran.Helper
         /// <param name="pathList">A path that can contain wildcards.</param>
         public override void Add(string pathList)
         {
-            foreach (var p in ExpandPath(pathList))
+            foreach (var p in this.ExpandPath(pathList))
             {
-                InternalList.Add(p);
+                this.InternalList.Add(p);
             }
         }
-
-        /// <summary>
-        /// Gets and sets the mode of which paths are added to the path list.
-        /// </summary>
-        public PathStorageMode PathStorage { get; set; } = PathStorageMode.Absolute;
 
         /// <summary>
         ///     Determines whether <see cref="PathList" /> contains a single path.
@@ -53,12 +53,12 @@ namespace Doctran.Helper
         /// <exception cref="ArgumentException">Thrown when the path contains wildcard statements.</exception>
         public override bool Contains(string path)
         {
-            if (!IsSinglePath(path))
+            if (!this.IsSinglePath(path))
             {
                 throw new ArgumentException("The path must be of expanded type and not contain wildcard statements.");
             }
 
-            return InternalList.Contains(path);
+            return this.InternalList.Contains(path);
         }
 
         /// <summary>
@@ -69,12 +69,12 @@ namespace Doctran.Helper
         /// <exception cref="ArgumentException">Thrown when the path contains wildcard statements.</exception>
         public override bool Remove(string path)
         {
-            if (!IsSinglePath(path))
+            if (!this.IsSinglePath(path))
             {
                 throw new ArgumentException("The path must be of expanded type and not contain wildcard statements.");
             }
 
-            return InternalList.Remove(path);
+            return this.InternalList.Remove(path);
         }
 
         /// <summary>
@@ -87,8 +87,7 @@ namespace Doctran.Helper
         ///     <see cref="string.Empty" />, then the <paramref name="pathList" /> is a single path.
         /// </param>
         /// <param name="searchOption">The search method implied by <paramref name="pathList" />.</param>
-        private void AnalysePath(string pathList, out string path, out string searchPattern,
-            out SearchOption searchOption)
+        private void AnalysePath(string pathList, out string path, out string searchPattern, out SearchOption searchOption)
         {
             var dirtext = Regex.Match(
                 pathList,
@@ -117,7 +116,7 @@ namespace Doctran.Helper
             string path, searchPattern;
             SearchOption searchOption;
 
-            AnalysePath(pathList, out path, out searchPattern, out searchOption);
+            this.AnalysePath(pathList, out path, out searchPattern, out searchOption);
 
             if (searchPattern == string.Empty && !File.Exists(path))
             {
@@ -155,7 +154,7 @@ namespace Doctran.Helper
             string path, searchPattern;
             SearchOption searchOption;
 
-            AnalysePath(pathList, out path, out searchPattern, out searchOption);
+            this.AnalysePath(pathList, out path, out searchPattern, out searchOption);
 
             return searchPattern == string.Empty;
         }

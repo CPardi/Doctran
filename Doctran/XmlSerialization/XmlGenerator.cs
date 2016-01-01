@@ -12,8 +12,6 @@ namespace Doctran.XmlSerialization
     using System.Linq;
     using System.Xml.Linq;
     using Parsing;
-    using ParsingElements;
-    using IFortranObject = Parsing.IFortranObject;
     using Utilitys;
 
     public class XmlGenerator
@@ -42,12 +40,12 @@ namespace Doctran.XmlSerialization
                 obj => new Func<IEnumerable<XElement>, XElement>(obj.Create));
 
             var keys =
-                from groupType in this._toGroupXmlDictionary.Keys
-                where !this._toXmlDictionary.Keys.Any(objectType => IsParentOrThis(groupType, objectType))
+                from groupType in _toGroupXmlDictionary.Keys
+                where !_toXmlDictionary.Keys.Any(objectType => IsParentOrThis(groupType, objectType))
                 select groupType;
 
             var str = string.Concat(keys.Select((k, i) => i == 0 ? $"'{k.Name}'" : $", '{k.Name}'"));
-            if (str != "")
+            if (str != string.Empty)
             {
                 throw new ApplicationException($"A group XElement exists for the types {str} for which there is no corresponding object XElement.");
             }
@@ -75,7 +73,7 @@ namespace Doctran.XmlSerialization
         private IEnumerable<XElement> GetValue(Type groupType, IEnumerable<IFortranObject> objsOfType)
         {
             Func<IEnumerable<XElement>, XElement> toGroupXml;
-            this._toGroupXmlDictionary.TryGetValue(groupType, out toGroupXml);
+            _toGroupXmlDictionary.TryGetValue(groupType, out toGroupXml);
 
             var objsOfTypeList = objsOfType as IList<IFortranObject> ?? objsOfType.ToList();
 
@@ -99,7 +97,7 @@ namespace Doctran.XmlSerialization
             {
                 var objType = obj.GetType();
                 Func<IFortranObject, XElement> toXml;
-                this._toXmlDictionary.TryGetValue(objType, out toXml);
+                _toXmlDictionary.TryGetValue(objType, out toXml);
                 if (toXml == null)
                 {
                     continue;

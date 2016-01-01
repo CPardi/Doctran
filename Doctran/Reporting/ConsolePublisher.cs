@@ -15,13 +15,6 @@ namespace Doctran.Reporting
 
     public class ConsolePublisher
     {
-        private readonly Dictionary<ReportSeverity, string> _reportTitles = new Dictionary<ReportSeverity, string>
-        {
-            { ReportSeverity.Error, "Error" },
-            { ReportSeverity.Warning, "Warning" },
-            { ReportSeverity.Message, "Message" }
-        };
-
         private readonly Dictionary<ReportGenre, string> _genreDescriptions = new Dictionary<ReportGenre, string>
         {
             { ReportGenre.Licensing, "A licensing issue has occured." },
@@ -33,47 +26,35 @@ namespace Doctran.Reporting
             { ReportGenre.Plugin, "Plugin loading issue." },
             { ReportGenre.ProjectFile, "Project file contains an issue." },
             { ReportGenre.XsltCompilation, "Fatal XSLT stylesheet compilation issue." },
-            { ReportGenre.XsltRuntime, "Fatal XSLT stylesheet runtime issue." },
+            { ReportGenre.XsltRuntime, "Fatal XSLT stylesheet runtime issue." }
         };
 
-        private ReportGenre ReportGenre { get; set; }
+        private readonly Dictionary<ReportSeverity, string> _reportTitles = new Dictionary<ReportSeverity, string>
+        {
+            { ReportSeverity.Error, "Error" },
+            { ReportSeverity.Warning, "Warning" },
+            { ReportSeverity.Message, "Message" }
+        };
 
         private string Location { get; set; }
 
         private string Reason { get; set; }
 
-        public void DescriptionReasonLocation(ReportGenre reportGenre, string reason, string location)
-        {
-            AddReportGenre(reportGenre);
-            AddReason(reason);
-            AddLocation(location);
-        }
-        
+        private ReportGenre ReportGenre { get; set; }
+
         public void DescriptionReason(ReportGenre reportGenre, string reason)
         {
-            AddReportGenre(reportGenre);
-            AddReason(reason);
-        }
-        
-        private void AddReportGenre(ReportGenre reportGenre)
-        {            
-            this.ReportGenre = reportGenre;
+            this.AddReportGenre(reportGenre);
+            this.AddReason(reason);
         }
 
-        private void AddLocation(string location)
+        public void DescriptionReasonLocation(ReportGenre reportGenre, string reason, string location)
         {
-            Debug.Assert(Location.IsNullOrEmpty(), "Cannot specify more than one error location.");
-
-            this.Location = location;
+            this.AddReportGenre(reportGenre);
+            this.AddReason(reason);
+            this.AddLocation(location);
         }
 
-        private void AddReason(string reason)
-        {
-            Debug.Assert(Reason.IsNullOrEmpty(), "Cannot specify more than one error reason.");
-            
-            this.Reason = reason;
-        }
-     
         public void Publish(ReportSeverity reportSeverity)
         {
             // If we need a new line then add it.
@@ -84,18 +65,37 @@ namespace Doctran.Reporting
             ttb.Append(_reportTitles[reportSeverity], _genreDescriptions[this.ReportGenre]);
 
             // If given, write reason.
-            if (!Reason.IsNullOrEmpty())
+            if (!this.Reason.IsNullOrEmpty())
             {
-                ttb.Append("Reason", Reason);
+                ttb.Append("Reason", this.Reason);
             }
 
             // If given, write location.
-            if (!Location.IsNullOrEmpty())
+            if (!this.Location.IsNullOrEmpty())
             {
-                ttb.Append("Location", Location);
+                ttb.Append("Location", this.Location);
             }
 
             Console.Write($"\n{ttb}");
+        }
+
+        private void AddLocation(string location)
+        {
+            Debug.Assert(this.Location.IsNullOrEmpty(), "Cannot specify more than one error location.");
+
+            this.Location = location;
+        }
+
+        private void AddReason(string reason)
+        {
+            Debug.Assert(this.Reason.IsNullOrEmpty(), "Cannot specify more than one error reason.");
+
+            this.Reason = reason;
+        }
+
+        private void AddReportGenre(ReportGenre reportGenre)
+        {
+            this.ReportGenre = reportGenre;
         }
     }
 }

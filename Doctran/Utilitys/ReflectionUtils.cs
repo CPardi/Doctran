@@ -13,7 +13,8 @@ namespace Doctran.Utilitys
 
     public static class ReflectionUtils
     {
-        public static T GetAssemblyAttribute<T>(this Assembly ass) where T : Attribute
+        public static T GetAssemblyAttribute<T>(this Assembly ass)
+            where T : Attribute
         {
             var attributes = ass.GetCustomAttributes(typeof(T), false);
             return

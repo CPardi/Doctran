@@ -14,9 +14,7 @@ namespace Doctran
     using System.Xml.Linq;
     using CommandLine;
     using Helper;
-    using Input;
     using Input.Options;
-    using Output;
     using Output.Assets;
     using Output.Html;
     using ParsingElements.FortranObjects;
@@ -52,8 +50,27 @@ namespace Doctran
             return 0;
         }
 
+        private static void GetCommandLineOptions(string[] args, Options options)
+        {
+            Parser.Default.ParseArgumentsStrict(args, options);
+
+            ShowLicensing = options.ShowLicensing;
+
+            PluginManager.Initialize(); // Must come after show licensing.
+
+            if (options.ShowHelp)
+            {
+                Report.MessageAndExit(options.GetUsage());
+            }
+
+            if (options.ShowPluginInformation)
+            {
+                Report.MessageAndExit(PluginManager.InformationString);
+            }
+        }
+
         private static void GetOptions(string path, Options options)
-        {            
+        {
             var parserExceptions = new ListenerAndAggregater<OptionReaderException>();
             var projectFileReader = new OptionsReader<Options>(5, "Project file") { ErrorListener = parserExceptions };
             var projFileLines = OtherUtils.ReadFile(path);
@@ -74,25 +91,6 @@ namespace Doctran
             if (es.Any())
             {
                 Report.Errors(action, es);
-            }
-        }
-
-        private static void GetCommandLineOptions(string[] args, Options options)
-        {
-            Parser.Default.ParseArgumentsStrict(args, options);
-            
-            ShowLicensing = options.ShowLicensing;
-
-            PluginManager.Initialize(); // Must come after show licensing.
-
-            if (options.ShowHelp)
-            {
-                Report.MessageAndExit(options.GetUsage());
-            }
-
-            if (options.ShowPluginInformation)
-            {
-                Report.MessageAndExit(PluginManager.InformationString);
             }
         }
 
@@ -131,7 +129,8 @@ namespace Doctran
             var xElements =
                 from source in project.Sources
                 let highlighter = DocumentationManager.TryGetDefinitionByIdentifier(source.Language)
-                select new XElement("File",
+                select new XElement(
+                    "File",
                     new XElement("Identifier", source.Identifier),
                     highlighter.HighlightLines(source.OriginalLines));
 

@@ -17,7 +17,7 @@ namespace Doctran.ParsingElements.FortranBlocks
     using Parsing;
     using Utilitys;
 
-    public class DescriptionBlock : FortranBlock
+    public class DescriptionBlock : IFortranBlock
     {
         private static readonly Markdown Markdown = new Markdown();
 
@@ -34,8 +34,7 @@ namespace Doctran.ParsingElements.FortranBlocks
                     from line in lines
                     where Regex.IsMatch(line.Text, @"^\s*!>") && !Regex.IsMatch(line.Text, @"^\s*!>>")
                     select Regex.Match(line.Text, @"!>(.*)").Groups[1].Value.Trim()) + " "
-                        .TrimEnd()
-                );
+                        .TrimEnd());
         }
 
         public static string GetDetailText(List<FileLine> lines)
@@ -44,23 +43,23 @@ namespace Doctran.ParsingElements.FortranBlocks
                 string.Concat(
                     from line in lines
                     where Regex.IsMatch(line.Text, @"^\s*!>>(.*)")
-                    select Regex.Match(line.Text, @"!>>(.*)").Groups[1].Value + "\n")
-                );
+                    select Regex.Match(line.Text, @"!>>(.*)").Groups[1].Value + "\n"));
         }
 
-        public  bool BlockEnd(IEnumerable<FortranBlock> ancestors, List<FileLine> lines, int lineIndex)
+        public bool BlockEnd(IEnumerable<IFortranBlock> ancestors, List<FileLine> lines, int lineIndex)
         {
             if (lines.Count == lineIndex + 1)
             {
                 return true;
             }
+
             return
                 CommentUtils.DescEnd(lines[lineIndex + 1].Text)
                 || CommentUtils.InfoStart(lines[lineIndex + 1].Text)
                 || CommentUtils.NDescStart(lines[lineIndex + 1].Text);
         }
 
-        public  bool BlockStart(IEnumerable<FortranBlock> ancestors, List<FileLine> lines, int lineIndex)
+        public bool BlockStart(IEnumerable<IFortranBlock> ancestors, List<FileLine> lines, int lineIndex)
         {
             var parentName = ancestors.FirstOrDefault()?.Name;
 
@@ -68,6 +67,7 @@ namespace Doctran.ParsingElements.FortranBlocks
             {
                 return false;
             }
+
             return
                 CommentUtils.DescStart(lines[lineIndex].Text)
                 && !(parentName ?? string.Empty).StartsWith("Information_")
@@ -76,7 +76,7 @@ namespace Doctran.ParsingElements.FortranBlocks
                 && !CommentUtils.InfoStart(lines[lineIndex].Text);
         }
 
-        public  IEnumerable<FortranObject> ReturnObject(IEnumerable<IContained> subObjects, List<FileLine> lines)
+        public IEnumerable<FortranObject> ReturnObject(IEnumerable<IContained> subObjects, List<FileLine> lines)
         {
             var basic = XmlUtils.WrapAndParse("Basic", GetBasicText(lines));
             var detailed = XmlUtils.WrapAndParse("Detailed", GetDetailText(lines));

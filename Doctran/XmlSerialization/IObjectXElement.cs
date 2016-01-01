@@ -19,7 +19,7 @@ namespace Doctran.XmlSerialization
     }
 
     public interface IObjectXElement<in TParsed>
-        where TParsed : FortranObject
+        where TParsed : IFortranObject
     {
         Type ForType { get; }
 

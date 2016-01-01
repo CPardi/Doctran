@@ -7,7 +7,9 @@
 
 namespace Doctran.ParsingElements
 {
-    public interface IHasValidName
+    using Parsing;
+
+    public interface IHasValidName : IFortranObject
     {
         string ValidName { get; }
     }

@@ -1,11 +1,9 @@
-﻿//-----------------------------------------------------------------------
-// <copyright file="OptionsReader.cs" company="Christopher Pardi">
-// Copyright © 2015 Christopher Pardi
-// This Source Code Form is subject to the terms of the Mozilla Public
-// License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+﻿// <copyright file="OptionsReader.cs" company="Christopher Pardi">
+//     Copyright © 2015 Christopher Pardi
+//     This Source Code Form is subject to the terms of the Mozilla Public
+//     License, v. 2.0. If a copy of the MPL was not distributed with this
+//     file, You can obtain one at http://mozilla.org/MPL/2.0/.
 // </copyright>
-//-----------------------------------------------------------------------
 
 namespace Doctran.Input.Options
 {
@@ -54,12 +52,12 @@ namespace Doctran.Input.Options
         }
 
         /// <summary>
-        ///     The error listener to be used to report parsing errors.
+        ///     Gets or sets the error listener be used for reporting errors.
         /// </summary>
         public IErrorListener<OptionReaderException> ErrorListener { get; set; } = new StandardErrorListener<OptionReaderException>();
 
         /// <summary>
-        ///     The name of the parser to be used within any exceptions.
+        ///     Gets the name of the parser. This name will be used within exceptions.
         /// </summary>
         public string Name { get; }
 
@@ -95,7 +93,7 @@ namespace Doctran.Input.Options
 
                 foreach (var option in propOptions)
                 {
-                    if(analysedOptions.Contains(option.Name))
+                    if (analysedOptions.Contains(option.Name))
                     {
                         throw new InvalidAttributesException($"The attribute for options of name '{option.Name}' was applied twice.");
                     }
@@ -111,8 +109,7 @@ namespace Doctran.Input.Options
                     {
                         if (optionList != null && optionList.InitializeAsDefault)
                         {
-                            prop.SetValue(options, (IEnumerable)Activator.CreateInstance(optionList.InitializationType),
-                                null);
+                            prop.SetValue(options, (IEnumerable)Activator.CreateInstance(optionList.InitializationType), null);
                         }
                         else if (scalarOption?.DefaultValue != null)
                         {
@@ -127,8 +124,7 @@ namespace Doctran.Input.Options
                     {
                         if (!IsGenericEnumerable(prop.PropertyType))
                         {
-                            throw new InvalidPropertyTypeException("DefaultOptionAttribute", typeof(IEnumerable<>),
-                                prop.PropertyType);
+                            throw new InvalidPropertyTypeException("DefaultOptionAttribute", typeof(IEnumerable<>), prop.PropertyType);
                         }
 
                         this.AssignList(option.MetaDataToProperty, options, metaDataOfName, prop, optionList.InitializationType);
@@ -143,8 +139,7 @@ namespace Doctran.Input.Options
             // If a default is specified, then assign any remaining values to it.
             if (defaultInfo != null && _metaDatas.Any())
             {
-                this.AssignList(defaultInfo.Item2.MetaDataToProperty, options, _metaDatas, defaultInfo.Item1,
-                    defaultInfo.Item2.InitializationType);
+                this.AssignList(defaultInfo.Item2.MetaDataToProperty, options, _metaDatas, defaultInfo.Item1, defaultInfo.Item2.InitializationType);
             }
         }
 
@@ -199,8 +194,7 @@ namespace Doctran.Input.Options
         /// <param name="propertyInfo">The <see cref="PropertyInfo" /> of the property to be assigned.</param>
         /// <param name="initializationType">The type to initialize the property to.</param>
         /// <exception cref="ParserException">The exception is throw when there has been an exception adding an object to the list.</exception>
-        private void AssignList(Func<IInformation, Type, object> convert, TOptions options,
-            IEnumerable<IInformation> valuesOfName, PropertyInfo propertyInfo, Type initializationType)
+        private void AssignList(Func<IInformation, Type, object> convert, TOptions options, IEnumerable<IInformation> valuesOfName, PropertyInfo propertyInfo, Type initializationType)
         {
             // If the property has not been initialized, then do it.
             if (propertyInfo.GetValue(options, null) == null)
@@ -226,7 +220,6 @@ namespace Doctran.Input.Options
                 try
                 {
                     propList.Add(c);
-
                 }
                 catch (Exception e)
                 {
@@ -245,8 +238,7 @@ namespace Doctran.Input.Options
         /// <param name="propertyInfo">The <see cref="PropertyInfo" /> of the property to be assigned.</param>
         /// <param name="initializationType">The type to initialize the property to.</param>
         /// <exception cref="ParserException">The exception is throw when the meta-data is not unique.</exception>
-        private void AssignScalar(Func<IInformation, Type, object> convert, TOptions options,
-            ICollection<IInformation> valuesOfName, PropertyInfo propertyInfo, Type initializationType)
+        private void AssignScalar(Func<IInformation, Type, object> convert, TOptions options, ICollection<IInformation> valuesOfName, PropertyInfo propertyInfo, Type initializationType)
         {
             if (!valuesOfName.Any())
             {
@@ -308,8 +300,7 @@ namespace Doctran.Input.Options
 
             if (!IsGenericEnumerable(prop.PropertyType))
             {
-                throw new InvalidPropertyTypeException(nameof(defaultOption), typeof(IEnumerable<>),
-                    prop.PropertyType);
+                throw new InvalidPropertyTypeException(nameof(defaultOption), typeof(IEnumerable<>), prop.PropertyType);
             }
 
             defaultInfo = new Tuple<PropertyInfo, IDefaultOptionAttribute>(prop, defaultOption);
@@ -336,8 +327,7 @@ namespace Doctran.Input.Options
         private List<FileLine> PreProcess(IEnumerable<FileLine> lines)
         {
             return (from line in lines
-                select new FileLine(line.Number, line.Text != "" ? "!>" + line.Text : "")
-                ).ToList();
+                select new FileLine(line.Number, line.Text != string.Empty ? "!>" + line.Text : string.Empty)).ToList();
         }
     }
 }

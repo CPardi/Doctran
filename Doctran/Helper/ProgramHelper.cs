@@ -9,7 +9,6 @@ namespace Doctran.Helper
 {
     using System.Collections.Generic;
     using System.IO;
-    using Parsing;
     using ParsingElements;
     using ParsingElements.FortranObjects;
     using Plugins;
@@ -36,7 +35,7 @@ namespace Doctran.Helper
                 var language = ParserManager.GetParserByExtension(Path.GetExtension(path));
 
                 var lines = OtherUtils.ReadFile(path);
-                var parsedFile = language.Parse(path, lines);                
+                var parsedFile = language.Parse(path, lines);
                 parsedFiles.Add(parsedFile);
             }
 

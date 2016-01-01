@@ -10,8 +10,10 @@ namespace Doctran.XmlSerialization
     using System;
     using System.Collections.Generic;
     using System.Xml.Linq;
+    using Parsing;
 
     public class InterfaceXElements<TParsed> : IInterfaceXElements, IInterfaceXElements<TParsed>
+        where TParsed : IFortranObject
     {
         public InterfaceXElements(Func<TParsed, IEnumerable<XElement>> func)
         {

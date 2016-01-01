@@ -7,11 +7,9 @@
 
 namespace Doctran.Parsing
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using Helper;
-    using ParsingElements;
 
     public abstract class FortranObject : IFortranObject, IContainer, IContained
     {
@@ -37,25 +35,12 @@ namespace Doctran.Parsing
 
         public IContainer Parent { get; set; }
 
-        public List<IContained> SubObjects { get; private set; }
+        public List<IContained> SubObjects { get; }
 
         public void AddSubObject(IContained obj)
         {
             obj.Parent = this;
             this.SubObjects.Add(obj);
-        }
-
-        public void RemoveSubObject(IContained obj)
-        {
-            this.SubObjects.Remove(obj);
-        }
-
-        public void RemoveSubObjects(IEnumerable<IContained> objs)
-        {
-            foreach (var obj in objs)
-            {
-                this.RemoveSubObject(obj);
-            }
         }
 
         public void AddSubObjects(IEnumerable<IContained> objs)
@@ -81,9 +66,17 @@ namespace Doctran.Parsing
             return obj as T;
         }
 
-        //public void OrderSubObjectsBy(Func<IFortranObject, int> keySelector)
-        //{
-        //    this.SubObjects = this.SubObjects.OrderBy(keySelector).ToList();
-        //}
+        public void RemoveSubObject(IContained obj)
+        {
+            this.SubObjects.Remove(obj);
+        }
+
+        public void RemoveSubObjects(IEnumerable<IContained> objs)
+        {
+            foreach (var obj in objs)
+            {
+                this.RemoveSubObject(obj);
+            }
+        }
     }
 }

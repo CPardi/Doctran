@@ -35,15 +35,15 @@ namespace Doctran.Helper
 
         public override string ToString()
         {
-            var titleWidth = _titles.Max(t => t.Length) + 3 + LeftMargin;
+            var titleWidth = _titles.Max(t => t.Length) + 3 + this.LeftMargin;
 
             for (var i = 0; i < _titles.Count; i++)
             {
                 var title = _titles[i];
                 var text = _texts[i];
 
-                _sb.Append((new string(' ', LeftMargin) + title + ": ").PadRight(titleWidth));
-                AddText(titleWidth, text);
+                _sb.Append((new string(' ', this.LeftMargin) + title + ": ").PadRight(titleWidth));
+                this.AddText(titleWidth, text);
                 _sb.Append(Environment.NewLine);
             }
 
@@ -58,7 +58,7 @@ namespace Doctran.Helper
             var writableWidth = Math.Min(Console.BufferWidth, Console.LargestWindowWidth) - this.RightMargin;
 
             var pos = indentWidth;
-            foreach (var t in Regex.Split(text, $@"(?<=[{Regex.Escape(string.Concat(Seperators))}])").Where(t => t != ""))
+            foreach (var t in Regex.Split(text, $@"(?<=[{Regex.Escape(string.Concat(Seperators))}])").Where(t => t != string.Empty))
             {
                 pos += t.Length;
 

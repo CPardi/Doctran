@@ -10,6 +10,7 @@ namespace Doctran.XmlSerialization
     using System;
     using System.Collections.Generic;
     using System.Xml.Linq;
+    using Parsing;
 
     public interface IInterfaceXElements
     {
@@ -19,6 +20,7 @@ namespace Doctran.XmlSerialization
     }
 
     public interface IInterfaceXElements<in TParsed>
+        where TParsed : IFortranObject
     {
         Type ForType { get; }
 

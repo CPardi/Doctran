@@ -1,4 +1,11 @@
-﻿namespace Doctran.Helper
+﻿// <copyright file="ListenerAndAggregater.cs" company="Christopher Pardi">
+//     Copyright © 2015 Christopher Pardi
+//     This Source Code Form is subject to the terms of the Mozilla Public
+//     License, v. 2.0. If a copy of the MPL was not distributed with this
+//     file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// </copyright>
+
+namespace Doctran.Helper
 {
     using System;
     using System.Collections.Generic;
@@ -17,12 +24,12 @@
         private readonly List<TException> _warnings = new List<TException>();
 
         /// <summary>
-        ///     The collection of errors reported to this listener.
+        ///     Gets the collection of errors reported to this listener.
         /// </summary>
         public ReadOnlyCollection<TException> Errors => _errors.AsReadOnly();
 
         /// <summary>
-        ///     The collections of warnings reported to this listener.
+        ///     Gets the collections of warnings reported to this listener.
         /// </summary>
         public ReadOnlyCollection<TException> Warnings => _warnings.AsReadOnly();
 

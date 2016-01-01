@@ -32,7 +32,7 @@ namespace Doctran.Output.Assets
             // Handles the stylesheet compilation.
             var compiler = _processor.NewXsltCompiler();
 
-            // Load a stylesheet at a from text reader, v9.6 doesent like using a Uri for some reason.            
+            // Load a stylesheet at a from text reader, v9.6 doesent like using a Uri for some reason.
             compiler.BaseUri = new Uri(xsltPathAndName);
 
             // Create transformer for preprocess.
@@ -42,7 +42,7 @@ namespace Doctran.Output.Assets
 
             // Create transformer for Html output.
             var textreader = File.OpenText(xsltPathAndName + ".xslt");
-            var executable = compiler.Compile(textreader);            
+            var executable = compiler.Compile(textreader);
             _transformer = executable.Load();
 
             _builder = _processor.NewDocumentBuilder();
@@ -50,9 +50,7 @@ namespace Doctran.Output.Assets
 
         public void SaveToDisk(XDocument xDocument, string outputDirectory)
         {
-            //
             // PRE-PROCESS
-            //
 
             // The transformation destination variable.
             var destinationPreprocess = new DomDestination();
@@ -66,12 +64,10 @@ namespace Doctran.Output.Assets
             // BaseOutputUri is only necessary for xsl:result-document.
             _transformerPreprocess.BaseOutputUri = new Uri(Path.GetFullPath(outputDirectory));
 
-            //Output the transform to the above variable.
+            // Output the transform to the above variable.
             _transformerPreprocess.Run(destinationPreprocess);
 
-            ///
-            /// OUTPUT MAIN
-            ///
+            // OUTPUT MAIN
 
             // The transformation destination variable.
             var destination = new DomDestination();
@@ -85,7 +81,7 @@ namespace Doctran.Output.Assets
             // Pass the output directory to the stylesheet.
             this.SetParameter("workingDirectory", _transformerPreprocess.BaseOutputUri.AbsolutePath);
 
-            //Output the transform to the above variable.
+            // Output the transform to the above variable.
             _transformer.Run(destination);
         }
 

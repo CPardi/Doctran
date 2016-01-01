@@ -1,4 +1,4 @@
-﻿// <copyright file="FortranBlock.cs" company="Christopher Pardi">
+﻿// <copyright file="IFortranBlock.cs" company="Christopher Pardi">
 //     Copyright © 2015 Christopher Pardi
 //     This Source Code Form is subject to the terms of the Mozilla Public
 //     License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -8,11 +8,9 @@
 namespace Doctran.Parsing
 {
     using System.Collections.Generic;
-    using System.Collections.ObjectModel;
     using Helper;
-    using ParsingElements;
 
-    public interface FortranBlock
+    public interface IFortranBlock
     {
         bool CheckInternal { get; }
 
@@ -20,9 +18,9 @@ namespace Doctran.Parsing
 
         string Name { get; }
 
-        bool BlockEnd(IEnumerable<FortranBlock> ancestors, List<FileLine> lines, int lineIndex);
+        bool BlockEnd(IEnumerable<IFortranBlock> ancestors, List<FileLine> lines, int lineIndex);
 
-        bool BlockStart(IEnumerable<FortranBlock> ancestors, List<FileLine> lines, int lineIndex);
+        bool BlockStart(IEnumerable<IFortranBlock> ancestors, List<FileLine> lines, int lineIndex);
 
         /// <summary>
         ///     Returns one or more <see cref="FortranObject" />, that represent the block specified by <paramref name="lines" />.

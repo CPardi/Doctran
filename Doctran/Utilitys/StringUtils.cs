@@ -24,8 +24,7 @@ namespace Doctran.Utilitys
             lines.AddRange(
                 linesString
                     .Split('\n')
-                    .Select((l, i) => new FileLine(i, l))
-                );
+                    .Select((l, i) => new FileLine(i, l)));
             return lines;
         }
 
@@ -40,21 +39,26 @@ namespace Doctran.Utilitys
                 {
                     withinBracketsDepth++;
                 }
+
                 if (aChar == ')' | aChar == ']')
                 {
                     withinBracketsDepth--;
                 }
+
                 if (withinBracketsDepth == 0 & aChar == delimiter)
                 {
                     delimiteredText.Add(text.Substring(prevIndex, currentIndex - prevIndex).Trim());
                     prevIndex = currentIndex + 1;
                 }
+
                 if (currentIndex == text.Count() - 1)
                 {
                     delimiteredText.Add(text.Substring(prevIndex, currentIndex - prevIndex + 1).Trim());
                 }
+
                 currentIndex++;
             }
+
             return delimiteredText;
         }
 
@@ -77,6 +81,7 @@ namespace Doctran.Utilitys
                     {
                         sQuotes = aChar != '\'';
                     }
+
                     if (dQuotes)
                     {
                         dQuotes = aChar != '"';
@@ -111,7 +116,7 @@ namespace Doctran.Utilitys
         /// <param name="start">The first line to locate.</param>
         /// <param name="end">The last line to locate.</param>
         /// <param name="path">The file path of the file.</param>
-        /// <returns></returns>
+        /// <returns>The location string.</returns>
         public static string LocationString(int start, int end, string path)
         {
             return
@@ -122,7 +127,7 @@ namespace Doctran.Utilitys
 
         public static string NoWhitespace(string text)
         {
-            return Regex.Replace(text, @"\s+", "");
+            return Regex.Replace(text, @"\s+", string.Empty);
         }
 
         public static string RemoveInlineComment(string s)
@@ -131,10 +136,12 @@ namespace Doctran.Utilitys
         }
 
         /// <summary>
-        ///     If convertable, a string value is converted to the specified type.
+        ///     Convert a string value to a specified type.
         /// </summary>
         /// <param name="this">The converted object.</param>
-        /// <param name="propertyType">The type to convert the meta-data to.</param>
+        /// <param name="propertyType">The type to convert the meta-data to. Must have interface <see cref="IConvertible"/></param>
+        /// <returns>An IConverable object.</returns>
+        /// <exception cref="ArgumentException">Thrown if <paramref name="propertyType"/> does not have teh <see cref="IConvertible"/> interface.</exception>
         public static object ToIConvertable(this string @this, Type propertyType)
         {
             if (propertyType.GetInterface(typeof(IConvertible).Name) == null)
@@ -153,6 +160,7 @@ namespace Doctran.Utilitys
             {
                 return string.Empty;
             }
+
             return char.ToUpper(s[0]) + s.Substring(1);
         }
 

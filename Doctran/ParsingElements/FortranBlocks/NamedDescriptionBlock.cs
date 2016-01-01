@@ -15,7 +15,7 @@ namespace Doctran.ParsingElements.FortranBlocks
     using Parsing;
     using Utilitys;
 
-    public class NamedDescriptionBlock : FortranBlock
+    public class NamedDescriptionBlock : IFortranBlock
     {
         public bool CheckInternal => false;
 
@@ -23,7 +23,7 @@ namespace Doctran.ParsingElements.FortranBlocks
 
         public string Name => "Named Description";
 
-        public  bool BlockEnd(IEnumerable<FortranBlock> ancestors, List<FileLine> lines, int lineIndex)
+        public bool BlockEnd(IEnumerable<IFortranBlock> ancestors, List<FileLine> lines, int lineIndex)
         {
             if (lineIndex + 1 >= lines.Count)
             {
@@ -37,7 +37,7 @@ namespace Doctran.ParsingElements.FortranBlocks
                 || CommentUtils.InfoStart(lines[lineIndex + 1].Text);
         }
 
-        public  bool BlockStart(IEnumerable<FortranBlock> ancestors, List<FileLine> lines, int lineIndex)
+        public bool BlockStart(IEnumerable<IFortranBlock> ancestors, List<FileLine> lines, int lineIndex)
         {
             var parentName = ancestors.FirstOrDefault()?.Name;
             return
@@ -47,12 +47,12 @@ namespace Doctran.ParsingElements.FortranBlocks
                 && !CommentUtils.InfoStart(lines[lineIndex].Text);
         }
 
-        public  IEnumerable<FortranObject> ReturnObject(IEnumerable<IContained> subObjects, List<FileLine> lines)
+        public IEnumerable<FortranObject> ReturnObject(IEnumerable<IContained> subObjects, List<FileLine> lines)
         {
             var name = Regex.Match(lines[0].Text, @"!>\s*(\w.*)\s*-").Groups[1].Value.Trim();
             var basic = XmlUtils.WrapAndParse("Basic", DescriptionBlock.GetBasicText(lines).Substring(name.Length + 1).TrimStart(' ', '-'));
             var detailed = XmlUtils.WrapAndParse("Detailed", DescriptionBlock.GetDetailText(lines));
-            yield return new NamedDescription(name.ToLower(), basic, detailed, lines); 
+            yield return new NamedDescription(name.ToLower(), basic, detailed, lines);
         }
     }
 }

@@ -32,7 +32,7 @@ namespace Doctran.Parsing
         {
             var file = source as ISourceFile;
             Report.Message("Post processing", $"Applying '{this.Name}' on '{file?.AbsolutePath}'");
-            Navigate(source);
+            this.Navigate(source);
         }
 
         private void DoActions(IFortranObject obj, Type type)
@@ -69,7 +69,7 @@ namespace Doctran.Parsing
 
             for (var i = asContainer.Count - 1; i >= 0; i--)
             {
-                Navigate(asContainer[i]);
+                this.Navigate(asContainer[i]);
             }
         }
     }
