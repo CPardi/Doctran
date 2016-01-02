@@ -70,7 +70,7 @@ namespace Doctran.ParsingElements.FortranBlocks
                 && !CommentUtils.NDescStart(lines[lineIndex].Text);
         }
 
-        public IEnumerable<FortranObject> ReturnObject(IEnumerable<IContained> subObjects, List<FileLine> lines)
+        public IEnumerable<IContained> ReturnObject(IEnumerable<IContained> subObjects, List<FileLine> lines)
         {
             // Regex group the type-name and it's value.
             var aMatch = Regex.Match(lines[0].Text.Trim(), @"!>+?\s*?(\w+)\s*?:\s*?(.*)");
@@ -102,8 +102,8 @@ namespace Doctran.ParsingElements.FortranBlocks
                 case 2:
                     return
                         _factories.ContainsKey(typeName)
-                            ? _factories[typeName].Create(_depth, value, subObjectList, lines).Cast<FortranObject>()
-                            : CollectionUtils.Singlet(new InformationValue(_depth, typeName, value, lines));
+                            ? _factories[typeName].Create(_depth, value, subObjectList, lines).Cast<LinedInternal>()
+                            : CollectionUtils.Singlet<IContained>(new InformationValue(_depth, typeName, value, lines));
                 case 3:
                     throw new BlockParserException("An information block cannot contain both a value and sub-information elements.");
                 default:

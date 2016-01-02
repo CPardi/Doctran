@@ -23,12 +23,12 @@ namespace Doctran.Parsing
         bool BlockStart(IEnumerable<IFortranBlock> ancestors, List<FileLine> lines, int lineIndex);
 
         /// <summary>
-        ///     Returns one or more <see cref="FortranObject" />, that represent the block specified by <paramref name="lines" />.
+        ///     Returns one or more <see cref="LinedInternal" />, that represent the block specified by <paramref name="lines" />.
         /// </summary>
-        /// <param name="subObjects">The enumeration of <see cref="FortranObject" /> that are defined with the current block.</param>
+        /// <param name="subObjects">The enumeration of <see cref="LinedInternal" /> that are defined with the current block.</param>
         /// <param name="lines">Lines defining the object's creation.</param>
-        /// <returns>An enumeration of <see cref="FortranObject" />.</returns>
+        /// <returns>An enumeration of <see cref="LinedInternal" />.</returns>
         /// <exception cref="BlockParserException">This exception is thrown invalid content within <paramref name="lines" />.</exception>
-        IEnumerable<FortranObject> ReturnObject(IEnumerable<IContained> subObjects, List<FileLine> lines);
+        IEnumerable<IContained> ReturnObject(IEnumerable<IContained> subObjects, List<FileLine> lines);
     }
 }

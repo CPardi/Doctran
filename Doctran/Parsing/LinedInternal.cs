@@ -1,29 +1,23 @@
-﻿// <copyright file="Description.cs" company="Christopher Pardi">
+﻿// <copyright file="LinedInternal.cs" company="Christopher Pardi">
 //     Copyright © 2015 Christopher Pardi
 //     This Source Code Form is subject to the terms of the Mozilla Public
 //     License, v. 2.0. If a copy of the MPL was not distributed with this
 //     file, You can obtain one at http://mozilla.org/MPL/2.0/.
 // </copyright>
 
-namespace Doctran.ParsingElements.FortranObjects
+namespace Doctran.Parsing
 {
     using System.Collections.Generic;
-    using System.Xml.Linq;
     using Helper;
-    using Parsing;
+    using ParsingElements;
 
-    public class Description : IDescription, IContained, IHasLines
+    public abstract class LinedInternal : Container, IContained, IHasLines
     {
-        public Description(XElement basic, XElement detailed, List<FileLine> lines)
+        protected LinedInternal(IEnumerable<IContained> subObjects, List<FileLine> lines)
+            : base(subObjects)
         {
-            this.Basic = basic;
-            this.Detailed = detailed;
             this.Lines = lines;
         }
-
-        public XElement Basic { get; }
-
-        public XElement Detailed { get; }
 
         public List<FileLine> Lines { get; }
 

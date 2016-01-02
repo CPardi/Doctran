@@ -13,12 +13,12 @@ namespace Doctran.Parsing
     {
         List<IContained> SubObjects { get; }
 
-        void AddSubObject(IContained obj);
+        void AddSubObject(IContained containedItem);
 
-        void AddSubObjects(IEnumerable<IContained> objs);
+        void AddSubObjects(IEnumerable<IContained> containedItems);
 
-        void RemoveSubObject(IContained obj);
+        void RemoveSubObject(IContained containedItem);
 
-        void RemoveSubObjects(IEnumerable<IContained> obj);
+        void RemoveSubObjects(IEnumerable<IContained> containedItems);
     }
 }

@@ -11,7 +11,7 @@ namespace Doctran.ParsingElements.FortranObjects
     using Helper;
     using Parsing;
 
-    public class InformationGroup : FortranObject, IInformationGroup
+    public class InformationGroup : LinedInternal, IInformationGroup
     {
         public InformationGroup(int depth, string name, IEnumerable<IContained> subObjects, List<FileLine> lines)
             : base(subObjects, lines)

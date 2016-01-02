@@ -7,15 +7,11 @@
 
 namespace Doctran.ParsingElements
 {
-    using System.Collections.Generic;
-    using Helper;
     using Parsing;
 
-    public interface IInformation : IContained
+    public interface IInformation : IHasLines, IContained
     {
         int Depth { get; }
-
-        List<FileLine> Lines { get; }
 
         string Name { get; }
     }

@@ -11,7 +11,7 @@ namespace Doctran.ParsingElements.FortranObjects
     using Helper;
     using Parsing;
 
-    public class Source : FortranObject, ISource
+    public class Source : LinedInternal, ISource
     {
         public Source(string language, IEnumerable<IContained> subObjects, List<FileLine> lines)
             : base(subObjects, lines)

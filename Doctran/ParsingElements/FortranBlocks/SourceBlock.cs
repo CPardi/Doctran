@@ -31,7 +31,7 @@ namespace Doctran.ParsingElements.FortranBlocks
 
         public bool BlockStart(IEnumerable<IFortranBlock> ancestors, List<FileLine> lines, int lineIndex) => lineIndex == 0;
 
-        public IEnumerable<FortranObject> ReturnObject(IEnumerable<IContained> subObjects, List<FileLine> lines)
+        public IEnumerable<IContained> ReturnObject(IEnumerable<IContained> subObjects, List<FileLine> lines)
         {
             yield return new Source(_language, subObjects, lines);
         }

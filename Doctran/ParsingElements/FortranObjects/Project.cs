@@ -16,13 +16,12 @@ namespace Doctran.ParsingElements.FortranObjects
     using Plugins;
     using Utilitys;
 
-    public class Project : FortranObject
+    public class Project : Container
     {
         public Project(IEnumerable<ISourceFile> parsedFiles)
+            : base(parsedFiles)
         {
-            var parsedFilesList = parsedFiles as IList<ISourceFile> ?? parsedFiles.ToList();
-            this.Sources = parsedFilesList.ToList().AsReadOnly();
-            this.AddSubObjects(parsedFilesList);
+            this.Sources = parsedFiles.ToList().AsReadOnly();
         }
 
         public ReadOnlyCollection<ISourceFile> Sources { get; }

@@ -10,7 +10,7 @@ namespace Doctran.ParsingElements
     using System.Xml.Linq;
     using Parsing;
 
-    public interface IDescription : IFortranObject
+    public interface IDescription : IContained, IHasLines
     {
         XElement Basic { get; }
 

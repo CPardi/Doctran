@@ -12,20 +12,24 @@ namespace Doctran.ParsingElements.FortranObjects
     using Helper;
     using Parsing;
 
-    public class NamedDescription : FortranObject, IDescription
+    public class NamedDescription : IDescription
     {
         public NamedDescription(string linkedTo, XElement basic, XElement detailed, List<FileLine> lines)
-            : base(lines)
         {
             this.LinkedTo = linkedTo;
             this.Basic = basic;
             this.Detailed = detailed;
+            this.Lines = lines;
         }
 
         public XElement Basic { get; }
 
         public XElement Detailed { get; }
 
+        public List<FileLine> Lines { get; }
+
         public string LinkedTo { get; }
+
+        public IContainer Parent { get; set; }
     }
 }

@@ -76,7 +76,7 @@ namespace Doctran.ParsingElements.FortranBlocks
                 && !CommentUtils.InfoStart(lines[lineIndex].Text);
         }
 
-        public IEnumerable<FortranObject> ReturnObject(IEnumerable<IContained> subObjects, List<FileLine> lines)
+        public IEnumerable<IContained> ReturnObject(IEnumerable<IContained> subObjects, List<FileLine> lines)
         {
             var basic = XmlUtils.WrapAndParse("Basic", GetBasicText(lines));
             var detailed = XmlUtils.WrapAndParse("Detailed", GetDetailText(lines));

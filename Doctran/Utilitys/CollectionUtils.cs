@@ -10,6 +10,7 @@ namespace Doctran.Utilitys
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Linq;
+    using Parsing;
 
     public static class CollectionUtils
     {
@@ -34,6 +35,36 @@ namespace Doctran.Utilitys
         public static ReadOnlyCollection<T> ToReadOnlyCollection<T>(this IEnumerable<T> @this)
         {
             return @this.ToList().AsReadOnly();
+        }
+
+        public static void AddSubObject(IContainer container, IContained contained)
+        {
+            contained.Parent = container;
+            container.SubObjects.Add(contained);
+        }
+
+        public static void AddSubObjects(IContainer container, IEnumerable<IContained> containedItems)
+        {
+            var containedItemList = containedItems as IList<IContained> ?? containedItems.ToList();
+            foreach (var item in containedItemList)
+            {
+                item.Parent = container;
+            }
+
+            container.SubObjects.AddRange(containedItemList);
+        }
+
+        public static void RemoveSubObject(IContainer container, IContained contained)
+        {
+            container.SubObjects.Remove(contained);
+        }
+
+        public static void RemoveSubObjects(IContainer container, IEnumerable<IContained> containeItems)
+        {
+            foreach (var item in containeItems)
+            {
+                container.RemoveSubObject(item);
+            }
         }
     }
 }

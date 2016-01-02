@@ -21,7 +21,7 @@ namespace Doctran.Helper
 
         public AssemblyLoader(string pluginPath)
         {
-            _assemblyTypes.AddRange(typeof(FortranObject).Assembly.GetTypes());
+            _assemblyTypes.AddRange(typeof(LinedInternal).Assembly.GetTypes());
             string[] paths;
             try
             {

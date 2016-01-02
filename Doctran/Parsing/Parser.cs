@@ -178,7 +178,7 @@ namespace Doctran.Parsing
 
                 // At this point we assumn the block has ended and create the object represented by it.
                 var blockLines = _lines.GetRange(startIndex, currentIndex - startIndex + 1);
-                IEnumerable<FortranObject> parsingResult = null;
+                IEnumerable<IContained> parsingResult = null;
                 try
                 {
                     parsingResult = currentFactory.ReturnObject(blockSubObjectsList, blockLines);

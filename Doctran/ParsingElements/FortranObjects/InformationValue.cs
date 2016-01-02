@@ -11,20 +11,24 @@ namespace Doctran.ParsingElements.FortranObjects
     using Helper;
     using Parsing;
 
-    public class InformationValue : FortranObject, IInformationValue
+    public class InformationValue : IInformationValue, IHasLines
     {
         public InformationValue(int depth, string name, string value, List<FileLine> lines)
-            : base(lines)
         {
             this.Name = name;
             this.Value = value;
             this.Depth = depth;
+            this.Lines = lines;
         }
 
         public int Depth { get; }
 
+        public List<FileLine> Lines { get; }
+
         public string Name { get; }
 
         public string Value { get; }
+
+        public IContainer Parent { get; set; }
     }
 }

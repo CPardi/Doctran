@@ -124,6 +124,7 @@
     <Compile Include="Input\Options\OptionListBaseAttribute.cs" />
     <Compile Include="Output\Assets\FileIgnorer.cs" />
     <Compile Include="ParsingElements\FortranObjects\InformationValue.cs" />
+    <Compile Include="Parsing\Container.cs" />
     <Compile Include="Parsing\IContained.cs" />
     <Compile Include="Parsing\IContainer.cs" />
     <Compile Include="ParsingElements\IInformationGroup.cs" />
@@ -168,8 +169,8 @@
     <Compile Include="ParsingElements\FortranObjects\Project.cs" />
     <Compile Include="ParsingElements\FortranObjects\InformationGroup.cs" />
     <Compile Include="ParsingElements\Traversal\TraverserActions.CheckNames.cs" />
-    <Compile Include="Parsing\FortranBlock.cs" />
-    <Compile Include="Parsing\FortranObject.cs" />
+    <Compile Include="Parsing\IFortranBlock.cs" />
+    <Compile Include="Parsing\LinedInternal.cs" />
     <Compile Include="Plugins\IPlugin.cs" />
     <Compile Include="XmlSerialization\IGroupXElement.cs" />
     <Compile Include="XmlSerialization\IInterfaceXElements.cs" />

@@ -19,7 +19,7 @@ namespace Doctran.ParsingElements.FortranObjects
     using Parsing;
     using Utilitys;
 
-    public class SourceFile : FortranObject, IHasName, IHasLines, IHasValidName, ISourceFile
+    public class SourceFile : LinedInternal, IHasName, IHasLines, IHasValidName, ISourceFile
     {
         private readonly FileInfo _info;
 
