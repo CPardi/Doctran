@@ -124,6 +124,7 @@
     <Compile Include="Input\Options\OptionListBaseAttribute.cs" />
     <Compile Include="Output\Assets\FileIgnorer.cs" />
     <Compile Include="ParsingElements\FortranObjects\InformationValue.cs" />
+    <Compile Include="ParsingElements\Traversal\TraverserActions.CheckParent.cs" />
     <Compile Include="Parsing\Container.cs" />
     <Compile Include="Parsing\IContained.cs" />
     <Compile Include="Parsing\IContainer.cs" />
@@ -131,7 +132,7 @@
     <Compile Include="ParsingElements\IInformationValue.cs" />
     <Compile Include="ParsingElements\Traversal\TraverserActions.AssignDescriptions.cs" />
     <Compile Include="ParsingElements\Traversal\TraverserActions.CheckDescriptionLinkage.cs" />
-    <Compile Include="ParsingElements\Traversal\TraverserActions.CheckDescriptionUniqueness.cs" />
+    <Compile Include="ParsingElements\Traversal\TraverserActions.CheckUniqueness.cs" />
     <Compile Include="Parsing\ParserException.cs" />
     <Compile Include="Input\ProjectFileOptions\UserPageOptionAttribute.cs" />
     <Compile Include="Input\ProjectFileOptions\MenuOptionAttribute.cs" />

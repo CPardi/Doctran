@@ -125,6 +125,23 @@ namespace Doctran.Utilitys
                     : $"Within lines {start} to {end} of '{path}'.";
         }
 
+        public static string DelimiteredConcat(this IEnumerable<string> @this, string delimiter, string lastDelimiter)
+        {
+            var stringList = @this.ToList();
+            if (stringList.Count == 1)
+            {
+                return stringList.First();
+            }
+
+            return string.Concat(
+                stringList
+                    .Select(
+                        (str, position) =>
+                            (position + 1 == stringList.Count ? lastDelimiter : string.Empty) +
+                            str +
+                            (position + 2 < stringList.Count ? delimiter : string.Empty)));
+        }
+
         public static string NoWhitespace(string text)
         {
             return Regex.Replace(text, @"\s+", string.Empty);
@@ -161,7 +178,7 @@ namespace Doctran.Utilitys
                 return string.Empty;
             }
 
-            return char.ToUpper(s[0]) + s.Substring(1);
+            return char.ToUpper(s[0]) + s.Substring(1).ToLower();
         }
 
         public static string ValidName(string name)

@@ -9,5 +9,6 @@ namespace Doctran.Parsing
 {
     public interface IFortranObject
     {
+        string ObjectName { get; }
     }
 }

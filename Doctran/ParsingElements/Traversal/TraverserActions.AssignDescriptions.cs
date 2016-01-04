@@ -11,6 +11,9 @@ namespace Doctran.ParsingElements.Traversal
     using FortranObjects;
     using Parsing;
 
+    /// <summary>
+    /// Contains a number of <see cref="ITraverserAction"/> for use with <see cref="Traverser"/>.
+    /// </summary>
     public static partial class TraverserActions
     {
         /// <summary>
@@ -45,7 +48,7 @@ namespace Doctran.ParsingElements.Traversal
                         obj.Parent.RemoveSubObject(obj);
                         foreach (var match in objsForDescription.OfType<IContainer>())
                         {
-                            match.AddSubObject(obj);
+                            match.AddSubObject(new Description(obj.Basic, obj.Detailed, obj.Lines));
                         }
                     });
             }

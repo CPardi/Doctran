@@ -22,5 +22,14 @@ namespace Doctran.Utilitys
                     ? attributes.OfType<T>().Single()
                     : null;
         }
+
+        public static void ForTypeAndInterfaces(this Type @this, Action<Type> action)
+        {
+            action(@this);
+            foreach (var inter in @this.GetInterfaces())
+            {
+                action(inter);
+            }
+        }
     }
 }

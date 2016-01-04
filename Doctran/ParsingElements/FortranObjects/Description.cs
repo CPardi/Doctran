@@ -12,7 +12,7 @@ namespace Doctran.ParsingElements.FortranObjects
     using Helper;
     using Parsing;
 
-    public class Description : IDescription, IContained, IHasLines
+    public class Description : IDescription
     {
         public Description(XElement basic, XElement detailed, List<FileLine> lines)
         {
@@ -28,5 +28,7 @@ namespace Doctran.ParsingElements.FortranObjects
         public List<FileLine> Lines { get; }
 
         public IContainer Parent { get; set; }
+
+        public string ObjectName => "Description";
     }
 }

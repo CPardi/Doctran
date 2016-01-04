@@ -39,6 +39,8 @@ namespace Doctran.Test.ParsingElements.Traversal.TraverserActions
                 this.Name = name;
             }
 
+            public string ObjectName => "Test Class";
+
             public string Name { get; }
         }
     }

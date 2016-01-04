@@ -21,6 +21,8 @@ namespace Doctran.ParsingElements.FortranObjects
             this.Lines = lines;
         }
 
+        public string ObjectName => $"Depth {this.Depth} Information Value";
+
         public int Depth { get; }
 
         public List<FileLine> Lines { get; }

@@ -17,6 +17,8 @@ namespace Doctran.Parsing
             this.AddSubObjects(subObjects);
         }
 
+        public abstract string ObjectName { get; }
+
         public List<IContained> SubObjects { get; } = new List<IContained>();
 
         public void AddSubObject(IContained containedItem) => CollectionUtils.AddSubObject(this, containedItem);

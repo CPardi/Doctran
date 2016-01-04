@@ -167,11 +167,16 @@ namespace Doctran.Reporting
                 return;
             }
 
-            foreach (var warning in warningsList)
+            if (ReportMode == ReportMode.Release)
             {
-                var publisher = new ConsolePublisher();
-                publish(publisher, warning);
-                publisher.Publish(ReportSeverity.Warning);
+                foreach (var warning in warningsList)
+                {
+                    var publisher = new ConsolePublisher();
+                    publish(publisher, warning);
+                    publisher.Publish(ReportSeverity.Warning);
+                }
+
+                Environment.Exit(1);
             }
 
             ThrowExceptions(warningsList);

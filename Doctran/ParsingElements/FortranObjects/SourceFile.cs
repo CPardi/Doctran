@@ -38,6 +38,8 @@ namespace Doctran.ParsingElements.FortranObjects
             this.Name = Path.GetFileNameWithoutExtension(absolutePath);
         }
 
+        public override string ObjectName => "Source File";
+
         public string AbsolutePath { get; }
 
         public DateTime Created => _info.CreationTime;

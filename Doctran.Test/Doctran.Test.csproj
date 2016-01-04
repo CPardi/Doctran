@@ -47,6 +47,9 @@
     <Compile Include="Input\Options\TwiceSpecifiedOptions.cs" />
     <Compile Include="Input\Options\TwiceSpecifiedOptionsList.cs" />
     <Compile Include="ParsingElements\Traversal\TraverserActions\AssignDescriptionsTest.cs" />
+    <Compile Include="ParsingElements\Traversal\TraverserActions\CheckParentTest.cs" />
+    <Compile Include="ParsingElements\Traversal\TraverserActions\CheckUniquenessTest.cs" />
+    <Compile Include="ParsingElements\Traversal\TraverserActions\CheckDescriptionLinkageTest.cs" />
     <Compile Include="ParsingElements\Traversal\TraverserActions\CheckNamesTest.cs" />
     <Compile Include="ProgramTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -57,6 +60,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>

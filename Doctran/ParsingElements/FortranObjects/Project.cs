@@ -28,6 +28,8 @@ namespace Doctran.ParsingElements.FortranObjects
 
         public XName SourcesXmlHead => "Files";
 
+        public override string ObjectName => "Project";
+
         public XElement XEle(XElement xmlPassthrough)
         {
             var xEle = new XElement("Project");

@@ -22,6 +22,8 @@ namespace Doctran.ParsingElements.FortranObjects
             this.Lines = lines;
         }
 
+        public string ObjectName => "Named Description";
+
         public XElement Basic { get; }
 
         public XElement Detailed { get; }

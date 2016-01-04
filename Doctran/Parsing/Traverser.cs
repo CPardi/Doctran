@@ -13,15 +13,16 @@ namespace Doctran.Parsing
     using Helper;
     using ParsingElements;
     using Reporting;
+    using Utilitys;
 
     public class Traverser
     {
-        private readonly Dictionary<Type, Action<object>> _actions;
+        private readonly ILookup<Type, Action<object>> _actions;
 
         public Traverser(string name, params ITraverserAction[] actions)
         {
             this.Name = name;
-            _actions = actions.ToDictionary(a => a.ForType, a => a.Act);
+            _actions = actions.ToLookup(a => a.ForType, a => a.Act);
         }
 
         public IErrorListener<TraverserException> ErrorListener { get; set; } = new StandardErrorListener<TraverserException>();
@@ -37,15 +38,18 @@ namespace Doctran.Parsing
 
         private void DoActions(IFortranObject obj, Type type)
         {
-            Action<object> act;
-            if (!_actions.TryGetValue(type, out act))
+            var actionsForType = _actions[type].ToList();
+            if (!actionsForType.Any())
             {
                 return;
             }
 
             try
             {
-                act(obj);
+                foreach (var act in actionsForType)
+                {
+                    act(obj);
+                }
             }
             catch (TraverserException e)
             {
@@ -55,11 +59,7 @@ namespace Doctran.Parsing
 
         private void Navigate(IFortranObject obj)
         {
-            this.DoActions(obj, obj.GetType());
-            foreach (var inter in obj.GetType().GetInterfaces())
-            {
-                this.DoActions(obj, inter);
-            }
+            obj.GetType().ForTypeAndInterfaces(t => this.DoActions(obj, t));
 
             var asContainer = (obj as IContainer)?.SubObjects;
             if (asContainer == null)

@@ -20,6 +20,8 @@ namespace Doctran.ParsingElements.FortranObjects
             this.Depth = depth;
         }
 
+        public override string ObjectName => $"Depth {this.Depth} Information Group";
+
         public int Depth { get; }
 
         public string Name { get; }

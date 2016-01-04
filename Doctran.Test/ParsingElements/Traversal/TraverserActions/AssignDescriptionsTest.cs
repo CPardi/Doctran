@@ -1,4 +1,4 @@
-﻿// <copyright file="assigndescriptionstest.cs" company="Christopher Pardi">
+﻿// <copyright file="AssignDescriptionsTest.cs" company="Christopher Pardi">
 //     Copyright © 2015 Christopher Pardi
 //     This Source Code Form is subject to the terms of the Mozilla Public
 //     License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -8,6 +8,7 @@
 namespace Doctran.Test.ParsingElements.Traversal.TraverserActions
 {
     using System.Collections.Generic;
+    using System.Linq;
     using System.Xml.Linq;
     using Doctran.Helper;
     using Doctran.ParsingElements;
@@ -41,11 +42,13 @@ namespace Doctran.Test.ParsingElements.Traversal.TraverserActions
             action.Act(description);
 
             Assert.IsTrue(!parent.SubObjects.Contains(description));
-            Assert.IsTrue(child1.SubObjects.Contains(description));
+            var newDesc = child1.SubObjects.OfType<Description>().Single();
+            Assert.IsTrue(newDesc.Basic == basic);
+            Assert.IsTrue(newDesc.Detailed == detailed);
         }
 
         [Test]
-        public void AssignDescriptionToMutliple()
+        public void AssignDescriptionToMultiple()
         {
             var action = TraverserActions.AssignDescriptions as ITraverserAction<NamedDescription>;
 
@@ -66,8 +69,14 @@ namespace Doctran.Test.ParsingElements.Traversal.TraverserActions
             action.Act(description);
 
             Assert.IsTrue(!parent.SubObjects.Contains(description));
-            Assert.IsTrue(child1.SubObjects.Contains(description));
-            Assert.IsTrue(child1Dash.SubObjects.Contains(description));
+
+            var newDesc = child1.SubObjects.OfType<Description>().Single();
+            Assert.IsTrue(newDesc.Basic == basic);
+            Assert.IsTrue(newDesc.Detailed == detailed);
+
+            newDesc = child1Dash.SubObjects.OfType<Description>().Single();
+            Assert.IsTrue(newDesc.Basic == basic);
+            Assert.IsTrue(newDesc.Detailed == detailed);
         }
 
         private class TestClass : Container,IContained, IHasIdentifier
@@ -77,6 +86,8 @@ namespace Doctran.Test.ParsingElements.Traversal.TraverserActions
             {
                 this.Identifier = identifier;
             }
+
+            public override string ObjectName => "Test Class";
 
             public string Identifier { get; }
 
