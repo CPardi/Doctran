@@ -25,6 +25,7 @@ namespace Doctran.Reporting
             { ReportGenre.ParsingPost, "Parsing post-processing issue." },
             { ReportGenre.Plugin, "Plugin loading issue." },
             { ReportGenre.ProjectFile, "Project file contains an issue." },
+            { ReportGenre.ThemeOutput, "Problem outputting documentation." },
             { ReportGenre.XsltCompilation, "Fatal XSLT stylesheet compilation issue." },
             { ReportGenre.XsltRuntime, "Fatal XSLT stylesheet runtime issue." }
         };

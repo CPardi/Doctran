@@ -7,6 +7,7 @@
 
 namespace Doctran.Helper
 {
+    using System;
     using System.Collections.Generic;
     using System.IO;
     using ParsingElements;
@@ -25,14 +26,17 @@ namespace Doctran.Helper
             {
                 Report.Message("Parsing", path);
 
-                if (!File.Exists(path))
-                {
-                    var e = new FileNotFoundException();
-                    Report.Error(pub => pub.DescriptionReason(ReportGenre.FileRead, $"Source file path does not exist at '{path}'."), e);
-                }
-
                 // Parse source files.
-                var language = ParserManager.GetParserByExtension(Path.GetExtension(path));
+                ILanguageParser language;
+                try
+                {
+                    language = ParserManager.GetParserByExtension(Path.GetExtension(path));
+                }
+                catch (NotSupportedException e)
+                {
+                    Report.Error(p => p.DescriptionReasonLocation(ReportGenre.FileRead, e.Message, path), e);
+                    return null;
+                }
 
                 var lines = OtherUtils.ReadFile(path);
                 var parsedFile = language.Parse(path, lines);

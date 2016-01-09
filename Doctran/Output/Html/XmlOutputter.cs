@@ -27,10 +27,10 @@ namespace Doctran.Output.Html
 
         public XDocument XDocument { get; set; }
 
-        public void SaveToDisk(string relativePathAndName)
+        public void SaveToDisk(string path)
         {
-            OtherUtils.CreateDirectory(Path.GetDirectoryName(Path.GetFullPath(relativePathAndName)));
-            this.XDocument.Save(Path.GetFullPath(relativePathAndName));
+            OtherUtils.CreateDirectory(Path.GetDirectoryName(Path.GetFullPath(path)));
+            this.XDocument.Save(Path.GetFullPath(path));
         }
     }
 }

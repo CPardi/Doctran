@@ -1,6 +1,9 @@
 #Changelog
 
-##Version 1.2.3 (Latest)
+##Version 1.2.4 (Latest)
+ * The option --save_xml=PATH has been changed to --save_xmls. The appearance of this option now instructs Doctran to save the XMLs generated to a directory call xml within the output directory.
+
+##Version 1.2.3
  * Improved error messages.
  * Fixed bug causing block description heading sections to not be collapsible.
  * Fixed broken links in procedure argument documentation.

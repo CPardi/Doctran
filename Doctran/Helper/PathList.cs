@@ -36,12 +36,20 @@ namespace Doctran.Helper
         ///     Adds a path to the list. Wildcards are expanded and resulting paths
         ///     are added.
         /// </summary>
-        /// <param name="pathList">A path that can contain wildcards.</param>
-        public override void Add(string pathList)
+        /// <param name="path">A path that can contain wildcards.</param>
+        public override void Add(string path)
         {
-            foreach (var p in this.ExpandPath(pathList))
+            foreach (var p in this.ExpandPath(path))
             {
                 this.InternalList.Add(p);
+            }
+        }
+
+        public void AddRange(IEnumerable<string> paths)
+        {
+            foreach (var path in paths)
+            {
+                this.Add(path);
             }
         }
 
@@ -105,12 +113,6 @@ namespace Doctran.Helper
         /// </summary>
         /// <param name="pathList">A path containing wildcards.</param>
         /// <returns>The expanded paths.</returns>
-        /// <exception cref="PathListException">
-        ///     Thrown when the following occurs:
-        ///     * The file pointed to by a single path is not found.
-        ///     * When the directory of a wildcard path is not found.
-        ///     * A expanded path contains invalid characters.
-        /// </exception>
         private IEnumerable<string> ExpandPath(string pathList)
         {
             string path, searchPattern;

@@ -9,6 +9,7 @@ namespace Doctran.Plugins
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
 
     public static class ParserManager
     {
@@ -24,7 +25,7 @@ namespace Doctran.Plugins
                 return languageParser;
             }
 
-            throw new ApplicationException($"A parser is not defined for the file extension '{extension}'.");
+            throw new NotSupportedException($"A parser is not defined for the file extension '{extension}'.");
         }
 
         public static ILanguageParser GetParserByIdentifier(string identifier)
@@ -35,7 +36,7 @@ namespace Doctran.Plugins
                 return languageParser;
             }
 
-            throw new ApplicationException($"A parser is not defined for the language identifier '{identifier}'.");
+            throw new ArgumentException($"A parser is not defined for the language identifier '{identifier}'.");
         }
 
         public static void RegisterLanguageParser(string identifier, string extension, ILanguageParser languageParser)

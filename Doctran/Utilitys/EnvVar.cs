@@ -24,5 +24,7 @@ namespace Doctran.Utilitys
         public static string ThemeDirectory(string themeName) => Path.Combine(ExecPath, @"themes", themeName);
 
         public static string XsltFullPathAndName(string themeName) => Path.Combine(ThemeDirectory(themeName), "main");
+
+        public static string XmlOutputDirectory(string outputDirectory, string xmlName) => Path.Combine(outputDirectory, "xml", xmlName);
     }
 }

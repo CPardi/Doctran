@@ -102,11 +102,17 @@
     <Reference Include="System" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Xml" />
+    <Reference Include="Z.ExtensionMethods.WithNamespace, Version=2.0.10.0, Culture=neutral, PublicKeyToken=59b66d028979105b, processorArchitecture=MSIL">
+      <HintPath>..\packages\Z.ExtensionMethods.WithNamespace.2.0.10\lib\net40\Z.ExtensionMethods.WithNamespace.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Helper\AbstractList.cs" />
     <Compile Include="Helper\ErrorListener.cs" />
     <Compile Include="Helper\IErrorListener.cs" />
+    <Compile Include="Helper\Options.Backing.cs" />
+    <Compile Include="Helper\Options.Checking.cs" />
     <Compile Include="Helper\ReportException.cs" />
     <Compile Include="Helper\ListenerAndAggregater.cs" />
     <Compile Include="Helper\StandardErrorListener.cs" />

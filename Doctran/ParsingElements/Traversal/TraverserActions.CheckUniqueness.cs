@@ -40,17 +40,15 @@ namespace Doctran.ParsingElements.Traversal
                     obj.Parent.RemoveSubObjects(ts);
 
                     // Create text specifying error lines in the exception message. For example 10 to 20 and 30 to 31.
-                    var textForIgnored = StringUtils.DelimiteredConcat(
-                        ts
-                            .OrderBy(o => (o as IHasLines ?? o.Parent as IHasLines)?.Lines.First().Number)
-                            .Select(o =>
-                            {
-                                var first = (o as IHasLines ?? o.Parent as IHasLines)?.Lines.First().Number;
-                                var last = (o as IHasLines ?? o.Parent as IHasLines)?.Lines.Last().Number;
-                                return first != last ? $"{first} to {last}" : $"{first}";
-                            }),
-                        ", ",
-                        " and ");
+                    var textForIgnored = ts
+                        .OrderBy(o => (o as IHasLines ?? o.Parent as IHasLines)?.Lines.First().Number)
+                        .Select(o =>
+                        {
+                            var first = (o as IHasLines ?? o.Parent as IHasLines)?.Lines.First().Number;
+                            var last = (o as IHasLines ?? o.Parent as IHasLines)?.Lines.Last().Number;
+                            return first != last ? $"{first} to {last}" : $"{first}";
+                        })
+                        .DelimiteredConcat(", ", " and ");
 
                     // Create the exception message and throw an exception.
                     var message = $"{obj.ObjectName.ToUpperFirstLowerRest()} must be unique."

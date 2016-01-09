@@ -12,6 +12,12 @@ namespace Doctran.Input.Options
     using System.Collections.Generic;
     using ParsingElements;
 
+    public enum ListMode
+    {
+        AddTo,
+        SetValue,
+    }
+
     [AttributeUsage(AttributeTargets.Property)]
     public abstract class OptionListBaseAttribute : Attribute, IOptionListAttribute
     {
@@ -44,6 +50,8 @@ namespace Doctran.Input.Options
         ///     Gets or sets a value indicating whether will be initialized by the <see cref="OptionsReader{TOptions}"/>.
         /// </summary>
         public bool InitializeAsDefault { get; set; } = false;
+
+        public ListMode ListMode { get; set; } = ListMode.AddTo;
 
         public abstract object MetaDataToProperty(IInformation metaData, Type propertyType);
     }

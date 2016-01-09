@@ -127,7 +127,14 @@ namespace Doctran.Input.Options
                             throw new InvalidPropertyTypeException("DefaultOptionAttribute", typeof(IEnumerable<>), prop.PropertyType);
                         }
 
-                        this.AssignList(option.MetaDataToProperty, options, metaDataOfName, prop, optionList.InitializationType);
+                        if (optionList.ListMode == ListMode.SetValue)
+                        {
+                            this.SetValueList(option.MetaDataToProperty, options, metaDataOfName, prop, optionList.InitializationType);
+                        }
+                        else if (optionList.ListMode == ListMode.AddTo)
+                        {
+                            this.AddToList(option.MetaDataToProperty, options, metaDataOfName, prop, optionList.InitializationType);
+                        }
                     }
                     else
                     {
@@ -139,7 +146,7 @@ namespace Doctran.Input.Options
             // If a default is specified, then assign any remaining values to it.
             if (defaultInfo != null && _metaDatas.Any())
             {
-                this.AssignList(defaultInfo.Item2.MetaDataToProperty, options, _metaDatas, defaultInfo.Item1, defaultInfo.Item2.InitializationType);
+                this.AddToList(defaultInfo.Item2.MetaDataToProperty, options, _metaDatas, defaultInfo.Item1, defaultInfo.Item2.InitializationType);
             }
         }
 
@@ -194,7 +201,7 @@ namespace Doctran.Input.Options
         /// <param name="propertyInfo">The <see cref="PropertyInfo" /> of the property to be assigned.</param>
         /// <param name="initializationType">The type to initialize the property to.</param>
         /// <exception cref="ParserException">The exception is throw when there has been an exception adding an object to the list.</exception>
-        private void AssignList(Func<IInformation, Type, object> convert, TOptions options, IEnumerable<IInformation> valuesOfName, PropertyInfo propertyInfo, Type initializationType)
+        private void AddToList(Func<IInformation, Type, object> convert, TOptions options, IEnumerable<IInformation> valuesOfName, PropertyInfo propertyInfo, Type initializationType)
         {
             // If the property has not been initialized, then do it.
             if (propertyInfo.GetValue(options, null) == null)
@@ -226,6 +233,37 @@ namespace Doctran.Input.Options
                     this.ErrorListener.Error(new OptionReaderException(v.Lines.First().Number, v.Lines.Last().Number, e.Message));
                 }
             }
+        }
+
+        private void SetValueList(Func<IInformation, Type, object> convert, TOptions options, IEnumerable<IInformation> valuesOfName, PropertyInfo propertyInfo, Type initializationType)
+        {
+            // Create an instance of the list specified.
+            var list = (IList)Activator.CreateInstance(initializationType);
+
+            // The type parameter to convert string values to.
+            var initTo = initializationType.GetInterface(typeof(IEnumerable<>).Name).GetGenericArguments()[0];
+
+            // Add the text options to it.
+            foreach (var v in valuesOfName)
+            {
+                var c = this.CheckAndConvertValue(convert, v, initTo);
+                if (c == null)
+                {
+                    continue;
+                }
+
+                try
+                {
+                    list.Add(c);
+                }
+                catch (Exception e)
+                {
+                    this.ErrorListener.Error(new OptionReaderException(v.Lines.First().Number, v.Lines.Last().Number, e.Message));
+                }
+            }
+
+            // Set the value of the list property
+            propertyInfo.SetValue(options, list, null);
         }
 
         /// <summary>

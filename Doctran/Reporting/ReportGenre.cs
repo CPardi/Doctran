@@ -25,8 +25,10 @@ namespace Doctran.Reporting
 
         ProjectFile,
 
+        ThemeOutput,
+
         XsltCompilation,
 
-        XsltRuntime
+        XsltRuntime,
     }
 }

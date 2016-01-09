@@ -16,6 +16,8 @@ namespace Doctran.Input.Options
 
         bool InitializeAsDefault { get; set; }
 
+        ListMode ListMode { get; set; }
+
         object MetaDataToProperty(IInformation metaData, Type propertyType);
     }
 }

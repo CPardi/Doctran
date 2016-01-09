@@ -11,6 +11,7 @@ namespace Doctran
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using System.Xml;
     using System.Xml.Linq;
     using CommandLine;
     using Helper;
@@ -32,7 +33,7 @@ namespace Doctran
             AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionTrapper;
 #endif
 
-            Report.SetDebugProfile();
+            Report.SetReleaseProfile();
 
             var options = new Options();
             GetCommandLineOptions(args, options);
@@ -42,7 +43,12 @@ namespace Doctran
             var project = GetProject(options.SourceFilePaths);
 
             OutputTheme(options);
-            var xmlOutputter = GetXmlOutputter(project, new XElement("Information", options.XmlInformation), options.OutputDirectory, options.SaveXmlPath);
+            var xmlOutputter = GetXmlOutputter(project, new XElement("Information", options.XmlInformation));
+            if (options.SaveXmls)
+            {
+                xmlOutputter.SaveToDisk(EnvVar.XmlOutputDirectory(options.OutputDirectory, "project.xml"));
+            }
+
             OutputHtml(project, xmlOutputter, options);
 
             Report.NewStatus($@"Documentation can be found at '{Path.GetFullPath(options.OutputDirectory)}'");
@@ -54,14 +60,9 @@ namespace Doctran
         {
             Parser.Default.ParseArgumentsStrict(args, options);
 
-            ShowLicensing = options.ShowLicensing;
+            Program.ShowLicensing = options.ShowLicensing;
 
             PluginManager.Initialize(); // Must come after show licensing.
-
-            if (options.ShowHelp)
-            {
-                Report.MessageAndExit(options.GetUsage());
-            }
 
             if (options.ShowPluginInformation)
             {
@@ -82,7 +83,8 @@ namespace Doctran
 
             // Report any errors to the user.
             Action<ConsolePublisher, OptionReaderException> action
-                = (pub, w) => pub.DescriptionReasonLocation(ReportGenre.ProjectFile, w.Message, StringUtils.LocationString(w.StartLine, w.EndLine, path));
+                = (p, e) => p.DescriptionReasonLocation(ReportGenre.ProjectFile, e.Message, StringUtils.LocationString(e.StartLine, e.EndLine, Path.GetFullPath(path)));
+
             if (ws.Any())
             {
                 Report.Warnings(action, ws);
@@ -102,46 +104,27 @@ namespace Doctran
             return proj;
         }
 
-        private static XmlOutputter GetXmlOutputter(Project project, XElement xmlInformation, string outputDirectory, string saveXmlPath)
+        private static XmlOutputter GetXmlOutputter(Project project, XElement xmlInformation)
         {
             Report.NewStatus("Generating xml... ");
-
             var xmlOutputter = new XmlOutputter(project.XEle(xmlInformation));
-            if (saveXmlPath != null)
-            {
-                xmlOutputter.SaveToDisk(Path.Combine(outputDirectory, saveXmlPath));
-            }
-
             Report.ContinueStatus("Done");
             return xmlOutputter;
-        }
-
-        private static string ModXmlPath(string saveXmlPath)
-        {
-            var ext = Path.GetExtension(saveXmlPath);
-            return saveXmlPath.Substring(0, saveXmlPath.Length - ext?.Length ?? 0) + "mod" + ext;
         }
 
         private static void OutputHtml(Project project, XmlOutputter xmlOutputter, Options options)
         {
             Report.NewStatus("Generating htmls... ");
 
-            var xElements =
-                from source in project.Sources
-                let highlighter = DocumentationManager.TryGetDefinitionByIdentifier(source.Language)
-                select new XElement(
-                    "File",
-                    new XElement("Identifier", source.Identifier),
-                    highlighter.HighlightLines(source.OriginalLines));
-
-            var reader = new XDocument(new XElement("Source", xElements)).CreateReader();
-
-            new XDocument(new XElement("Source", xElements)).Save(Path.Combine(options.OutputDirectory, "source.xml"));
+            var reader = CreateSourceXml(project, options);
 
             var preProcess = new XsltRunner(Path.Combine(EnvVar.ExecPath, "themes", options.ThemeName, "main_pre.xslt"));
             var preProcessResult = preProcess.Run(xmlOutputter.XDocument, Path.GetFullPath(options.OutputDirectory));
 
-            preProcessResult.Save(Path.Combine(options.OutputDirectory, ModXmlPath(options.SaveXmlPath)));
+            if (options.SaveXmls)
+            {
+                preProcessResult.Save(EnvVar.XmlOutputDirectory(options.OutputDirectory, "documentation_file.xml"));
+            }
 
             var htmlOutputter = new XsltRunner(Path.Combine(EnvVar.ExecPath, "themes", options.ThemeName, "main.xslt"));
 
@@ -152,6 +135,24 @@ namespace Doctran
                 new KeyValuePair<string, object>("source", reader));
 
             Report.ContinueStatus("Done");
+        }
+
+        private static XmlReader CreateSourceXml(Project project, Options options)
+        {
+            var xElements =
+                from source in project.Sources
+                let highlighter = DocumentationManager.TryGetDefinitionByIdentifier(source.Language)
+                select new XElement(
+                    "File",
+                    new XElement("Identifier", source.Identifier),
+                    highlighter.HighlightLines(source.OriginalLines));
+            var reader = new XDocument(new XElement("Source", xElements)).CreateReader();
+            if (options.SaveXmls)
+            {
+                new XDocument(new XElement("Source", xElements)).Save(EnvVar.XmlOutputDirectory(options.OutputDirectory, "source.xml"));
+            }
+
+            return reader;
         }
 
         private static void OutputTheme(Options options)
