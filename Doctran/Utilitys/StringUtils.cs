@@ -125,6 +125,20 @@ namespace Doctran.Utilitys
                     : $"Within lines {start} to {end} of '{path}'.";
         }
 
+        public static string DelimiteredConcat(this IEnumerable<string> @this, string delimiter)
+        {
+            var stringList = @this.ToList();
+            if (stringList.Count == 1)
+            {
+                return stringList.First();
+            }
+
+            return string.Concat(
+                stringList
+                    .Select(
+                        (str, position) => str + (position + 2 < stringList.Count ? delimiter : string.Empty)));
+        }
+
         public static string DelimiteredConcat(this IEnumerable<string> @this, string delimiter, string lastDelimiter)
         {
             var stringList = @this.ToList();

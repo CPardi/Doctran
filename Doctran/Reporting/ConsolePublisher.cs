@@ -30,6 +30,13 @@ namespace Doctran.Reporting
             { ReportGenre.XsltRuntime, "Fatal XSLT stylesheet runtime issue." }
         };
 
+        private readonly Dictionary<ReportSeverity, string> _reportStreams = new Dictionary<ReportSeverity, string>
+        {
+            { ReportSeverity.Error, "Error" },
+            { ReportSeverity.Warning, "Warning" },
+            { ReportSeverity.Message, "Message" }
+        };
+
         private readonly Dictionary<ReportSeverity, string> _reportTitles = new Dictionary<ReportSeverity, string>
         {
             { ReportSeverity.Error, "Error" },
@@ -77,7 +84,14 @@ namespace Doctran.Reporting
                 ttb.Append("Location", this.Location);
             }
 
-            Console.Write($"\n{ttb}");
+            if (reportSeverity == ReportSeverity.Error)
+            {
+                Console.Error.WriteLine($"\n{ttb}");
+            }
+            else
+            {
+                Console.Write($"\n{ttb}");
+            }
         }
 
         private void AddLocation(string location)

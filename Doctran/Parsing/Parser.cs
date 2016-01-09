@@ -13,6 +13,7 @@ namespace Doctran.Parsing
     using ParsingElements;
     using ParsingElements.FortranBlocks;
     using ParsingElements.FortranObjects;
+    using Utilitys;
 
     public class Parser
     {
@@ -168,6 +169,13 @@ namespace Doctran.Parsing
                 List<IContained> blockObjects,
                 IEnumerable<IContained> blockSubObjects)
             {
+                if (_lines.Count <= currentIndex)
+                {
+                    var lineNum = _lines.Last().Number;
+                    var stackString = blockNameStack.Select(block => block.Name).DelimiteredConcat("->");
+                    throw new ParserException(lineNum, lineNum, $"Could not find block closure before end of file. Block stack before error {stackString}");
+                }
+
                 var blockSubObjectsList = blockSubObjects as List<IContained> ?? blockSubObjects.ToList();
 
                 // If block has not ended yet then return.

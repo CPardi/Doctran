@@ -33,7 +33,7 @@ namespace Doctran
             AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionTrapper;
 #endif
 
-            Report.SetReleaseProfile();
+            Report.SetDebugProfile();
 
             var options = new Options();
             GetCommandLineOptions(args, options);
