@@ -14,6 +14,6 @@ namespace Doctran.Input.Options
     {
         string Name { get; }
 
-        object MetaDataToProperty(IInformation metaData, Type propertyType);
+        object InformationToProperty(IInformation information, Type propertyType);
     }
 }

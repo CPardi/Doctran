@@ -24,12 +24,12 @@ namespace Doctran.Input.ProjectFileOptions
         {
         }
 
-        public override object MetaDataToProperty(IInformation metaData, Type propertyType)
+        public override object InformationToProperty(IInformation information, Type propertyType)
         {
-            var value = metaData as IInformationValue;
+            var value = information as IInformationValue;
             if (value == null)
             {
-                throw new OptionReaderException(metaData.Lines.First().Number, metaData.Lines.Last().Number, $"'{metaData.Name}' must be a value type.");
+                throw new OptionReaderException(information.Lines.First().Number, information.Lines.Last().Number, $"'{information.Name}' must be a value type.");
             }
 
             try
@@ -37,12 +37,12 @@ namespace Doctran.Input.ProjectFileOptions
                 var path = value.Value;
                 var xElement = new XElement("UserPage");
                 xElement.Add(new XElement("Path", PathUtils.ChangeExtension(path, ".html")));
-                xElement.Add(XmlUtils.WrapAndParse("Content", new Markdown().Transform(File.ReadAllText(path))));
+                xElement.Add(XmlUtils.WrapAndParse("Content", new Markdown().Transform(OtherUtils.ReadAllText(path))));
                 return xElement;
             }
             catch (Exception e)
             {
-                throw new OptionReaderException(metaData.Lines.First().Number, metaData.Lines.Last().Number, e.Message);
+                throw new OptionReaderException(information.Lines.First().Number, information.Lines.Last().Number, e.Message);
             }
         }
     }

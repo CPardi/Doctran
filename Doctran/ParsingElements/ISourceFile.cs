@@ -15,6 +15,6 @@ namespace Doctran.ParsingElements
     {
         string AbsolutePath { get; }
 
-        List<FileLine> OriginalLines { get; }
+        string OriginalLines { get; }
     }
 }

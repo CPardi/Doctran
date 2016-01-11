@@ -53,6 +53,6 @@ namespace Doctran.Input.Options
 
         public ListMode ListMode { get; set; } = ListMode.AddTo;
 
-        public abstract object MetaDataToProperty(IInformation metaData, Type propertyType);
+        public abstract object InformationToProperty(IInformation information, Type propertyType);
     }
 }

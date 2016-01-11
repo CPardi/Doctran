@@ -16,22 +16,21 @@ namespace Doctran.Input.Options
     using Parsing;
     using ParsingElements;
     using ParsingElements.FortranBlocks;
+    using Utilitys;
 
     /// <summary>
     ///     Parses text and populates an options class with the parsed values. Each property of the options class corresponds
-    ///     to a single meta-data metaData or meta data group, identified by propertyType typeName.
+    ///     to a single <see cref="IInformation"/>, identified by propertyType typeName.
     /// </summary>
     /// <typeparam name="TOptions">The generic class representing the options to be passed to the parser.</typeparam>
     public class OptionsReader<TOptions>
     {
-        private readonly int _maxDepth;
-
         private readonly Parser _parser;
 
         /// <summary>
-        ///     Hold the intermediary instances of <see cref="IMetaData" /> that are generated while parsing.
+        ///     Holds the intermediary instances of <see cref="IInformation" /> that are generated while parsing.
         /// </summary>
-        private List<IInformation> _metaDatas;
+        private List<IInformation> _informationList;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="OptionsReader{TOptions}" /> class.
@@ -40,10 +39,9 @@ namespace Doctran.Input.Options
         /// <param name="name">The parser's name to be used within any exceptions.</param>
         public OptionsReader(int maxDepth, string name)
         {
-            _maxDepth = maxDepth;
             this.Name = name;
 
-            _parser = new Parser("DoctranOptions", InformationBlock.MultiDepthEnumeration(1, _maxDepth))
+            _parser = new Parser("DoctranOptions", InformationBlock.MultiDepthEnumeration(1, maxDepth))
             {
                 ErrorListener = new ErrorListener<ParserException>(
                     warn => this.ErrorListener.Warning(new OptionReaderException(warn.StartLine, warn.EndLine, warn.Message)),
@@ -66,15 +64,15 @@ namespace Doctran.Input.Options
         /// </summary>
         /// <param name="options">The instance of <see cref="TOptions" /> to be populated.</param>
         /// <param name="sourceName">The name of the source. If from a file use file path.</param>
-        /// <param name="lines">The lines of text to be parsed.</param>
+        /// <param name="source">The lines of text to be parsed.</param>
         /// <exception cref="ParserException">Thrown when the text being parsed contains an exception.</exception>
         /// <exception cref="InvalidPropertyTypeException">
         ///     Throw when the developer has applied an attribute to a property of an
         ///     incorrect type.
         /// </exception>
-        public void Parse(TOptions options, string sourceName, List<FileLine> lines)
+        public void Parse(TOptions options, string sourceName, string source)
         {
-            _metaDatas = _parser.Parse(sourceName, this.PreProcess(lines)).SubObjects.Cast<IInformation>().ToList();
+            _informationList = _parser.Parse(sourceName, source, this.Preprocessor).SubObjects.Cast<IInformation>().ToList();
 
             // If we find a property with the default option attribute then it will be stored here.
             Tuple<PropertyInfo, IDefaultOptionAttribute> defaultInfo = null;
@@ -104,8 +102,8 @@ namespace Doctran.Input.Options
                     var optionList = option as IOptionListAttribute;
 
                     // If there is no option defined or the option doesn't appear within the text, then skip.
-                    List<IInformation> metaDataOfName;
-                    if (!(metaDataOfName = this.GetMetaDataOfName(option.Name)).Any())
+                    List<IInformation> informationOfName;
+                    if (!(informationOfName = this.GetInformationOfName(option.Name)).Any())
                     {
                         if (optionList != null && optionList.InitializeAsDefault)
                         {
@@ -129,24 +127,24 @@ namespace Doctran.Input.Options
 
                         if (optionList.ListMode == ListMode.SetValue)
                         {
-                            this.SetValueList(option.MetaDataToProperty, options, metaDataOfName, prop, optionList.InitializationType);
+                            this.SetValueList(option.InformationToProperty, options, informationOfName, prop, optionList.InitializationType);
                         }
                         else if (optionList.ListMode == ListMode.AddTo)
                         {
-                            this.AddToList(option.MetaDataToProperty, options, metaDataOfName, prop, optionList.InitializationType);
+                            this.AddToList(option.InformationToProperty, options, informationOfName, prop, optionList.InitializationType);
                         }
                     }
                     else
                     {
-                        this.AssignScalar(option.MetaDataToProperty, options, metaDataOfName, prop, prop.PropertyType);
+                        this.AssignScalar(option.InformationToProperty, options, informationOfName, prop, prop.PropertyType);
                     }
                 }
             }
 
             // If a default is specified, then assign any remaining values to it.
-            if (defaultInfo != null && _metaDatas.Any())
+            if (defaultInfo != null && _informationList.Any())
             {
-                this.AddToList(defaultInfo.Item2.MetaDataToProperty, options, _metaDatas, defaultInfo.Item1, defaultInfo.Item2.InitializationType);
+                this.AddToList(defaultInfo.Item2.InformationToProperty, options, _informationList, defaultInfo.Item1, defaultInfo.Item2.InitializationType);
             }
         }
 
@@ -305,18 +303,18 @@ namespace Doctran.Input.Options
         ///     Converts the data to the type <paramref name="type" />.
         /// </summary>
         /// <param name="convert">The conversion procedure.</param>
-        /// <param name="metaData">The meta-data to convert</param>
+        /// <param name="information">The information to convert.</param>
         /// <param name="type">The type to convert the meta-data to.</param>
         /// <returns>The converted meta-data.</returns>
         /// <exception cref="ParserException">
-        ///     This is thrown when there has been an exception converting <paramref name="metaData" />
+        ///     This is thrown when there has been an exception converting <paramref name="information" />
         ///     to type <paramref name="type" />.
         /// </exception>
-        private object CheckAndConvertValue(Func<IInformation, Type, object> convert, IInformation metaData, Type type)
+        private object CheckAndConvertValue(Func<IInformation, Type, object> convert, IInformation information, Type type)
         {
             try
             {
-                return convert(metaData, type);
+                return convert(information, type);
             }
             catch (OptionReaderException e)
             {
@@ -345,25 +343,26 @@ namespace Doctran.Input.Options
         }
 
         /// <summary>
-        ///     Returns the meta-data that textes <see ref="typeName" /> and removes it from <see cref="_metaDatas" />.
+        ///     Returns the meta-data that textes <see ref="typeName" /> and removes it from <see cref="_informationList" />.
         /// </summary>
         /// <param name="typeName">The propertyType typeName of the meta-data to be return.</param>
         /// <returns>A list of meta-data values or groups of propertyType typeName <see ref="typeName" /></returns>
-        private List<IInformation> GetMetaDataOfName(string typeName)
+        private List<IInformation> GetInformationOfName(string typeName)
         {
-            var valuesOfName = _metaDatas
+            var valuesOfName = _informationList
                 .Where(md => md.Name == typeName).ToList();
 
             foreach (var v in valuesOfName)
             {
-                _metaDatas.Remove(v);
+                _informationList.Remove(v);
             }
 
             return valuesOfName;
         }
 
-        private List<FileLine> PreProcess(IEnumerable<FileLine> lines)
+        private IEnumerable<FileLine> Preprocessor(string source)
         {
+            var lines = StringUtils.ConvertToFileLineList(source);
             return (from line in lines
                 select new FileLine(line.Number, line.Text != string.Empty ? "!>" + line.Text : string.Empty)).ToList();
         }

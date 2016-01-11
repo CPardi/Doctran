@@ -17,7 +17,7 @@ namespace Doctran.Test
     {
         private readonly StringWriter _sw = new StringWriter();
 
-        private readonly TextReader _tr = new StringReader("");
+        private readonly TextReader _tr = new StringReader(string.Empty);
 
         private string _currentDir;
 
@@ -36,7 +36,7 @@ namespace Doctran.Test
             Console.SetIn(_tr);
 
             var soureDir = testPath;
-            var args = Directory.GetFiles(soureDir + @"", "*.f90", SearchOption.AllDirectories).ToList();
+            var args = Directory.GetFiles(soureDir + string.Empty, "*.f90", SearchOption.AllDirectories).ToList();
 
             args.Add("-o");
             args.Add($@"{testPath}\Docs");

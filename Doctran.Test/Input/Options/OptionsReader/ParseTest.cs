@@ -1,4 +1,4 @@
-﻿// <copyright file="parsetest.cs" company="Christopher Pardi">
+﻿// <copyright file="ParseTest.cs" company="Christopher Pardi">
 //     Copyright © 2015 Christopher Pardi
 //     This Source Code Form is subject to the terms of the Mozilla Public
 //     License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -12,9 +12,7 @@ namespace Doctran.Test.Input.Options.OptionsReader
     using System.Linq;
     using Doctran.Helper;
     using Doctran.Input.Options;
-    using Helper;
     using NUnit.Framework;
-    using Utilitys;
     using Options = Input.Options.Options;
 
     [TestFixture]
@@ -31,19 +29,19 @@ namespace Doctran.Test.Input.Options.OptionsReader
                 "Default : Default Value 1\n" +
                 "Default : Default Value 2\n" +
                 "Default : Default Value 3";
-            var sourceLines = StringUtils.ConvertToFileLineList(source);
 
             var options = new Options();
             var parser = new OptionsReader<Options>(1, "String option test");
 
             // Act
-            parser.Parse(options, "Unit test", sourceLines);
+            parser.Parse(options, "Unit test", source);
 
             // Assert
-            for (var i = 0; i < options.StringListOption.Count(); i++)
+            for (var i = 0; i < options.StringListOption.Count; i++)
             {
                 Assert.AreEqual($"String Value {i + 1}", options.StringListOption[i]);
             }
+
             for (var i = 0; i < options.DefaultOption.Count; i++)
             {
                 Assert.AreEqual($"Default Value {i + 1}", options.DefaultOption[i]);
@@ -63,13 +61,12 @@ namespace Doctran.Test.Input.Options.OptionsReader
             var source =
                 "IntList : 23\n" +
                 "IntList : 45";
-            var sourceLines = StringUtils.ConvertToFileLineList(source);
 
             var options = new Options();
             var parser = new OptionsReader<Options>(1, "String option test");
 
             // Act
-            parser.Parse(options, "Unit Test", sourceLines);
+            parser.Parse(options, "Unit Test", source);
 
             // Assert
             Assert.AreEqual(23, options.IntListOption[0]);
@@ -85,13 +82,12 @@ namespace Doctran.Test.Input.Options.OptionsReader
                 "AbstractAssign : String Value 1\n" +
                 "AbstractAssign : String Value 2\n" +
                 "NoIList : String Value 2";
-            var sourceLines = StringUtils.ConvertToFileLineList(source);
 
             var options = new InvalidAttributeOptions();
             var parser = new OptionsReader<InvalidAttributeOptions>(1, "Abstract assign option test");
 
             // Act
-            parser.Parse(options, "Unit Test", sourceLines);
+            parser.Parse(options, "Unit Test", source);
         }
 
         [Test]
@@ -103,13 +99,12 @@ namespace Doctran.Test.Input.Options.OptionsReader
                 "Default : Default Value 1\n" +
                 "Default : Default Value 2\n" +
                 "Default : Default Value 3";
-            var sourceLines = StringUtils.ConvertToFileLineList(source);
 
             var options = new InvalidDefaultOptions();
             var parser = new OptionsReader<InvalidDefaultOptions>(1, "String option test");
 
             // Act
-            parser.Parse(options, "Unit Test", sourceLines);
+            parser.Parse(options, "Unit Test", source);
         }
 
         [Test]
@@ -120,17 +115,15 @@ namespace Doctran.Test.Input.Options.OptionsReader
                 "IntList : Not a number\n" +
                 "IntList : Another not a number\n" +
                 "IntList : 12";
-            var sourceLines = StringUtils.ConvertToFileLineList(source);
-          
+
             var options = new Options();
             var parser = new OptionsReader<Options>(1, "String option test");
 
             var eCount = 0;
             parser.ErrorListener = new ErrorListener<OptionReaderException>(
                 e => { eCount++; },
-                e => { eCount++; }
-                );
-            parser.Parse(options, "Unit Test", sourceLines);
+                e => { eCount++; });
+            parser.Parse(options, "Unit Test", source);
 
             Assert.IsTrue(eCount > 0);
         }
@@ -143,11 +136,10 @@ namespace Doctran.Test.Input.Options.OptionsReader
             var source =
                 "IntOption : 23\n" +
                 "StringOption : 23";
-            var sourceLines = StringUtils.ConvertToFileLineList(source);
 
             var options = new InvalidMultipleAttributesOptionsList();
             var parser = new OptionsReader<InvalidMultipleAttributesOptionsList>(1, "InvalidMutlipleAttributesOptionsList");
-            parser.Parse(options, "Unit Test", sourceLines);
+            parser.Parse(options, "Unit Test", source);
         }
 
         [Test]
@@ -156,7 +148,6 @@ namespace Doctran.Test.Input.Options.OptionsReader
             // Arrange
             var source =
                 "ScalarInt : Not a number";
-            var sourceLines = StringUtils.ConvertToFileLineList(source);
 
             var options = new Options();
             var parser = new OptionsReader<Options>(1, "String option test");
@@ -164,9 +155,8 @@ namespace Doctran.Test.Input.Options.OptionsReader
             var eCount = 0;
             parser.ErrorListener = new ErrorListener<OptionReaderException>(
                 e => { eCount++; },
-                e => { eCount++; }
-                );
-            parser.Parse(options, "Unit Test", sourceLines);
+                e => { eCount++; });
+            parser.Parse(options, "Unit Test", source);
 
             Assert.IsTrue(eCount > 0);
         }
@@ -180,13 +170,12 @@ namespace Doctran.Test.Input.Options.OptionsReader
                 "MultiOptionList1 : 45\n" +
                 "MultiOptionList2 : 56\n" +
                 "MultiOptionList2 : 67";
-            var sourceLines = StringUtils.ConvertToFileLineList(source);
 
             var options = new MultiListOptions();
             var parser = new OptionsReader<MultiListOptions>(1, "String option test");
 
             // Act
-            parser.Parse(options, "Unit Test", sourceLines);
+            parser.Parse(options, "Unit Test", source);
 
             // Assert
             Assert.AreEqual(23, options.MultiOptionList[0]);
@@ -206,13 +195,12 @@ namespace Doctran.Test.Input.Options.OptionsReader
                 "MultiOptionList1 : 45\n" +
                 "MultiOptionList2 : 56\n" +
                 "MultiOptionList2 : 67";
-            var sourceLines = StringUtils.ConvertToFileLineList(source);
 
             var options = new MultiListOptionsWithDefault();
             var parser = new OptionsReader<MultiListOptionsWithDefault>(1, "String option test");
 
             // Act
-            parser.Parse(options, "Unit Test", sourceLines);
+            parser.Parse(options, "Unit Test", source);
 
             // Assert
             Assert.AreEqual(23, options.MultiOptionListWithDefault[0]);
@@ -230,19 +218,16 @@ namespace Doctran.Test.Input.Options.OptionsReader
             var source =
                 "ScalarInt : 12\n" +
                 "ScalarInt : 23";
-            var sourceLines = StringUtils.ConvertToFileLineList(source);
 
             var options = new Options();
             var parser = new OptionsReader<Options>(1, "MultipleScalarValues test");
 
-            
-            //Act
+            // Act
             var eCount = 0;
             parser.ErrorListener = new ErrorListener<OptionReaderException>(
                 e => { eCount++; },
-                e => { eCount++; }
-                );
-            parser.Parse(options, "Unit Test", sourceLines);
+                e => { eCount++; });
+            parser.Parse(options, "Unit Test", source);
 
             Assert.IsTrue(eCount > 0);
         }
@@ -254,13 +239,12 @@ namespace Doctran.Test.Input.Options.OptionsReader
             // Arrange
             var source =
                 "NoIConvertable : String Value 2";
-            var sourceLines = StringUtils.ConvertToFileLineList(source);
 
             var options = new NoIConvertableOptions();
             var parser = new OptionsReader<NoIConvertableOptions>(1, "Abstract assign option test");
 
             // Act
-            parser.Parse(options, "Unit Test", sourceLines);
+            parser.Parse(options, "Unit Test", source);
         }
 
         [Test]
@@ -270,13 +254,12 @@ namespace Doctran.Test.Input.Options.OptionsReader
             // Arrange
             var source =
                 "NoIList : String Value 2";
-            var sourceLines = StringUtils.ConvertToFileLineList(source);
 
             var options = new NoIListOptions();
             var parser = new OptionsReader<NoIListOptions>(1, "Abstract assign option test");
 
             // Act
-            parser.Parse(options, "Unit Test", sourceLines);
+            parser.Parse(options, "Unit Test", source);
         }
 
         [Test]
@@ -286,14 +269,13 @@ namespace Doctran.Test.Input.Options.OptionsReader
             var source =
                 "IntList : 23\n" +
                 "IntList : 45";
-            var sourceLines = StringUtils.ConvertToFileLineList(source);
 
             var options = new Options();
             var parser = new OptionsReader<Options>(1, "String option test");
 
             // Act
             options.IntListOption = new List<int> { 21 };
-            parser.Parse(options, "Unit Test", sourceLines);
+            parser.Parse(options, "Unit Test", source);
 
             // Assert
             Assert.AreEqual(21, options.IntListOption[0]);
@@ -307,13 +289,12 @@ namespace Doctran.Test.Input.Options.OptionsReader
             // Arrange
             var source =
                 "ScalarInt : 23";
-            var sourceLines = StringUtils.ConvertToFileLineList(source);
 
             var options = new Options();
             var parser = new OptionsReader<Options>(1, "String option test");
 
             // Act
-            parser.Parse(options, "Unit Test", sourceLines);
+            parser.Parse(options, "Unit Test", source);
 
             // Assert
             Assert.AreEqual(23, options.IntOption);
@@ -325,13 +306,12 @@ namespace Doctran.Test.Input.Options.OptionsReader
             // Arrange
             var source =
                 "ScalarString : String Value";
-            var sourceLines = StringUtils.ConvertToFileLineList(source);
 
             var options = new Options();
             var parser = new OptionsReader<Options>(1, "String option test");
 
             // Act
-            parser.Parse(options, "Unit Test", sourceLines);
+            parser.Parse(options, "Unit Test", source);
 
             // Assert
             Assert.AreEqual("String Value", options.StringOption);
@@ -344,13 +324,12 @@ namespace Doctran.Test.Input.Options.OptionsReader
             var source =
                 "StringEnumerable : String Value 1\n" +
                 "StringEnumerable : String Value 2";
-            var sourceLines = StringUtils.ConvertToFileLineList(source);
 
             var options = new Options();
             var parser = new OptionsReader<Options>(1, "String option test");
 
             // Act
-            parser.Parse(options, "Unit Test", sourceLines);
+            parser.Parse(options, "Unit Test", source);
 
             // Assert
             Assert.AreEqual($"String Value 1", options.StringEnumerableOption.First());
@@ -364,13 +343,12 @@ namespace Doctran.Test.Input.Options.OptionsReader
             var source =
                 "StringList : String Value 1\n" +
                 "StringList : String Value 2";
-            var sourceLines = StringUtils.ConvertToFileLineList(source);
 
             var options = new Options();
             var parser = new OptionsReader<Options>(1, "String option test");
 
             // Act
-            parser.Parse(options, "Unit Test", sourceLines);
+            parser.Parse(options, "Unit Test", source);
 
             // Assert
             for (var i = 0; i < options.StringListOption.Count; i++)
@@ -386,11 +364,10 @@ namespace Doctran.Test.Input.Options.OptionsReader
             // Arrange
             var source =
                 "Option : 23";
-            var sourceLines = StringUtils.ConvertToFileLineList(source);
 
             var options = new TwiceSpecifiedOptions();
             var parser = new OptionsReader<TwiceSpecifiedOptions>(1, "TwiceSpecifiedOptions");
-            parser.Parse(options, "Unit Test", sourceLines);
+            parser.Parse(options, "Unit Test", source);
         }
 
         [Test]
@@ -400,11 +377,10 @@ namespace Doctran.Test.Input.Options.OptionsReader
             // Arrange
             var source =
                 "OptionList : 23";
-            var sourceLines = StringUtils.ConvertToFileLineList(source);
 
             var options = new TwiceSpecifiedOptionsList();
             var parser = new OptionsReader<TwiceSpecifiedOptionsList>(1, "TwiceSpecifiedOptionsList");
-            parser.Parse(options, "Unit Test", sourceLines);
+            parser.Parse(options, "Unit Test", source);
         }
     }
 }

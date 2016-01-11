@@ -175,8 +175,6 @@ namespace Doctran.Reporting
                     publish(publisher, warning);
                     publisher.Publish(ReportSeverity.Warning);
                 }
-
-                Environment.Exit(1);
             }
 
             ThrowExceptions(warningsList);

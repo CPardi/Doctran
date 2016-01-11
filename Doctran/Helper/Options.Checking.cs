@@ -31,6 +31,18 @@ namespace Doctran.Helper
             Report.Error(p => p.DescriptionReason(ReportGenre.Argument, $"Value for flag --{attr.LongName}{shortNameStr} contains an error. {e.Message}"), e);
         }
 
+        private string CheckCommandPathExists(string propertyName, string path)
+        {
+            if (File.Exists(path))
+            {
+                return path;
+            }
+
+            var fullPath = Path.GetFullPath(path);
+            ReportError(new FileNotFoundException($"Could not find file at '{fullPath}'", fullPath), propertyName);
+            return path;
+        }
+
         private string CheckCommandLinePath(string propertyName, string path)
         {
             try

@@ -19,12 +19,12 @@ namespace Doctran.ParsingElements.FortranObjects
     using Parsing;
     using Utilitys;
 
-    public class SourceFile : LinedInternal, IHasName, IHasLines, IHasValidName, ISourceFile
+    public class SourceFile : LinedInternal, IHasName, IHasValidName, ISourceFile
     {
         private readonly FileInfo _info;
 
         // Reads a file, determines its type and loads the contained procedure and/or modules.
-        public SourceFile(string language, string absolutePath, IEnumerable<IContained> subObjects, List<FileLine> originalLines, List<FileLine> lines)
+        public SourceFile(string language, string absolutePath, IEnumerable<IContained> subObjects, string originalLines, List<FileLine> lines)
             : base(subObjects, lines)
         {
             this.Name = Path.GetFileName(absolutePath);
@@ -56,7 +56,7 @@ namespace Doctran.ParsingElements.FortranObjects
 
         public string Name { get; }
 
-        public List<FileLine> OriginalLines { get; }
+        public string OriginalLines { get; }
 
         public string ValidName => StringUtils.ValidName(this.Name);
 

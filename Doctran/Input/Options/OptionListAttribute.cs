@@ -23,12 +23,12 @@ namespace Doctran.Input.Options
 
         public string Name { get; }
 
-        public override object MetaDataToProperty(IInformation metaData, Type propertyType)
+        public override object InformationToProperty(IInformation information, Type propertyType)
         {
-            var infoV = metaData as IInformationValue;
+            var infoV = information as IInformationValue;
             if (infoV == null)
             {
-                throw new OptionReaderException(metaData.Lines.First().Number, metaData.Lines.Last().Number, $"'{metaData.Name}' can only be a value type and not a group.");
+                throw new OptionReaderException(information.Lines.First().Number, information.Lines.Last().Number, $"'{information.Name}' can only be a value type and not a group.");
             }
 
             try
@@ -37,7 +37,7 @@ namespace Doctran.Input.Options
             }
             catch (FormatException e)
             {
-                throw new OptionReaderException(metaData.Lines.First().Number, metaData.Lines.Last().Number, e.Message);
+                throw new OptionReaderException(information.Lines.First().Number, information.Lines.Last().Number, e.Message);
             }
         }
     }

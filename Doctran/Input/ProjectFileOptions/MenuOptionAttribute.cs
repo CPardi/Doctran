@@ -25,22 +25,22 @@ namespace Doctran.Input.ProjectFileOptions
         {
         }
 
-        public override object MetaDataToProperty(IInformation metaData, Type propertyType)
+        public override object InformationToProperty(IInformation information, Type propertyType)
         {
-            var value = metaData as IInformationValue;
+            var value = information as IInformationValue;
             if (value == null)
             {
-                throw new OptionReaderException(metaData.Lines.First().Number, metaData.Lines.Last().Number, $"'{metaData.Name}' must be a value type.");
+                throw new OptionReaderException(information.Lines.First().Number, information.Lines.Last().Number, $"'{information.Name}' must be a value type.");
             }
 
             try
             {
-                var menuString = Regex.Replace(File.ReadAllText(value.Value), @"(.*?\.)(?:md|markdown)", match => match.Groups[1].Value + "html");
+                var menuString = Regex.Replace(OtherUtils.ReadAllText(value.Value), @"(.*?\.)(?:md|markdown)", match => match.Groups[1].Value + "html");
                 return XmlUtils.WrapAndParse("Menu", new Markdown().Transform(menuString));
             }
             catch (Exception e)
             {
-                throw new OptionReaderException(metaData.Lines.First().Number, metaData.Lines.Last().Number, e.Message);
+                throw new OptionReaderException(information.Lines.First().Number, information.Lines.Last().Number, e.Message);
             }
         }
     }

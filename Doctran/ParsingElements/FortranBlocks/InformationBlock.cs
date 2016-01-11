@@ -78,7 +78,7 @@ namespace Doctran.ParsingElements.FortranBlocks
             // Retrieve the type name
             var typeName = aMatch.Groups[1].Value.Trim();
 
-            var subObjectList = subObjects.Cast<IInformation>().ToList();
+            var subObjectList = subObjects.OfType<IInformation>().ToList();
 
             // Retrieve the value, from the definition line and any subsequent lines.
             var value = aMatch.Groups[2].Value.Trim()

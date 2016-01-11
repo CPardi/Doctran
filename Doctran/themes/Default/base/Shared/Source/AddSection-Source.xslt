@@ -17,7 +17,7 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
 
         <h2>Source</h2>
         <p>
-            <xsl:text>The program source shown below is taken from '</xsl:text>
+            <xsl:text>The source code shown below is taken from '</xsl:text>
             <a href="{$file/href}">
                 <xsl:value-of select="$file/Name"/><xsl:value-of select="$file/Extension"/>
             </a>

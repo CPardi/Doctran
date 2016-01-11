@@ -22,6 +22,22 @@ namespace Doctran.Test.ParsingElements.Traversal.TraverserActions
     public class CheckUniquenessTest
     {
         [Test]
+        public void NotUniqueDescription()
+        {
+            {
+                var action = TraverserActions.CheckUniqueness<IDescription>() as ITraverserAction<IDescription>;
+
+                var detailed = new XElement("Detailed");
+                var description1 = new Description(new XElement("Basic1"), detailed, new List<FileLine> { new FileLine(0, string.Empty) });
+                var description2 = new Description(new XElement("Basic2"), detailed, new List<FileLine> { new FileLine(1, string.Empty) });
+                var child1 = new TestClass("child1", new IContained[] { description1, description2 });
+
+                Assert.Throws(typeof(TraverserException), () => action.Act(description1));
+                Assert.IsTrue(child1.SubObjects.OfType<IDescription>().Count() == 1);
+            }
+        }
+
+        [Test]
         public void UniqueDescription()
         {
             {
@@ -29,26 +45,10 @@ namespace Doctran.Test.ParsingElements.Traversal.TraverserActions
 
                 var basic = new XElement("Basic");
                 var detailed = new XElement("Detailed");
-                var description1 = new Description(basic, detailed, new List<FileLine>() { });
-                var child1 = new TestClass("child1", new [] { description1 });
+                var description1 = new Description(basic, detailed, new List<FileLine>());
+                var child1 = new TestClass("child1", new[] { description1 });
 
                 Assert.DoesNotThrow(() => action.Act(description1));
-            }
-        }
-
-        [Test]
-        public void NotUniqueDescription()
-        {
-            {
-                var action = TraverserActions.CheckUniqueness<IDescription>() as ITraverserAction<IDescription>;
-
-                var detailed = new XElement("Detailed");
-                var description1 = new Description(new XElement("Basic1"), detailed, new List<FileLine>() { new FileLine(0, string.Empty) });
-                var description2 = new Description(new XElement("Basic2"), detailed, new List<FileLine> { new FileLine(1, string.Empty)});
-                var child1 = new TestClass("child1", new IContained[] { description1, description2 });
-
-                Assert.Throws(typeof(TraverserException), () => action.Act(description1));
-                Assert.IsTrue(child1.SubObjects.OfType<IDescription>().Count() == 1);
             }
         }
 
@@ -60,9 +60,9 @@ namespace Doctran.Test.ParsingElements.Traversal.TraverserActions
                 this.Identifier = identifier;
             }
 
-            public override string ObjectName => "Test Class";
-
             public string Identifier { get; }
+
+            public override string ObjectName => "Test Class";
 
             public IContainer Parent { get; set; }
         }

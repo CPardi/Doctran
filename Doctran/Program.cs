@@ -33,14 +33,14 @@ namespace Doctran
             AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionTrapper;
 #endif
 
-            Report.SetDebugProfile();
+            Report.SetReleaseProfile();
 
             var options = new Options();
             GetCommandLineOptions(args, options);
             GetOptions(options.ProjectFilePath ?? EnvVar.DefaultInfoPath, options);
             Report.Verbose = options.Verbose;
 
-            var project = GetProject(options.SourceFilePaths);
+            var project = GetProject(options.SourceFilePaths, options.RunInSerial);
 
             OutputTheme(options);
             var xmlOutputter = GetXmlOutputter(project, new XElement("Information", options.XmlInformation));
@@ -74,10 +74,11 @@ namespace Doctran
         {
             var parserExceptions = new ListenerAndAggregater<OptionReaderException>();
             var projectFileReader = new OptionsReader<Options>(5, "Project file") { ErrorListener = parserExceptions };
-            var projFileLines = OtherUtils.ReadFile(path);
+            var projFileSource = OtherUtils.ReadAllText(path);
+
             PathUtils.RunInDirectory(
                 Path.GetDirectoryName(path),
-                () => projectFileReader.Parse(options, path, projFileLines));
+                () => projectFileReader.Parse(options, path, projFileSource));
             var ws = parserExceptions.Warnings;
             var es = parserExceptions.Errors;
 
@@ -96,10 +97,10 @@ namespace Doctran
             }
         }
 
-        private static Project GetProject(IEnumerable<string> sourceFiles)
+        private static Project GetProject(IEnumerable<string> sourceFiles, bool runInSerial)
         {
             Report.NewStatus("Analysing project block structure... ");
-            var proj = ProgramHelper.ParseProject(sourceFiles);
+            var proj = ProgramHelper.ParseProject(sourceFiles, runInSerial);
             Report.ContinueStatus("Done");
             return proj;
         }

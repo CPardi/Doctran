@@ -165,7 +165,7 @@
     <Compile Include="Reporting\ReportSeverity.cs" />
     <Compile Include="Utilitys\PreprocessorUtils.cs" />
     <Compile Include="Parsing\IFortranObject.cs" />
-    <Compile Include="Plugins\IDocumentationGenerator.cs" />
+    <Compile Include="Plugins\IXmlSerializer.cs" />
     <Compile Include="Plugins\ILanguageParser.cs" />
     <Compile Include="Plugins\ParserManager.cs" />
     <Compile Include="ParsingElements\FortranBlocks\DescriptionBlock.cs" />

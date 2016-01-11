@@ -57,7 +57,7 @@ namespace Doctran.Helper
         public string ProjectFilePath
         {
             get { return _projectFilePath; }
-            set { _projectFilePath = this.CheckCommandLinePath(nameof(this.ProjectFilePath), value); }
+            set { _projectFilePath = this.CheckCommandPathExists(nameof(this.ProjectFilePath), this.CheckCommandLinePath(nameof(this.ProjectFilePath), value)); }
         }
 
         /// <summary>
@@ -73,10 +73,16 @@ namespace Doctran.Helper
         public bool ShowLicensing { get; set; }
 
         /// <summary>
-        ///     Gets or sets a value indicating whether  information about installed plugins should be shown to the user.
+        ///     Gets or sets a value indicating whether information about installed plugins should be shown to the user.
         /// </summary>
         [CommandLine.Option("plugins", HelpText = "This option forces Doctran to check the plugins folder for any shared libraries present and write their names and version numbers.")]
         public bool ShowPluginInformation { get; set; }
+
+        /// <summary>
+        ///     Gets or sets a value indicating whether processes should be run in serial.
+        /// </summary>
+        [CommandLine.Option("serial", HelpText = "This option forces Doctran to run in serial.")]
+        public bool RunInSerial { get; set; }
 
         /// <summary>
         ///     Gets the paths of the source files specified by the user from the command line and the project file.

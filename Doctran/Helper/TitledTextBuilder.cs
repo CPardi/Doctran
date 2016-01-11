@@ -25,7 +25,7 @@ namespace Doctran.Helper
 
         public int RightMargin { get; set; } = 1;
 
-        private static IEnumerable<char> Seperators => new[] { ' ', ',', '\\', '/', ';', ':' };
+        private static IEnumerable<char> Seperators => new[] { ' ', ',', '\\', '/', ';', ':', '|', '[', ']' };
 
         public void Append(string title, string text)
         {

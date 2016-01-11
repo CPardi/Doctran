@@ -9,7 +9,7 @@ namespace Doctran.Parsing
 {
     using ParsingElements;
 
-    public interface ISource : IFortranObject, IHasIdentifier, IContainer, IContained
+    public interface ISource : IHasIdentifier, IContainer, IContained, IHasLines
     {
         string Language { get; }
     }

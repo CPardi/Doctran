@@ -20,12 +20,11 @@ namespace Doctran.Utilitys
 
         public static List<FileLine> ConvertToFileLineList(string linesString)
         {
-            var lines = new List<FileLine>();
-            lines.AddRange(
+            return
                 linesString
+                .Replace("\r\n", "\n").Replace("\r", "\n") // Normalize line endings.
                     .Split('\n')
-                    .Select((l, i) => new FileLine(i, l)));
-            return lines;
+                    .Select((l, i) => new FileLine(i + 1, l)).ToList();
         }
 
         public static List<string> DelimiterExceptBrackets(string text, char delimiter)
@@ -135,8 +134,9 @@ namespace Doctran.Utilitys
 
             return string.Concat(
                 stringList
+                .Reverse<string>()
                     .Select(
-                        (str, position) => str + (position + 2 < stringList.Count ? delimiter : string.Empty)));
+                        (str, position) => str + (position + 1 < stringList.Count ? delimiter : string.Empty)));
         }
 
         public static string DelimiteredConcat(this IEnumerable<string> @this, string delimiter, string lastDelimiter)

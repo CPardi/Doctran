@@ -1,4 +1,11 @@
-﻿namespace Doctran.Test.ParsingElements.Traversal.TraverserActions
+﻿// <copyright file="CheckDescriptionLinkageTest.cs" company="Christopher Pardi">
+//     Copyright © 2015 Christopher Pardi
+//     This Source Code Form is subject to the terms of the Mozilla Public
+//     License, v. 2.0. If a copy of the MPL was not distributed with this
+//     file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// </copyright>
+
+namespace Doctran.Test.ParsingElements.Traversal.TraverserActions
 {
     using System.Collections.Generic;
     using System.Xml.Linq;
@@ -8,7 +15,6 @@
     using Doctran.ParsingElements.Traversal;
     using NUnit.Framework;
     using Parsing;
-    using Utilitys;
 
     [TestFixture]
     [Category("Unit")]
@@ -22,7 +28,7 @@
 
                 var basic = new XElement("Basic");
                 var detailed = new XElement("Detailed");
-                var description = new NamedDescription("child1", basic, detailed, new List<FileLine>() { });
+                var description = new NamedDescription("child1", basic, detailed, new List<FileLine>());
                 var child1 = new TestClass("child1", new[] { description });
 
                 Assert.DoesNotThrow(() => action.Act(description));
@@ -37,7 +43,7 @@
 
                 var basic = new XElement("Basic");
                 var detailed = new XElement("Detailed");
-                var description = new NamedDescription("wrong", basic, detailed, new List<FileLine>() { });
+                var description = new NamedDescription("wrong", basic, detailed, new List<FileLine>());
                 var child1 = new TestClass("child1", new[] { description });
 
                 Assert.Throws(typeof(TraverserException), () => action.Act(description));
@@ -52,9 +58,9 @@
                 this.Identifier = identifier;
             }
 
-            public override string ObjectName => "Test Class";
-
             public string Identifier { get; }
+
+            public override string ObjectName => "Test Class";
 
             public IContainer Parent { get; set; }
         }

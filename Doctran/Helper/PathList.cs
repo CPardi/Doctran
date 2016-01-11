@@ -99,7 +99,7 @@ namespace Doctran.Helper
         {
             var dirtext = Regex.Match(
                 pathList,
-                @"^(.*?)\\?(\*\*)?\\?(\*(?:.\w+)?)?$".Replace(@"\\", @"\" + EnvVar.Slash));
+                @"^(.*?)[\\|\/]?(\*\*)?[\\|\/]?(\*(?:.\w+)?)?$");
 
             path = dirtext.Groups[1].Value == string.Empty ? "." : dirtext.Groups[1].Value;
             searchPattern = dirtext.Groups[3].Value;

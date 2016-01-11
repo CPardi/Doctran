@@ -13,6 +13,6 @@ namespace Doctran.Plugins
 
     public interface ILanguageParser
     {
-        ISourceFile Parse(string sourceName, List<FileLine> lines);
+        ISourceFile Parse(string sourceName, string lines);
     }
 }

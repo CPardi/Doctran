@@ -29,39 +29,39 @@ namespace Doctran.Input.ProjectFileOptions
         }
 
         /// <summary>
-        ///     Converts the intermediary <see cref="IMetaData" /> to a <see cref="XElement" />.
+        ///     Converts the intermediary <see cref="IInformation" /> to a <see cref="XElement" />.
         /// </summary>
-        /// <param name="metaData">The meta-data to be converted.</param>
+        /// <param name="information">The meta-data to be converted.</param>
         /// <param name="propertyType">The actual type of the property this attribute was applied to.</param>
         /// <returns>The result of the conversion.</returns>
         /// <exception cref="InvalidPropertyTypeException">
         ///     Thrown when the property this attribute was applied to is not of type
         ///     <see cref="XElement" />.
         /// </exception>
-        public override object MetaDataToProperty(IInformation metaData, Type propertyType)
+        public override object InformationToProperty(IInformation information, Type propertyType)
         {
             if (propertyType != typeof(XElement))
             {
-                throw new InvalidPropertyTypeException("MetaDataToProperty", typeof(XElement), propertyType);
+                throw new InvalidPropertyTypeException(nameof(this.InformationToProperty), typeof(XElement), propertyType);
             }
 
-            return ToXml(metaData);
+            return ToXml(information);
         }
 
         /// <summary>
-        ///     Converts an <see cref="IMetaData" /> to an <see cref="XElement" />.
+        ///     Converts an <see cref="IInformation" /> to an <see cref="XElement" />.
         /// </summary>
-        /// <param name="metaData">The meta-data to be converted.</param>
+        /// <param name="information">The meta-data to be converted.</param>
         /// <returns>The result of the conversion.</returns>
-        private static XElement ToXml(IInformation metaData)
+        private static XElement ToXml(IInformation information)
         {
-            var value = metaData as IInformationValue;
+            var value = information as IInformationValue;
             if (value != null)
             {
                 return new XElement(value.Name, value.Value);
             }
 
-            var group = (IInformationGroup)metaData;
+            var group = (IInformationGroup)information;
             return new XElement(group.Name, group.SubObjects.OfType<IInformation>().Select(ToXml));
         }
     }

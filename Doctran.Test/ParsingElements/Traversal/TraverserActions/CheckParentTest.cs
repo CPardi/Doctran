@@ -1,4 +1,4 @@
-﻿// <copyright file="CheckUniquenessTest.cs" company="Christopher Pardi">
+﻿// <copyright file="CheckParentTest.cs" company="Christopher Pardi">
 //     Copyright © 2015 Christopher Pardi
 //     This Source Code Form is subject to the terms of the Mozilla Public
 //     License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -8,7 +8,6 @@
 namespace Doctran.Test.ParsingElements.Traversal.TraverserActions
 {
     using System.Collections.Generic;
-    using System.Linq;
     using System.Xml.Linq;
     using Doctran.Helper;
     using Doctran.ParsingElements;
@@ -22,6 +21,36 @@ namespace Doctran.Test.ParsingElements.Traversal.TraverserActions
     public class CheckParentTest
     {
         [Test]
+        public void InvalidInterfaceParent()
+        {
+            {
+                var action = TraverserActions.CheckParent<Description>(typeof(IHasName)) as ITraverserAction<Description>;
+
+                var basic = new XElement("Basic");
+                var detailed = new XElement("Detailed");
+                var description1 = new Description(basic, detailed, new List<FileLine>());
+                var child1 = new TestClass("child1", new[] { description1 });
+
+                Assert.Throws(typeof(TraverserException), () => action.Act(description1));
+            }
+        }
+
+        [Test]
+        public void ValidInterfaceParent()
+        {
+            {
+                var action = TraverserActions.CheckParent<Description>(typeof(IHasIdentifier)) as ITraverserAction<Description>;
+
+                var basic = new XElement("Basic");
+                var detailed = new XElement("Detailed");
+                var description1 = new Description(basic, detailed, new List<FileLine>());
+                var child1 = new TestClass("child1", new[] { description1 });
+
+                Assert.DoesNotThrow(() => action.Act(description1));
+            }
+        }
+
+        [Test]
         public void ValidParentForConcrete()
         {
             {
@@ -29,8 +58,8 @@ namespace Doctran.Test.ParsingElements.Traversal.TraverserActions
 
                 var basic = new XElement("Basic");
                 var detailed = new XElement("Detailed");
-                var description1 = new Description(basic, detailed, new List<FileLine>() { });
-                var child1 = new TestClass("child1", new [] { description1 });
+                var description1 = new Description(basic, detailed, new List<FileLine>());
+                var child1 = new TestClass("child1", new[] { description1 });
 
                 Assert.DoesNotThrow(() => action.Act(description1));
             }
@@ -44,40 +73,10 @@ namespace Doctran.Test.ParsingElements.Traversal.TraverserActions
 
                 var basic = new XElement("Basic");
                 var detailed = new XElement("Detailed");
-                var description1 = new Description(basic, detailed, new List<FileLine>() { });
+                var description1 = new Description(basic, detailed, new List<FileLine>());
                 var child1 = new TestClass("child1", new[] { description1 });
 
                 Assert.DoesNotThrow(() => action.Act(description1));
-            }
-        }
-
-        [Test]
-        public void ValidInterfaceParent()
-        {
-            {
-                var action = TraverserActions.CheckParent<Description>(typeof(IHasIdentifier)) as ITraverserAction<Description>;
-
-                var basic = new XElement("Basic");
-                var detailed = new XElement("Detailed");
-                var description1 = new Description(basic, detailed, new List<FileLine>() { });
-                var child1 = new TestClass("child1", new[] { description1 });
-
-                Assert.DoesNotThrow(() => action.Act(description1));
-            }
-        }
-
-        [Test]
-        public void InvalidInterfaceParent()
-        {
-            {
-                var action = TraverserActions.CheckParent<Description>(typeof(IHasName)) as ITraverserAction<Description>;
-
-                var basic = new XElement("Basic");
-                var detailed = new XElement("Detailed");
-                var description1 = new Description(basic, detailed, new List<FileLine>() { });
-                var child1 = new TestClass("child1", new[] { description1 });
-
-                Assert.Throws(typeof(TraverserException), () => action.Act(description1));
             }
         }
 
@@ -89,9 +88,9 @@ namespace Doctran.Test.ParsingElements.Traversal.TraverserActions
                 this.Identifier = identifier;
             }
 
-            public override string ObjectName => "Test Class";
-
             public string Identifier { get; }
+
+            public override string ObjectName => "Test Class";
 
             public IContainer Parent { get; set; }
         }

@@ -75,6 +75,20 @@ namespace Doctran.Utilitys
             return new Tuple<string, string>(htmlPath, htmlText);
         }
 
+        public static string ReadAllText(string path)
+        {
+            try
+            {
+                return File.ReadAllText(path);
+            }
+            catch (Exception e)
+            {
+                Report.Error(p => p.DescriptionReason(ReportGenre.FileRead, e.Message), e);
+            }
+
+            return null;
+        }
+
         public static List<FileLine> ReadFile(string path)
         {
             var lines = new List<FileLine>();

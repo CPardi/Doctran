@@ -7,6 +7,7 @@
 
 namespace Doctran.Parsing
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using Helper;
@@ -37,12 +38,12 @@ namespace Doctran.Parsing
 
         public IErrorListener<ParserException> ErrorListener { get; set; } = new StandardErrorListener<ParserException>();
 
-        public ISourceFile Parse(string sourceName, List<FileLine> lines)
+        public ISourceFile Parse(string sourceName, string source, Func<string, IEnumerable<FileLine>> preprocessor)
         {
             // Set the current index to 0 and parse the lines set in the constructor.
             var currentIndex = 0;
-            var blockNameStack = new Stack<IFortranBlock>();
-            blockNameStack.Push(_blockParsers["Source"]);
+            var blockStack = new Stack<IFortranBlock>();
+            blockStack.Push(_blockParsers["Source"]);
 
             // Store the snippet and insert a blank line at the start to simplify the parsing algorithm.
             var linesForParse = new List<FileLine>
@@ -50,11 +51,19 @@ namespace Doctran.Parsing
                 new FileLine(0, string.Empty)
             };
 
+            var lines = preprocessor(source).ToList();
             linesForParse.AddRange(lines);
 
             var parserForLines = new ParserForLines(linesForParse, _blockParsers, this.ErrorListener);
-            var parsingResult = (Source)parserForLines.SearchBlock(0, ref currentIndex, blockNameStack).Single();
-            return new SourceFile(_language, sourceName, parsingResult.SubObjects, lines, parsingResult.Lines.Skip(1).ToList());
+            var parsingResult = (Source)parserForLines.SearchBlock(0, ref currentIndex, blockStack).SingleOrDefault();
+
+            if (parsingResult != null)
+            {
+                return new SourceFile(_language, sourceName, parsingResult?.SubObjects, source, parsingResult.Lines.Skip(1).ToList());
+            }
+
+            this.ErrorListener.Warning(new ParserException(1, 1, "File could not be parsed and will appear empty."));
+            return new SourceFile(_language, sourceName, CollectionUtils.Empty<IContained>(), source, linesForParse.Skip(1).ToList());
         }
 
         private class ParserForLines
@@ -72,9 +81,9 @@ namespace Doctran.Parsing
                 _errorListener = errorListener;
             }
 
-            public IEnumerable<IContained> SearchBlock(int startIndex, ref int currentIndex, Stack<IFortranBlock> blockNameStack)
+            public IEnumerable<IContained> SearchBlock(int startIndex, ref int currentIndex, Stack<IFortranBlock> blockStack)
             {
-                var currentFactory = blockNameStack.Peek();
+                var currentFactory = blockStack.Peek();
 
                 // Objects defined by this block of code.
                 var blockObjects = new List<IContained>();
@@ -83,7 +92,7 @@ namespace Doctran.Parsing
                 var blockSubObjects = new List<IContained>();
 
                 // If this block is a one liner then create the objects and exit.
-                if (this.EndBlock(startIndex, currentIndex, blockNameStack, currentFactory, blockObjects, blockSubObjects))
+                if (this.EndBlock(startIndex, currentIndex, blockStack, currentFactory, blockObjects, blockSubObjects))
                 {
                     return blockObjects;
                 }
@@ -105,11 +114,11 @@ namespace Doctran.Parsing
                         // * Block has an explicit end - (LineIndex) the line after the last line of the last subblock. (incrementIndex) is set to false because AddSubBlocks has already incremented the index.
                         // * Block does not have an explicit end - (LineIndex) the last line of the last subblock. (incrementIndex) is set to true.
                         // This is to ensure that blockParsers without an explicit ending can be closed by the subsequent code.
-                        this.AddSubBlocks(ref incrementIndex, ref currentIndex, currentFactory, blockNameStack, blockSubObjects);
+                        this.AddSubBlocks(ref incrementIndex, ref currentIndex, currentFactory, blockStack, blockSubObjects);
                     }
 
                     // If this block is at the end then create it, add its sub objects and exit.
-                    if (this.EndBlock(startIndex, currentIndex, blockNameStack, currentFactory, blockObjects, blockSubObjects))
+                    if (this.EndBlock(startIndex, currentIndex, blockStack, currentFactory, blockObjects, blockSubObjects))
                     {
                         break;
                     }
@@ -129,24 +138,24 @@ namespace Doctran.Parsing
                 ref bool incrementIndex,
                 ref int currentIndex,
                 IFortranBlock currentFactory,
-                Stack<IFortranBlock> blockNameStack,
+                Stack<IFortranBlock> blockStack,
                 List<IContained> blockSubObjects)
             {
                 foreach (var block in _blockParsers.Values)
                 {
                     // If this isn't the start of a new block then check the next block parser.
-                    if (!block.BlockStart(blockNameStack, _lines, currentIndex))
+                    if (!block.BlockStart(blockStack, _lines, currentIndex))
                     {
                         continue;
                     }
 
-                    blockNameStack.Push(block);
+                    blockStack.Push(block);
 
                     // The start index of this block is the current index.
                     var startIndex = currentIndex;
 
                     // Get any blockParsers that maybe defined within the current block, these will be added later.
-                    blockSubObjects.AddRange(this.SearchBlock(startIndex, ref currentIndex, blockNameStack));
+                    blockSubObjects.AddRange(this.SearchBlock(startIndex, ref currentIndex, blockStack));
 
                     // If the block does not have an explicit end, then stay on the same line to check for a block end and go to next line later.
                     incrementIndex = !currentFactory.ExplicitEnd;
@@ -164,22 +173,21 @@ namespace Doctran.Parsing
             private bool EndBlock(
                 int startIndex,
                 int currentIndex,
-                Stack<IFortranBlock> blockNameStack,
+                Stack<IFortranBlock> blockStack,
                 IFortranBlock currentFactory,
                 List<IContained> blockObjects,
                 IEnumerable<IContained> blockSubObjects)
             {
-                if (_lines.Count <= currentIndex)
+                // End the block if we are at the end of the source.
+                if (!this.ValidLineIndex(currentIndex, blockStack))
                 {
-                    var lineNum = _lines.Last().Number;
-                    var stackString = blockNameStack.Select(block => block.Name).DelimiteredConcat("->");
-                    throw new ParserException(lineNum, lineNum, $"Could not find block closure before end of file. Block stack before error {stackString}");
+                    return true;
                 }
 
                 var blockSubObjectsList = blockSubObjects as List<IContained> ?? blockSubObjects.ToList();
 
                 // If block has not ended yet then return.
-                if (!currentFactory.BlockEnd(blockNameStack.Skip(1), _lines, currentIndex))
+                if (!currentFactory.BlockEnd(blockStack.Skip(1), _lines, currentIndex))
                 {
                     return false;
                 }
@@ -202,8 +210,21 @@ namespace Doctran.Parsing
                     blockObjects.AddRange(parsingResult);
                 }
 
-                blockNameStack.Pop();
+                blockStack.Pop();
                 return true;
+            }
+
+            private bool ValidLineIndex(int currentIndex, Stack<IFortranBlock> blockStack)
+            {
+                if (currentIndex <= _lines.Count - 1)
+                {
+                    return true;
+                }
+
+                var lineNum = _lines.Last().Number;
+                var stackString = blockStack.Select(block => block.Name).DelimiteredConcat("->");
+                _errorListener.Error(new ParserException(lineNum, lineNum, $"Could not find block closure before end of file. Block stack before error '{stackString}'"));
+                return false;
             }
         }
     }

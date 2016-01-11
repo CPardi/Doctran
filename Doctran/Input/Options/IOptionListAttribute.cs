@@ -18,6 +18,6 @@ namespace Doctran.Input.Options
 
         ListMode ListMode { get; set; }
 
-        object MetaDataToProperty(IInformation metaData, Type propertyType);
+        object InformationToProperty(IInformation information, Type propertyType);
     }
 }

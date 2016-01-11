@@ -12,17 +12,17 @@ namespace Doctran.Plugins
 
     public static class DocumentationManager
     {
-        private static readonly Dictionary<string, IDocumentationGenerator> DefinitionsByIdentifier = new Dictionary<string, IDocumentationGenerator>();
+        private static readonly Dictionary<string, IXmlSerializer> DefinitionsByIdentifier = new Dictionary<string, IXmlSerializer>();
 
-        public static void RegisterDocumentationDefinition(string identifier, string extension, IDocumentationGenerator documentationDefinition)
+        public static void RegisterDocumentationDefinition(string identifier, string extension, IXmlSerializer documentationDefinition)
         {
             DefinitionsByIdentifier.Remove(identifier);
             DefinitionsByIdentifier.Add(identifier, documentationDefinition);
         }
 
-        public static IDocumentationGenerator TryGetDefinitionByIdentifier(string identifier)
+        public static IXmlSerializer TryGetDefinitionByIdentifier(string identifier)
         {
-            IDocumentationGenerator documentationDefinitions;
+            IXmlSerializer documentationDefinitions;
             if (DefinitionsByIdentifier.TryGetValue(identifier, out documentationDefinitions))
             {
                 return documentationDefinitions;

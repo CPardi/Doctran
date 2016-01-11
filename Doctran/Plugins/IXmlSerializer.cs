@@ -1,4 +1,4 @@
-﻿// <copyright file="IDocumentationGenerator.cs" company="Christopher Pardi">
+﻿// <copyright file="IXmlSerializer.cs" company="Christopher Pardi">
 //     Copyright © 2015 Christopher Pardi
 //     This Source Code Form is subject to the terms of the Mozilla Public
 //     License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -12,9 +12,9 @@ namespace Doctran.Plugins
     using Helper;
     using Parsing;
 
-    public interface IDocumentationGenerator
+    public interface IXmlSerializer
     {
-        XElement HighlightLines(List<FileLine> lines);
+        XElement HighlightLines(string source);
 
         XElement ParsedSourcesToXml(IFortranObject source);
     }

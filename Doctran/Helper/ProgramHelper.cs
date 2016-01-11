@@ -10,38 +10,38 @@ namespace Doctran.Helper
     using System;
     using System.Collections.Generic;
     using System.IO;
-    using ParsingElements;
     using ParsingElements.FortranObjects;
     using Plugins;
     using Reporting;
     using Utilitys;
+    using System.Linq;
 
     internal static class ProgramHelper
     {
-        public static Project ParseProject(IEnumerable<string> sourceFiles)
+        public static Project ParseProject(IEnumerable<string> sourceFiles, bool runInSerial)
         {
-            var parsedFiles = new List<ISourceFile>();
+            var files = runInSerial ? sourceFiles : sourceFiles.AsParallel();
 
-            foreach (var path in sourceFiles)
-            {
-                Report.Message("Parsing", path);
+            var parsedFiles = files.Select(path =>
+                    {
+                        Report.Message("Parsing", path);
 
-                // Parse source files.
-                ILanguageParser language;
-                try
-                {
-                    language = ParserManager.GetParserByExtension(Path.GetExtension(path));
-                }
-                catch (NotSupportedException e)
-                {
-                    Report.Error(p => p.DescriptionReasonLocation(ReportGenre.FileRead, e.Message, path), e);
-                    return null;
-                }
+                        // Parse source files.
+                        ILanguageParser language;
+                        try
+                        {
+                            language = ParserManager.GetParserByExtension(Path.GetExtension(path));
+                        }
+                        catch (NotSupportedException e)
+                        {
+                            Report.Error(p => p.DescriptionReasonLocation(ReportGenre.FileRead, e.Message, path), e);
+                            return null;
+                        }
 
-                var lines = OtherUtils.ReadFile(path);
-                var parsedFile = language.Parse(path, lines);
-                parsedFiles.Add(parsedFile);
-            }
+                        var source = OtherUtils.ReadAllText(path);
+                        return language.Parse(path, source);
+                    })
+                    .ToList();
 
             return new Project(parsedFiles);
         }
