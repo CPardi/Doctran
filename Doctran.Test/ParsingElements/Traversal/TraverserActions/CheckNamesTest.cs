@@ -7,6 +7,7 @@
 
 namespace Doctran.Test.ParsingElements.Traversal.TraverserActions
 {
+    using Doctran.Parsing;
     using Doctran.ParsingElements;
     using Doctran.ParsingElements.Traversal;
     using NUnit.Framework;

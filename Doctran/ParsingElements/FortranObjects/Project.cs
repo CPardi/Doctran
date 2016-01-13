@@ -21,10 +21,11 @@ namespace Doctran.ParsingElements.FortranObjects
         public Project(IEnumerable<ISourceFile> parsedFiles)
             : base(parsedFiles)
         {
-            this.Sources = parsedFiles.ToList().AsReadOnly();
         }
 
-        public ReadOnlyCollection<ISourceFile> Sources { get; }
+        public int SourceNameUniquenessLevel => PathUtils.UniquePathLevel(this.Sources.Select(s => s.AbsolutePath));
+
+        public ReadOnlyCollection<ISourceFile> Sources => this.SubObjects.OfType<ISourceFile>().ToList().AsReadOnly();
 
         public XName SourcesXmlHead => "Files";
 

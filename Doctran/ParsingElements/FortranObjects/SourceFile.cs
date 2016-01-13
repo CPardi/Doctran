@@ -10,11 +10,6 @@ namespace Doctran.ParsingElements.FortranObjects
     using System;
     using System.Collections.Generic;
     using System.IO;
-    using System.Linq;
-    using System.Xml.Linq;
-    using ColorCode;
-    using ColorCode.Formatting;
-    using ColorCode.Styling.StyleSheets;
     using Helper;
     using Parsing;
     using Utilitys;
@@ -27,18 +22,11 @@ namespace Doctran.ParsingElements.FortranObjects
         public SourceFile(string language, string absolutePath, IEnumerable<IContained> subObjects, string originalLines, List<FileLine> lines)
             : base(subObjects, lines)
         {
-            this.Name = Path.GetFileName(absolutePath);
-
             this.AbsolutePath = absolutePath;
             this.OriginalLines = originalLines;
             this.Language = language;
             _info = new FileInfo(this.AbsolutePath);
-
-            // Get the filename from the inputted string
-            this.Name = Path.GetFileNameWithoutExtension(absolutePath);
         }
-
-        public override string ObjectName => "Source File";
 
         public string AbsolutePath { get; }
 
@@ -54,30 +42,12 @@ namespace Doctran.ParsingElements.FortranObjects
 
         public int LineCount => this.Lines.Count - 1;
 
-        public string Name { get; }
+        public string Name => Path.GetFileNameWithoutExtension(PathUtils.FilenameAndAncestorDirectories(this.AbsolutePath, Traversal.AncestorOfType<Project>(this).SourceNameUniquenessLevel));
+
+        public override string ObjectName => "Source File";
 
         public string OriginalLines { get; }
 
         public string ValidName => StringUtils.ValidName(this.Name);
-
-        public XElement SourceXEle(List<FileLine> lines)
-        {
-            var str = string.Concat(lines.Select(line => line.Text + Environment.NewLine));
-
-            // Return a syntax highlighted source code.
-            var cc = new CodeColorizer();
-            var coloredLines = cc.Colorize(
-                str,
-                Languages.Fortran,
-                new HtmlLinedClassFormatter(),
-                new LinedStyleSheet())
-                .Replace(Environment.NewLine, string.Empty);
-
-            return
-                new XElement(
-                    "File",
-                    new XElement("Name", this.Name),
-                    new XElement("Lines", XElement.Parse(coloredLines, LoadOptions.PreserveWhitespace)));
-        }
     }
 }

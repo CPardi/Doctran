@@ -160,6 +160,7 @@
     <Compile Include="Parsing\ISource.cs" />
     <Compile Include="ParsingElements\ISourceFile.cs" />
     <Compile Include="ParsingElements\FortranObjects\NamedDescription.cs" />
+    <Compile Include="Parsing\Traversal.cs" />
     <Compile Include="Parsing\TraverserException.cs" />
     <Compile Include="Reporting\ReportGenre.cs" />
     <Compile Include="Reporting\ReportSeverity.cs" />

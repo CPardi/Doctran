@@ -11,6 +11,7 @@ namespace Doctran.Test.ParsingElements.Traversal.TraverserActions
     using System.Linq;
     using System.Xml.Linq;
     using Doctran.Helper;
+    using Doctran.Parsing;
     using Doctran.ParsingElements;
     using Doctran.ParsingElements.FortranObjects;
     using Doctran.ParsingElements.Traversal;
