@@ -43,15 +43,24 @@ namespace Doctran.ParsingElements.FortranBlocks
             return
                 CommentUtils.NDescStart(lines[lineIndex].Text)
                 && !(parentName ?? string.Empty).StartsWith("Information_")
-                && !CommentUtils.DetailLine(lines[lineIndex].Text)
                 && !CommentUtils.InfoStart(lines[lineIndex].Text);
         }
 
         public IEnumerable<IContained> ReturnObject(IEnumerable<IContained> subObjects, List<FileLine> lines)
         {
-            var name = Regex.Match(lines[0].Text, @"!>\s*(\w.*)\s*-").Groups[1].Value.Trim();
-            var basic = XmlUtils.WrapAndParse("Basic", DescriptionBlock.GetBasicText(lines).Substring(name.Length + 1).TrimStart(' ', '-'));
-            var detailed = XmlUtils.WrapAndParse("Detailed", DescriptionBlock.GetDetailText(lines));
+            var result = Regex.Match(lines[0].Text, @"(!>>?\s*)(\w.*)\s*-(.*)");
+            var symbol = result.Groups[1].Value;
+            var name = result.Groups[2].Value.Trim();
+            var value = result.Groups[3].Value;
+
+            var newLines = new List<FileLine>()
+            {
+                new FileLine(lines.First().Number, symbol + value)
+            };
+            newLines.AddRange(lines.Skip(1));
+
+            var basic = XmlUtils.WrapAndParse("Basic", DescriptionBlock.GetBasicText(newLines));
+            var detailed = XmlUtils.WrapAndParse("Detailed", DescriptionBlock.GetDetailText(newLines));
             yield return new NamedDescription(name.ToLower(), basic, detailed, lines);
         }
     }

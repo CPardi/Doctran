@@ -53,7 +53,7 @@ namespace Doctran.Utilitys
 
         public static bool NDescStart(string text)
         {
-            return Regex.IsMatch(text.Trim(), @"^\s*!>\s*\w[^\s]*\s*-.*");
+            return Regex.IsMatch(text.Trim(), @"^\s*!>>?\s*\w[^\s]*\s*-.*");
         }
     }
 }

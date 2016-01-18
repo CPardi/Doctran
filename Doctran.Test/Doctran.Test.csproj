@@ -48,8 +48,23 @@
     <Compile Include="Input\Options\OptionsReader\ParseTest.cs" />
     <Compile Include="Input\Options\TwiceSpecifiedOptions.cs" />
     <Compile Include="Input\Options\TwiceSpecifiedOptionsList.cs" />
+    <Compile Include="ParsingElements\FortranBlocks\InformationBlock\BlockEndTest.cs" />
+    <Compile Include="ParsingElements\FortranBlocks\InformationBlock\BlockStartTest.cs" />
+    <Compile Include="ParsingElements\FortranBlocks\InformationBlock\InformationStrings.cs" />
+    <Compile Include="ParsingElements\FortranBlocks\InformationBlock\ReturnObjectTest.cs" />
+    <Compile Include="ParsingElements\FortranBlocks\NamedDescriptionBlock\BlockEndTest.cs" />
+    <Compile Include="ParsingElements\FortranBlocks\NamedDescriptionBlock\BlockStartTest.cs" />
+    <Compile Include="ParsingElements\FortranBlocks\NamedDescriptionBlock\NamedDescriptionStrings.cs" />
+    <Compile Include="ParsingElements\FortranBlocks\NamedDescriptionBlock\ReturnObjectTest.cs" />
+    <Compile Include="ParsingElements\FortranBlocks\DescriptionBlock\BlockEndTest.cs" />
+    <Compile Include="ParsingElements\FortranBlocks\DescriptionBlock\BlockStartTest.cs" />
+    <Compile Include="ParsingElements\FortranBlocks\DescriptionBlock\DescriptionStrings.cs" />
+    <Compile Include="ParsingElements\FortranBlocks\DescriptionBlock\ReturnObjectTest.cs" />
+    <Compile Include="ParsingElements\FortranBlocks\TestUtilities\StringUtils.cs" />
+    <Compile Include="ParsingElements\FortranBlocks\TestUtilities\TestingUtils.cs" />
     <Compile Include="ParsingElements\Traversal\TraverserActions\AssignDescriptionsTest.cs" />
     <Compile Include="ParsingElements\Traversal\TraverserActions\CheckParentTest.cs" />
+    <Compile Include="ParsingElements\Traversal\TraverserActions\UniqueSourceNameTest.cs" />
     <Compile Include="ParsingElements\Traversal\TraverserActions\CheckUniquenessTest.cs" />
     <Compile Include="ParsingElements\Traversal\TraverserActions\CheckDescriptionLinkageTest.cs" />
     <Compile Include="ParsingElements\Traversal\TraverserActions\CheckNamesTest.cs" />
@@ -105,6 +120,7 @@
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.0-rc3\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.0-rc3\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>

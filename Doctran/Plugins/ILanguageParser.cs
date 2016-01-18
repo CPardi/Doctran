@@ -7,12 +7,18 @@
 
 namespace Doctran.Plugins
 {
-    using System.Collections.Generic;
-    using Helper;
+    using System.Collections.ObjectModel;
+    using Parsing;
     using ParsingElements;
 
     public interface ILanguageParser
     {
+        string FriendlyName { get; }
+
+        ReadOnlyCollection<ITraverserAction> GlobalTraverserActions { get; }
+
+        string Identifier { get; }
+
         ISourceFile Parse(string sourcePath, string lines);
     }
 }

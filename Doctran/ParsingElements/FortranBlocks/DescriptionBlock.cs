@@ -33,17 +33,21 @@ namespace Doctran.ParsingElements.FortranBlocks
                 string.Concat(
                     from line in lines
                     where Regex.IsMatch(line.Text, @"^\s*!>") && !Regex.IsMatch(line.Text, @"^\s*!>>")
-                    select Regex.Match(line.Text, @"!>(.*)").Groups[1].Value.Trim()) + " "
+                    select Regex.Match(line.Text, @"!>(.*)").Groups[1].Value.TrimStart()) + " "
                         .TrimEnd());
         }
 
         public static string GetDetailText(List<FileLine> lines)
         {
+            var detailLines = lines
+                .Where(line => Regex.IsMatch(line.Text, @"^\s*!>>(.*)"))
+                .ToList();
+
             return Markdown.Transform(
                 string.Concat(
-                    from line in lines
-                    where Regex.IsMatch(line.Text, @"^\s*!>>(.*)")
-                    select Regex.Match(line.Text, @"!>>(.*)").Groups[1].Value + "\n"));
+                    detailLines
+                        .Select(line => Regex.Match(line.Text, @"!>>(.*)").Groups[1].Value)
+                        .Select((line, i) => i == detailLines.Count - 1 ? line : $"{line}")));
         }
 
         public bool BlockEnd(IEnumerable<IFortranBlock> ancestors, List<FileLine> lines, int lineIndex)
@@ -71,7 +75,6 @@ namespace Doctran.ParsingElements.FortranBlocks
             return
                 CommentUtils.DescStart(lines[lineIndex].Text)
                 && !(parentName ?? string.Empty).StartsWith("Information_")
-                && !CommentUtils.DetailLine(lines[lineIndex].Text)
                 && !CommentUtils.NDescStart(lines[lineIndex].Text)
                 && !CommentUtils.InfoStart(lines[lineIndex].Text);
         }

@@ -87,9 +87,11 @@ namespace Doctran.Helper
         /// <summary>
         ///     Gets the paths of the source files specified by the user from the command line and the project file.
         /// </summary>
-        public List<string> SourceFilePaths => this.CheckPathList(ReportGenre.Argument, this.SourceFilesFromCommandLine)
-            .Concat(this.SourceFilesFromOptionFile)
-            .ToList();
+        public List<string> SourceFilePaths =>
+            this.CheckDuplicatePaths(
+                this.CheckPathList(ReportGenre.Argument, this.SourceFilesFromCommandLine)
+                    .Concat(this.SourceFilesFromOptionFile)
+                    .ToList());
 
         /// <summary>
         ///     Sets the paths of the source files specified by the user from the command line.

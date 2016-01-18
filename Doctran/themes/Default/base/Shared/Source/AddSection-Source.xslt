@@ -6,9 +6,10 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
  file, You can obtain one at http://mozilla.org/MPL/2.0/.
 -->
 
-<xsl:stylesheet version="2.0" exclude-result-prefixes="xs"
+<xsl:stylesheet version="2.0" exclude-result-prefixes="xs xsl doctran"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                xmlns:xs="http://www.w3.org/2001/XMLSchema">
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                xmlns:doctran="http://www.doctran.co.uk">
 
     <xsl:template mode="AddSection" match="Source">
         <xsl:param name="file" as="element()"/>
@@ -19,7 +20,7 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
         <p>
             <xsl:text>The source code shown below is taken from '</xsl:text>
             <a href="{$file/href}">
-                <xsl:value-of select="$file/Name"/><xsl:value-of select="$file/Extension"/>
+                <xsl:value-of select="doctran:object-name($file)"/>
             </a>
             <xsl:text>'.</xsl:text>
         </p>

@@ -11,6 +11,7 @@ namespace Doctran.Parsing
     using System.Linq;
     using Helper;
     using ParsingElements;
+    using ParsingElements.FortranObjects;
     using Reporting;
     using Utilitys;
 
@@ -28,9 +29,16 @@ namespace Doctran.Parsing
 
         public string Name { get; }
 
-        public void Go(ISource source)
+        public void Go(Project source)
         {
-            var file = source as ISourceFile;
+            var project = source;
+            Report.Message("Post processing", $"Applying '{this.Name}' on '{project.ObjectName}'");
+            this.Navigate(source);
+        }
+
+        public void Go(ISourceFile source)
+        {
+            var file = source;
             Report.Message("Post processing", $"Applying '{this.Name}' on '{file?.AbsolutePath}'");
             this.Navigate(source);
         }

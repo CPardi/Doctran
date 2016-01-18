@@ -128,6 +128,7 @@ namespace Doctran.Utilitys
         ///     The number of ancestor directories required to make each string within <paramref name="paths" /> unique. A
         ///     zero is return for cases where each filename is unique.
         /// </returns>
+        /// <exception cref="InvalidOperationException">Thrown when two or more paths are identical.</exception>
         public static int UniquePathLevel(IEnumerable<string> paths)
         {
             var pathList = paths as IList<string> ?? paths.ToList();

@@ -7,13 +7,13 @@
 
 namespace Doctran.ParsingElements
 {
-    using System.Collections.Generic;
-    using Helper;
     using Parsing;
 
-    public interface ISourceFile : ISource
+    public interface ISourceFile : ISource, IHasName, IHasValidName
     {
         string AbsolutePath { get; }
+
+        int NameUniquenessLevel { get; set; }
 
         string OriginalLines { get; }
     }

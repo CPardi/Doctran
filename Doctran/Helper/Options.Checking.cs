@@ -72,6 +72,19 @@ namespace Doctran.Helper
             return pathList.ToList();
         }
 
+        private List<string> CheckDuplicatePaths(IEnumerable<string> paths)
+        {
+            var pathList = paths as IList<string> ?? paths.ToList();
+            var distinctPaths = pathList.Distinct().ToList();
+
+            if (distinctPaths.Count != pathList.Count())
+            {
+                Report.Warning(p => p.DescriptionReason(ReportGenre.FileRead, "Duplicate source file paths have been specified and have been removed."));
+            }
+
+            return distinctPaths;
+        }
+
         private string CheckThemeExists(string propertyName, string themeName)
         {
             if (!Directory.Exists(Path.Combine(EnvVar.ThemeDirectory(themeName))))

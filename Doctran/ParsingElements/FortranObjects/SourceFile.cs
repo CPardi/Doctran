@@ -14,7 +14,7 @@ namespace Doctran.ParsingElements.FortranObjects
     using Parsing;
     using Utilitys;
 
-    public class SourceFile : LinedInternal, IHasName, IHasValidName, ISourceFile
+    public class SourceFile : LinedInternal, ISourceFile
     {
         private readonly FileInfo _info;
 
@@ -34,7 +34,7 @@ namespace Doctran.ParsingElements.FortranObjects
 
         public string Extension => _info.Extension;
 
-        public string Identifier => $"{this.Name}{this.Extension}";
+        public string Identifier => this.Name;
 
         public string Language { get; }
 
@@ -42,12 +42,14 @@ namespace Doctran.ParsingElements.FortranObjects
 
         public int LineCount => this.Lines.Count - 1;
 
-        public string Name => Path.GetFileNameWithoutExtension(PathUtils.FilenameAndAncestorDirectories(this.AbsolutePath, Traversal.AncestorOfType<Project>(this).SourceNameUniquenessLevel));
+        public string Name => PathUtils.FilenameAndAncestorDirectories(this.AbsolutePath, this.NameUniquenessLevel);
+
+        public int NameUniquenessLevel { get; set; } = 0;
 
         public override string ObjectName => "Source File";
 
         public string OriginalLines { get; }
 
-        public string ValidName => StringUtils.ValidName(this.Name);
+        public string ValidName => this.Name.Replace("/", "_newdir_").Replace("\\", "_newdir_");
     }
 }

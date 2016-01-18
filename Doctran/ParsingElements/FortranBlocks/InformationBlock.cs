@@ -84,7 +84,7 @@ namespace Doctran.ParsingElements.FortranBlocks
             var value = aMatch.Groups[2].Value.Trim()
                         + string.Concat(lines.Skip(1)
                             .Where(line => line.Number <= (subObjectList.Any() ? subObjectList.First().Lines.First().Number - 1 : lines.Last().Number))
-                            .Select(line => line.Text.Substring(_depth + 1) + Environment.NewLine));
+                            .Select((line, i) => line.Text.Substring(_depth + 1)));
 
             // Seperate cases.
             //  0 - NO subobjects, NO value.
