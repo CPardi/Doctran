@@ -39,7 +39,6 @@ namespace Doctran.Utilitys
 
             return string.Concat(
                 stringList
-                    .Reverse<string>()
                     .Select(
                         (str, position) => str + (position + 1 < stringList.Count ? delimiter : string.Empty)));
         }
@@ -87,6 +86,62 @@ namespace Doctran.Utilitys
                 if (currentIndex == text.Count() - 1)
                 {
                     delimiteredText.Add(text.Substring(prevIndex, currentIndex - prevIndex + 1).Trim());
+                }
+
+                currentIndex++;
+            }
+
+            return delimiteredText;
+        }
+
+        public static List<string> SplitExceptChars(string text, char split, Tuple<char, char>[] pairs) => SplitExceptChars(text, new[] { split }, pairs);
+
+        public static List<string> SplitExceptChars(string text, char[] split, Tuple<char, char>[] pairs)
+        {
+            var delimiteredText = new List<string>();
+
+            var pairDepth = new int[pairs.Length];
+
+            int prevIndex = 0, currentIndex = 0;
+            foreach (var aChar in text)
+            {
+                // Search through each pair for split exception begining.
+                for (var i = 0; i < pairs.Length; i++)
+                {
+                    // Check for ending of identical exception pair.
+                    if (aChar == pairs[i].Item1 && pairs[i].Item1 == pairs[i].Item2 && pairDepth[i] == 1)
+                    {
+                        pairDepth[i]--;
+                        break;
+                    }
+
+                    // Check for exception pair begining.
+                    if (aChar == pairs[i].Item1)
+                    {
+                        pairDepth[i]++;
+                        break;
+                    }
+
+                    // CHeck for differing exception pair ending.
+                    if (aChar == pairs[i].Item2)
+                    {
+                        pairDepth[i]--;
+                        break;
+                    }
+                }
+
+                // If we are not within a exception pair block then search for split character.
+                if (pairDepth.All(d => d == 0) & split.Contains(aChar))
+                {
+                    delimiteredText.Add(text.Substring(prevIndex, currentIndex - prevIndex));
+                    prevIndex = currentIndex + 1;
+                }
+
+                // If we are at the last character then add the final substring.
+                if (currentIndex == text.Length - 1)
+                {
+                    delimiteredText.Add(text.Substring(prevIndex, currentIndex - prevIndex + 1));
+                    break;
                 }
 
                 currentIndex++;

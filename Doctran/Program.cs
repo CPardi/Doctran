@@ -53,6 +53,11 @@ namespace Doctran
                 xmlOutputter.SaveToDisk(EnvVar.XmlOutputDirectory(options.OutputDirectory, "project.xml"));
             }
 
+            if (options.OnlyParse)
+            {
+                return 0;
+            }
+
             OutputHtml(project, xmlOutputter, options);
 
             Report.NewStatus($@"Documentation can be found at '{Path.GetFullPath(options.OutputDirectory)}'");

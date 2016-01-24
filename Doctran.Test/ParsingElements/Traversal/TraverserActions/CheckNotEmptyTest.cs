@@ -16,13 +16,13 @@ namespace Doctran.Test.ParsingElements.Traversal.TraverserActions
 
     [TestFixture]
     [Category("Unit")]
-    public class CheckNamesTest
+    public class CheckNotEmptyTest
     {
         [Test]
         public void HasName()
         {
             var testClass = new TestClass("Name");
-            TraverserActions.CheckNames.Act(testClass, new StandardErrorListener<TraverserException>());
+            TraverserActions.CheckNotEmpty<IHasName>("name", o => o.Name).Act(testClass, new StandardErrorListener<TraverserException>());
             Assert.AreEqual("Name", testClass.Name);
         }
 
@@ -31,7 +31,7 @@ namespace Doctran.Test.ParsingElements.Traversal.TraverserActions
         public void NoName()
         {
             var testClass = new TestClass(string.Empty);
-            TraverserActions.CheckNames.Act(testClass, new StandardErrorListener<TraverserException>());
+            TraverserActions.CheckNotEmpty<IHasName>("name", o => o.Name).Act(testClass, new StandardErrorListener<TraverserException>());
         }
 
         private class TestClass : IHasName

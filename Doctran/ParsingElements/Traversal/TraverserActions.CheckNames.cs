@@ -7,24 +7,24 @@
 
 namespace Doctran.ParsingElements.Traversal
 {
+    using System;
     using Parsing;
     using Utilitys;
 
     public static partial class TraverserActions
     {
-        public static ITraverserAction CheckNames
+        public static ITraverserAction CheckNotEmpty<T>(string propertyName, Func<T, string> getValue)
+            where T : IFortranObject
         {
-            get
-            {
-                return new TraverserAction<IHasName>(
-                    (obj, errLis) =>
+            return new TraverserAction<T>(
+                (obj, errLis) =>
+                {
+                    if (getValue(obj).IsNullOrEmpty())
                     {
-                        if (obj.Name.IsNullOrEmpty())
-                        {
-                            errLis.Error(new TraverserException(obj, "Object has an empty name."));
-                        }
-                    });
-            }
+                        errLis.Error(new TraverserException(obj, $"A '{Names.OfType(obj.GetType()).ToLower()}' has an empty '{propertyName}'."));
+                    }
+                });
         }
+
     }
 }

@@ -128,6 +128,12 @@ namespace Doctran.Helper
         }
 
         /// <summary>
+        ///     Gets or sets a value indicating whether the program should be stopped after the parsing stage.
+        /// </summary>
+        [CommandLine.Option("only_parse", DefaultValue = false, HelpText = "Source files will only be parsed before exitting.")]
+        public bool OnlyParse { get; set; }
+
+        /// <summary>
         ///     Gets or sets the additional XML elements to be appended to the project's XML file.
         /// </summary>
         [XmlDefaultOption(InitializeAsDefault = true)]
