@@ -22,7 +22,7 @@ namespace Doctran.Reporting
             { ReportGenre.Argument, "Argument list issue." },
             { ReportGenre.FileRead, "File read issue." },
             { ReportGenre.Parsing, "Parsing issue." },
-            { ReportGenre.ParsingPost, "Parsing post-processing issue." },
+            { ReportGenre.Traversal, "Project traversal issue." },
             { ReportGenre.Plugin, "Plugin loading issue." },
             { ReportGenre.ProjectFile, "Project file contains an issue." },
             { ReportGenre.ThemeOutput, "Problem outputting documentation." },

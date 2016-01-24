@@ -35,7 +35,7 @@ namespace Doctran.Test.ParsingElements.Traversal.TraverserActions
             var project = new Project(sourceList);
 
             ITraverserAction action = TraverserActions.UniqueSourceNames as ITraverserAction<Project>;
-            action.Act(project);
+            action.Act(project, new StandardErrorListener<TraverserException>());
         }
 
         [Test]
@@ -52,7 +52,7 @@ namespace Doctran.Test.ParsingElements.Traversal.TraverserActions
             var project = new Project(sourceList);
 
             ITraverserAction action = TraverserActions.UniqueSourceNames as ITraverserAction<Project>;
-            action.Act(project);
+            action.Act(project, new StandardErrorListener<TraverserException>());
             Assert.AreEqual(0, project.SourceNameUniquenessLevel);
             Assert.AreEqual("File1", sourceList[0].Name);
             Assert.AreEqual("File2", sourceList[1].Name);
@@ -72,7 +72,7 @@ namespace Doctran.Test.ParsingElements.Traversal.TraverserActions
             var project = new Project(sourceList);
 
             ITraverserAction action = TraverserActions.UniqueSourceNames as ITraverserAction<Project>;
-            action.Act(project);
+            action.Act(project, new StandardErrorListener<TraverserException>());
             Assert.AreEqual(1, project.SourceNameUniquenessLevel);
             Assert.AreEqual("src/File1", sourceList[0].Name);
             Assert.AreEqual("examples/File1", sourceList[1].Name);

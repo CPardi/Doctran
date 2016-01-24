@@ -19,7 +19,7 @@ namespace Doctran.Reporting
 
         Parsing,
 
-        ParsingPost,
+        Traversal,
 
         Plugin,
 

@@ -7,6 +7,7 @@
 
 namespace Doctran.Test.ParsingElements.Traversal.TraverserActions
 {
+    using Doctran.Helper;
     using Doctran.Parsing;
     using Doctran.ParsingElements;
     using Doctran.ParsingElements.Traversal;
@@ -21,7 +22,7 @@ namespace Doctran.Test.ParsingElements.Traversal.TraverserActions
         public void HasName()
         {
             var testClass = new TestClass("Name");
-            TraverserActions.CheckNames.Act(testClass);
+            TraverserActions.CheckNames.Act(testClass, new StandardErrorListener<TraverserException>());
             Assert.AreEqual("Name", testClass.Name);
         }
 
@@ -30,7 +31,7 @@ namespace Doctran.Test.ParsingElements.Traversal.TraverserActions
         public void NoName()
         {
             var testClass = new TestClass(string.Empty);
-            TraverserActions.CheckNames.Act(testClass);
+            TraverserActions.CheckNames.Act(testClass, new StandardErrorListener<TraverserException>());
         }
 
         private class TestClass : IHasName

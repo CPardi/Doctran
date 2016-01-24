@@ -19,7 +19,7 @@ namespace Doctran.ParsingElements.Traversal
             get
             {
                 return new TraverserAction<Project>(
-                    obj =>
+                    (obj, errLis) =>
                     {
                         var uniquenessLevel = PathUtils.UniquePathLevel(obj.Sources.Select(s => s.AbsolutePath));
                         foreach (var s in obj.Sources)

@@ -23,7 +23,7 @@ namespace Doctran.ParsingElements.Traversal
             where T : IContained
         {
             return new TraverserAction<T>(
-                obj =>
+                (obj, errLis) =>
                 {
                     // Get all the parent SubObjects, and return if
                     //  - Zero or one subobjects are found.
@@ -50,13 +50,13 @@ namespace Doctran.ParsingElements.Traversal
                         })
                         .DelimiteredConcat(", ", " and ");
 
-                    // Create the exception message and throw an exception.
+                    // Create the exception message and tell the listener.
                     var message = $"{obj.ObjectName.ToUpperFirstLowerRest()} must be unique."
                                   +
                                   (textForIgnored.IsNullOrEmpty()
                                       ? string.Empty
                                       : $" Duplicate {obj.ObjectName.ToLower()}(s) appear at lines {textForIgnored} and have been ignored.");
-                    throw new TraverserException(obj, message);
+                    errLis.Error(new TraverserException(obj, message));
                 });
         }
     }

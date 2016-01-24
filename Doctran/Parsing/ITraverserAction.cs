@@ -8,10 +8,13 @@
 namespace Doctran.Parsing
 {
     using System;
+    using Helper;
 
     public interface ITraverserAction
     {
-        Action<object> Act { get; }
+        Action<object, IErrorListener<TraverserException>> Act { get; }
+
+        IErrorListener<TraverserException> ErrorListener { get; set; }
 
         Type ForType { get; }
     }
@@ -19,6 +22,6 @@ namespace Doctran.Parsing
     public interface ITraverserAction<in T> : ITraverserAction
         where T : IFortranObject
     {
-        new Action<T> Act { get; }
+        new Action<T, IErrorListener<TraverserException>> Act { get; }
     }
 }

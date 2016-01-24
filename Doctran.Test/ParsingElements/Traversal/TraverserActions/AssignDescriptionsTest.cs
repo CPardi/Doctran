@@ -42,7 +42,7 @@ namespace Doctran.Test.ParsingElements.Traversal.TraverserActions
 
             var parent = new TestClass("parent", subObjects);
 
-            action.Act(description);
+            action.Act(description, new StandardErrorListener<TraverserException>());
 
             Assert.IsTrue(!parent.SubObjects.Contains(description));
 
@@ -72,7 +72,7 @@ namespace Doctran.Test.ParsingElements.Traversal.TraverserActions
 
             var parent = new TestClass("parent", subObjects);
 
-            action.Act(description);
+            action.Act(description, new StandardErrorListener<TraverserException>());
 
             Assert.IsTrue(!parent.SubObjects.Contains(description));
             var newDesc = child1.SubObjects.OfType<Description>().Single();

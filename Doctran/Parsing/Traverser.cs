@@ -17,12 +17,12 @@ namespace Doctran.Parsing
 
     public class Traverser
     {
-        private readonly ILookup<Type, Action<object>> _actions;
+        private readonly ILookup<Type, ITraverserAction> _actions;
 
         public Traverser(string name, params ITraverserAction[] actions)
         {
             this.Name = name;
-            _actions = actions.ToLookup(a => a.ForType, a => a.Act);
+            _actions = actions.ToLookup(a => a.ForType);
         }
 
         public IErrorListener<TraverserException> ErrorListener { get; set; } = new StandardErrorListener<TraverserException>();
@@ -39,7 +39,7 @@ namespace Doctran.Parsing
         public void Go(ISourceFile source)
         {
             var file = source;
-            Report.Message("Post processing", $"Applying '{this.Name}' on '{file?.AbsolutePath}'");
+            Report.Message("Post processing", $"Applying '{this.Name}' on '{file.AbsolutePath}'");
             this.Navigate(source);
         }
 
@@ -51,16 +51,10 @@ namespace Doctran.Parsing
                 return;
             }
 
-            try
+            var errorListener = new ErrorListener<TraverserException>(w => this.ErrorListener.Warning(w), e => this.ErrorListener.Error(e));
+            foreach (var act in actionsForType)
             {
-                foreach (var act in actionsForType)
-                {
-                    act(obj);
-                }
-            }
-            catch (TraverserException e)
-            {
-                this.ErrorListener.Error(e);
+                act.Act(obj, errorListener);
             }
         }
 

@@ -32,7 +32,7 @@ namespace Doctran.Test.ParsingElements.Traversal.TraverserActions
                 var description1 = new Description(basic, detailed, new List<FileLine>());
                 var child1 = new TestClass("child1", new[] { description1 });
 
-                Assert.Throws(typeof(TraverserException), () => action.Act(description1));
+                Assert.Throws(typeof(TraverserException), () => action.Act(description1, new StandardErrorListener<TraverserException>()));
             }
         }
 
@@ -47,7 +47,7 @@ namespace Doctran.Test.ParsingElements.Traversal.TraverserActions
                 var description1 = new Description(basic, detailed, new List<FileLine>());
                 var child1 = new TestClass("child1", new[] { description1 });
 
-                Assert.DoesNotThrow(() => action.Act(description1));
+                Assert.DoesNotThrow(() => action.Act(description1, new StandardErrorListener<TraverserException>()));
             }
         }
 
@@ -62,7 +62,7 @@ namespace Doctran.Test.ParsingElements.Traversal.TraverserActions
                 var description1 = new Description(basic, detailed, new List<FileLine>());
                 var child1 = new TestClass("child1", new[] { description1 });
 
-                Assert.DoesNotThrow(() => action.Act(description1));
+                Assert.DoesNotThrow(() => action.Act(description1, new StandardErrorListener<TraverserException>()));
             }
         }
 
@@ -77,7 +77,7 @@ namespace Doctran.Test.ParsingElements.Traversal.TraverserActions
                 var description1 = new Description(basic, detailed, new List<FileLine>());
                 var child1 = new TestClass("child1", new[] { description1 });
 
-                Assert.DoesNotThrow(() => action.Act(description1));
+                Assert.DoesNotThrow(() => action.Act(description1, new StandardErrorListener<TraverserException>()));
             }
         }
 

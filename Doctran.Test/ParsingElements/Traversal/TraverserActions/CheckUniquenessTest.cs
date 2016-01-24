@@ -33,7 +33,7 @@ namespace Doctran.Test.ParsingElements.Traversal.TraverserActions
                 var description2 = new Description(new XElement("Basic2"), detailed, new List<FileLine> { new FileLine(1, string.Empty) });
                 var child1 = new TestClass("child1", new IContained[] { description1, description2 });
 
-                Assert.Throws(typeof(TraverserException), () => action.Act(description1));
+                Assert.Throws(typeof(TraverserException), () => action.Act(description1, new StandardErrorListener<TraverserException>()));
                 Assert.IsTrue(child1.SubObjects.OfType<IDescription>().Count() == 1);
             }
         }
@@ -49,7 +49,7 @@ namespace Doctran.Test.ParsingElements.Traversal.TraverserActions
                 var description1 = new Description(basic, detailed, new List<FileLine>());
                 var child1 = new TestClass("child1", new[] { description1 });
 
-                Assert.DoesNotThrow(() => action.Act(description1));
+                Assert.DoesNotThrow(() => action.Act(description1, new StandardErrorListener<TraverserException>()));
             }
         }
 

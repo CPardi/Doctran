@@ -15,6 +15,8 @@ namespace Doctran.Utilitys
 
     public static class StringUtils
     {
+        private static readonly Random Random = new Random();
+
         public static string ConvertFromFileLineList(List<FileLine> lines)
             => string.Concat(lines.Select((line, index) => index == 0 ? line.Text : $"\n{line.Text}"));
 
@@ -22,9 +24,41 @@ namespace Doctran.Utilitys
         {
             return
                 linesString
-                .Replace("\r\n", "\n").Replace("\r", "\n") // Normalize line endings.
+                    .Replace("\r\n", "\n").Replace("\r", "\n") // Normalize line endings.
                     .Split('\n')
                     .Select((l, i) => new FileLine(i + 1, l)).ToList();
+        }
+
+        public static string DelimiteredConcat(this IEnumerable<string> @this, string delimiter)
+        {
+            var stringList = @this.ToList();
+            if (stringList.Count == 1)
+            {
+                return stringList.First();
+            }
+
+            return string.Concat(
+                stringList
+                    .Reverse<string>()
+                    .Select(
+                        (str, position) => str + (position + 1 < stringList.Count ? delimiter : string.Empty)));
+        }
+
+        public static string DelimiteredConcat(this IEnumerable<string> @this, string delimiter, string lastDelimiter)
+        {
+            var stringList = @this.ToList();
+            if (stringList.Count == 1)
+            {
+                return stringList.First();
+            }
+
+            return string.Concat(
+                stringList
+                    .Select(
+                        (str, position) =>
+                            (position + 1 == stringList.Count ? lastDelimiter : string.Empty) +
+                            str +
+                            (position + 2 < stringList.Count ? delimiter : string.Empty)));
         }
 
         public static List<string> DelimiterExceptBrackets(string text, char delimiter)
@@ -124,38 +158,6 @@ namespace Doctran.Utilitys
                     : $"Within lines {start} to {end} of '{path}'.";
         }
 
-        public static string DelimiteredConcat(this IEnumerable<string> @this, string delimiter)
-        {
-            var stringList = @this.ToList();
-            if (stringList.Count == 1)
-            {
-                return stringList.First();
-            }
-
-            return string.Concat(
-                stringList
-                .Reverse<string>()
-                    .Select(
-                        (str, position) => str + (position + 1 < stringList.Count ? delimiter : string.Empty)));
-        }
-
-        public static string DelimiteredConcat(this IEnumerable<string> @this, string delimiter, string lastDelimiter)
-        {
-            var stringList = @this.ToList();
-            if (stringList.Count == 1)
-            {
-                return stringList.First();
-            }
-
-            return string.Concat(
-                stringList
-                    .Select(
-                        (str, position) =>
-                            (position + 1 == stringList.Count ? lastDelimiter : string.Empty) +
-                            str +
-                            (position + 2 < stringList.Count ? delimiter : string.Empty)));
-        }
-
         public static string NoWhitespace(string text)
         {
             return Regex.Replace(text, @"\s+", string.Empty);
@@ -170,9 +172,14 @@ namespace Doctran.Utilitys
         ///     Convert a string value to a specified type.
         /// </summary>
         /// <param name="this">The converted object.</param>
-        /// <param name="propertyType">The type to convert the meta-data to. Must have interface <see cref="IConvertible"/></param>
+        /// <param name="propertyType">
+        ///     The type to convert the meta-data to. Must have interface <see cref="IConvertible" />
+        /// </param>
         /// <returns>An IConverable object.</returns>
-        /// <exception cref="ArgumentException">Thrown if <paramref name="propertyType"/> does not have teh <see cref="IConvertible"/> interface.</exception>
+        /// <exception cref="ArgumentException">
+        ///     Thrown if <paramref name="propertyType" /> does not have teh
+        ///     <see cref="IConvertible" /> interface.
+        /// </exception>
         public static object ToIConvertable(this string @this, Type propertyType)
         {
             if (propertyType.GetInterface(typeof(IConvertible).Name) == null)
@@ -184,6 +191,9 @@ namespace Doctran.Utilitys
 
             return Convert.ChangeType(@this, propertyType);
         }
+
+        public static string ToRandomCase(this string @string)
+            => new string(@string.ToCharArray().Select(aChar => Random.Next(2) == 0 ? char.ToUpper(aChar) : char.ToLower(aChar)).ToArray());
 
         public static string ToUpperFirstLowerRest(this string s)
         {

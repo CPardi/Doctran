@@ -24,7 +24,7 @@ namespace Doctran.ParsingElements.Traversal
             get
             {
                 return new TraverserAction<NamedDescription>(
-                    obj =>
+                    (obj, errLis) =>
                     {
                         var linkedTo = obj?.LinkedTo;
 

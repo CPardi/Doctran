@@ -17,11 +17,11 @@ namespace Doctran.ParsingElements.Traversal
             get
             {
                 return new TraverserAction<IHasName>(
-                    obj =>
+                    (obj, errLis) =>
                     {
                         if (obj.Name.IsNullOrEmpty())
                         {
-                            throw new TraverserException(obj, "Object has an empty name.");
+                            errLis.Error(new TraverserException(obj, "Object has an empty name."));
                         }
                     });
             }

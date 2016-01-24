@@ -177,7 +177,10 @@ namespace Doctran.Reporting
                 }
             }
 
-            ThrowExceptions(warningsList);
+            if (ReportMode == ReportMode.Debug)
+            {
+                ThrowExceptions(warningsList);
+            }
         }
 
         private static void ApplicationExit()

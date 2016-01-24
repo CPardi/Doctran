@@ -29,11 +29,15 @@ namespace Doctran
 
         public static int Main(string[] args)
         {
-#if RELEASE
-            AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionTrapper;
+
+#if DEBUG
+            Report.SetDebugProfile();
 #endif
 
+#if !DEBUG
+            AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionTrapper;
             Report.SetReleaseProfile();
+#endif
 
             var options = new Options();
             GetCommandLineOptions(args, options);

@@ -8,19 +8,22 @@
 namespace Doctran.Parsing
 {
     using System;
+    using Helper;
 
     public class TraverserAction<T> : ITraverserAction<T>
         where T : IFortranObject
     {
-        public TraverserAction(Action<T> act)
+        public TraverserAction(Action<T, IErrorListener<TraverserException>> act)
         {
             this.Act = act;
         }
 
-        public Action<T> Act { get; }
+        public Action<T, IErrorListener<TraverserException>> Act { get; }
+
+        public IErrorListener<TraverserException> ErrorListener { get; set; } = new StandardErrorListener<TraverserException>();
 
         public Type ForType => typeof(T);
 
-        Action<object> ITraverserAction.Act => obj => this.Act((T)obj);
+        Action<object, IErrorListener<TraverserException>> ITraverserAction.Act => (obj, errLis) => this.Act((T)obj, errLis);
     }
 }

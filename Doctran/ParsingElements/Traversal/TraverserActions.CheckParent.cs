@@ -26,7 +26,7 @@ namespace Doctran.ParsingElements.Traversal
             where T : IContained
         {
             return new TraverserAction<T>(
-                obj =>
+                (obj, errLis) =>
                 {
                     foreach (var type in validParentTypes)
                     {
@@ -44,7 +44,7 @@ namespace Doctran.ParsingElements.Traversal
                     var parentsText = validParentTypes.Select(t => t.Name).DelimiteredConcat(", ", " or ");
                     var message = $"A {obj.ObjectName.ToLower()} has a {obj.Parent.ObjectName.ToLower()} as a parent. " +
                                   $"{obj.ObjectName.ToUpperFirstLowerRest()}s are expected to have {parentsText} as parents.";
-                    throw new TraverserException(obj, message);
+                    errLis.Error(new TraverserException(obj, message));
                 });
         }
     }

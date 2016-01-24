@@ -17,7 +17,7 @@ namespace Doctran.ParsingElements.Traversal
             get
             {
                 return new TraverserAction<NamedDescription>(
-                    obj =>
+                    (obj, errLis) =>
                     {
                         // Return if OK.
                         if ((obj.Parent as IHasIdentifier)?.Identifier == obj.LinkedTo)
@@ -27,7 +27,7 @@ namespace Doctran.ParsingElements.Traversal
 
                         // Throw exception if not.
                         obj.Parent.SubObjects.Remove(obj);
-                        throw new TraverserException(obj, "Description meta-data was ignored. Description identifier does not match parent identifier.");
+                        errLis.Warning(new TraverserException(obj, "Description meta-data was ignored. Description identifier does not match parent identifier."));
                     });
             }
         }

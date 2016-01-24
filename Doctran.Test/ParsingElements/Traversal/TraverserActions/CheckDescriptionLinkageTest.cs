@@ -32,7 +32,7 @@ namespace Doctran.Test.ParsingElements.Traversal.TraverserActions
                 var description = new NamedDescription("child1", basic, detailed, new List<FileLine>());
                 var child1 = new TestClass("child1", new[] { description });
 
-                Assert.DoesNotThrow(() => action.Act(description));
+                Assert.DoesNotThrow(() => action.Act(description, new StandardErrorListener<TraverserException>()));
             }
         }
 
@@ -47,7 +47,7 @@ namespace Doctran.Test.ParsingElements.Traversal.TraverserActions
                 var description = new NamedDescription("wrong", basic, detailed, new List<FileLine>());
                 var child1 = new TestClass("child1", new[] { description });
 
-                Assert.Throws(typeof(TraverserException), () => action.Act(description));
+                Assert.Throws(typeof(TraverserException), () => action.Act(description, new StandardErrorListener<TraverserException>()));
             }
         }
 
