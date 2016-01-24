@@ -29,7 +29,7 @@ namespace Doctran.ParsingElements.FortranObjects
 
         public XName SourcesXmlHead => "Files";
 
-        public override string ObjectName => "Project";
+        public override string ObjectName => Names.OfType(this.GetType());
 
         public XElement XEle(XElement xmlPassthrough)
         {

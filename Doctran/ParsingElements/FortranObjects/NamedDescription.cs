@@ -22,7 +22,7 @@ namespace Doctran.ParsingElements.FortranObjects
             this.Lines = lines;
         }
 
-        public string ObjectName => "Named Description";
+        public string ObjectName => Names.OfType(this.GetType());
 
         public XElement Basic { get; }
 

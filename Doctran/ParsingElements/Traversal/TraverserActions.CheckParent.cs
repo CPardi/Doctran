@@ -41,9 +41,9 @@ namespace Doctran.ParsingElements.Traversal
                         return;
                     }
 
-                    var parentsText = validParentTypes.Select(t => t.Name).DelimiteredConcat(", ", " or ");
-                    var message = $"A {obj.ObjectName.ToLower()} has a {obj.Parent.ObjectName.ToLower()} as a parent. " +
-                                  $"{obj.ObjectName.ToUpperFirstLowerRest()}s are expected to have {parentsText} as parents.";
+                    var parentsText = validParentTypes.Select(t => $"'{Names.OfType(t).ToLower()}s'").DelimiteredConcat(", ", " or ");
+                    var message = $"A '{obj.ObjectName.ToLower()}' has a '{obj.Parent.ObjectName.ToLower()}' for a parent. " +
+                                  $"'{obj.ObjectName.ToUpperFirstLowerRest()}s' are expected to have {parentsText} as parents.";
                     errLis.Error(new TraverserException(obj, message));
                 });
         }

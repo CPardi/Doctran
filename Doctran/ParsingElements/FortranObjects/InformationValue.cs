@@ -21,7 +21,7 @@ namespace Doctran.ParsingElements.FortranObjects
             this.Lines = lines;
         }
 
-        public string ObjectName => $"Depth {this.Depth} Information Value";
+        public string ObjectName => Names.OfType(this.GetType());
 
         public int Depth { get; }
 

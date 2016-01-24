@@ -46,7 +46,7 @@ namespace Doctran.ParsingElements.FortranObjects
 
         public int NameUniquenessLevel { get; set; } = 0;
 
-        public override string ObjectName => "Source File";
+        public override string ObjectName => Names.OfType(this.GetType());
 
         public string OriginalLines { get; }
 

@@ -29,6 +29,6 @@ namespace Doctran.ParsingElements.FortranObjects
 
         public IContainer Parent { get; set; }
 
-        public string ObjectName => "Description";
+        public string ObjectName => Names.OfType(this.GetType());
     }
 }
