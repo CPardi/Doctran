@@ -55,7 +55,7 @@ namespace Doctran.ParsingElements.Traversal
                                   +
                                   (textForIgnored.IsNullOrEmpty()
                                       ? string.Empty
-                                      : $" Duplicate {obj.ObjectName.ToLower()}(s) appear at lines {textForIgnored} and have been ignored.");
+                                      : $" Duplicate {obj.ObjectName.ToLower()}(s) appearing at lines {textForIgnored} have been ignored.");
                     errLis.Error(new TraverserException(obj, message));
                 });
         }

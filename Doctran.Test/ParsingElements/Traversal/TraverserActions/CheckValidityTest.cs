@@ -1,4 +1,4 @@
-﻿// <copyright file="CheckNamesTest.cs" company="Christopher Pardi">
+﻿// <copyright file="CheckNotEmptyTest.cs" company="Christopher Pardi">
 //     Copyright © 2015 Christopher Pardi
 //     This Source Code Form is subject to the terms of the Mozilla Public
 //     License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -11,18 +11,18 @@ namespace Doctran.Test.ParsingElements.Traversal.TraverserActions
     using Doctran.Parsing;
     using Doctran.ParsingElements;
     using Doctran.ParsingElements.Traversal;
+    using Doctran.Utilitys;
     using NUnit.Framework;
-    using Parsing;
 
     [TestFixture]
     [Category("Unit")]
-    public class CheckNotEmptyTest
+    public class CheckValidityTest
     {
         [Test]
         public void HasName()
         {
             var testClass = new TestClass("Name");
-            TraverserActions.CheckNotEmpty<IHasName>("name", o => o.Name).Act(testClass, new StandardErrorListener<TraverserException>());
+            TraverserActions.CheckValidity<IHasName>(o => !o.Name.IsNullOrEmpty(), o => "Contruct contains an invalid name.").Act(testClass, new StandardErrorListener<TraverserException>());
             Assert.AreEqual("Name", testClass.Name);
         }
 
@@ -31,7 +31,7 @@ namespace Doctran.Test.ParsingElements.Traversal.TraverserActions
         public void NoName()
         {
             var testClass = new TestClass(string.Empty);
-            TraverserActions.CheckNotEmpty<IHasName>("name", o => o.Name).Act(testClass, new StandardErrorListener<TraverserException>());
+            TraverserActions.CheckValidity<IHasName>(o => !o.Name.IsNullOrEmpty(), o => "Contruct contains an invalid name.").Act(testClass, new StandardErrorListener<TraverserException>());
         }
 
         private class TestClass : IHasName

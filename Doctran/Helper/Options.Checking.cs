@@ -79,7 +79,7 @@ namespace Doctran.Helper
 
             if (distinctPaths.Count != pathList.Count())
             {
-                Report.Warning(p => p.DescriptionReason(ReportGenre.FileRead, "Duplicate source file paths have been specified and have been removed."));
+                Report.Warning(p => p.DescriptionReason(ReportGenre.FileRead, "Duplicate source file paths have been removed."));
             }
 
             return distinctPaths;

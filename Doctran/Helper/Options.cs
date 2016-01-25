@@ -53,7 +53,7 @@ namespace Doctran.Helper
         /// <summary>
         ///     Gets or sets the location of a project file.
         /// </summary>
-        [CommandLine.Option('p', "project_info", MetaValue = "PATH", HelpText = "PATH is the location of the project's information file.")]
+        [CommandLine.Option('p', "project-info", MetaValue = "PATH", HelpText = "PATH is the location of the project's information file.")]
         public string ProjectFilePath
         {
             get { return _projectFilePath; }
@@ -63,7 +63,7 @@ namespace Doctran.Helper
         /// <summary>
         ///     Gets or sets a value indicating whether the generated XML files should be saved within the output directory.
         /// </summary>
-        [CommandLine.Option("save_xmls", MetaValue = "PATH", HelpText = "Specifies a path to save the intermediary XML document generated. The document is not saved by default.")]
+        [CommandLine.Option("save-xmls", MetaValue = "PATH", HelpText = "Specifies a path to save the intermediary XML documents generated. The document is not saved by default.")]
         public bool SaveXmls { get; set; }
 
         /// <summary>
@@ -130,8 +130,8 @@ namespace Doctran.Helper
         /// <summary>
         ///     Gets or sets a value indicating whether the program should be stopped after the parsing stage.
         /// </summary>
-        [CommandLine.Option("only_parse", DefaultValue = false, HelpText = "Source files will only be parsed before exitting.")]
-        public bool OnlyParse { get; set; }
+        [CommandLine.Option("no-output", DefaultValue = false, HelpText = "Source files will only be parsed before exitting. If --save_xmls is specified then XML documents will be saved before exitting.")]
+        public bool NoOutput { get; set; }
 
         /// <summary>
         ///     Gets or sets the additional XML elements to be appended to the project's XML file.

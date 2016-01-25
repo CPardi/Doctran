@@ -67,7 +67,7 @@ namespace Doctran.Utilitys
 
             var dirCount = directories.Length;
 
-            return directories.Skip(dirCount - numDirectories - 1).Reverse().DelimiteredConcat(seperator.ToString());
+            return directories.Skip(dirCount - numDirectories - 1).DelimiteredConcat(seperator.ToString());
         }
 
         /// <summary>

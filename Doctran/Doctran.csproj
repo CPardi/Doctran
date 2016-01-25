@@ -133,6 +133,7 @@
     <Compile Include="Output\Assets\FileIgnorer.cs" />
     <Compile Include="ParsingElements\FortranObjects\InformationValue.cs" />
     <Compile Include="ParsingElements\Names.cs" />
+    <Compile Include="ParsingElements\Traversal\TraverserActions.CheckForUnexpected.cs" />
     <Compile Include="ParsingElements\Traversal\TraverserActions.UniqueSourceNames.cs" />
     <Compile Include="ParsingElements\Traversal\TraverserActions.CheckParent.cs" />
     <Compile Include="Parsing\Container.cs" />
@@ -180,7 +181,7 @@
     <Compile Include="ParsingElements\IHasName.cs" />
     <Compile Include="ParsingElements\FortranObjects\Project.cs" />
     <Compile Include="ParsingElements\FortranObjects\InformationGroup.cs" />
-    <Compile Include="ParsingElements\Traversal\TraverserActions.CheckNames.cs" />
+    <Compile Include="ParsingElements\Traversal\TraverserActions.CheckValidity.cs" />
     <Compile Include="Parsing\IFortranBlock.cs" />
     <Compile Include="Parsing\LinedInternal.cs" />
     <Compile Include="Plugins\IPlugin.cs" />

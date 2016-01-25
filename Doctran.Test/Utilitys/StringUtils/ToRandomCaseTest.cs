@@ -7,8 +7,8 @@
 
 namespace Doctran.Test.Utilitys.StringUtils
 {
-    using NUnit.Framework;
     using Doctran.Utilitys;
+    using NUnit.Framework;
 
     [TestFixture]
     public class ToRandomCaseTest

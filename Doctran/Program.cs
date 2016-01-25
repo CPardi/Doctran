@@ -29,7 +29,6 @@ namespace Doctran
 
         public static int Main(string[] args)
         {
-
 #if DEBUG
             Report.SetDebugProfile();
 #endif
@@ -46,18 +45,18 @@ namespace Doctran
 
             var project = GetProject(options.SourceFilePaths, options.RunInSerial);
 
-            OutputTheme(options);
             var xmlOutputter = GetXmlOutputter(project, new XElement("Information", options.XmlInformation));
             if (options.SaveXmls)
             {
                 xmlOutputter.SaveToDisk(EnvVar.XmlOutputDirectory(options.OutputDirectory, "project.xml"));
             }
 
-            if (options.OnlyParse)
+            if (options.NoOutput)
             {
                 return 0;
             }
 
+            OutputTheme(options);
             OutputHtml(project, xmlOutputter, options);
 
             Report.NewStatus($@"Documentation can be found at '{Path.GetFullPath(options.OutputDirectory)}'");

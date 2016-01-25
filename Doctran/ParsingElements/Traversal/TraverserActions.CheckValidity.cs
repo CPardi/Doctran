@@ -1,4 +1,4 @@
-﻿// <copyright file="TraverserActions.CheckNames.cs" company="Christopher Pardi">
+﻿// <copyright file="TraverserActions.CheckValidity.cs" company="Christopher Pardi">
 //     Copyright © 2015 Christopher Pardi
 //     This Source Code Form is subject to the terms of the Mozilla Public
 //     License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -9,22 +9,20 @@ namespace Doctran.ParsingElements.Traversal
 {
     using System;
     using Parsing;
-    using Utilitys;
 
     public static partial class TraverserActions
     {
-        public static ITraverserAction CheckNotEmpty<T>(string propertyName, Func<T, string> getValue)
+        public static ITraverserAction CheckValidity<T>(Func<T, bool> isValid, Func<T, string> getErrorDetail)
             where T : IFortranObject
         {
             return new TraverserAction<T>(
                 (obj, errLis) =>
                 {
-                    if (getValue(obj).IsNullOrEmpty())
+                    if (!isValid(obj))
                     {
-                        errLis.Error(new TraverserException(obj, $"A '{Names.OfType(obj.GetType()).ToLower()}' has an empty '{propertyName}'."));
+                        errLis.Error(new TraverserException(obj, $"A '{Names.OfType(obj.GetType()).ToLower()}' contains an invalid value. {getErrorDetail(obj)}"));
                     }
                 });
         }
-
     }
 }
