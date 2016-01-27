@@ -1,4 +1,4 @@
-// <copyright file="PreprocessorUtils.cs" company="Christopher Pardi">
+// <copyright file="ParsingUtils.cs" company="Christopher Pardi">
 //     Copyright © 2015 Christopher Pardi
 //     This Source Code Form is subject to the terms of the Mozilla Public
 //     License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -11,7 +11,7 @@ namespace Doctran.Utilitys
     using System.Linq;
     using Helper;
 
-    public static class PreprocessorUtils
+    public static class ParsingUtils
     {
         public static List<FileLine> TrimLines(List<FileLine> lines)
         {

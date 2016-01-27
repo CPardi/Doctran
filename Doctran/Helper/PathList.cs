@@ -12,7 +12,6 @@ namespace Doctran.Helper
     using System.IO;
     using System.Linq;
     using System.Text.RegularExpressions;
-    using Utilitys;
 
     /// <summary>
     ///     Stores a list of file paths. Adding a new path can include wildcards, which are expanded and each resultant added
@@ -20,13 +19,6 @@ namespace Doctran.Helper
     /// </summary>
     public class PathList : AbstractList<string>
     {
-        public enum PathStorageMode
-        {
-            Absolute,
-
-            Relative
-        }
-
         /// <summary>
         ///     Gets or sets the mode of which paths are added to the path list.
         /// </summary>

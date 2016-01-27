@@ -24,16 +24,14 @@ namespace Doctran.Test.Helper
         [Test(Description = "Add a path with a double wildcard and extension.")]
         public void DirectoryDoubleWildcardWithExtensionMatch()
         {
-            var pathColl = new PathList();
-            pathColl.Add(@"Folder1\**\*.txt");
+            var pathColl = new PathList { @"Folder1\**\*.txt" };
             Assert.AreEqual(4, pathColl.Count);
         }
 
         [Test(Description = "Add a path with a double wildcard and extension.")]
         public void DirectoryWildcardWithExtensionMatch()
         {
-            var pathColl = new PathList();
-            pathColl.Add(@"Folder1\*.txt");
+            var pathColl = new PathList { @"Folder1\*.txt" };
             Assert.AreEqual(1, pathColl.Count);
         }
 
@@ -56,8 +54,7 @@ namespace Doctran.Test.Helper
         [Test(Description = "Add a path with a wildcard.")]
         public void FileNameWildcard()
         {
-            var pathColl = new PathList();
-            pathColl.Add("*");
+            var pathColl = new PathList { "*" };
             Assert.AreEqual(2, pathColl.Count);
         }
 
@@ -69,12 +66,18 @@ namespace Doctran.Test.Helper
             pathColl.Add("NotExistingFile");
         }
 
+        [Test(Description = "Just a double wildcard.")]
+        public void JustDoubleWildcard()
+        {
+            var pathColl = new PathList { "**/*.txt" };
+            Assert.AreEqual(7, pathColl.Count);
+        }
+
         [Test(Description = "Try to remove an item using a path with wildcards. This should be invalid.")]
         [ExpectedException(typeof(ArgumentException))]
         public void RemoveWildCardPath()
         {
-            var pathColl = new PathList();
-            pathColl.Add(@"Folder1\**\*.txt");
+            var pathColl = new PathList { @"Folder1\**\*.txt" };
             pathColl.Remove(@"Folder1\**\*.txt");
         }
 

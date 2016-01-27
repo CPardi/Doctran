@@ -59,7 +59,7 @@ namespace Doctran.Helper
 
         private List<string> CheckPathList(ReportGenre genre, IEnumerable<string> list)
         {
-            var pathList = new PathList { PathStorage = PathList.PathStorageMode.Absolute };
+            var pathList = new PathList { PathStorage = PathStorageMode.Absolute };
             try
             {
                 pathList.AddRange(list);

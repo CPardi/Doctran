@@ -115,6 +115,7 @@
     <Compile Include="Helper\IErrorListener.cs" />
     <Compile Include="Helper\Options.Backing.cs" />
     <Compile Include="Helper\Options.Checking.cs" />
+    <Compile Include="Helper\PathStorageMode.cs" />
     <Compile Include="Helper\ReportException.cs" />
     <Compile Include="Helper\ListenerAndAggregater.cs" />
     <Compile Include="Helper\StandardErrorListener.cs" />
@@ -163,11 +164,12 @@
     <Compile Include="Parsing\ISource.cs" />
     <Compile Include="ParsingElements\ISourceFile.cs" />
     <Compile Include="ParsingElements\FortranObjects\NamedDescription.cs" />
+    <Compile Include="Parsing\ParserTraverser.cs" />
     <Compile Include="Parsing\Traversal.cs" />
     <Compile Include="Parsing\TraverserException.cs" />
     <Compile Include="Reporting\ReportGenre.cs" />
     <Compile Include="Reporting\ReportSeverity.cs" />
-    <Compile Include="Utilitys\PreprocessorUtils.cs" />
+    <Compile Include="Utilitys\ParsingUtils.cs" />
     <Compile Include="Parsing\IFortranObject.cs" />
     <Compile Include="Plugins\IXmlSerializer.cs" />
     <Compile Include="Plugins\ILanguageParser.cs" />

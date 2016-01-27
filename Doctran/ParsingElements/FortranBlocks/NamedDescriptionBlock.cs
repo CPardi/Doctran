@@ -10,6 +10,8 @@ namespace Doctran.ParsingElements.FortranBlocks
     using System.Collections.Generic;
     using System.Linq;
     using System.Text.RegularExpressions;
+    using System.Xml;
+    using System.Xml.Linq;
     using FortranObjects;
     using Helper;
     using Parsing;
@@ -59,9 +61,18 @@ namespace Doctran.ParsingElements.FortranBlocks
             };
             newLines.AddRange(lines.Skip(1));
 
-            var basic = XmlUtils.WrapAndParse("Basic", DescriptionBlock.GetBasicText(newLines));
-            var detailed = XmlUtils.WrapAndParse("Detailed", DescriptionBlock.GetDetailText(newLines));
-            yield return new NamedDescription(name.ToLower(), basic, detailed, lines);
+            var basic = XmlUtils.WrapAsCData("Basic", DescriptionBlock.GetBasicText(newLines));
+            var detailText = DescriptionBlock.GetDetailText(newLines);
+
+            try
+            {
+                var detailed = XmlUtils.WrapAndParse("Detailed", detailText);
+                return CollectionUtils.Singlet(new NamedDescription(name.ToLower(), basic, detailed, lines));
+            }
+            catch (XmlException e)
+            {
+                throw new BlockParserException($"{e.Message.TrimEnd('.')} in the following generated markdown string: '{detailText.TrimEnd('\n')}'.");
+            }
         }
     }
 }

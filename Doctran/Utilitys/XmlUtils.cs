@@ -52,9 +52,14 @@ namespace Doctran.Utilitys
             }
         }
 
+        public static XElement WrapAsCData(string name, string text)
+        {
+            return new XElement(name, new XCData(text));
+        }
+
         public static XElement WrapAndParse(string name, string text)
         {
-            return XElement.Parse("<" + name + ">" + text + "</" + name + ">", LoadOptions.PreserveWhitespace);
+            return XElement.Parse($"<{name}>{text}</{name}>", LoadOptions.PreserveWhitespace);
         }
     }
 }

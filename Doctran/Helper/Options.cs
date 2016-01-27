@@ -26,13 +26,13 @@ namespace Doctran.Helper
         ///     project file.
         /// </summary>
         [Input.Options.OptionList("CopyAndParse", typeof(PathList))]
-        public PathList CopyAndParsePaths { get; set; } = new PathList { PathStorage = PathList.PathStorageMode.Relative };
+        public PathList CopyAndParsePaths { get; set; } = new PathList { PathStorage = PathStorageMode.Relative };
 
         /// <summary>
         ///     Gets or sets a list of paths to be copied to the output directory. Paths are stored relative to the project file.
         /// </summary>
         [Input.Options.OptionList("Copy", typeof(PathList))]
-        public PathList CopyPaths { get; set; } = new PathList { PathStorage = PathList.PathStorageMode.Relative };
+        public PathList CopyPaths { get; set; } = new PathList { PathStorage = PathStorageMode.Relative };
 
         /// <summary>
         ///     Gets or sets a path to save the documentation.
@@ -136,7 +136,7 @@ namespace Doctran.Helper
         /// <summary>
         ///     Gets or sets the additional XML elements to be appended to the project's XML file.
         /// </summary>
-        [XmlDefaultOption(InitializeAsDefault = true)]
+        [XmlDefaultOption("Author", "Name", "TagLine", "Searchable", "ShowSource", InitializeAsDefault = true, Strict = true)]
         [MenuOption]
         [UserPageOption]
         public List<XElement> XmlInformation { get; set; }

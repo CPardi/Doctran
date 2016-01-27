@@ -326,7 +326,7 @@ namespace Doctran.Input.Options
         private void GetDefaultOption(PropertyInfo prop, ref Tuple<PropertyInfo, IDefaultOptionAttribute> defaultInfo)
         {
             // Get the default option, if any
-            var defaultOption = prop.GetCustomAttributes(typeof(DefaultOptionAttribute), true).SingleOrDefault()
+            var defaultOption = prop.GetCustomAttributes(typeof(IDefaultOptionAttribute), true).SingleOrDefault()
                 as IDefaultOptionAttribute;
 
             if (defaultOption == null)

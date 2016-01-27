@@ -11,6 +11,7 @@ namespace Doctran.ParsingElements.FortranBlocks
     using System.Linq;
     using System.Net;
     using System.Text.RegularExpressions;
+    using System.Xml;
     using FortranObjects;
     using Helper;
     using MarkdownSharp;
@@ -19,8 +20,6 @@ namespace Doctran.ParsingElements.FortranBlocks
 
     public class DescriptionBlock : IFortranBlock
     {
-        private static readonly Markdown Markdown = new Markdown();
-
         public bool CheckInternal => false;
 
         public bool ExplicitEnd => false;
@@ -29,12 +28,12 @@ namespace Doctran.ParsingElements.FortranBlocks
 
         public static string GetBasicText(IEnumerable<FileLine> lines)
         {
-            return WebUtility.HtmlEncode(
+            return
                 string.Concat(
                     from line in lines
                     where Regex.IsMatch(line.Text, @"^\s*!>") && !Regex.IsMatch(line.Text, @"^\s*!>>")
                     select Regex.Match(line.Text, @"!>(.*)").Groups[1].Value.TrimStart()) + " "
-                        .TrimEnd());
+                        .TrimEnd();
         }
 
         public static string GetDetailText(List<FileLine> lines)
@@ -43,11 +42,11 @@ namespace Doctran.ParsingElements.FortranBlocks
                 .Where(line => Regex.IsMatch(line.Text, @"^\s*!>>(.*)"))
                 .ToList();
 
-            return Markdown.Transform(
+            return new Markdown().Transform(
                 string.Concat(
                     detailLines
                         .Select(line => Regex.Match(line.Text, @"!>>(.*)").Groups[1].Value)
-                        .Select((line, i) => i == detailLines.Count - 1 ? line : $"{line}")));
+                        .Select((line, i) => i == detailLines.Count - 1 ? line : $"{line}\n")));
         }
 
         public bool BlockEnd(IEnumerable<IFortranBlock> ancestors, List<FileLine> lines, int lineIndex)
@@ -82,9 +81,17 @@ namespace Doctran.ParsingElements.FortranBlocks
         public IEnumerable<IContained> ReturnObject(IEnumerable<IContained> subObjects, List<FileLine> lines)
         {
             var basic = XmlUtils.WrapAndParse("Basic", GetBasicText(lines));
-            var detailed = XmlUtils.WrapAndParse("Detailed", GetDetailText(lines));
+            var detailText = GetDetailText(lines);
 
-            yield return new Description(basic, detailed, lines);
+            try
+            {
+                var detailed = XmlUtils.WrapAndParse("Detailed", detailText);
+                return CollectionUtils.Singlet(new Description(basic, detailed, lines));
+            }
+            catch (XmlException e)
+            {
+                throw new BlockParserException($"{e.Message.TrimEnd('.')} in the following generated markdown string: '{detailText.TrimEnd('\n')}'.");
+            }
         }
     }
 }

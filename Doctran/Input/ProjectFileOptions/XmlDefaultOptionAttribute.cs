@@ -18,15 +18,21 @@ namespace Doctran.Input.ProjectFileOptions
     ///     Defines a property that holds XML data that mirrors a project file's group-value structure.
     /// </summary>
     [AttributeUsage(AttributeTargets.Property)]
-    internal class XmlDefaultOptionAttribute : DefaultOptionAttribute
+    internal class XmlDefaultOptionAttribute : OptionListBaseAttribute, IDefaultOptionAttribute
     {
+        private readonly string[] _allowedNames;
+
         /// <summary>
         ///     Initializes a new instance of the <see cref="XmlDefaultOptionAttribute" /> class.
         /// </summary>
-        public XmlDefaultOptionAttribute()
+        /// <param name="allowedNames">Names of options that can be allowed to be passed through if <see cref="Strict"/> is set to true.</param>
+        public XmlDefaultOptionAttribute(params string[] allowedNames)
             : base(typeof(List<XElement>))
         {
+            _allowedNames = allowedNames;
         }
+
+        public bool Strict { get; set; }
 
         /// <summary>
         ///     Converts the intermediary <see cref="IInformation" /> to a <see cref="XElement" />.
@@ -43,6 +49,11 @@ namespace Doctran.Input.ProjectFileOptions
             if (propertyType != typeof(XElement))
             {
                 throw new InvalidPropertyTypeException(nameof(this.InformationToProperty), typeof(XElement), propertyType);
+            }
+
+            if (this.Strict && !_allowedNames.Contains(information.Name))
+            {
+                throw new OptionReaderException(information.Lines.First().Number, information.Lines.Last().Number, $"'{information.Name}' is not a recognised option.");
             }
 
             return ToXml(information);
