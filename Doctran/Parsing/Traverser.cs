@@ -8,6 +8,7 @@
 namespace Doctran.Parsing
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using Helper;
     using ParsingElements;
@@ -28,6 +29,8 @@ namespace Doctran.Parsing
         public IErrorListener<TraverserException> ErrorListener { get; set; } = new StandardErrorListener<TraverserException>();
 
         public string Name { get; }
+
+        public IEnumerable<ITraverserAction> TraverserActions => _actions.SelectMany(a => a);
 
         public void Go(Project source)
         {

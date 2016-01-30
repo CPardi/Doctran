@@ -8,8 +8,10 @@
 namespace Doctran.ParsingElements.Traversal
 {
     using System;
+    using System.Collections.Generic;
     using System.Diagnostics;
     using System.Linq;
+    using Helper;
     using Parsing;
     using Utilitys;
 
@@ -25,27 +27,29 @@ namespace Doctran.ParsingElements.Traversal
         public static ITraverserAction CheckParent<T>(params Type[] validParentTypes)
             where T : IContained
         {
+            foreach (var type in validParentTypes)
+            {
+                Debug.Assert(type.GetInterface(nameof(IFortranObject)) != null, $"The types given within '{validParentTypes}' must implement the interface {nameof(IContained)}");
+            }
+
             return new TraverserAction<T>(
-                (obj, errLis) =>
-                {
-                    foreach (var type in validParentTypes)
-                    {
-                        Debug.Assert(type.GetInterface(nameof(IFortranObject)) != null, $"The types given within '{validParentTypes}' must implement the interface {nameof(IContained)}");
-                    }
+                (obj, errLis) => CheckInstanceParent(validParentTypes, obj, errLis));
+        }
 
-                    var valid = false;
-                    obj.Parent.GetType().ForTypeAndInterfaces(t => valid |= validParentTypes.Contains(t));
+        private static void CheckInstanceParent(IEnumerable<Type> validParentTypes, IContained obj, IErrorListener<TraverserException> errLis)
+        {
+            var valid = false;
+            obj.Parent.GetType().ForTypeAndInterfaces(t => valid |= validParentTypes.Contains(t));
 
-                    if (valid)
-                    {
-                        return;
-                    }
+            if (valid)
+            {
+                return;
+            }
 
-                    var parentsText = validParentTypes.Select(t => $"'{Names.OfType(t).ToLower()}s'").DelimiteredConcat(", ", " or ");
-                    var message = $"A '{obj.ObjectName.ToLower()}' has a '{obj.Parent.ObjectName.ToLower()}' for a parent. " +
-                                  $"'{obj.ObjectName.ToUpperFirstLowerRest()}s' are expected to have {parentsText} as parents.";
-                    errLis.Error(new TraverserException(obj, message));
-                });
+            var parentsText = validParentTypes.Select(t => $"'{Names.OfType(t).ToLower()}s'").DelimiteredConcat(", ", " or ");
+            var message = $"A '{obj.ObjectName.ToLower()}' has a '{obj.Parent.ObjectName.ToLower()}' for a parent. " +
+                          $"'{obj.ObjectName.ToUpperFirstLowerRest()}s' are expected to have {parentsText} as parents.";
+            errLis.Error(new TraverserException(obj, message));
         }
     }
 }

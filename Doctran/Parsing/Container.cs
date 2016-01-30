@@ -8,6 +8,7 @@
 namespace Doctran.Parsing
 {
     using System.Collections.Generic;
+    using ParsingElements;
     using Utilitys;
 
     public abstract class Container : IContainer
@@ -17,7 +18,7 @@ namespace Doctran.Parsing
             this.AddSubObjects(subObjects);
         }
 
-        public abstract string ObjectName { get; }
+        public string ObjectName => Names.OfType(this.GetType());
 
         public List<IContained> SubObjects { get; } = new List<IContained>();
 

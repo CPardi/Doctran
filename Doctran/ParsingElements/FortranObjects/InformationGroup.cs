@@ -20,8 +20,6 @@ namespace Doctran.ParsingElements.FortranObjects
             this.Depth = depth;
         }
 
-        public override string ObjectName => Names.OfType(this.GetType());
-
         public int Depth { get; }
 
         public string Name { get; }

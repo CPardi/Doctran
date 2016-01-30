@@ -80,7 +80,7 @@ namespace Doctran.ParsingElements.FortranBlocks
 
         public IEnumerable<IContained> ReturnObject(IEnumerable<IContained> subObjects, List<FileLine> lines)
         {
-            var basic = XmlUtils.WrapAndParse("Basic", GetBasicText(lines));
+            var basic = XmlUtils.WrapAsCData("Basic", GetBasicText(lines));
             var detailText = GetDetailText(lines);
 
             try

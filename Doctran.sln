@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Doctran", "Doctran\Doctran.csproj", "{76ED33A3-5634-4A57-81AD-C8B948E6FF12}"
 EndProject
@@ -16,6 +16,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fortran95.Test", "Plugin-Fortran95\Fortran95.Test\Fortran95.Test.csproj", "{63E70515-C3A2-4FDA-BEBA-142DA4E0B03B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fortran2003.Test", "Plugin-Fortran2003\Fortran2003.Test\Fortran2003.Test.csproj", "{D58B7B29-9C41-48F2-B498-A54B5CA3E258}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Doctran.Licensing", "Doctran.Licensing\Doctran.Licensing.csproj", "{33B205D0-7310-405A-9E82-F5A72724B089}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -52,6 +54,10 @@ Global
 		{D58B7B29-9C41-48F2-B498-A54B5CA3E258}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D58B7B29-9C41-48F2-B498-A54B5CA3E258}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D58B7B29-9C41-48F2-B498-A54B5CA3E258}.Release|Any CPU.Build.0 = Release|Any CPU
+		{33B205D0-7310-405A-9E82-F5A72724B089}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{33B205D0-7310-405A-9E82-F5A72724B089}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{33B205D0-7310-405A-9E82-F5A72724B089}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{33B205D0-7310-405A-9E82-F5A72724B089}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

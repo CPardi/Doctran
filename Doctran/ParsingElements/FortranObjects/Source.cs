@@ -19,8 +19,6 @@ namespace Doctran.ParsingElements.FortranObjects
             this.Language = language;
         }
 
-        public override string ObjectName => "Source";
-
         public string Identifier => $"{this.Language} source";
 
         public string Language { get; }

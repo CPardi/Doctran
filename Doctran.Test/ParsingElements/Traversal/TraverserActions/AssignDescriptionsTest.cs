@@ -90,8 +90,6 @@ namespace Doctran.Test.ParsingElements.Traversal.TraverserActions
 
             public string Identifier { get; }
 
-            public override string ObjectName => "Test Class";
-
             public IContainer Parent { get; set; }
         }
     }

@@ -46,8 +46,6 @@ namespace Doctran.ParsingElements.FortranObjects
 
         public int NameUniquenessLevel { get; set; } = 0;
 
-        public override string ObjectName => Names.OfType(this.GetType());
-
         public string OriginalLines { get; }
 
         public string ValidName => this.Name.Replace("/", "_newdir_").Replace("\\", "_newdir_");
