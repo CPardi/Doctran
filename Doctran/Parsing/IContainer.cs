@@ -8,12 +8,15 @@
 namespace Doctran.Parsing
 {
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
 
     public interface IContainer : IFortranObject
     {
-        List<IContained> SubObjects { get; }
+        ReadOnlyCollection<IContained> SubObjects { get; }
 
         void AddSubObject(IContained containedItem);
+
+        void InsertSubObject(int index, IContained containedItem);
 
         void AddSubObjects(IEnumerable<IContained> containedItems);
 

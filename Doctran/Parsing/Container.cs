@@ -8,11 +8,14 @@
 namespace Doctran.Parsing
 {
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using ParsingElements;
     using Utilitys;
 
     public abstract class Container : IContainer
     {
+        private readonly List<IContained> _subObjects = new List<IContained>();
+
         protected Container(IEnumerable<IContained> subObjects)
         {
             this.AddSubObjects(subObjects);
@@ -20,13 +23,15 @@ namespace Doctran.Parsing
 
         public string ObjectName => Names.OfType(this.GetType());
 
-        public List<IContained> SubObjects { get; } = new List<IContained>();
+        public ReadOnlyCollection<IContained> SubObjects => _subObjects.AsReadOnly();
 
-        public void AddSubObject(IContained containedItem) => CollectionUtils.AddSubObject(this, containedItem);
+        public void AddSubObject(IContained containedItem) => CollectionUtils.AddSubObject(_subObjects, this, containedItem);
 
-        public void AddSubObjects(IEnumerable<IContained> containedItems) => CollectionUtils.AddSubObjects(this, containedItems);
+        public void AddSubObjects(IEnumerable<IContained> containedItems) => CollectionUtils.AddSubObjects(_subObjects, this, containedItems);
 
-        public void RemoveSubObject(IContained containedItem) => CollectionUtils.RemoveSubObject(this, containedItem);
+        public void InsertSubObject(int index, IContained containedItem) => CollectionUtils.InsertSubObject(_subObjects, this, index, containedItem);
+
+        public void RemoveSubObject(IContained containedItem) => CollectionUtils.RemoveSubObject(_subObjects, this, containedItem);
 
         public void RemoveSubObjects(IEnumerable<IContained> containedItems) => CollectionUtils.RemoveSubObjects(this, containedItems);
     }

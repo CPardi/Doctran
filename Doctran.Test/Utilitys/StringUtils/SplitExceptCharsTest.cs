@@ -91,12 +91,58 @@ namespace Doctran.Test.Utilitys.StringUtils
 
                 yield return new TestCaseData(@"one=""sdf,""", new[] { ',' }, new[] { new Tuple<char, char>('"', '"') }, new[] { @"one=""sdf,""" })
                     .SetName("Delimiter at before last exception char.");
+
+                yield return new TestCaseData(@"one=""sdf,"",", new[] { ',' }, new[] { new Tuple<char, char>('"', '"') }, new[] { @"one=""sdf,""", string.Empty })
+                    .SetName("Splitter at end of string.");
+
+                yield return new TestCaseData(@",one=""sdf,""", new[] { ',' }, new[] { new Tuple<char, char>('"', '"') }, new[] { string.Empty, @"one=""sdf,""" })
+                    .SetName("Splitter at beggining of string.");
+            }
+        }
+
+        public static IEnumerable StringData
+        {
+            get
+            {
+                yield return new TestCaseData(@"one=""sdf=>sfe""", new[] { "=>" }, new[] { new Tuple<char, char>('"', '"') }, new[] { @"one=""sdf=>sfe""" })
+                    .SetName("String splitter within escape chars.");
+
+                yield return new TestCaseData(@"one=>""sdf""", new[] { "=>" }, new[] { new Tuple<char, char>('"', '"') }, new[] { @"one", @"""sdf""" })
+                    .SetName("String splitter outside escape chars.");
+
+                yield return new TestCaseData(@"one=>""sdf=>sfe""", new[] { "=>" }, new[] { new Tuple<char, char>('"', '"') }, new[] { @"one", @"""sdf=>sfe""" })
+                    .SetName("String splitter inside and outside escape chars.");
+
+                yield return new TestCaseData(@"one=>""sdf""=sfe", new[] { "=>", "=" }, new[] { new Tuple<char, char>('"', '"') }, new[] { @"one", @"""sdf""", "sfe" })
+                    .SetName("Multiple splitters.");
+
+                yield return new TestCaseData(@"one=""sdf""=>", new[] { "=", "=>" }, new[] { new Tuple<char, char>('"', '"') }, new[] { @"one", @"""sdf""", string.Empty })
+                    .SetName("Splitter at end of string.");
+
+                yield return new TestCaseData(@"=>one=""sdf""", new[] { "=", "=>" }, new[] { new Tuple<char, char>('"', '"') }, new[] { string.Empty, @"one", @"""sdf""" })
+                    .SetName("Splitter at end of string.");
+
+                yield return new TestCaseData(@"one=>two>""sdf""", new[] { "=>", ">" }, new[] { new Tuple<char, char>('"', '"') }, new[] { @"one", "two", @"""sdf""" })
+                    .SetName("Conflicting splitter on right.");
             }
         }
 
         [Test]
         [TestCaseSource(typeof(SplitExceptCharsTest), nameof(Data))]
-        public void Test(string testString, char[] seperator, Tuple<char, char>[] pairs, string[] expected)
+        public void TestCharSeperators(string testString, char[] seperator, Tuple<char, char>[] pairs, string[] expected)
+        {
+            var actual = StringUtils.SplitExceptChars(testString, seperator, pairs);
+
+            Assert.AreEqual(expected.Count(), actual.Count(), $"Actual:\n {actual.DelimiteredConcat(",\n")}");
+            for (var i = 0; i < pairs.Length; i++)
+            {
+                Assert.AreEqual(actual[i], expected[i]);
+            }
+        }
+
+        [Test]
+        [TestCaseSource(typeof(SplitExceptCharsTest), nameof(StringData))]
+        public void TestStringSeperators(string testString, string[] seperator, Tuple<char, char>[] pairs, string[] expected)
         {
             var actual = StringUtils.SplitExceptChars(testString, seperator, pairs);
 

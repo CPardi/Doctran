@@ -91,7 +91,7 @@ namespace Doctran.Licensing
             if (desc != null)
             {
                 obj.AddSubObject(new Description(new XElement(desc.Basic.Value + watermarkText), desc.Detailed, desc.Lines));
-                obj.SubObjects.Remove(desc);
+                obj.RemoveSubObject(desc);
             }
             else
             {

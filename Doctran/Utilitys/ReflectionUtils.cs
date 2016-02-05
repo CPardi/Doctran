@@ -8,6 +8,7 @@
 namespace Doctran.Utilitys
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
 
@@ -29,6 +30,26 @@ namespace Doctran.Utilitys
             foreach (var inter in @this.GetInterfaces())
             {
                 action(inter);
+            }
+        }
+
+        public static IEnumerable<Type> GetTypeAndBaseTypes(this Type @this)
+        {
+            var current = @this;
+            while (current != null)
+            {
+                yield return current;
+                current = current.BaseType;
+            }
+        }
+
+        public static IEnumerable<Type> GetBaseTypes(this Type @this)
+        {
+            var current = @this;
+            while (current != null)
+            {
+                current = current.BaseType;
+                yield return current;
             }
         }
     }

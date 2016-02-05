@@ -96,12 +96,15 @@ namespace Doctran.XmlSerialization
             foreach (var obj in objsOfType)
             {
                 var objType = obj.GetType();
-                Func<IFortranObject, XElement> toXml;
-                _toXmlDictionary.TryGetValue(objType, out toXml);
-                if (toXml == null)
+                var objTypes = objType.GetTypeAndBaseTypes();
+
+                var toXmlKey = _toXmlDictionary.Keys.FirstOrDefault(key => objTypes.Contains(key));
+                if (toXmlKey == null)
                 {
                     continue;
                 }
+
+                var toXml = _toXmlDictionary[toXmlKey];
 
                 var xElement = toXml(obj);
                 xElement.Add(objType.GetInterfaces().Select(inter =>

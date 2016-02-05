@@ -63,6 +63,7 @@
     <Compile Include="ParsingElements\FortranBlocks\TestUtilities\StringUtils.cs" />
     <Compile Include="ParsingElements\FortranBlocks\TestUtilities\TestingUtils.cs" />
     <Compile Include="ParsingElements\Traversal\TraverserActions\AssignDescriptionsTest.cs" />
+    <Compile Include="ParsingElements\Traversal\TraverserActions\CheckAncestorTest.cs" />
     <Compile Include="ParsingElements\Traversal\TraverserActions\CheckParentTest.cs" />
     <Compile Include="ParsingElements\Traversal\TraverserActions\UniqueSourceNameTest.cs" />
     <Compile Include="ParsingElements\Traversal\TraverserActions\CheckUniquenessTest.cs" />

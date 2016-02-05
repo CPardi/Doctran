@@ -37,13 +37,19 @@ namespace Doctran.Utilitys
             return @this.ToList().AsReadOnly();
         }
 
-        public static void AddSubObject(IContainer container, IContained contained)
+        public static void AddSubObject(List<IContained> subObjects, IContainer container, IContained contained)
         {
             contained.Parent = container;
-            container.SubObjects.Add(contained);
+            subObjects.Add(contained);
         }
 
-        public static void AddSubObjects(IContainer container, IEnumerable<IContained> containedItems)
+        public static void InsertSubObject(List<IContained> subObjects, IContainer container, int index, IContained contained)
+        {
+            contained.Parent = container;
+            subObjects.Insert(index, contained);
+        }
+
+        public static void AddSubObjects(List<IContained> subObjects, IContainer container, IEnumerable<IContained> containedItems)
         {
             var containedItemList = containedItems as IList<IContained> ?? containedItems.ToList();
             foreach (var item in containedItemList)
@@ -51,12 +57,12 @@ namespace Doctran.Utilitys
                 item.Parent = container;
             }
 
-            container.SubObjects.AddRange(containedItemList);
+            subObjects.AddRange(containedItemList);
         }
 
-        public static void RemoveSubObject(IContainer container, IContained contained)
+        public static void RemoveSubObject(List<IContained> subObjects, IContainer container, IContained contained)
         {
-            container.SubObjects.Remove(contained);
+            subObjects.Remove(contained);
         }
 
         public static void RemoveSubObjects(IContainer container, IEnumerable<IContained> containeItems)

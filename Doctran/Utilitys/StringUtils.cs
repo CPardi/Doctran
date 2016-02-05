@@ -94,17 +94,25 @@ namespace Doctran.Utilitys
             return delimiteredText;
         }
 
-        public static List<string> SplitExceptChars(string text, char split, Tuple<char, char>[] pairs) => SplitExceptChars(text, new[] { split }, pairs);
+        public static List<string> SplitExceptChars(string text, char split, Tuple<char, char>[] pairs) => SplitExceptChars(text, new[] { split.ToString() }, pairs);
 
-        public static List<string> SplitExceptChars(string text, char[] split, Tuple<char, char>[] pairs)
+        public static List<string> SplitExceptChars(string text, char[] split, Tuple<char, char>[] pairs) => SplitExceptChars(text, split.Select(s => s.ToString()), pairs);
+
+        public static List<string> SplitExceptChars(string text, IEnumerable<string> split, Tuple<char, char>[] pairs)
         {
             var delimiteredText = new List<string>();
 
             var pairDepth = new int[pairs.Length];
 
-            int prevIndex = 0, currentIndex = 0;
-            foreach (var aChar in text)
+            var prevIndex = 0;
+            var charArray = text.ToCharArray();
+            var splitArray = split.OrderByDescending(str => str.Length).ToArray();
+
+            var charNum = 0;
+            while (charNum < charArray.Length)
             {
+                var aChar = charArray[charNum];
+
                 // Search through each pair for split exception begining.
                 for (var i = 0; i < pairs.Length; i++)
                 {
@@ -131,20 +139,27 @@ namespace Doctran.Utilitys
                 }
 
                 // If we are not within a exception pair block then search for split character.
-                if (pairDepth.All(d => d == 0) & split.Contains(aChar))
+                if (pairDepth.All(d => d == 0))
                 {
-                    delimiteredText.Add(text.Substring(prevIndex, currentIndex - prevIndex));
-                    prevIndex = currentIndex + 1;
+                    // Split array should be in size order, so the first match will then be the longest match. Make sure there is enough of the string left and
+                    // see if the next character match any of the split strings.
+                    var matchString = splitArray.FirstOrDefault(str => text.Length - (charNum + str.Length) >= 0 && str == text.Substring(charNum, str.Length));
+                    if (matchString != null)
+                    {
+                        delimiteredText.Add(text.Substring(prevIndex, charNum - prevIndex));
+                        prevIndex = charNum + matchString.Length;
+                        charNum = charNum + matchString.Length - 1;
+                    }
                 }
 
                 // If we are at the last character then add the final substring.
-                if (currentIndex == text.Length - 1)
+                if (charNum == text.Length - 1)
                 {
-                    delimiteredText.Add(text.Substring(prevIndex, currentIndex - prevIndex + 1));
+                    delimiteredText.Add(text.Substring(prevIndex, charNum - prevIndex + 1));
                     break;
                 }
 
-                currentIndex++;
+                charNum++;
             }
 
             return delimiteredText;

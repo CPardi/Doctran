@@ -39,7 +39,7 @@ namespace Doctran.Parsing
         {
             // Parse and post process AST.
             var pListener = new ListenerAndAggregater<ParserException>();
-            var sourceFile = new Parser("FreeFormatFortran95", this.BlockParsers) { ErrorListener = pListener }
+            var sourceFile = new Parser(this.Language, this.BlockParsers) { ErrorListener = pListener }
                 .Parse(sourceName, source, this.Preprocessor);
 
             // Report warnings for both warnings and errors frot he parser.

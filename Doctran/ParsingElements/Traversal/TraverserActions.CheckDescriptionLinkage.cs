@@ -26,7 +26,7 @@ namespace Doctran.ParsingElements.Traversal
                         }
 
                         // Throw exception if not.
-                        obj.Parent.SubObjects.Remove(obj);
+                        obj.Parent.RemoveSubObject(obj);
                         errLis.Warning(new TraverserException(obj, "Description meta-data was ignored. Description identifier does not match parent identifier."));
                     });
             }
