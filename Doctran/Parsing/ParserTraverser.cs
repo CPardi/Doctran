@@ -60,7 +60,7 @@ namespace Doctran.Parsing
             var tErrors = tListener.Warnings.Concat(tListener.Errors).ToList();
             if (tErrors.Any())
             {
-                Report.Warnings((pub, e) => CreateTActionPublisher(sourceName, e, pub), tErrors.OrderBy(err => (err.Cause as IHasLines)?.Lines.First().Number));
+                Report.Warnings((pub, e) => CreateTActionPublisher(sourceName, e, pub), tErrors.OrderBy(err => (err.Cause as IHasLines)?.Lines.FirstOrDefault().Number));
             }
 
             return sourceFile;

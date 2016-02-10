@@ -39,7 +39,7 @@ namespace Doctran.ParsingElements.Traversal
         private static void CheckInstanceParent(IEnumerable<Type> validParentTypes, IContained obj, IErrorListener<TraverserException> errLis)
         {
             var valid = false;
-            obj.Parent.GetType().ForTypeAndInterfaces(t => valid |= validParentTypes.Contains(t));
+            obj.Parent.GetType().ForTypeBaseTypesAndInterfaces(t => valid |= validParentTypes.Contains(t));
 
             if (valid)
             {

@@ -37,7 +37,7 @@ namespace Doctran.Helper
         /// <summary>
         ///     Gets or sets a path to save the documentation.
         /// </summary>
-        [CommandLine.Option('o', "output", DefaultValue = "Docs", MetaValue = "PATH", HelpText = "PATH is the output directory for the documentation.")]
+        [CommandLine.Option('o', "output", DefaultValue = "Docs", MetaValue = "PATH", HelpText = "Specifies the output directory for the documentation.")]
         public string OutputDirectory
         {
             get { return _outputDirectory; }

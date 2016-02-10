@@ -119,6 +119,7 @@
     <Compile Include="Helper\ReportException.cs" />
     <Compile Include="Helper\ListenerAndAggregater.cs" />
     <Compile Include="Helper\StandardErrorListener.cs" />
+    <Compile Include="Helper\TypeSwitch.cs" />
     <Compile Include="Input\Options\OptionsReader.cs" />
     <Compile Include="Input\Options\OptionReaderException.cs" />
     <Compile Include="Input\Options\DefaultOptionAttribute.cs" />

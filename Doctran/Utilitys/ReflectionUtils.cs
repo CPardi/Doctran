@@ -33,6 +33,19 @@ namespace Doctran.Utilitys
             }
         }
 
+        public static void ForTypeBaseTypesAndInterfaces(this Type @this, Action<Type> action)
+        {
+            foreach (var baseType in @this.GetTypeAndBaseTypes())
+            {
+                action(baseType);
+            }
+
+            foreach (var inter in @this.GetInterfaces())
+            {
+                action(inter);
+            }
+        }
+
         public static IEnumerable<Type> GetTypeAndBaseTypes(this Type @this)
         {
             var current = @this;
