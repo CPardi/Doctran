@@ -16,7 +16,7 @@ namespace Doctran.XmlSerialization
 
     public class XmlGenerator
     {
-        private readonly Dictionary<Type, Func<IFortranObject, IEnumerable<XElement>>> _interfaceXmlDictionary;
+        private readonly Dictionary<Type, IInterfaceXElements> _interfaceXmlDictionary;
 
         private readonly Dictionary<Type, Func<IEnumerable<XElement>, XElement>> _toGroupXmlDictionary;
 
@@ -27,9 +27,7 @@ namespace Doctran.XmlSerialization
             IEnumerable<IObjectXElement> objectXElements,
             IEnumerable<IGroupXElement> toGroupXmlDictionary)
         {
-            _interfaceXmlDictionary = interfaceXElements.ToDictionary(
-                obj => obj.ForType,
-                obj => new Func<IFortranObject, IEnumerable<XElement>>(obj.Create));
+            _interfaceXmlDictionary = interfaceXElements.ToDictionary(obj => obj.ForType);
 
             _toXmlDictionary = objectXElements.ToDictionary(
                 obj => obj.ForType,
@@ -109,9 +107,10 @@ namespace Doctran.XmlSerialization
                 var xElement = toXml(obj);
                 xElement.Add(objType.GetInterfaces().Select(inter =>
                 {
-                    Func<IFortranObject, IEnumerable<XElement>> create;
-                    _interfaceXmlDictionary.TryGetValue(inter, out create);
-                    return create != null ? create(obj) : CollectionUtils.Empty<XElement>();
+                    // Try to get the interface XElement creator. If it exists and instructed by it to create the XElements, then do it.
+                    IInterfaceXElements interfaceXElements;
+                    _interfaceXmlDictionary.TryGetValue(inter, out interfaceXElements);
+                    return interfaceXElements != null && interfaceXElements.ShouldCreate(obj) ? interfaceXElements.Create(obj) : CollectionUtils.Empty<XElement>();
                 }));
 
                 xElement.Add(this.Navigate(obj));

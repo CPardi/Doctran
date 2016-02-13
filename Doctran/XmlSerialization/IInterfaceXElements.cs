@@ -16,6 +16,8 @@ namespace Doctran.XmlSerialization
     {
         Type ForType { get; }
 
+        bool ShouldCreate(object from);
+
         IEnumerable<XElement> Create(object from);
     }
 
@@ -23,6 +25,8 @@ namespace Doctran.XmlSerialization
         where TParsed : IFortranObject
     {
         Type ForType { get; }
+
+        bool ShouldCreate(TParsed from);
 
         IEnumerable<XElement> Create(TParsed from);
     }

@@ -79,7 +79,7 @@ namespace Doctran.Parsing
                 pub.DescriptionReasonLocation(
                     ReportGenre.Traversal,
                     $"{e.Message} Output may contain unexpected results.",
-                    StringUtils.LocationString(lines.First().Number, lines.Last().Number, sourceName));
+                    StringUtils.LocationString(lines.FirstOrDefault().Number, lines.LastOrDefault().Number, sourceName));
             }
             else
             {

@@ -14,6 +14,9 @@ namespace Doctran.Utilitys
 
     public static class CollectionUtils
     {
+        public static IEnumerable<TIn> NotOfType<TIn, TNot>(this IEnumerable<TIn> @this)
+            where TNot : TIn => @this.Where(item => !(item is TNot));
+
         public static IEnumerable<T> Empty<T>()
         {
             return new List<T>();
