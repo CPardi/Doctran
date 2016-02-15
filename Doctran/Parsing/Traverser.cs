@@ -23,7 +23,7 @@ namespace Doctran.Parsing
         public Traverser(string name, params ITraverserAction[] actions)
         {
             this.Name = name;
-            _actions = actions.ToLookup(a => a.ForType);
+            _actions = actions.ToLookup(a => a.ForType, new CompareRootTypes(actions.Select(a => a.ForType)));
         }
 
         public IErrorListener<TraverserException> ErrorListener { get; set; } = new StandardErrorListener<TraverserException>();

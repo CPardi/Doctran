@@ -11,6 +11,7 @@ namespace Doctran.XmlSerialization
     using System.Collections.Generic;
     using System.Linq;
     using System.Xml.Linq;
+    using Helper;
     using Parsing;
     using Utilitys;
 
@@ -51,26 +52,6 @@ namespace Doctran.XmlSerialization
             {
                 throw new ApplicationException($"A group XElement exists for the types {str} for which there is no corresponding object XElement.");
             }
-        }
-
-        private class CompareRootTypes : EqualityComparer<Type>
-        {
-            private readonly IEnumerable<Type> _types;
-
-            public CompareRootTypes(IEnumerable<Type> types)
-            {
-                _types = types;
-            }
-
-            public override bool Equals(Type x, Type y)
-            {
-                var xLowestType = x.GetTypeAndBaseTypes().First(t => _types.Contains(t));
-                var yLowestType = x.GetTypeAndBaseTypes().First(t => _types.Contains(t));
-
-                return xLowestType == yLowestType;
-            }
-
-            public override int GetHashCode(Type obj) => obj?.GetTypeAndBaseTypesAndInterfaces().FirstOrDefault(t => _types.Contains(t))?.GetHashCode() ?? obj?.GetHashCode() ?? 0;
         }
 
         public XElement CreateForObject(IFortranObject obj) => this.GetXmlValue(new[] { obj }).Single();
@@ -152,5 +133,7 @@ namespace Doctran.XmlSerialization
             => (obj as IContainer)?.SubObjects.GroupBy(this.KeySelector).SelectMany(objsOfType => this.GetValue(objsOfType.Key, objsOfType)) ?? new XElement[] { };
 
         private IEnumerable<XElement> SkipLevel(IEnumerable<IFortranObject> objsOfType) => objsOfType.SelectMany(this.Navigate);
+
+        
     }
 }

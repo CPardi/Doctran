@@ -189,6 +189,7 @@
     <Compile Include="Parsing\IFortranBlock.cs" />
     <Compile Include="Parsing\LinedInternal.cs" />
     <Compile Include="Plugins\IPlugin.cs" />
+    <Compile Include="Helper\CompareRootTypes.cs" />
     <Compile Include="XmlSerialization\IGroupXElement.cs" />
     <Compile Include="XmlSerialization\IInterfaceXElements.cs" />
     <Compile Include="XmlSerialization\InterfaceXElements.cs" />
