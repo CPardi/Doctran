@@ -58,18 +58,31 @@ namespace Doctran.Helper
             var writableWidth = Math.Min(Console.BufferWidth, Console.LargestWindowWidth) - this.RightMargin;
 
             var pos = indentWidth;
-            foreach (var t in Regex.Split(text, $@"(?<=[{Regex.Escape(string.Concat(Seperators))}])").Where(t => t != string.Empty))
+
+            foreach (var betweenSeperator in Regex.Split(text, $@"(?<=[{Regex.Escape(string.Concat(Seperators))}])").Where(t => t != string.Empty))
             {
-                pos += t.Length;
-
-                if (pos >= writableWidth)
+                var index = 0;
+                foreach (var betweenNewLine in betweenSeperator.Split('\n'))
                 {
-                    _sb.Append(Environment.NewLine);
-                    _sb.Append(indentString);
-                    pos = indentWidth + t.Length;
-                }
+                    pos += betweenNewLine.Length;
 
-                _sb.Append(t);
+                    if (index != 0)
+                    {
+                        _sb.Append(Environment.NewLine);
+                        _sb.Append(indentString);
+                    } 
+
+                    if (pos >= writableWidth)
+                    {
+                        _sb.Append(Environment.NewLine);
+                        _sb.Append(indentString);
+                        pos = indentWidth + betweenNewLine.Length;
+                    }
+
+                    _sb.Append(betweenNewLine);
+
+                    index++;
+                }
             }
         }
     }

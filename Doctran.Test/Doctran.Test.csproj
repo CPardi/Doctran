@@ -78,6 +78,15 @@
     <Compile Include="Utilitys\StringUtils\ConvertToFileLineListTest.cs" />
     <Compile Include="Utilitys\StringUtils\SplitExceptCharsTest.cs" />
     <Compile Include="Utilitys\StringUtils\ToRandomCaseTest.cs" />
+    <Compile Include="XmlSerialization\InterfaceXElements\CreateTest.cs" />
+    <Compile Include="XmlSerialization\InterfaceXElements\ForTypeTest.cs" />
+    <Compile Include="XmlSerialization\InterfaceXElements\InterfaceXElementsTest.cs" />
+    <Compile Include="XmlSerialization\ITestClass.cs" />
+    <Compile Include="XmlSerialization\InterfaceXElements\ShouldCreateTest.cs" />
+    <Compile Include="XmlSerialization\TestContainer.cs" />
+    <Compile Include="XmlSerialization\TestExtensionClass.cs" />
+    <Compile Include="XmlSerialization\TestClass.cs" />
+    <Compile Include="XmlSerialization\XmlGenerator\CreateForObjectTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="nunit.framework, Version=2.6.4.14350, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">

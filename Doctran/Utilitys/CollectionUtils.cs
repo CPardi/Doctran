@@ -30,9 +30,9 @@ namespace Doctran.Utilitys
             }
         }
 
-        public static IEnumerable<T> Singlet<T>(T tInstance)
+        public static IEnumerable<T> Singlet<T>(this T @this)
         {
-            yield return tInstance;
+            yield return @this;
         }
 
         public static ReadOnlyCollection<T> ToReadOnlyCollection<T>(this IEnumerable<T> @this)

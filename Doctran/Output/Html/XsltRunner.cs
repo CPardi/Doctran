@@ -110,15 +110,15 @@ namespace Doctran.Output.Html
         private void ReportCompilerErrors(TransformerErrorListener listener)
         {
             Report.Warnings(
-                (pub, w) => pub.DescriptionReasonLocation(ReportGenre.XsltCompilation, w.getCause().Message, this.LocationString(w.getLocator())),
+                (pub, w) => pub.DescriptionReasonLocation(ReportGenre.XsltCompilation, w.getCause()?.Message, this.LocationString(w.getLocator())),
                 listener.Warnings);
 
             Report.Warnings(
-                (pub, e) => pub.DescriptionReasonLocation(ReportGenre.XsltCompilation, e.getCause().Message, this.LocationString(e.getLocator())),
+                (pub, e) => pub.DescriptionReasonLocation(ReportGenre.XsltCompilation, e.getCause()?.Message, this.LocationString(e.getLocator())),
                 listener.Errors);
 
             Report.Errors(
-                (pub, e) => pub.DescriptionReasonLocation(ReportGenre.XsltCompilation, e.getCause().Message, this.LocationString(e.getLocator())),
+                (pub, e) => pub.DescriptionReasonLocation(ReportGenre.XsltCompilation, e.getCause()?.Message, this.LocationString(e.getLocator())),
                 listener.FatalErrors);
         }
 

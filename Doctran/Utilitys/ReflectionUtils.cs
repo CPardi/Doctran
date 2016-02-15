@@ -14,16 +14,6 @@ namespace Doctran.Utilitys
 
     public static class ReflectionUtils
     {
-        public static T GetAssemblyAttribute<T>(this Assembly ass)
-            where T : Attribute
-        {
-            var attributes = ass.GetCustomAttributes(typeof(T), false);
-            return
-                attributes.Length != 0
-                    ? attributes.OfType<T>().Single()
-                    : null;
-        }
-
         public static void ForTypeAndInterfaces(this Type @this, Action<Type> action)
         {
             action(@this);
@@ -46,14 +36,14 @@ namespace Doctran.Utilitys
             }
         }
 
-        public static IEnumerable<Type> GetTypeAndBaseTypes(this Type @this)
+        public static T GetAssemblyAttribute<T>(this Assembly ass)
+            where T : Attribute
         {
-            var current = @this;
-            while (current != null)
-            {
-                yield return current;
-                current = current.BaseType;
-            }
+            var attributes = ass.GetCustomAttributes(typeof(T), false);
+            return
+                attributes.Length != 0
+                    ? attributes.OfType<T>().Single()
+                    : null;
         }
 
         public static IEnumerable<Type> GetBaseTypes(this Type @this)
@@ -64,6 +54,48 @@ namespace Doctran.Utilitys
                 current = current.BaseType;
                 yield return current;
             }
+        }
+
+        /// <summary>
+        ///     Returns the root type that is not object. If <paramref name="this" /> is <see cref="object" /> or a direct
+        ///     extension of <see cref="object" />, then <paramref name="this" /> is returned.
+        /// </summary>
+        /// <param name="this">The type whose root type is to be found.</param>
+        /// <returns>The root type.</returns>
+        public static Type GetRootType(this Type @this)
+        {
+            var current = @this;
+            while (current.BaseType != null && current.BaseType != typeof(object))
+            {
+                current = current.BaseType;
+            }
+
+            return current;
+        }
+
+        public static IEnumerable<Type> GetTypeAndBaseTypes(this Type @this)
+        {
+            var current = @this;
+            while (current != null)
+            {
+                yield return current;
+                current = current.BaseType;
+            }
+        }
+
+        public static IEnumerable<Type> GetTypeAndBaseTypesAndInterfaces(this Type @this)
+        {
+            var typeList = new List<Type>();
+            var current = @this;
+            while (current != null)
+            {
+                typeList.Add(current);
+                current = current.BaseType;
+            }
+
+            typeList.AddRange(@this.GetInterfaces());
+
+            return typeList;
         }
     }
 }

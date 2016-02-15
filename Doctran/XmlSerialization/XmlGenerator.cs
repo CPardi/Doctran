@@ -25,17 +25,21 @@ namespace Doctran.XmlSerialization
         public XmlGenerator(
             IEnumerable<IInterfaceXElements> interfaceXElements,
             IEnumerable<IObjectXElement> objectXElements,
-            IEnumerable<IGroupXElement> toGroupXmlDictionary)
+            IEnumerable<IGroupXElement> toGroupXElements)
         {
             _interfaceXmlDictionary = interfaceXElements.ToDictionary(obj => obj.ForType);
 
-            _toXmlDictionary = objectXElements.ToDictionary(
+            var objectXElementsList = objectXElements as IObjectXElement[] ?? objectXElements.ToArray();
+            _toXmlDictionary = objectXElementsList.ToDictionary(
                 obj => obj.ForType,
-                obj => new Func<IFortranObject, XElement>(obj.Create));
+                obj => new Func<IFortranObject, XElement>(obj.Create),
+                new CompareRootTypes(objectXElementsList.Select(oxe => oxe.ForType)));
 
-            _toGroupXmlDictionary = toGroupXmlDictionary.ToDictionary(
+            var groupXElementsArray = toGroupXElements as IGroupXElement[] ?? toGroupXElements.ToArray();
+            _toGroupXmlDictionary = groupXElementsArray.ToDictionary(
                 obj => obj.ForType,
-                obj => new Func<IEnumerable<XElement>, XElement>(obj.Create));
+                obj => new Func<IEnumerable<XElement>, XElement>(obj.Create),
+                new CompareRootTypes(groupXElementsArray.Select(oxe => oxe.ForType)));
 
             var keys =
                 from groupType in _toGroupXmlDictionary.Keys
@@ -47,6 +51,26 @@ namespace Doctran.XmlSerialization
             {
                 throw new ApplicationException($"A group XElement exists for the types {str} for which there is no corresponding object XElement.");
             }
+        }
+
+        private class CompareRootTypes : EqualityComparer<Type>
+        {
+            private readonly IEnumerable<Type> _types;
+
+            public CompareRootTypes(IEnumerable<Type> types)
+            {
+                _types = types;
+            }
+
+            public override bool Equals(Type x, Type y)
+            {
+                var xLowestType = x.GetTypeAndBaseTypes().First(t => _types.Contains(t));
+                var yLowestType = x.GetTypeAndBaseTypes().First(t => _types.Contains(t));
+
+                return xLowestType == yLowestType;
+            }
+
+            public override int GetHashCode(Type obj) => obj?.GetTypeAndBaseTypesAndInterfaces().FirstOrDefault(t => _types.Contains(t))?.GetHashCode() ?? obj?.GetHashCode() ?? 0;
         }
 
         public XElement CreateForObject(IFortranObject obj) => this.GetXmlValue(new[] { obj }).Single();
@@ -94,15 +118,13 @@ namespace Doctran.XmlSerialization
             foreach (var obj in objsOfType)
             {
                 var objType = obj.GetType();
-                var objTypes = objType.GetTypeAndBaseTypes();
 
-                var toXmlKey = _toXmlDictionary.Keys.FirstOrDefault(key => objTypes.Contains(key));
-                if (toXmlKey == null)
+                Func<IFortranObject, XElement> toXml;
+
+                if (!_toXmlDictionary.TryGetValue(objType, out toXml))
                 {
                     continue;
                 }
-
-                var toXml = _toXmlDictionary[toXmlKey];
 
                 var xElement = toXml(obj);
                 xElement.Add(objType.GetInterfaces().Select(inter =>

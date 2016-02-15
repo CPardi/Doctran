@@ -75,9 +75,9 @@ namespace Doctran.XmlSerialization
 
         private Predicate<TParsed> Predicate { get; }
 
-        public IEnumerable<XElement> Create(TParsed from) => this.Func(from);
+        public IEnumerable<XElement> Create(TParsed from) => this.Func(@from);
 
-        public bool ShouldCreate(TParsed from) => this.Predicate(from);
+        public bool ShouldCreate(TParsed from) => this.Predicate(@from);
 
         IEnumerable<XElement> IInterfaceXElements.Create(object from) => this.Create((TParsed)from);
 
