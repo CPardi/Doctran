@@ -32,7 +32,7 @@ namespace Doctran.ParsingElements.FortranBlocks
                 string.Concat(
                     from line in lines
                     where Regex.IsMatch(line.Text, @"^\s*!>") && !Regex.IsMatch(line.Text, @"^\s*!>>")
-                    select Regex.Match(line.Text, @"!>(.*)").Groups[1].Value.TrimStart() + " ")
+                    select Regex.Match(line.Text, @"!>(.*)").Groups[1].Value.Trim() + " ")
                         .TrimEnd();
         }
 

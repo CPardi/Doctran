@@ -27,7 +27,7 @@ namespace Doctran.Test.ParsingElements.FortranBlocks.DescriptionBlock
                     MakeAssertions(new XElement("Basic", new XCData("A basic description")), new XElement("Detailed", string.Empty))).SetName("A single line basic description.");
 
                 yield return new TestCaseData(
-                    "!> A basic \n" +
+                    "!> A basic\n" +
                     "!> description",
                     MakeAssertions(new XElement("Basic", new XCData("A basic description")), new XElement("Detailed", string.Empty))).SetName("A multi line basic description.");
 
@@ -55,8 +55,8 @@ namespace Doctran.Test.ParsingElements.FortranBlocks.DescriptionBlock
                     .SetName("A basic description with a detailed description.");
 
                 yield return new TestCaseData(
-                    "!> A basic \n" +
-                    "!>description\n" +
+                    "!> A basic\n" +
+                    "!> description\n" +
                     "!>>A detailed\n" +
                     "!>> description",
                     MakeAssertions(
@@ -65,7 +65,7 @@ namespace Doctran.Test.ParsingElements.FortranBlocks.DescriptionBlock
                     .SetName("A multiline basic description with a multiline detailed description.");
 
                 yield return new TestCaseData(
-                    "!> A basic \n" +
+                    "!> A basic\n" +
                     "!>>A detailed\n" +
                     "!>description\n" +
                     "!>> description",
