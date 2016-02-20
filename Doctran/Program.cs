@@ -179,7 +179,7 @@ namespace Doctran
                 var ex = (Exception)e.ExceptionObject;
 
                 var logPath = Path.GetFullPath("errors.log");
-                Console.WriteLine("internal error");
+                Console.WriteLine("\ninternal error");
                 Console.WriteLine("Exception details written to " + logPath);
                 using (var sq = new StreamWriter(logPath, false))
                 {
