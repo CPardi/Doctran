@@ -21,6 +21,11 @@ namespace Doctran.Parsing
         public static T AncestorOfType<T>(IContained contained)
             where T : class, IFortranObject
         {
+            if (contained == null)
+            {
+                return null;
+            }
+
             IFortranObject current = contained;
             var currentT = contained as T;
             while (current != null && currentT == null)

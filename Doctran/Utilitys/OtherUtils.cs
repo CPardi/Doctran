@@ -8,6 +8,7 @@
 namespace Doctran.Utilitys
 {
     using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
@@ -17,6 +18,44 @@ namespace Doctran.Utilitys
 
     public static class OtherUtils
     {
+        public static T SingleOrThrow<T>(this IEnumerable<T> @this, Exception e)
+        {
+            var thisArray = @this as T[] ?? @this.ToArray();
+            if (thisArray.Length == 0 || thisArray.Length > 1)
+            {
+                throw e;
+            }
+
+            return thisArray.Single();
+        }
+
+        public static T SingleOrThrow<T>(this IEnumerable<T> @this, Exception eForZero, Exception eForGreaterThanOne)
+        {
+            var thisArray = @this as T[] ?? @this.ToArray();
+            if (thisArray.Length == 0)
+            {
+                throw eForZero;
+            }
+
+            if (thisArray.Length > 1)
+            {
+                throw eForGreaterThanOne;
+            }
+
+            return thisArray.Single();
+        }
+
+        public static T SingleOrDefaultOrThrow<T>(this IEnumerable<T> @this, Exception e)
+        {
+            var thisArray = @this as T[] ?? @this.ToArray();
+            if (thisArray.Length > 1)
+            {
+                throw e;
+            }
+
+            return thisArray.SingleOrDefault();
+        }
+
         public static void ConsoleGotoNewLine()
         {
             if (Console.CursorLeft != 0)
