@@ -16,12 +16,12 @@
                         "formAttr": {},
                         "inputAttr": {
                             "type": "text",
-                            "value": "Search...",
+                            "value": "Filter (Press ENTER to Search)...",
                             "autocomplete": "off"
                         },
                         filter: function (a, searchString) {
                             // Used for search, a regex with special characters escaped.
-                            var r = new RegExp(searchString.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&"), 'i');
+                            var r = new RegExp(searchString.replace(/[\-\[\]\/\{}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&"), 'i');
 
                             // Remember a.text() is all that is returned by "resultInfo".
                             return a.text().match(r);

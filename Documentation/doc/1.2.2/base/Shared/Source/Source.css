@@ -1,14 +1,19 @@
+.fortran.code{
+    overflow-x: auto;
+}
+
 .fortran.code code > ul {
     margin: 0 !important;
-    padding: 0 !important;;
-    border: 0 !important;;
+    padding: 0 !important;
+    border: 0 !important;
     font: inherit;
     vertical-align: baseline;
     list-style: none;
-	display:table;	
-	min-width: 100%;
+	display:table;
+    min-width: 150em;
     font-size: 1.05em;
-    line-height: 1.1;
+    line-height: 1.4 !important;
+    font-family: Consolas, Monaco, Andale Mono, monospace;
 }
 
 .fortran.code code > ul > li {
@@ -28,12 +33,13 @@
 
 .fortran.code code {
     border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
 }
 
 .fortran > code > ul {
     list-style-type : none;
     display : table;
-    white-space : pre;
 }
 
 .fortran > code > ul li {
@@ -46,7 +52,7 @@
     display : inline-block;
     width : 2.5em;
     border-right : 3px solid #6CE26C;
-    padding: 0.3em 0.5em 0.0em 0px;
+    padding-right: 0.5em;
     text-align : right;
 }
 

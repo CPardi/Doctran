@@ -12,6 +12,7 @@ namespace Doctran.Input.ProjectFileOptions
     using System.IO;
     using System.Linq;
     using System.Xml.Linq;
+    using Helper;
     using MarkdownSharp;
     using Options;
     using ParsingElements;
@@ -34,11 +35,21 @@ namespace Doctran.Input.ProjectFileOptions
 
             try
             {
-                var path = value.Value;
-                var xElement = new XElement("UserPage");
-                xElement.Add(new XElement("Path", PathUtils.ChangeExtension(path, ".html")));
-                xElement.Add(XmlUtils.WrapAndParse("Content", new Markdown().Transform(OtherUtils.ReadAllText(path))));
-                return xElement;
+                var xElements = new List<XElement>();
+
+                // The path could contain wildcards, so use a PathList.
+                var pathList = new PathList() { PathStorage = PathStorageMode.Relative };
+                pathList.Add(value.Value.Trim());
+
+                foreach (var path in pathList)
+                {
+                    var xElement = new XElement("UserPage");
+                    xElement.Add(new XElement("Path", PathUtils.ChangeExtension(path, ".html")));
+                    xElement.Add(XmlUtils.WrapAndParse("Content", new Markdown().Transform(OtherUtils.ReadAllText(path))));
+                    xElements.Add(xElement);
+                }
+
+                return xElements;
             }
             catch (Exception e)
             {

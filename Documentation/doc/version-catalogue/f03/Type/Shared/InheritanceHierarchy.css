@@ -1,9 +1,0 @@
-#InheritanceHierarchy ul {
-  list-style: none;
-  margin: 0 !important;
-  line-height: 1.25 !important;
-}
-#InheritanceHierarchy .arrow {
-  position: relative;
-  bottom: 0.15em;
-}

@@ -122,7 +122,7 @@ namespace Doctran.Utilitys
             }
             catch (Exception e)
             {
-                Report.Error(p => p.DescriptionReason(ReportGenre.FileRead, e.Message), e);
+                Report.Error(p => p.DescriptionReason(ReportGenre.FileRead, $"{e.Message} '{path}'"), e);
             }
 
             return null;

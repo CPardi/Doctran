@@ -15,12 +15,14 @@ do
 	echo c:$dir/doc/$projDir/index.html >> IndexList.txt
 	cd source
 	
-	if Doctran.exe --overwrite -o ../doc/$projDir --project_info $projDir/project.info --save_xml project.xml
+	if Doctran.exe --overwrite -o ../doc/$projDir --project-info $projDir/project.info --save-xmls
 	then
 		echo "Success"
 	else
 		echo -e "${red}FALIURE!!!${NC}"
 	fi
+	rm -rf ../doc/$projDir/f95
+	rm -rf ../doc/$projDir/f03
 	echo "--------------------"
 done
 cd ..

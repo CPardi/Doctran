@@ -51,6 +51,19 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
 		<xsl:text>../</xsl:text>
 	</xsl:template>
 
+	<xsl:function name="doctran:normalize-path" as="xs:string">
+		<xsl:param name="path" as="xs:string"/>
+
+		<xsl:variable name="toForwardSlash" select="replace($path, '\\', '/')"/>
+
+		<xsl:value-of select="if(starts-with($toForwardSlash, './'))then
+                                    substring-after($toForwardSlash, './')
+                                else if(starts-with($toForwardSlash, '.\'))then
+                                    substring-after($toForwardSlash, '.\')
+                                else $toForwardSlash"/>
+
+	</xsl:function>
+
 </xsl:stylesheet>
 
 

@@ -33,7 +33,7 @@ namespace Doctran.Input.Options
 
             try
             {
-                return infoV.Value.ToIConvertable(propertyType);
+                return infoV.Value.Trim().ToIConvertable(propertyType);
             }
             catch (FormatException e)
             {

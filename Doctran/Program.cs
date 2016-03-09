@@ -42,7 +42,7 @@ namespace Doctran
             GetCommandLineOptions(args, options);
             GetOptions(options.ProjectFilePath ?? EnvVar.DefaultInfoPath, options);
             Report.Verbose = options.Verbose;
-
+            
             var project = GetProject(options.SourceFilePaths, options.RunInSerial);
 
             var xmlOutputter = GetXmlOutputter(project, new XElement("Information", options.XmlInformation));

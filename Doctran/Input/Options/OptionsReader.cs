@@ -224,7 +224,18 @@ namespace Doctran.Input.Options
 
                 try
                 {
-                    propList.Add(c);
+                    var ienumC = c as IList;
+                    if (ienumC != null)
+                    {
+                        foreach (var cItem in ienumC)
+                        {
+                            propList.Add(cItem);
+                        }
+                    }
+                    else
+                    {
+                        propList.Add(c);
+                    }
                 }
                 catch (Exception e)
                 {

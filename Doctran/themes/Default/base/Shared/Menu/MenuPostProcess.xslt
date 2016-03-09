@@ -6,7 +6,10 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
  file, You can obtain one at http://mozilla.org/MPL/2.0/.
 -->
 
-<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:stylesheet version="2.0" exclude-result-prefixes="doctran xs xsl"
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                xmlns:doctran="http://www.doctran.co.uk">
 
     <xsl:template name="MenuPostProcess">
         <xsl:param name="menu"/>
@@ -19,12 +22,14 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
     <xsl:template mode="MenuPostProcess" match="a">
         <xsl:param name="href"/>
 
+        <xsl:variable name="normalPath" select="doctran:normalize-path(@href)"/>
+
         <xsl:copy>
             <!-- If the current page path is the same as this link, then add the "active" class. -->
-            <xsl:attribute name="class" select="if (@href=$href) then 'active' else ''"/>
+            <xsl:attribute name="class" select="if ($normalPath=$href) then 'active' else ''"/>
 
             <!-- Add the prefix to make link relative to the index page. -->
-            <xsl:attribute name="href" select="@href"/>
+            <xsl:attribute name="href" select="$normalPath"/>
 
             <!-- And recurse... -->
             <xsl:apply-templates mode="MenuPostProcess" select="@*[local-name()!='href'] | node()">

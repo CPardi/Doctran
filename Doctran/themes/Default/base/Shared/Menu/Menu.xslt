@@ -6,8 +6,7 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
  file, You can obtain one at http://mozilla.org/MPL/2.0/.
 -->
 
-<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-        >
+<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
     <!--Include the following files to get used control's head information.-->
     <xsl:include href="MenuRaw.xslt"/>

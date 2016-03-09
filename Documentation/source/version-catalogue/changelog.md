@@ -9,6 +9,7 @@
  * Initializations are now shown for variables.
  * Fixed bug which caused procedure arguments not to be shown in call syntax argument lists.
  * Fixed bug causing inheritance hierarchy to be display in reverse.
+ * Fixed some issues with array descriptions.
 
 ##Version 1.2.3
  * Improved error messages.
