@@ -63,7 +63,7 @@ namespace Doctran.Parsing
 
         private void Navigate(IFortranObject obj)
         {
-            obj.GetType().ForTypeAndInterfaces(t => this.DoActions(obj, t));
+            this.DoActions(obj, obj.GetType());
 
             var asContainer = (obj as IContainer)?.SubObjects;
             if (asContainer == null)

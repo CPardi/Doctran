@@ -12,6 +12,7 @@ namespace Doctran.Helper
     using System.IO;
     using System.Linq;
     using System.Text.RegularExpressions;
+    using Utilitys;
 
     /// <summary>
     ///     Stores a list of file paths. Adding a new path can include wildcards, which are expanded and each resultant added
@@ -19,6 +20,8 @@ namespace Doctran.Helper
     /// </summary>
     public class PathList : AbstractList<string>
     {
+        public bool NormalizePaths { get; set; } = true;
+
         /// <summary>
         ///     Gets or sets the mode of which paths are added to the path list.
         /// </summary>
@@ -31,7 +34,7 @@ namespace Doctran.Helper
         /// <param name="path">A path that can contain wildcards.</param>
         public override void Add(string path)
         {
-            foreach (var p in this.ExpandPath(path))
+            foreach (var p in this.ExpandPath(NormalizePath(path)))
             {
                 this.InternalList.Add(p);
             }
@@ -53,12 +56,13 @@ namespace Doctran.Helper
         /// <exception cref="ArgumentException">Thrown when the path contains wildcard statements.</exception>
         public override bool Contains(string path)
         {
-            if (!this.IsSinglePath(path))
+            var normalizedPath = NormalizePath(path);
+            if (!IsSinglePath(normalizedPath))
             {
                 throw new ArgumentException("The path must be of expanded type and not contain wildcard statements.");
             }
 
-            return this.InternalList.Contains(path);
+            return this.InternalList.Contains(normalizedPath);
         }
 
         /// <summary>
@@ -69,12 +73,13 @@ namespace Doctran.Helper
         /// <exception cref="ArgumentException">Thrown when the path contains wildcard statements.</exception>
         public override bool Remove(string path)
         {
-            if (!this.IsSinglePath(path))
+            var normalizedPath = NormalizePath(path);
+            if (!IsSinglePath(normalizedPath))
             {
                 throw new ArgumentException("The path must be of expanded type and not contain wildcard statements.");
             }
 
-            return this.InternalList.Remove(path);
+            return this.InternalList.Remove(normalizedPath);
         }
 
         /// <summary>
@@ -87,7 +92,7 @@ namespace Doctran.Helper
         ///     <see cref="string.Empty" />, then the <paramref name="pathList" /> is a single path.
         /// </param>
         /// <param name="searchOption">The search method implied by <paramref name="pathList" />.</param>
-        private void AnalysePath(string pathList, out string path, out string searchPattern, out SearchOption searchOption)
+        private static void AnalysePath(string pathList, out string path, out string searchPattern, out SearchOption searchOption)
         {
             var dirtext = Regex.Match(
                 pathList,
@@ -110,7 +115,7 @@ namespace Doctran.Helper
             string path, searchPattern;
             SearchOption searchOption;
 
-            this.AnalysePath(pathList, out path, out searchPattern, out searchOption);
+            AnalysePath(pathList, out path, out searchPattern, out searchOption);
 
             if (searchPattern == string.Empty && !File.Exists(path))
             {
@@ -143,14 +148,30 @@ namespace Doctran.Helper
         /// </summary>
         /// <param name="pathList">The path to check.</param>
         /// <returns>If true, then <paramref name="pathList" />is a single path.</returns>
-        private bool IsSinglePath(string pathList)
+        private static bool IsSinglePath(string pathList)
         {
             string path, searchPattern;
             SearchOption searchOption;
 
-            this.AnalysePath(pathList, out path, out searchPattern, out searchOption);
+            AnalysePath(pathList, out path, out searchPattern, out searchOption);
 
             return searchPattern == string.Empty;
+        }
+
+        /// <summary>
+        /// Normalizes a string representing a path by making the directory seperator operating system invariant and removing uneeded parts.
+        /// </summary>
+        /// <param name="path">The path to normalize.</param>
+        /// <returns>The normalized path.</returns>
+        private static string NormalizePath(string path)
+        {
+            // Change all directory seperators to the current operating systems directory seperator.
+            var opSysSlash = path
+                .Trim()
+                .Replace('/', EnvVar.Slash)
+                .Replace('\\', EnvVar.Slash);
+
+            return opSysSlash;
         }
     }
 }

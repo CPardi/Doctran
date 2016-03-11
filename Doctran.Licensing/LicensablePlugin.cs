@@ -90,12 +90,12 @@ namespace Doctran.Licensing
             var desc = obj.SubObjects.OfType<Description>().SingleOrDefault();
             if (desc != null)
             {
-                obj.AddSubObject(new Description(new XElement(desc.Basic.Value + watermarkText), desc.Detailed, desc.Lines));
+                obj.AddSubObject(new Description(new XElement("Basic", desc.Basic.Value + watermarkText), desc.Detailed, desc.Lines));
                 obj.RemoveSubObject(desc);
             }
             else
             {
-                obj.AddSubObject(new Description(new XElement("Basic", watermarkText), new XElement("Detailed", string.Empty), new List<FileLine>()));
+                obj.AddSubObject(new Description(new XElement("Basic", watermarkText), new XElement("Detailed", string.Empty), new List<FileLine>() {new FileLine()}));
             }
         }
 

@@ -42,7 +42,7 @@ These options allow the user to affect the input and output.
 
 <tr><td> --no-output</td><td>Instructs the program not to generate any documentation. If `--save-xmls` appears, XML data will still be saved. (Default: false).</td></tr>
 
-<tr><td> --save-xmls DIR</td><td>Intermediary XML documents will be saved the directory DIR. By default these documents are not saved.</td></tr>
+<tr><td> --save-xmls DIR</td><td>Intermediary XML documents will be saved to the directory DIR. By default these documents are not saved.</td></tr>
 
 </tbody>
 </table>

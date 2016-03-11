@@ -306,6 +306,20 @@ This project contains the following Fortran 95 source files.
       <Content>
         <h1>What's New</h1>
 
+<h3>What's new in Doctran 1.2.4</h3>
+
+<ul>
+<li>Errors messages are displayed for structural issues in the code.</li>
+<li>The option <code>--save_xml=PATH</code> has been changed to <code>--save-xmls</code>. The appearance of this option now instructs the program to save the XMLs generated to a directory called <code>xml</code> within the output directory.</li>
+<li>The option <code>--no-output</code> has been added. The appearance of this option instructs the program not to generate any documentation. If <code>--save-xmls</code> appears, XML data will still be saved.</li>
+<li>The options <code>--project_file</code> has been changed to <code>--project-file</code>.</li>
+<li>The font of syntax highlighted code has been changed to monospace to an issue with misaligned characters.</li>
+<li>Initializations are now shown for variables.</li>
+<li>Fixed bug which caused procedure arguments not to be shown in call syntax argument lists.</li>
+<li>Fixed bug causing inheritance hierarchy to be display in reverse.</li>
+<li>Fixed some issues with array descriptions.</li>
+</ul>
+
 <h3>What's new in Doctran 1.2.3</h3>
 
 <ul>
@@ -887,7 +901,7 @@ end subroutine
     <Name>Doctran</Name>
   </Information>
   <DocCreated>
-    <DateTime>2016-03-09T20:59:43.7262190+00:00</DateTime>
+    <DateTime>2016-03-11T21:04:53.3496471+00:00</DateTime>
   </DocCreated>
   <Files />
 </Project>
