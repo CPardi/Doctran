@@ -1,0 +1,6 @@
+Name: Doctran
+
+Menu: menu.markdown
+UserPage: **/*.md
+
+Copy: images/*.png

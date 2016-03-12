@@ -16,36 +16,41 @@ namespace Doctran.Output.Assets
 
     public class AssetOutputter
     {
+        private readonly IEnumerable<string> _themeParts;
+
         private readonly Dictionary<string, IFileCopier> _copiers = new Dictionary<string, IFileCopier>();
 
         private readonly DefaultCopier _defaultCopier = new DefaultCopier();
 
-        public AssetOutputter()
+        public AssetOutputter(IEnumerable<string> themeParts)
         {
+            _themeParts = themeParts;
             this.AddCopier(new LessFileCopier());
             this.AddCopier(new MarkdownFileCopier());
             this.AddCopier(new XsltFileIgnorer());
         }
 
-        public void Output(Options options)
+        public void Output(bool overwriteExisting, string outputDirectory, string projectFilePath, string themeName, IEnumerable<string> copyPaths, IEnumerable<string> copyAndParsePaths)
         {
-            var relativeDirectory = Path.GetDirectoryName(options.ProjectFilePath ?? EnvVar.DefaultInfoPath) + EnvVar.Slash;
-            var outputDirectory = options.OutputDirectory + EnvVar.Slash;
+            var relativeDirectory = Path.GetDirectoryName(projectFilePath ?? EnvVar.DefaultInfoPath) ?? string.Empty;
 
             // Copy user's extra files.
-            foreach (var filePath in options.CopyPaths)
+            foreach (var filePath in copyPaths)
             {
-                this.CopyFile(options.OverwriteExisting, false, outputDirectory, relativeDirectory, relativeDirectory + filePath);
+                this.CopyFile(overwriteExisting, false, outputDirectory, relativeDirectory, Path.Combine(relativeDirectory, filePath));
             }
 
             // Copy and parse user's extra files.
-            foreach (var filePath in options.CopyAndParsePaths)
+            foreach (var filePath in copyAndParsePaths)
             {
-                this.CopyFile(options.OverwriteExisting, true, outputDirectory, relativeDirectory, relativeDirectory + filePath);
+                this.CopyFile(overwriteExisting, true, outputDirectory, relativeDirectory, Path.Combine(relativeDirectory, filePath));
             }
 
-            // Copy theme files.
-            this.CopyFilesFromDir(options.OverwriteExisting, true, true, outputDirectory, EnvVar.ThemeDirectory(options.ThemeName), string.Empty);
+            // Copy the parts needed from theme files.
+            foreach (var part in _themeParts)
+            {
+                this.CopyFilesFromDir(overwriteExisting, true, true, outputDirectory, EnvVar.ThemeOutputPath(themeName), part);
+            }
         }
 
         private void AddCopier(IFileCopier copier)

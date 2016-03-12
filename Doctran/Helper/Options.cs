@@ -63,8 +63,14 @@ namespace Doctran.Helper
         /// <summary>
         ///     Gets or sets a value indicating whether the generated XML files should be saved within the output directory.
         /// </summary>
-        [CommandLine.Option("save-xmls", MetaValue = "DIR", HelpText = "Specifies a directory to save the intermediary XML documents generated. These documents are not saved by default.")]
+        [CommandLine.Option("save-xmls", HelpText = "Specify the intermediary XML documents will be saved int he output directory. By default these documents are not saved.")]
         public bool SaveXmls { get; set; }
+        
+        /// <summary>
+        ///     Gets or sets a value indicating whether the generated XML files should be saved within the output directory.
+        /// </summary>
+        [CommandLine.Option("time-run", HelpText = "Specifies that an XML file should be generated containing timing information of the run.")]
+        public bool TimeOutput { get; set; }
 
         /// <summary>
         ///     Gets or sets a value indicating whether information about licensing should be shown to the user.

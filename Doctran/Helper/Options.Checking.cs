@@ -87,7 +87,7 @@ namespace Doctran.Helper
 
         private string CheckThemeExists(string propertyName, string themeName)
         {
-            if (!Directory.Exists(Path.Combine(EnvVar.ThemeDirectory(themeName))))
+            if (!Directory.Exists(Path.Combine(EnvVar.ThemeOutputPath(themeName))))
             {
                 ReportError(new NotImplementedException($"A theme named '{themeName}' does not exist."), propertyName);
             }

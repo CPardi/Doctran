@@ -21,10 +21,14 @@ namespace Doctran.Utilitys
 
         public static string PluginPath => Path.Combine(ExecPath, "plugins");
 
-        public static string ThemeDirectory(string themeName) => Path.Combine(ExecPath, @"themes", themeName);
+        public static string ThemeOutputPath(string themeName) => Path.Combine(ExecPath, @"themes", themeName);
 
-        public static string XsltFullPathAndName(string themeName) => Path.Combine(ThemeDirectory(themeName), "main");
+        public static string ThemeOutputPath(string themeName, string fileName) => Path.Combine(ExecPath, @"themes", themeName, fileName);
 
-        public static string XmlOutputDirectory(string outputDirectory, string xmlName) => Path.Combine(outputDirectory, "xml", xmlName);
+        public static string XsltFullPathAndName(string themeName) => Path.Combine(ThemeOutputPath(themeName), "main");
+
+        public static string XmlOutputPath(string outputDirectory) => Path.Combine(outputDirectory, "xml");
+
+        public static string XmlOutputPath(string outputDirectory, string xmlName) => Path.Combine(outputDirectory, "xml", xmlName);
     }
 }

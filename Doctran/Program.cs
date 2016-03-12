@@ -9,6 +9,7 @@ namespace Doctran
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.IO;
     using System.Linq;
     using System.Xml;
@@ -27,6 +28,12 @@ namespace Doctran
     {
         public static bool ShowLicensing { get; private set; }
 
+        private static Stopwatch StageStopwatch { get; } = new Stopwatch();
+
+        private static XElement TimingXml { get; } = new XElement("timings", new XElement("description", "Times are given in milliseconds."));
+
+        private static Stopwatch TotalStopwatch { get; } = new Stopwatch();
+
         public static int Main(string[] args)
         {
 #if DEBUG
@@ -38,17 +45,20 @@ namespace Doctran
             Report.SetReleaseProfile();
 #endif
 
+            TotalStopwatch.Restart();
+            StageStopwatch.Restart();
             var options = new Options();
             GetCommandLineOptions(args, options);
             GetOptions(options.ProjectFilePath ?? EnvVar.DefaultInfoPath, options);
             Report.Verbose = options.Verbose;
-            
+            SaveTiming("options-parsing", StageStopwatch.ElapsedMilliseconds);
+
             var project = GetProject(options.SourceFilePaths, options.RunInSerial);
 
             var xmlOutputter = GetXmlOutputter(project, new XElement("Information", options.XmlInformation));
             if (options.SaveXmls)
             {
-                xmlOutputter.SaveToDisk(EnvVar.XmlOutputDirectory(options.OutputDirectory, "project.xml"));
+                xmlOutputter.SaveToDisk(EnvVar.XmlOutputPath(options.OutputDirectory, "project.xml"));
             }
 
             if (options.NoOutput)
@@ -59,16 +69,41 @@ namespace Doctran
             OutputTheme(options);
             OutputHtml(project, xmlOutputter, options);
 
+            SaveTiming("total", TotalStopwatch.ElapsedMilliseconds);
+            if (options.TimeOutput)
+            {
+                Directory.CreateDirectory(EnvVar.XmlOutputPath(options.OutputDirectory));
+                TimingXml.Save(EnvVar.XmlOutputPath(options.OutputDirectory, "timings.xml"));
+            }
+
             Report.NewStatus($@"Documentation can be found at '{Path.GetFullPath(options.OutputDirectory)}'");
             Report.NewStatus("Documentation generation complete.\n");
             return 0;
+        }
+
+        private static XmlReader CreateSourceXml(Project project, Options options)
+        {
+            var xElements =
+                from source in project.Sources
+                let highlighter = DocumentationManager.TryGetDefinitionByIdentifier(source.Language)
+                select new XElement(
+                    "File",
+                    new XElement("Identifier", source.Identifier),
+                    highlighter.HighlightLines(source.OriginalLines));
+            var reader = new XDocument(new XElement("Source", xElements)).CreateReader();
+            if (options.SaveXmls)
+            {
+                new XDocument(new XElement("Source", xElements)).Save(EnvVar.XmlOutputPath(options.OutputDirectory, "source.xml"));
+            }
+
+            return reader;
         }
 
         private static void GetCommandLineOptions(string[] args, Options options)
         {
             Parser.Default.ParseArgumentsStrict(args, options);
 
-            Program.ShowLicensing = options.ShowLicensing;
+            ShowLicensing = options.ShowLicensing;
 
             PluginManager.Initialize(); // Must come after show licensing.
 
@@ -107,22 +142,29 @@ namespace Doctran
 
         private static Project GetProject(IEnumerable<string> sourceFiles, bool runInSerial)
         {
+            StageStopwatch.Restart();
             Report.NewStatus("Analysing project block structure... ");
             var proj = ProgramHelper.ParseProject(sourceFiles, runInSerial);
+
+            SaveTiming("project-parsing", StageStopwatch.ElapsedMilliseconds);
             Report.ContinueStatus("Done");
             return proj;
         }
 
         private static XmlOutputter GetXmlOutputter(Project project, XElement xmlInformation)
         {
+            StageStopwatch.Restart();
             Report.NewStatus("Generating xml... ");
             var xmlOutputter = new XmlOutputter(project.XEle(xmlInformation));
+
+            SaveTiming("xml-generation", StageStopwatch.ElapsedMilliseconds);
             Report.ContinueStatus("Done");
             return xmlOutputter;
         }
 
         private static void OutputHtml(Project project, XmlOutputter xmlOutputter, Options options)
         {
+            StageStopwatch.Restart();
             Report.NewStatus("Generating htmls... ");
 
             var reader = CreateSourceXml(project, options);
@@ -132,7 +174,7 @@ namespace Doctran
 
             if (options.SaveXmls)
             {
-                preProcessResult.Save(EnvVar.XmlOutputDirectory(options.OutputDirectory, "documentation_file.xml"));
+                preProcessResult.Save(EnvVar.XmlOutputPath(options.OutputDirectory, "documentation_file.xml"));
             }
 
             var htmlOutputter = new XsltRunner(Path.Combine(EnvVar.ExecPath, "themes", options.ThemeName, "main.xslt"));
@@ -143,33 +185,25 @@ namespace Doctran
                 new KeyValuePair<string, object>("verbose", Report.Verbose),
                 new KeyValuePair<string, object>("source", reader));
 
+            SaveTiming("html-output", StageStopwatch.ElapsedMilliseconds);
             Report.ContinueStatus("Done");
-        }
-
-        private static XmlReader CreateSourceXml(Project project, Options options)
-        {
-            var xElements =
-                from source in project.Sources
-                let highlighter = DocumentationManager.TryGetDefinitionByIdentifier(source.Language)
-                select new XElement(
-                    "File",
-                    new XElement("Identifier", source.Identifier),
-                    highlighter.HighlightLines(source.OriginalLines));
-            var reader = new XDocument(new XElement("Source", xElements)).CreateReader();
-            if (options.SaveXmls)
-            {
-                new XDocument(new XElement("Source", xElements)).Save(EnvVar.XmlOutputDirectory(options.OutputDirectory, "source.xml"));
-            }
-
-            return reader;
         }
 
         private static void OutputTheme(Options options)
         {
+            StageStopwatch.Restart();
             Report.NewStatus("Outputting theme files... ");
-            var themeOutputter = new AssetOutputter();
-            themeOutputter.Output(options);
+            var themeParts = DocumentationManager.RequiredThemeParts(options.SourceFilePaths.Select(Path.GetExtension));
+            var themeOutputter = new AssetOutputter(themeParts);
+            themeOutputter.Output(options.OverwriteExisting, options.OutputDirectory, options.ProjectFilePath, options.ThemeName, options.CopyPaths, options.CopyAndParsePaths);
+
+            SaveTiming("theme-output", StageStopwatch.ElapsedMilliseconds);
             Report.ContinueStatus("Done");
+        }
+
+        private static void SaveTiming(string name, long milliseonds)
+        {
+            TimingXml.Add(new XElement(name, milliseonds));
         }
 
         private static void UnhandledExceptionTrapper(object sender, UnhandledExceptionEventArgs e)

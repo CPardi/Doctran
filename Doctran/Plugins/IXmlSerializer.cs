@@ -7,13 +7,13 @@
 
 namespace Doctran.Plugins
 {
-    using System.Collections.Generic;
     using System.Xml.Linq;
-    using Helper;
     using Parsing;
 
-    public interface IXmlSerializer
+    public interface IDocumentationDefinition
     {
+        string[] ThemePartNames { get; }
+
         XElement HighlightLines(string source);
 
         XElement ParsedSourcesToXml(IFortranObject source);

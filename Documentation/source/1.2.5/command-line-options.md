@@ -15,6 +15,8 @@ These options force Doctran to display various information meant to be helpful t
 
 <tr><td>--plugins</td><td>This option forces Doctran to check the plugins path for any plugins present and write their names and version. Doctran will exit immediately after plugins have been checked.</td></tr>
 
+<tr><td>--time-run</td><td>Specifies that an XML file should be generated containing timing information of the run.</td></tr>
+
 <tr><td>--verbose VALUE</td><td>
 Sets how much information should written to the screen. VALUE can be the following:
  <ul>

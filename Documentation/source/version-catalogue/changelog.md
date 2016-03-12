@@ -1,6 +1,10 @@
 #Changelog
 
-##Version 1.2.4 (Latest)
+##Version 1.2.5 (Latest)
+ * The option `--time-run` has been added to specify that timings should be saved within an XML file in the xml directory of the output directory.
+ * Stopped the output of unneeded files when creating static wiki documentation (documentation containing no Fortran source files).
+
+##Version 1.2.4
  * Errors messages are displayed for structural issues in the code.
  * The option `--save_xml=PATH` has been changed to `--save-xmls`. The appearance of this option now instructs the program to save the XMLs generated to a directory called `xml` within the output directory.
  * The option `--no-output` has been added. The appearance of this option instructs the program not to generate any documentation. If `--save-xmls` appears, XML data will still be saved.
