@@ -14,6 +14,7 @@ where `TYPE_VALUE` can be any of the following:
 
  * `Project` - The current project.
  * `File` - Fortran source files.
+ * `Program` - Fortran programs.
  * `Module` - Fortran modules.
  * `DerivedType` - Fortran user-defined derived-types.
  * `Function` - External and module functions.

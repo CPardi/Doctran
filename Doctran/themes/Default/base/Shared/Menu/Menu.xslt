@@ -24,16 +24,14 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
 
     <xsl:template name="Menu-body">
         <!-- This is the template for the contents menu that is displayed on all Pages. -->
-        <div id="Menu">
-            <div class="contentContainer doctranMenu">
-                <xsl:call-template name="MenuPostProcess">
-                    <xsl:with-param name="menu">
-                        <xsl:apply-templates mode="MenuRaw" select="/Project/Information/Menu">
-                            <xsl:with-param name="current" select="."/>
-                        </xsl:apply-templates>
-                    </xsl:with-param>
-                </xsl:call-template>
-            </div>
+        <div class="doctran-menu">
+            <xsl:call-template name="MenuPostProcess">
+                <xsl:with-param name="menu">
+                    <xsl:apply-templates mode="MenuRaw" select="/Project/Information/Menu">
+                        <xsl:with-param name="current" select="."/>
+                    </xsl:apply-templates>
+                </xsl:with-param>
+            </xsl:call-template>
         </div>
     </xsl:template>
 

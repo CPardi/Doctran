@@ -16,7 +16,7 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
     <xsl:variable name="project" select="/Project"/>
     <xsl:variable name="staticLists" as="element()">
         <Elements>
-            <xsl:for-each select="tokenize('project,file,module,derivedtype,function,subroutine,assignment,overload,operator,variable', ',')">
+            <xsl:for-each select="tokenize('project,file,program,module,derivedtype,function,subroutine,assignment,overload,operator,variable', ',')">
                 <xsl:variable name="keyName" select="."/>
                 <Element type="{$keyName}" option="">
                     <ul>

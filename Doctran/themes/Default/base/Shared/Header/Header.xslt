@@ -18,6 +18,7 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
     <xsl:template name="Header-body">
 
         <div id="Header">
+            <div id="show-hide"></div>
             <h1>
                 <a class="title" href="index.html">
                     <xsl:value-of select="doctran:object-name(/Project)"/>
