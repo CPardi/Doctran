@@ -50,7 +50,7 @@ namespace Doctran.ParsingElements.FortranBlocks
 
         public IEnumerable<IContained> ReturnObject(IEnumerable<IContained> subObjects, List<FileLine> lines)
         {
-            var result = Regex.Match(lines[0].Text, @"(!>>?\s*)(\w.*)\s*-(.*)");
+            var result = Regex.Match(lines[0].Text, @"(!>>?\s*)(\w.*?)\s*-(.*)");
             var symbol = result.Groups[1].Value;
             var name = result.Groups[2].Value.Trim();
             var value = result.Groups[3].Value;

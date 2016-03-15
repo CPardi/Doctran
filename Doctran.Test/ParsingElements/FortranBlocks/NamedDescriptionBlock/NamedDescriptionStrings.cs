@@ -27,6 +27,10 @@ namespace Doctran.Test.ParsingElements.FortranBlocks.NamedDescriptionBlock
                     MakeAssertions("name", new XElement("Basic", new XCData("A basic description")), new XElement("Detailed", string.Empty))).SetName("A single line basic description.");
 
                 yield return new TestCaseData(
+                    "!> Name - A basic description - with a minus sign.",
+                    MakeAssertions("name", new XElement("Basic", new XCData("A basic description - with a minus sign.")), new XElement("Detailed", string.Empty))).SetName("A single line basic description with special character.");
+
+                yield return new TestCaseData(
                     "!> Name - A basic \n" +
                     "!> description",
                     MakeAssertions("name", new XElement("Basic", new XCData("A basic description")), new XElement("Detailed", string.Empty))).SetName("A multi line basic description.");
