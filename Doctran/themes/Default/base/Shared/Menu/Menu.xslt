@@ -32,6 +32,7 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
                     </xsl:apply-templates>
                 </xsl:with-param>
             </xsl:call-template>
+            <div class="vspacer"/>
         </div>
     </xsl:template>
 
