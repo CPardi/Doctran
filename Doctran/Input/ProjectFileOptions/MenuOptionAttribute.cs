@@ -9,11 +9,9 @@ namespace Doctran.Input.ProjectFileOptions
 {
     using System;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Text.RegularExpressions;
     using System.Xml.Linq;
-    using MarkdownSharp;
     using Options;
     using ParsingElements;
     using Utilitys;
@@ -35,8 +33,14 @@ namespace Doctran.Input.ProjectFileOptions
 
             try
             {
-                var menuString = Regex.Replace(OtherUtils.ReadAllText(value.Value), @"(.*?\.)(?:md|markdown)", match => match.Groups[1].Value + "html");
-                return XmlUtils.WrapAndParse("Menu", new Markdown().Transform(menuString));
+                // Change .md or .markdown extensions to .html and change macros to an XML form.
+                var menuString =
+                    ParsingUtils.ReplaceMacros(
+                        Regex.Replace(
+                            OtherUtils.ReadAllText(value.Value),
+                            @"\w+?\.(?:md|markdown)",
+                            match => PathUtils.ChangeExtension(match.Value, "html")));
+                return XmlUtils.WrapAndParse("Menu", menuString);
             }
             catch (Exception e)
             {
