@@ -1,4 +1,4 @@
-#Installation Instructions
+# Installation Instructions
 Doctran may be run on Windows systems from XP SP3 onwards, and on Linux and Mac OS X systems that support the Mono 2.8 framework or above.
 
 Doctran has been tested by the developer on the following systems, and runs on:

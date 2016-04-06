@@ -1,12 +1,14 @@
-#Changelog
+# Changelog
 
-##Version 1.2.5 (Latest)
+## Version 1.2.5 (Latest)
+ * Fixed a bug causing named description to not be parsed for text containing a minus sign.
  * The option `--time-run` has been added to specify that performance timings should be saved within an XML file in the xml directory of the output directory.
  * Stopped the output of unneeded files when creating static wiki documentation (documentation containing no Fortran source files).
  * In tables and menu lists one can use `Program` as a `TYPE_VALUE` to output a table or list of fortran programs.
  * A button to toggle the visibility of the menu has been added to documentation generated.
+ * The [Remarkable](https://github.com/jonschlinkert/remarkable) markdown parser is now used to parse Markdown. Additional Markdown constructs, such as guarded code blocks may now used. However, Markdown parsing may now behave slightly differently. In particular, a space must appear between `#` and the text in headings (eg. # h1 heading as opposed to #h1 heading).
 
-##Version 1.2.4
+## Version 1.2.4
  * Errors messages are displayed for structural issues in the code.
  * The option `--save_xml=PATH` has been changed to `--save-xmls`. The appearance of this option now instructs the program to save the XMLs generated to a directory called `xml` within the output directory.
  * The option `--no-output` has been added. The appearance of this option instructs the program not to generate any documentation. If `--save-xmls` appears, XML data will still be saved.
@@ -17,12 +19,12 @@
  * Fixed bug causing inheritance hierarchy to be display in reverse.
  * Fixed some issues with array descriptions.
 
-##Version 1.2.3
+## Version 1.2.3
  * Improved error messages.
  * Fixed bug causing block description heading sections to not be collapsible.
  * Fixed broken links in procedure argument documentation.
 
-##Version 1.2.2
+## Version 1.2.2
  * The style of the generated documentation has been modified to take advantage of wide screen and high resolution displays.
  * `Menu` project information added, to allow menu customizations. The menu is now generated from a markdown or HTML file containing macros.
  * `UserPage` project information added, so that additional documentation pages can be created from the user's markdown or HTML files.

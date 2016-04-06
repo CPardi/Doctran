@@ -3,8 +3,7 @@
     $.fn.extend({
         doctranMenu: function (user_options) {
 
-            var
-                defaults = {
+            var defaults = {
                     "toggleDuration": 0,
                     "recursiveClose": true,
                     "uniqueBranching": true,
@@ -12,6 +11,12 @@
                     "expanderClosed": "▶",
                     "markTargeted": true,
                     "openActive": true,
+                    "showHide": {
+                        "toggleDuration": 0,
+                        "appendTo": null,
+                        "onShow": null,
+                        "onHide": null
+                    },
                     "search": {
                         "formAttr": {},
                         "inputAttr": {
@@ -47,8 +52,133 @@
                         "text": options.expanderClosed
                     }));
                 },
-                scrollTo = function (plugin, item) {
-                    plugin.scrollTop(item.offset().top - plugin.offset().top + plugin.scrollTop() - (plugin.height() / 2));
+                createSearchInput = function (plugin, searchUl, menuUl) {
+                    return $("<input>", options.search.inputAttr)
+                        .focusin(function () {
+                            var input = $(this);
+                            input.toggleClass("active");
+                            if (input.prop("value") === options.search.inputAttr.value) {
+                                input.prop("value", "");
+                            }
+                        }).focusout(function () {
+                            var input = $(this);
+                            input.toggleClass("active");
+                            if (input.prop("value") === "") {
+                                input.prop("value", options.search.inputAttr.value);
+                            }
+                            searchUl.children(".focused").removeClass("focused");
+                        })
+                        // Check for arrow key up or down to move the focus up or down.
+                        .keydown(function (e) {
+                            var keyCode = e.keyCode || e.which,
+                                focused,
+                                move;
+
+                            if (keyCode === 38 || keyCode === 40) {
+                                focused = searchUl.children(".focused");
+                                if (focused.length) {
+                                    move = keyCode === 38 ? focused.prevAll("li:visible").first() : focused.nextAll("li:visible").first();
+                                    focused.removeClass("focused");
+                                    move.addClass("focused");
+                                } else {
+                                    move = keyCode === 38 ? searchUl.children("li:visible:last") : searchUl.children("li:visible:first");
+                                    move.addClass("focused");
+                                }
+                                this.scrollTo(plugin, move);
+                                e.preventDefault();
+                                return false;
+                            }
+                        })
+                        // If:
+                        // * Escape is pressed - then set the input's text to empty and show the normal menu.
+                        // * Enter is pressed on a focused item - then go to the url of the focused item.
+                        // * Any other key - Filter or re-filter the search results.
+                        .keyup(function (e) {
+                            var input = $(this),
+                                keyCode = e.keyCode || e.which,
+                                searchString = keyCode === 27 ? "" : input.prop("value"),
+                                focused;
+
+                            if (keyCode === 13 && (focused = searchUl.children(".focused")).length) {
+                                window.location.replace(focused.children("a").prop("href"));
+                                return;
+                            }
+
+                            input.prop("value", searchString);
+                            if (searchString === "") {
+                                menuUl.show();
+                                searchUl.hide();
+                            } else {
+                                searchUl
+                                    .children("li")
+                                    .hide()
+                                    .filter(function () {
+                                        return options.search.filter($(this).children("a"), searchString);
+                                    }).show();
+                                menuUl.hide();
+                                searchUl.show();
+                            }
+                        });
+                },
+                createSearchResults = function (plugin, menuUl) {
+                    var searchUl = $("<ul>", {
+                            "class": "searchResults"
+                        }),
+                        listItems = {};
+
+                    // Flatten the menu list and add it to the plugin.
+                    menuUl.find("li>a").each(function () {
+                        var a = $(this),
+                            info,
+                            newLink;
+
+                        info = options.search.resultInfo(a);
+
+                        newLink = a.clone().append($("<span>", {
+                            "class": "resultInfo"
+                        }).append(info));
+
+                        listItems[a.prop("href")] = ($("<li>").hover(function () {
+                            searchUl.children(".focused").removeClass("focused");
+                        }).append(newLink));
+
+                    });
+
+                    searchUl.append($.map(listItems, function (li) {
+                        return li;
+                    }));
+
+                    return searchUl.hide();
+                },
+                processShowHideSwitch = function (showHideSwitch, plugin, menuUl) {
+                    return $(showHideSwitch)
+                        .addClass("doctran-menu-show-hide-img hide")
+                        .click(function () {
+                            var showHideImg = $(this);
+
+                            // Change display to stop resize on hide and change the switch's image.
+                            if (plugin.is(":hidden")) {
+                                if (options.showHide.onHide != null) {
+                                    options.showHide.onHide();
+                                }
+
+                                showHideImg.attr("src", "img/hide.png");
+                                menuUl.css({"width": "auto"});
+                            }
+                            else {
+                                if (options.showHide.onShow != null) {
+                                    options.showHide.onShow();
+                                }
+
+                                menuUl.css({"width": plugin.width()});
+                                showHideImg.attr("src", "img/show.png");
+                            }
+
+                            showHideImg.toggleClass("show");
+                            showHideImg.toggleClass("hide");
+                            // Animate the show/hide process.
+                            plugin.animate({width: 'toggle'}, options.showHide.toggleDuration);
+                        });
                 },
                 addExpanders = function (parent_ul) {
 
@@ -109,6 +239,26 @@
                         li_i.children("ul").toggle();
                     });
                 },
+                addSearchInput = function (plugin) {
+                    var menuUl = plugin.children(".menu"),
+                        searchUl = createSearchResults(plugin, menuUl),
+                        searchForm = $("<form>", options.search.formAttr).submit(function (e) { // Prevent form submission is an item is in focus.
+                            if (searchUl.children(".focused").length) {
+                                e.preventDefault();
+                                return false;
+                            }
+                        }).append(createSearchInput(plugin, searchUl, menuUl));
+                    plugin.prepend(searchForm);
+                    plugin.append(searchUl);
+                },
+                addShowHide = function (plugin, menuUl) {
+                    if (options.showHide.appendTo != null) {
+                        processShowHideSwitch(options.showHide.appendTo, plugin, menuUl);
+                    }
+                },
+                scrollTo = function (plugin, item) {
+                    plugin.scrollTop(item.offset().top - plugin.offset().top + plugin.scrollTop() - (plugin.height() / 2));
+                },
                 openActive = function (plugin, activeLi) {
                     var toggleDuration = options.toggleDuration;
 
@@ -128,118 +278,11 @@
 
                     // Scroll so that the active list item appears in the center of the menu.
                     scrollTo(plugin, activeLi);
-                },
-                createSearchResults = function (plugin, menuUl) {
-                    var searchUl = $("<ul>", {
-                            "class": "searchResults"
-                        }),
-                        listItems = {};
-
-                    // Flatten the menu list and add it to the plugin.
-                    menuUl.find("li>a").each(function () {
-                        var a = $(this),
-                            info,
-                            newLink;
-
-                        info = options.search.resultInfo(a);
-
-                        newLink = a.clone().append($("<span>", {
-                            "class": "resultInfo"
-                        }).append(info));
-
-                        listItems[a.prop("href")] = ($("<li>").hover(function () {
-                            searchUl.children(".focused").removeClass("focused");
-                        }).append(newLink));
-
-                    });
-
-                    searchUl.append($.map(listItems, function (li) {
-                        return li;
-                    }));
-
-                    return searchUl.hide();
-                },
-                addSearchInput = function (plugin) {
-                    var menuUl = plugin.children(".menu"),
-                        searchUl = createSearchResults(plugin, menuUl),
-                        searchForm = $("<form>", options.search.formAttr).submit(function (e) { // Prevent form submission is an item is in focus.
-                            if (searchUl.children(".focused").length) {
-                                e.preventDefault();
-                                return false;
-                            }
-                        }).append($("<input>", options.search.inputAttr)
-                            .focusin(function () {
-                                var input = $(this);
-                                input.toggleClass("active");
-                                if (input.prop("value") === options.search.inputAttr.value) {
-                                    input.prop("value", "");
-                                }
-                            }).focusout(function () {
-                                var input = $(this);
-                                input.toggleClass("active");
-                                if (input.prop("value") === "") {
-                                    input.prop("value", options.search.inputAttr.value);
-                                }
-                                searchUl.children(".focused").removeClass("focused");
-                            })
-                            // Check for arrow key up or down to move the focus up or down.
-                            .keydown(function (e) {
-                                var keyCode = e.keyCode || e.which,
-                                    focused,
-                                    move;
-
-                                if (keyCode === 38 || keyCode === 40) {
-                                    focused = searchUl.children(".focused");
-                                    if (focused.length) {
-                                        move = keyCode === 38 ? focused.prevAll("li:visible").first() : focused.nextAll("li:visible").first();
-                                        focused.removeClass("focused");
-                                        move.addClass("focused");
-                                    } else {
-                                        move = keyCode === 38 ? searchUl.children("li:visible:last") : searchUl.children("li:visible:first");
-                                        move.addClass("focused");
-                                    }
-                                    scrollTo(plugin, move);
-                                    e.preventDefault();
-                                    return false;
-                                }
-                            })
-                            // If:
-                            // * Escape is pressed - then set the input's text to empty and show the normal menu.
-                            // * Enter is pressed on a focused item - then go to the url of the focused item.
-                            // * Any other key - Filter or re-filter the search results.
-                            .keyup(function (e) {
-                                var input = $(this),
-                                    keyCode = e.keyCode || e.which,
-                                    searchString = keyCode === 27 ? "" : input.prop("value"),
-                                    focused;
-
-                                if (keyCode === 13 && (focused = searchUl.children(".focused")).length) {
-                                    window.location.replace(focused.children("a").prop("href"));
-                                    return;
-                                }
-
-                                input.prop("value", searchString);
-                                if (searchString === "") {
-                                    menuUl.show();
-                                    searchUl.hide();
-                                } else {
-                                    searchUl
-                                        .children("li")
-                                        .hide()
-                                        .filter(function () {
-                                            return options.search.filter($(this).children("a"), searchString);
-                                        }).show();
-                                    menuUl.hide();
-                                    searchUl.show();
-                                }
-                            }));
-                    plugin.prepend(searchForm);
-                    plugin.append(searchUl);
                 };
 
-            return this.each(function () {
+            return this.each(function (i, e) {
 
-                var plugin = $(this),
+                var plugin = $(e),
                     menuUl = plugin.children("ul"),
                     activeLi = plugin.find(".active").first();
 
@@ -250,6 +293,7 @@
 
                 // Begin main plugin body
                 addExpanders(menuUl);
+                addShowHide(plugin, menuUl);
 
                 // If requested, open active and scroll to it.
                 if (options.openActive) {

@@ -1,6 +1,6 @@
 # What's New
 
-###What's new in Doctran 1.2.4
+### What's new in Doctran 1.2.4
 
  * Errors messages are displayed for structural issues in the code.
  * The option `--save_xml=PATH` has been changed to `--save-xmls`. The appearance of this option now instructs the program to save the XMLs generated to a directory called `xml` within the output directory.
@@ -12,13 +12,13 @@
  * Fixed bug causing inheritance hierarchy to be display in reverse.
  * Fixed some issues with array descriptions.
 
-###What's new in Doctran 1.2.3
+### What's new in Doctran 1.2.3
 
  * Improved error messages.
  * Fixed bug causing block description heading sections to not be collapsible.
  * Fixed broken links in procedure argument documentation.
 
-###What's new in Doctran 1.2.2
+### What's new in Doctran 1.2.2
 
  * The style of the generated documentation has been modified to take advantage of wide screen and high resolution displays.
  * `Menu` project information element added, to allow menu customizations. The menu is now generated from a markdown or HTML file containing macros.

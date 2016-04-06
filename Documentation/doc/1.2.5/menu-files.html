@@ -1,0 +1,34 @@
+<!DOCTYPE html
+  SYSTEM "about:legacy-compat">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>Menu Files</title><meta charset="UTF-8"><link href="base/Shared/Page/reset.css" rel="stylesheet" type="text/css"><link href="base/Shared/Page/Page.css" rel="stylesheet" type="text/css"><script>globals = { prefix : ''};</script><script src="base/Shared/Page/jquery-1.11.1.min.js" type="text/javascript"></script><script src="base/Shared/Page/Page.js" type="text/javascript"></script><link href="base/Shared/Header/Header.css" rel="stylesheet" type="text/css"><link href="base/Shared/Sections/Sections.css" rel="stylesheet" type="text/css"><script src="base/Shared/Sections/Sections.js" type="text/javascript"></script><link href="base/Shared/Table/Table.css" rel="stylesheet" type="text/css"><script src="base/Shared/Table/Table.js" type="text/javascript"></script><script src="base/Shared/Table/sorttable.js" type="text/javascript"></script><link href="base/Shared/Footer/Footer.css" rel="stylesheet" type="text/css"><link href="base/Shared/Menu/doctranMenu/doctranmenu.css" rel="stylesheet" type="text/css"><script src="base/Shared/Menu/doctranMenu/doctranmenu.js" type="text/javascript"></script><link href="base/Shared/Menu/Menu.css" rel="stylesheet" type="text/css"><script src="base/Shared/Menu/Menu.js" type="text/javascript"></script></head><body><div id="Page"><div class="mainContainer"><div id="Header"><div id="show-hide"></div><h1><a href="index.html" class="title">Doctran</a></h1></div><div id="Article"><h1>Menu Files</h1><p>A menu file is just a HTML (.html) or markdown (.md or .markdown) file containing a list of links you want to appear in the documentation menu. Items can either be simple links or special macros that will insert lists of links generated from your Fortran source code. Files should should only contain the list in your chosen markup and not any boilerplate tags such as <code>&lt;html&gt;</code> or <code>&lt;body&gt;</code>.</p><div class="section"><h2>Macros</h2><div class="content"><p>Macros can be used within your menu files to automatically generate menu links to your source code pages. The following macros are supported:</p><ul><li><code>|Name|</code> - The name of the current block.</li><li><code>|BlockName|</code> - The type name of the current block.</li><li><code>|List, TYPE_VALUE|</code> - Lists all items of <code>TYPE</code>.</li><li><code>|List, TYPE_VALUE, Recursive|</code> - Lists all items of <code>TYPE</code>, as well as their sub-blocks.</li></ul><p>where <code>TYPE_VALUE</code> can be any of the following:</p><ul><li><code>Project</code> - The current project.</li><li><code>File</code> - Fortran source files.</li><li><code>Program</code> - Fortran programs.</li><li><code>Module</code> - Fortran modules.</li><li><code>DerivedType</code> - Fortran user-defined derived-types.</li><li><code>Function</code> - External and module functions.</li><li><code>Subroutine</code> - External and module subroutines.</li><li><code>Assignment</code> - Generic assignment interfaces.</li><li><code>Overload</code> - Generic name interfaces.</li><li><code>Operator</code> - Generic operator interfaces.</li><li><code>Variable</code> - Module variables.</li></ul><p>The previous <code>TYPE_VALUE</code> values adds menu items that do not change from page to page. The next <code>TYPE_VALUE</code> values add menu item that are dependant on the user's current page.</p><ul><li><code>SubBlocks</code> -  Current block's sub-blocks.</li><li><code>SubBlocksAndSelf</code> - Current block as well as it's sub-blocks.</li><li><code>SameType</code> -Blocks of the same type as the current block.</li></ul></div></div><div class="section"><h2>Example</h2><div class="content"><p>An example markdown menu file is shown below.</p><pre><code>    * [Welcome](index.md)
+    * [File List](filelist.md) |List, File|
+    * [Module API](modulelist.md) |List,Module,Recursive|
+</code></pre><p>The above menu file will produce</p><ul><li>A link to an index <a href="project-files/types/userpage.html">user page</a>.</li><li>A "File List" heading linked to a <a href="project-files/types/userpage.html">user page</a>, followed by a generated list of links to source file documentation.</li><li>A "Module API" heading linked to a <a href="project-files/types/userpage.html">user page</a>, followed by a generated list of links to module documentation.</li></ul></div></div></div><div id="Bottom"></div><div id="Footer">Documentation created with <a href="http://doctran.co.uk" target="_blank">Doctran</a> at 7:45 p.m. on 06/04/2016</div></div><div class="doctran-menu"> * [Welcome to Doctran](index.html)
+ * [What's New](what-s-new.html)
+ * Getting Started
+  * [System Requirements and Installation](getting-started/system-requirements-and-installation.html)
+  * [Your First Documentation](getting-started/your-first-documentation.html)
+  * [Generating a Static Wiki](getting-started/generating-a-static-wiki.html)
+ * [Command Line Options](command-line-options.html)
+ * Source Comments
+  * [Description Meta-Data](source-comments/description-meta-data.html)
+  * [Information Meta-Data](source-comments/information-meta-data.html)
+     * [Author](source-comments/information-meta-data/author.html)
+ * [Project Files](project-files.html)
+  * Types
+      * [Author](project-files/types/author.html)
+      * [Copy](project-files/types/copy.html)
+      * [CopyAndParse](project-files/types/copyandparse.html)
+      * [Menu](project-files/types/menu.html)
+      * [Name](project-files/types/name.html)
+      * [Searchable](project-files/types/searchable.html)
+      * [ShowSource](project-files/types/showsource.html)
+      * [Source](project-files/types/source.html)
+      * [Tagline](project-files/types/tagline.html)
+      * [UserPage](project-files/types/userpage.html)
+  * Values
+      * [PATH](project-files/values/path.html)
+ * [Menu Files](menu-files.html)
+ * [User Page Files](user-page-files.html)
+ * [Version Catalogue](../version-catalogue/index.html)
+ * [Doctran Home](http://www.doctran.co.uk)<div class="vspacer"></div></div></div><script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script></body></html>

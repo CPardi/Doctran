@@ -1,4 +1,4 @@
-#Project Files
+# Project Files
 The project file is simply a plain text file that contains information about your project. You can specify a project file using the `--project_info` option.
 
 A project file contains informational elements which have the form `TYPE: VALUE`. The following values for `TYPE` are supported:
@@ -18,7 +18,7 @@ The following possible values of `VALUE` are supported:
 
   * [PATH](project-files/values/path.md)
 
-##Example
+## Example
 An example project file is shown below
 
     Name: Timers

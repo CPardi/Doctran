@@ -1,4 +1,5 @@
 c:/Documents/Programming/VisualStudio/Projects/Doctran/Documentation/doc/1.2.1/index.html
 c:/Documents/Programming/VisualStudio/Projects/Doctran/Documentation/doc/1.2.2/index.html
 c:/Documents/Programming/VisualStudio/Projects/Doctran/Documentation/doc/1.2.4/index.html
+c:/Documents/Programming/VisualStudio/Projects/Doctran/Documentation/doc/1.2.5/index.html
 c:/Documents/Programming/VisualStudio/Projects/Doctran/Documentation/doc/version-catalogue/index.html

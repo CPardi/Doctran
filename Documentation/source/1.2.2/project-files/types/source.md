@@ -1,4 +1,4 @@
-#Source
+# Source
 Specifies a path to Fortran source files. This can be specified multiple times and takes the following form:
 
     Source: PATH

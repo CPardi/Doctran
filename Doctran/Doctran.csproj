@@ -87,6 +87,15 @@
       <HintPath>..\..\..\..\..\..\Program Files\Saxonica\SaxonHE9.6N\bin\IKVM.Runtime.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Jint">
+      <HintPath>..\..\JsLibsForCs\JsLibsForCs.Remarkable\bin\Release\Jint.dll</HintPath>
+    </Reference>
+    <Reference Include="JsLibsForCs">
+      <HintPath>..\..\JsLibsForCs\JsLibsForCs.Remarkable\bin\Release\JsLibsForCs.dll</HintPath>
+    </Reference>
+    <Reference Include="JsLibsForCs.Remarkable">
+      <HintPath>..\..\JsLibsForCs\JsLibsForCs.Remarkable\bin\Release\JsLibsForCs.Remarkable.dll</HintPath>
+    </Reference>
     <Reference Include="MarkdownSharp, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MarkdownSharp.1.13.0.0\lib\35\MarkdownSharp.dll</HintPath>
       <Private>True</Private>

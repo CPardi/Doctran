@@ -42,7 +42,7 @@ namespace Doctran.ParsingElements.FortranBlocks
                 .Where(line => Regex.IsMatch(line.Text, @"^\s*!>>(.*)"))
                 .ToList();
 
-            return new Markdown().Transform(
+            return StringUtils.RenderMarkdown(
                 string.Concat(
                     detailLines
                         .Select(line => Regex.Match(line.Text, @"!>>(.*)").Groups[1].Value)

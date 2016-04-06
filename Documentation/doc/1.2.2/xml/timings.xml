@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<timings>
+  <description>Times are given in milliseconds.</description>
+  <options-parsing>2531</options-parsing>
+  <project-parsing>5</project-parsing>
+  <xml-generation>14</xml-generation>
+  <theme-output>452</theme-output>
+  <html-output>4285</html-output>
+  <total>7311</total>
+</timings>
