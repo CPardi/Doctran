@@ -1,74 +1,51 @@
 <Project>
   <Information>
-    <Menu>
-      <ul>
-<li><a href="index.html">Welcome to Doctran</a></li>
-<li><a href="what-s-new.html">What's New</a></li>
-<li>Getting Started
-<ul>
-<li><a href="getting-started/system-requirements-and-installation.html">System Requirements and Installation</a></li>
-<li><a href="getting-started/your-first-documentation.html">Your First Documentation</a></li>
-<li><a href="getting-started/generating-a-static-wiki.html">Generating a Static Wiki</a></li>
-</ul></li>
-<li><a href="command-line-options.html">Command Line Options</a></li>
-<li>Source Comments
-<ul>
-<li><a href="source-comments/description-meta-data.html">Description Meta-Data</a></li>
-<li><a href="source-comments/information-meta-data.html">Information Meta-Data</a>
-<ul>
-<li><a href="source-comments/information-meta-data/author.html">Author</a></li>
-</ul></li>
-</ul></li>
-<li><a href="project-files.html">Project Files</a>
-<ul>
-<li>Types
-<ul>
-<li><a href="project-files/types/author.html">Author</a></li>
-<li><a href="project-files/types/copy.html">Copy</a></li>
-<li><a href="project-files/types/copyandparse.html">CopyAndParse</a></li>
-<li><a href="project-files/types/menu.html">Menu</a></li>
-<li><a href="project-files/types/name.html">Name</a></li>
-<li><a href="project-files/types/searchable.html">Searchable</a></li>
-<li><a href="project-files/types/showsource.html">ShowSource</a></li>
-<li><a href="project-files/types/source.html">Source</a></li>
-<li><a href="project-files/types/tagline.html">Tagline</a></li>
-<li><a href="project-files/types/userpage.html">UserPage</a></li>
-</ul></li>
-<li>Values
-<ul>
-<li><a href="project-files/values/path.html">PATH</a></li>
-</ul></li>
-</ul></li>
-<li><a href="menu-files.html">Menu Files</a></li>
-<li><a href="user-page-files.html">User Page Files</a></li>
-<li><a href="../version-catalogue/index.html">Version Catalogue</a></li>
-<li><a href="http://www.doctran.co.uk">Doctran Home</a></li>
-</ul>
-</Menu>
+    <Menu> * [Welcome to Doctran](index.html)
+ * [What's New](what-s-new.html)
+ * Getting Started
+  * [System Requirements and Installation](getting-started/system-requirements-and-installation.html)
+  * [Your First Documentation](getting-started/your-first-documentation.html)
+  * [Generating a Static Wiki](getting-started/generating-a-static-wiki.html)
+ * [Command Line Options](command-line-options.html)
+ * Source Comments
+  * [Description Meta-Data](source-comments/description-meta-data.html)
+  * [Information Meta-Data](source-comments/information-meta-data.html)
+     * [Author](source-comments/information-meta-data/author.html)
+ * [Project Files](project-files.html)
+  * Types
+      * [Author](project-files/types/author.html)
+      * [Copy](project-files/types/copy.html)
+      * [CopyAndParse](project-files/types/copyandparse.html)
+      * [Menu](project-files/types/menu.html)
+      * [Name](project-files/types/name.html)
+      * [Searchable](project-files/types/searchable.html)
+      * [ShowSource](project-files/types/showsource.html)
+      * [Source](project-files/types/source.html)
+      * [Tagline](project-files/types/tagline.html)
+      * [UserPage](project-files/types/userpage.html)
+  * Values
+      * [PATH](project-files/values/path.html)
+ * [Menu Files](menu-files.html)
+ * [User Page Files](user-page-files.html)
+ * [Version Catalogue](../version-catalogue/index.html)
+ * [Doctran Home](http://www.doctran.co.uk)</Menu>
     <UserPage>
       <Prefix />
       <href>command-line-options.html</href>
       <Path>.\command-line-options.html</Path>
       <Content>
         <h1>Command Line Options</h1>
-
 <p>Doctran can be supplied with the command-line options shown below.</p>
-
 <h2>Help</h2>
-
 <p>These options force Doctran to display various information meant to be helpful to the user.</p>
-
 <table>
 <thead>
 <tr><td>Option name</td><td>Description</td></tr>
 </thead>
 <tbody>
 <tr><td>--help</td><td>Displays usage information.</td></tr>
-
 <tr><td>--license</td><td>Run Doctran with this options to enter a license key and view license information.</td></tr>
-
 <tr><td>--plugins</td><td>This option forces Doctran to check the plugins path for any plugins present and write their names and version. Doctran will exit immediately after plugins have been checked.</td></tr>
-
 <tr><td>--verbose VALUE</td><td>
 Sets how much information should written to the screen. VALUE can be the following:
  <ul>
@@ -77,33 +54,22 @@ Sets how much information should written to the screen. VALUE can be the followi
      <li> 3 - Detailed information output. Everything from 2 with a lot of information on what is processing.</li>
  </ul>
 </td></tr>
-
 </tbody>
 </table>
-
-<h2>I/O</h2>
-
-<p>These options allow the user to affect the input and output.</p>
-
+<p>##I/O
+These options allow the user to affect the input and output.</p>
 <table>
 <thead>
 <tr><td>Option name</td><td>Description</td></tr>
 </thead>
 <tbody>
-
 <tr><td> --output, -o DIR</td><td>DIR is the output directory for the documentation. (Default: Docs).</td></tr>
-
 <tr><td>--overwrite</td><td>If this option is specified, then the auxiliary files (css, scripts, etc.) and html files in the output directory will be overwritten. If not, then just the html files will be overwritten, which is the default behaviour.</td></tr>
-
 <tr><td> --save_xml FILE</td><td>Specifies a path to save the intermediary XML document generated. The document is not saved by default.</td></tr>
-
 </tbody>
 </table>
-
 <h2>Project</h2>
-
 <p>These options allow the user to specify information relating to their project.</p>
-
 <table>
 <thead>
 <tr>
@@ -115,8 +81,7 @@ Sets how much information should written to the screen. VALUE can be the followi
 <td>--project_info FILE,</td><td>FILE is the name and/or path of the project's information file.</td>
 </tr>
 </tbody>
-</table>   
-</Content>
+</table>   </Content>
     </UserPage>
     <UserPage>
       <Prefix />
@@ -124,11 +89,8 @@ Sets how much information should written to the screen. VALUE can be the followi
       <Path>.\index.html</Path>
       <Content>
         <h1>Welcome to Doctran 1.2.3 - 1.2.2</h1>
-
 <p><image align="left" style="margin: 0 4em 1.0em 0" src="images/logo.png" /> Doctran is a documentation generator for generating API documentation in HTML format from modern Fortran source code. It has full support for Fortran 95 standard and the object oriented parts of the Fortran 2003 standard.</p>
-
 <p>The HTML format allows related documents to be conveniently hyper-linked together. Both breadcrumb and drop-down menu navigations are automatically generated to allow quick access to all parts of you source code.</p>
-
 <p>Doctran is a cross platform application and can be run on Windows, Linux and Mac systems.</p>
 </Content>
     </UserPage>
@@ -138,22 +100,16 @@ Sets how much information should written to the screen. VALUE can be the followi
       <Path>.\menu-files.html</Path>
       <Content>
         <h1>Menu Files</h1>
-
 <p>A menu file is just a HTML (.html) or markdown (.md or .markdown) file containing a list of links you want to appear in the documentation menu. Items can either be simple links or special macros that will insert lists of links generated from your Fortran source code. Files should should only contain the list in your chosen markup and not any boilerplate tags such as <code>&lt;html&gt;</code> or <code>&lt;body&gt;</code>.</p>
-
 <h2>Macros</h2>
-
 <p>Macros can be used within your menu files to automatically generate menu links to your source code pages. The following macros are supported:</p>
-
 <ul>
 <li><code>|Name|</code> - The name of the current block.</li>
 <li><code>|BlockName|</code> - The type name of the current block.</li>
 <li><code>|List, TYPE_VALUE|</code> - Lists all items of <code>TYPE</code>.</li>
 <li><code>|List, TYPE_VALUE, Recursive|</code> - Lists all items of <code>TYPE</code>, as well as their sub-blocks.</li>
 </ul>
-
 <p>where <code>TYPE_VALUE</code> can be any of the following:</p>
-
 <ul>
 <li><code>Project</code> - The current project.</li>
 <li><code>File</code> - Fortran source files.</li>
@@ -166,30 +122,23 @@ Sets how much information should written to the screen. VALUE can be the followi
 <li><code>Operator</code> - Generic operator interfaces.</li>
 <li><code>Variable</code> - Module variables.</li>
 </ul>
-
 <p>The previous <code>TYPE_VALUE</code> values adds menu items that do not change from page to page. The next <code>TYPE_VALUE</code> values add menu item that are dependant on the user's current page.</p>
-
 <ul>
 <li><code>SubBlocks</code> -  Current block's sub-blocks.</li>
 <li><code>SubBlocksAndSelf</code> - Current block as well as it's sub-blocks.</li>
 <li><code>SameType</code> -Blocks of the same type as the current block.</li>
 </ul>
-
 <h2>Example</h2>
-
 <p>An example markdown menu file is shown below.</p>
-
 <pre><code>    * [Welcome](index.md)
     * [File List](filelist.md) |List, File|
     * [Module API](modulelist.md) |List,Module,Recursive|
 </code></pre>
-
 <p>The above menu file will produce</p>
-
 <ul>
 <li>A link to an index <a href="project-files/types/userpage.md">user page</a>.</li>
-<li>A "File List" heading linked to a <a href="project-files/types/userpage.md">user page</a>, followed by a generated list of links to source file documentation. </li>
-<li>A "Module API" heading linked to a <a href="project-files/types/userpage.md">user page</a>, followed by a generated list of links to module documentation. </li>
+<li>A "File List" heading linked to a <a href="project-files/types/userpage.md">user page</a>, followed by a generated list of links to source file documentation.</li>
+<li>A "Module API" heading linked to a <a href="project-files/types/userpage.md">user page</a>, followed by a generated list of links to module documentation.</li>
 </ul>
 </Content>
     </UserPage>
@@ -199,11 +148,8 @@ Sets how much information should written to the screen. VALUE can be the followi
       <Path>.\project-files.html</Path>
       <Content>
         <h1>Project Files</h1>
-
 <p>The project file is simply a plain text file that contains information about your project. You can specify a project file using the <code>--project_info</code> option.</p>
-
 <p>A project file contains informational elements which have the form <code>TYPE: VALUE</code>. The following values for <code>TYPE</code> are supported:</p>
-
 <ul>
 <li><a href="project-files/types/author.md">Author</a></li>
 <li><a href="project-files/types/copy.md">Copy</a></li>
@@ -216,17 +162,12 @@ Sets how much information should written to the screen. VALUE can be the followi
 <li><a href="project-files/types/name.md">Tagline</a></li>
 <li><a href="project-files/types/userpage.md">UserPage</a></li>
 </ul>
-
 <p>The following possible values of <code>VALUE</code> are supported:</p>
-
 <ul>
 <li><a href="project-files/values/path.md">PATH</a></li>
 </ul>
-
 <h2>Example</h2>
-
 <p>An example project file is shown below</p>
-
 <pre><code>Name: Timers
 Tagline: Making timing easy.
 
@@ -250,8 +191,7 @@ Searchable:
 &gt; Type: Overload
 &gt; Type: Operator
 &gt; Type: Function
-&gt; Type: Subroutine
-</code></pre>
+&gt; Type: Subroutine</code></pre>
 </Content>
     </UserPage>
     <UserPage>
@@ -260,23 +200,15 @@ Searchable:
       <Path>.\user-page-files.html</Path>
       <Content>
         <h1>User Page Files</h1>
-
 <p>A user page file can be either be a html (.html) or markdown (.md or .markdown) file. This file should contain the content you want to be displayed in your chosen markup. To include a user page file within your project use the <a href="project-files/types/userpage.md">UserPage</a> element in your <a href="project-files.md">project file</a>.</p>
-
 <p>The first heading is used as the title for the user page and all relative links such as links, images, CSS and script are assumed to be relative to the project file. Files should not contain any boilerplate tags such as <code>&lt;html&gt;</code> or <code>&lt;body&gt;</code> only your content.</p>
-
 <p>To allow more flexibility, menu entries are not automatically generated. Instead, menu entries are added manually to the <a href="menu-files.md">menu file</a>.</p>
-
 <h2>Macros</h2>
-
 <p>Macros can be used within your user page files to include information about your source code. The following macros are supported:</p>
-
 <ul>
 <li><code>|Table, TYPE_VALUE|</code> - When placed within <code>&lt;table&gt;</code> tags, the table will be populated with item of <code>TYPE_VALUE</code>.</li>
 </ul>
-
 <p>where <code>TYPE_VALUE</code> can be any of the following:</p>
-
 <ul>
 <li><code>Project</code> - The current project.</li>
 <li><code>File</code> - Fortran source files.</li>
@@ -289,11 +221,8 @@ Searchable:
 <li><code>Operator</code> - Generic operator interfaces.</li>
 <li><code>Variable</code> - Module variables.</li>
 </ul>
-
 <h2>Example</h2>
-
 <p>An example user page file is shown below. It uses markup syntax and a macro to show a list of files linking to their documentation pages.</p>
-
 <pre><code>#Welcome
 
 ## Description 
@@ -304,8 +233,7 @@ This project contains the following Fortran 95 source files.
 
 &lt;table&gt;
 |table,file|
-&lt;/table&gt;
-</code></pre>
+&lt;/table&gt;</code></pre>
 </Content>
     </UserPage>
     <UserPage>
@@ -314,22 +242,18 @@ This project contains the following Fortran 95 source files.
       <Path>.\what-s-new.html</Path>
       <Content>
         <h1>What's New</h1>
-
 <h3>What's new in Doctran 1.2.3</h3>
-
 <ul>
 <li>Improved error messages.</li>
 <li>Fixed bug causing block description heading sections to not be collapsible.</li>
 <li>Fixed broken links in procedure argument documentation.</li>
 </ul>
-
 <h3>What's new in Doctran 1.2.2</h3>
-
 <ul>
 <li>The style of the generated documentation has been modified to take advantage of wide screen and high resolution displays.</li>
 <li><code>Menu</code> project information element added, to allow menu customizations. The menu is now generated from a markdown or HTML file containing macros.</li>
 <li><code>UserPage</code> project information element added, so that additional documentation pages can be created from the user's markdown or HTML files.</li>
-<li><code>Source</code> project information element added so that source files can be specified from the project file. </li>
+<li><code>Source</code> project information element added so that source files can be specified from the project file.</li>
 <li><code>Tagline</code> project information element added, which should not be used to specify the project's tagline.</li>
 <li>A project page is no longer automatically generated from comments within the project file, instead this can be created using the <code>UserPage</code> information element.</li>
 <li>Headings in meta-data have moved one level up, so the top level heading used in descriptions is now <code>&lt;h2&gt;</code> or <code>##</code>.</li>
@@ -342,31 +266,21 @@ This project contains the following Fortran 95 source files.
       <Path>.\getting-started\generating-a-static-wiki.html</Path>
       <Content>
         <h1>Generating a Static Wiki</h1>
-
 <p>Doctran can be used as a static wiki generator. Meaning that given a collection of Markdown or HTML files, Doctran will transform these into styled HTML documents with a title, menu and search. Of course, the following can be combined with document generator capabilities to produce quality documentation.</p>
-
 <p>Assuming for simplicity you have a single markdown file, say <code>index.md</code>, then firstly you need to create a <a href="menu-files.md">menu file</a>. Save the following text as <code>menu.md</code> in the same directory as your index.md</p>
-
 <pre><code> * [Welcome](index.html)
 </code></pre>
-
 <p>This will produce a menu with one item named "Welcome" linking to <code>index.md</code>.</p>
-
 <p>Next you need to create a <a href="project-files.md">project file</a> to include your content and menu. Create another file called <code>project.info</code>, again within the same folder, that contains the following:</p>
-
 <pre><code>Name: My Static Wiki
 Tagline: My Wiki Tagline
 Menu: menu.md
 UserPage: index.md
 </code></pre>
-
 <p>This will set a project name and tagline and include you menu and content files.</p>
-
 <p>Finally, run Doctran in the folder that these files are saved within, using the following:</p>
-
 <pre><code>doctran --project_info project.info -o StaticWiki
 </code></pre>
-
 <p>This will generate your static wiki within a <code>StaticWiki</code> folder.</p>
 </Content>
     </UserPage>
@@ -376,68 +290,43 @@ UserPage: index.md
       <Path>.\getting-started\system-requirements-and-installation.html</Path>
       <Content>
         <h1>System Requirements and Installation</h1>
-
 <h2>Hardware Requirements</h2>
-
 <p>The minimum hardware requirements for Doctran are as follows:</p>
-
 <ul>
 <li>1 GHz processor</li>
 <li>512 MB RAM</li>
 </ul>
-
 <h2>Windows Systems</h2>
-
 <h3>Requirements</h3>
-
 <p>Doctran's only prerequisite is the the .Net Framework 4.</p>
-
 <h3>Installation</h3>
-
 <p>The Windows package comes as a self-installing executable, making installation straightforward. Proceed by following the dialogues. You will be asked to download and install any missing prerequisites, and to add a shortcut to Doctran's command prompt. This is recommended, as loading the command prompt using one of these shortcuts is probably the quickest way of getting started using Doctran.</p>
-
 <h3>Testing the Installation</h3>
-
 <p>Once you have downloaded and run the installation package on you system, it is best to test that the installation has been successful. A test project has been included to allow this.</p>
-
 <ul>
 <li>Open up a Doctran command prompt.</li>
 <li>Then, type <code>cd testing</code> to move into the testing folder.</li>
 <li>Finally, type <code>run_tests.bat</code>.</li>
 </ul>
-
 <p>Doctran will then be run on a collection of simple source files. If documentation generation is completed successfully, then you will see the message "Documentation generation complete." outputted. You can view the documentation generated by searching in your home directory for a Docs directory.</p>
-
 <p>If everything finished successfully you are now ready to start creating documentation for you own Fortran projects.</p>
-
 <h2>Linux and Mac OS X Installations</h2>
-
 <h3>Requirements</h3>
-
 <p>The only prerequisite required is Mono version 2.8, or above. This is the implementation of the .Net framework on non-Windows systems. Installation information can be found on Mono's <a href="http://www.mono-project.com/download/">website</a></p>
-
 <h3>Installation</h3>
-
 <p>Installation on Unix based systems are distributed as a <a href="https://github.com/megastep/makeself">makeself</a> package. To install place DoctranTrial.sh in the directory you would like to install Doctran within. Then, open a terminal within that directory and type</p>
-
 <pre><code>sh ./DoctranTrial.sh
 </code></pre>
-
 <p>The install package will check and warn you about any missing prerequisites. You will be asked if you want to add a symbolic link from Doctran to your <code>/usr/bin/</code> folder. This will allow you to call Doctran from any folder. Confirming will require root access and you will be prompted to enter your root password.</p>
-
 <h3>Testing the Installation</h3>
-
 <p>Once you have downloaded and run the installation package on you system, it is best to test that the installation has been successful. A test project has been included to allow this.</p>
-
 <ul>
 <li>Open up a terminal.</li>
 <li>Navigate to Doctran's installation directory.</li>
 <li>Type <code>cd testing</code> to move into the testing folder.</li>
 <li>Then, type <code>sh run_tests.sh</code>.</li>
 </ul>
-
 <p>Doctran will then be run on a collection of simple source files. If documentation generation is completed successfully, then you will see the message "Documentation generation complete." outputted. You can view the documentation generated by searching in your home directory for a Docs directory.</p>
-
 <p>If everything finished successfully you are now ready to start creating documentation for you own Fortran projects.</p>
 </Content>
     </UserPage>
@@ -447,24 +336,16 @@ UserPage: index.md
       <Path>.\getting-started\your-first-documentation.html</Path>
       <Content>
         <h1>Your First Documentation</h1>
-
-<p>Doctran can only be run from the command line. The most basic syntax for running Doctran is </p>
-
+<p>Doctran can only be run from the command line. The most basic syntax for running Doctran is</p>
 <pre><code>doctran [source_files]
 </code></pre>
-
 <p>where source_files is a space separated list of paths to your source files. This will output your documentation in a newly created Docs folder within your current directory.</p>
-
 <p>Commonly, you would want your documentation to be placed within a new folder. To do this use the <code>--output_dir</code> option or its shorter <code>-o</code> option as shown below.</p>
-
 <pre><code>doctran -o &lt;DIR&gt; [source_files]
 </code></pre>
-
 <p>The above will output documentation in the <code>&lt;DIR&gt;</code> directory, creating the path if required. The most general syntax for running Doctran is shown below.</p>
-
 <pre><code>doctran [options] [source_files]
 </code></pre>
-
 <p>A full list of options can be found <a href="command-line-options.md">here</a></p>
 </Content>
     </UserPage>
@@ -474,15 +355,11 @@ UserPage: index.md
       <Path>.\project-files\types\author.html</Path>
       <Content>
         <h1>Author</h1>
-
 <p>Use this to specify any additional authors not specified using <a href="source-comments/information-meta-data/author.md">author</a> elements within the source.  This can be specified multiple times and take the following form:</p>
-
 <pre><code>Author:
 &gt;SubComponent: SubComponent_Value
 </code></pre>
-
 <p>It the following sub-components:</p>
-
 <table>
 <thead>
 <tr>
@@ -500,8 +377,7 @@ UserPage: index.md
 <td>Affiliation</td><td>1</td><td> The author's institution or work place.</td>
 </tr>
 </tbody>
-</table>
-</Content>
+</table></Content>
     </UserPage>
     <UserPage>
       <Prefix>../../</Prefix>
@@ -509,36 +385,26 @@ UserPage: index.md
       <Path>.\project-files\types\copy.html</Path>
       <Content>
         <h1>Copy</h1>
-
 <p>Instructs that the content at a path should be copied to the output folder. This can be specified multiple times and takes the following form:</p>
-
 <pre><code>Copy: PATH
 </code></pre>
-
 <p>The value of <code>PATH</code> is the path of the data to be copied, relative to the project file. The data found will then be copied to the output directory, with the relative path maintained.</p>
-
 <p>For example, given the following directory structure:</p>
-
 <pre><code>- Root
     - project.info
     - File1.md
     - Directory1
         - SubFile1.md
 </code></pre>
-
 <p>and within the project.info file there is the command</p>
-
 <pre><code>Copy: Directory1/SubFile.md
 </code></pre>
-
 <p>Then the output path will have the directory structure</p>
-
 <pre><code>- OutputDir
     - Directory1
         - SubFile1.md
     + GeneratedContent 
 </code></pre>
-
 <p><code>PATH</code> can be more complex than a single filename. See <a href="project-files/values/path.md">PATH</a> for more details.</p>
 </Content>
     </UserPage>
@@ -548,16 +414,11 @@ UserPage: index.md
       <Path>.\project-files\types\copyandparse.html</Path>
       <Content>
         <h1>CopyAndParse</h1>
-
 <p>Instructs that the content at a path should be parse and then copied to the output folder. This can be specified multiple times and takes the following form:</p>
-
 <pre><code>CopyAndParse: PATH
 </code></pre>
-
 <p>See <a href="project-files/types/copy.md">Copy</a> for more information on the copied directory structure. <code>PATH</code> can be more complex than a single filename. See <a href="project-files/values/path.md">PATH</a> for more details.</p>
-
 <p>Below show a table of how files of a particular extension will be parsed. Any files not matching an extension below are simply copied without any transformation.</p>
-
 <table>
     <thead>
         <tr>
@@ -566,21 +427,20 @@ UserPage: index.md
             <td>Output Extension</td>       
         </tr>
     </thead>
-
-    <tbody>
-        <tr>
-            <td>.md, .markdown</td>
-            <td>Markdown content within the file is transformed to HTML.</td>                
-            <td>.html</td>       
-        </tr>
-
-        <tr>
-            <td>.less</td>
-            <td>LESS content within the file is transformed to CSS</td>                
-            <td>.css</td>       
-        </tr>           
-    </tbody>
-
+<pre><code>&lt;tbody&gt;
+    &lt;tr&gt;
+        &lt;td&gt;.md, .markdown&lt;/td&gt;
+        &lt;td&gt;Markdown content within the file is transformed to HTML.&lt;/td&gt;                
+        &lt;td&gt;.html&lt;/td&gt;       
+    &lt;/tr&gt;
+    
+    &lt;tr&gt;
+        &lt;td&gt;.less&lt;/td&gt;
+        &lt;td&gt;LESS content within the file is transformed to CSS&lt;/td&gt;                
+        &lt;td&gt;.css&lt;/td&gt;       
+    &lt;/tr&gt;           
+&lt;/tbody&gt;
+</code></pre>
 </table>
 </Content>
     </UserPage>
@@ -590,14 +450,10 @@ UserPage: index.md
       <Path>.\project-files\types\menu.html</Path>
       <Content>
         <h1>Menu</h1>
-
 <p>Specifies a menu file that contains the menu for the generated documentation. This can be specified only once and takes the following form:</p>
-
 <pre><code>Menu: FILEPATH
 </code></pre>
-
 <p>where <code>FILEPATH</code> is the path to a menu file.</p>
-
 <p>See <a href="menu-files.md">here</a> for more information on menu files.</p>
 </Content>
     </UserPage>
@@ -607,11 +463,8 @@ UserPage: index.md
       <Path>.\project-files\types\name.html</Path>
       <Content>
         <h1>Name</h1>
-
 <p>The name of the project to be display within the header and title. This should be specified only once and take the following form:</p>
-
-<pre><code>Name: Name_Value
-</code></pre>
+<pre><code>Name: Name_Value</code></pre>
 </Content>
     </UserPage>
     <UserPage>
@@ -620,45 +473,11 @@ UserPage: index.md
       <Path>.\project-files\types\searchable.html</Path>
       <Content>
         <h1>Searchable</h1>
-
 <p>The type of code block that should be indexed and viewable within the documentation search results. This should be specified only once and take the following form:</p>
-
 <pre><code>Searchable:
 &gt; Type: Type_Value
 </code></pre>
-
 <p><code>Type</code> may be specified multiple times and <code>Type_Value</code> can take any of the following values:</p>
-
-<ul>
-<li>File</li>
-<li>Program</li>
-<li>Module</li>
-<li>DerivedType</li>
-<li>Assignment</li>
-<li>Overload</li>
-<li>Operator</li>
-<li>Function </li>
-<li>Subroutine</li>
-</ul>
-
-<p>By default all of the above is made searchable.</p>
-</Content>
-    </UserPage>
-    <UserPage>
-      <Prefix>../../</Prefix>
-      <href>project-files/types/showsource.html</href>
-      <Path>.\project-files\types\showsource.html</Path>
-      <Content>
-        <h1>ShowSource</h1>
-
-<p>The type of code block that syntax highlighted source code should be included on its page. This should be specified only once and take the following form:</p>
-
-<pre><code>Markup:
-&gt; Type: Type_Value
-</code></pre>
-
-<p><code>Type</code> may be specified multiple times and <code>Type_Value</code> can take of the following values:</p>
-
 <ul>
 <li>File</li>
 <li>Program</li>
@@ -670,7 +489,31 @@ UserPage: index.md
 <li>Function</li>
 <li>Subroutine</li>
 </ul>
-
+<p>By default all of the above is made searchable.</p>
+</Content>
+    </UserPage>
+    <UserPage>
+      <Prefix>../../</Prefix>
+      <href>project-files/types/showsource.html</href>
+      <Path>.\project-files\types\showsource.html</Path>
+      <Content>
+        <h1>ShowSource</h1>
+<p>The type of code block that syntax highlighted source code should be included on its page. This should be specified only once and take the following form:</p>
+<pre><code>Markup:
+&gt; Type: Type_Value
+</code></pre>
+<p><code>Type</code> may be specified multiple times and <code>Type_Value</code> can take of the following values:</p>
+<ul>
+<li>File</li>
+<li>Program</li>
+<li>Module</li>
+<li>DerivedType</li>
+<li>Assignment</li>
+<li>Overload</li>
+<li>Operator</li>
+<li>Function</li>
+<li>Subroutine</li>
+</ul>
 <p>By default the source will be shown for files, programs, functions and subroutines.</p>
 </Content>
     </UserPage>
@@ -680,14 +523,10 @@ UserPage: index.md
       <Path>.\project-files\types\source.html</Path>
       <Content>
         <h1>Source</h1>
-
 <p>Specifies a path to Fortran source files. This can be specified multiple times and takes the following form:</p>
-
 <pre><code>Source: PATH
 </code></pre>
-
 <p>This can be used instead of or in conjunction with specifying source files at the command-line.</p>
-
 <p><code>PATH</code> can be more complex than a single filename. See <a href="project-files/values/path.md">PATH</a> for more details.</p>
 </Content>
     </UserPage>
@@ -697,12 +536,9 @@ UserPage: index.md
       <Path>.\project-files\types\tagline.html</Path>
       <Content>
         <h1>Tagline</h1>
-
 <p>Specifies a tag-line for your project that will be shown within the header of the generated documentation. This can be specified once and takes the following form:</p>
-
 <pre><code>Tagline: VALUE
 </code></pre>
-
 <p>where <code>VALUE</code> is your tag-line.</p>
 </Content>
     </UserPage>
@@ -712,16 +548,11 @@ UserPage: index.md
       <Path>.\project-files\types\userpage.html</Path>
       <Content>
         <h1>UserPage</h1>
-
 <p>Specifies that a non-source file should be included within the generated documentation. This can be specified multiple times and takes the following form:</p>
-
 <pre><code>UserPage: PATH
 </code></pre>
-
 <p>where <code>PATH</code> is the path to a user page file. The pages generated from this content will contain a header and menu similar to automatically generated pages.</p>
-
 <p>See <a href="user-page-files.md">here</a> for more information on user page files.</p>
-
 <p><code>PATH</code> can be more complex than a single filename and specify multiple user page files. See <a href="project-files/values/path.md">PATH</a> for more details.</p>
 </Content>
     </UserPage>
@@ -731,14 +562,10 @@ UserPage: index.md
       <Path>.\project-files\values\path.html</Path>
       <Content>
         <h1>PATH</h1>
-
 <p>In general a <code>PATH</code> value can take the form:</p>
-
 <pre><code>pathToDirectory[/**][/searchPattern]
 </code></pre>
-
 <p>The <code>searchPattern</code> within the <code>PATH</code> can include the wildcard characters <code>*</code>, <code>?</code>. Their uses are described below:</p>
-
 <table>
     <thead>
         <tr><td>Wildcard specifier</td><td>Description</td></tr>    
@@ -754,13 +581,9 @@ UserPage: index.md
         </tr>    
     </tbody>
 </table>
-
 <p>The path can optionally include <code>**</code> to specify that the preceding directory and all its sub-directories are to be searched for files matching the <code>searchPattern</code>.</p>
-
 <h2>Examples</h2>
-
 <p>For the follow examples assume you have the directory structure:</p>
-
 <pre><code>- Root
     - File1.txt
     - File2.md
@@ -768,15 +591,13 @@ UserPage: index.md
         - SubFile1.txt
         - SubFile2.md
 </code></pre>
-
 <p>Then, for the following <code>PATH</code> values:</p>
-
 <ul>
-<li><code>Root/File1.txt</code>, matches 
+<li><code>Root/File1.txt</code>, matches
 <ul>
 <li>Root/File1.txt</li>
 </ul></li>
-<li><code>Root/*.txt</code>, matches 
+<li><code>Root/*.txt</code>, matches
 <ul>
 <li>Root/File1.txt</li>
 </ul></li>
@@ -801,54 +622,37 @@ UserPage: index.md
       <Path>.\source-comments\description-meta-data.html</Path>
       <Content>
         <h1>Descriptive Comments</h1>
-
 <p>A description can be placed anywhere within a block to describe that block's purpose. In the case of declarations of variables-like objects, a description must be placed on the line directly beneath the declaration line. A variable-like object refers to variables, arguments and components. A description made up of two parts, a basic and a detail part.</p>
-
 <h3>Basic Part</h3>
-
 <p>The basic part of a description being with <code>!&gt;</code> and is used to give a brief outline of what the block is used for. This description is used as the subtitle on the block's documentation page, as well as the description displayed within lists. Note, a variable-like object can only contain a basic description part.</p>
-
 <h3>Detail Part</h3>
-
 <p>Doctran will treat any line beginning with <code>!&gt;&gt;</code> as a detailed description component. The detailed part of a description is only seen within the blocks documentation page. Detailed descriptions can contain HTML or markdown. Note that section headings are given by <code>&lt;h2&gt;</code> tags in html or the <code>##</code> in markdown as the level one heading is used for the object's name and type. Doctran will automatically make the content between each level two heading foldable.</p>
-
 <p>If required, a description maybe split onto multiple lines by starting the next line with <code>!&gt;</code> or <code>!&gt;&gt;</code> for basic and detailed components respectively.</p>
-
 <h3>Example</h3>
-
 <p>An example of some valid descriptions are shown below.</p>
-
 <pre><code>type Vector_1d
     !&gt; A basic description.
     !&gt; Another line may be included and must be directly below the previous line.
     !&gt;&gt; ## Markdown parsed heading
     !&gt;&gt; A detailed description.
     !&gt;&gt; The same applies for a multi-line detailed descriptions.
-
+    
     real x_1
     !&gt; A basic description of a variable. This must be directly below the declaration.
 end type
 </code></pre>
-
 <h2>Named Descriptions</h2>
-
 <p>Named descriptions allow the description of variable-like objects, where several of them are declared on a single line. Any line with the form <code>!&gt; NAME - DESCRIPTION</code>, where <code>NAME</code> is a string of alpha numeric characters, will be interpreted by Doctran as a named description. As with all Fortran names the <code>NAME</code> specified is not case sensitive.</p>
-
 <h3>Example</h3>
-
 <p>An example of some valid named descriptions are shown below.</p>
-
 <pre><code>type Vector_2d
     real x_1, x_2
     !&gt; x_1 - A real variable holding the value of the vector in the x direction.
     !&gt; x_2 - A real variable holding the value of the vector in the y direction.
 end type
 </code></pre>
-
 <h2>Alternative Commenting</h2>
-
 <p>Named descriptions allow for more flexibility when specifying your descriptions. Doctran will search within a block and also its parent block for names matching the description's name. This allows for a different style of commenting to be used as shown in the example below.</p>
-
 <pre><code>!&gt; Vector_2d - A type containing two real components, representing the two degrees of freedom.
 !&gt;&gt; Mathematically this type represents the following:
 !&gt;&gt; \[ \vec{x} = \left(\begin{array}{c} x_1 \\ x_2 \end{array} \right) \]
@@ -856,8 +660,7 @@ type Vector_2d
     !&gt; x_1 - A real variable holding the value of the vector in the x direction.
     !&gt; x_2 - A real variable holding the value of the vector in the y direction.
     real x_1, x_2
-end type
-</code></pre>
+end type</code></pre>
 </Content>
     </UserPage>
     <UserPage>
@@ -866,13 +669,9 @@ end type
       <Path>.\source-comments\information-meta-data.html</Path>
       <Content>
         <h1>Information Comments</h1>
-
 <p>An information element specifies a specific property of a block. Any line of the form <code>!&gt; TYPE : DESCRIPTION</code>, where <code>TYPE</code> is a string of alpha numeric characters, will be interpreted by Doctran as a information element. The <code>TYPE</code> specification is not case sensitive.</p>
-
 <p>Any line of the form <code>!&gt;&gt; COMPONENT : DESCRIPTION</code> will be interpreted as a sub-component of the <code>TYPE</code> above. Again the <code>COMPONENT</code> is not case sensitive. See the author below information type below as an example.</p>
-
 <p>Doctran supports the following informational elements:</p>
-
 <ul>
 <li><a href="source-comments/information-meta-data/author.md">Author</a></li>
 </ul>
@@ -884,13 +683,9 @@ end type
       <Path>.\source-comments\information-meta-data\author.html</Path>
       <Content>
         <h1>Author</h1>
-
 <p>An author information element is used to specify the person who wrote a block of code. It may be placed within any block of code and the information will be shown on that block's documentation page.</p>
-
 <h2>Sub-Information</h2>
-
 <p>The author information comment supports the following sub-information:</p>
-
 <table>
 <thead>
 <tr>
@@ -909,28 +704,25 @@ end type
 </tr>
 </tbody>
 </table>
-
 <p>Below shows an example of an author information element for a subroutine.</p>
-
 <pre><code>subroutine equals(lhs, rhs)
 !&gt; Author:
 !&gt;&gt; Name: Bob
 !&gt;&gt; Email: bob@example.com
 !&gt;&gt; Affiliation: A Fortran Software Company
-
+    
     type(Vector_1d),intent(inout) :: lhs
     type(Vector_1d),intent(in) :: rhs
-
+            
     lhs%x_1 = rhs%x_2
-
-end subroutine
-</code></pre>
+    
+end subroutine</code></pre>
 </Content>
     </UserPage>
     <Name>Doctran</Name>
   </Information>
   <DocCreated>
-    <DateTime>2016-03-11T21:04:45.8626964+00:00</DateTime>
+    <DateTime>2016-04-06T19:45:23.6483643+01:00</DateTime>
   </DocCreated>
   <Files />
 </Project>

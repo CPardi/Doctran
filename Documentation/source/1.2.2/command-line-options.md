@@ -1,7 +1,7 @@
-#Command Line Options
+# Command Line Options
 Doctran can be supplied with the command-line options shown below.
 
-##Help
+## Help
 These options force Doctran to display various information meant to be helpful to the user.
 
 <table>
@@ -45,7 +45,7 @@ These options allow the user to affect the input and output.
 </tbody>
 </table>
 
-##Project
+## Project
 These options allow the user to specify information relating to their project.
 
 <table>

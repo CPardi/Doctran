@@ -1,4 +1,4 @@
-#Author
+# Author
 Use this to specify any additional authors not specified using [author](source-comments/information-meta-data/author.md) elements within the source.  This can be specified multiple times and take the following form:
 
     Author:

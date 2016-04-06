@@ -1,4 +1,4 @@
-#Getting Started
+# Getting Started
 Once you have downloaded and run the installation package on you system, it is best to test that the installation has been successful. To do this use the following steps:
   - Open up a Doctran Command Prompt, on Windows systems, or a terminal, on other systems.
   - Type `cd testing` to move into the testing folder
@@ -8,7 +8,7 @@ Doctran will then be run on a collection of simple source files. If documentatio
 
 If everything finished successfully you are now ready to start creating documentation for you own Fortran projects.
 
-##Running Doctran
+## Running Doctran
 Doctran can only be run from the command line. The most basic syntax for running Doctran is 
 
     doctran source_files

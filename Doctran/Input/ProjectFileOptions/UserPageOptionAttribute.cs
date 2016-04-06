@@ -9,7 +9,6 @@ namespace Doctran.Input.ProjectFileOptions
 {
     using System;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Xml.Linq;
     using Helper;
@@ -45,7 +44,7 @@ namespace Doctran.Input.ProjectFileOptions
                 {
                     var xElement = new XElement("UserPage");
                     xElement.Add(new XElement("Path", PathUtils.ChangeExtension(path, ".html")));
-                    xElement.Add(XmlUtils.WrapAndParse("Content", new Markdown().Transform(OtherUtils.ReadAllText(path))));
+                    xElement.Add(XmlUtils.WrapAndParse("Content", StringUtils.RenderMarkdown(OtherUtils.ReadAllText(path))));
                     xElements.Add(xElement);
                 }
 

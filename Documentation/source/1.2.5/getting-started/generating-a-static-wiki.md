@@ -1,4 +1,4 @@
-#Generating a Static Wiki
+# Generating a Static Wiki
 Doctran can be used as a static wiki generator. Meaning that given a collection of Markdown or HTML files, Doctran will transform these into styled HTML documents with a title, menu and search. Of course, the following can be combined with document generator capabilities to produce quality documentation.
 
 Assuming for simplicity you have a single markdown file, say `index.md`, then firstly you need to create a [menu file](menu-files.md). Save the following text as `menu.md` in the same directory as your index.md

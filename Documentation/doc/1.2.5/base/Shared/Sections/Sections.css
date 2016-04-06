@@ -1,0 +1,6 @@
+#Article .section > .folded {
+  display: none;
+}
+#Article .section > .unfolded {
+  display: block;
+}
