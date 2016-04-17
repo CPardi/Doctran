@@ -15,7 +15,7 @@ do
 	echo c:$dir/doc/$projDir/index.html >> IndexList.txt
 	cd source
 	
-	if Doctran.exe --overwrite -o ../doc/$projDir --project-info $projDir/project.info --save-xmls --time-run
+	if Doctran.exe --overwrite -o ../doc/$projDir --project-info $projDir/project.info --save-xmls
 	then
 		echo "Success"
 	else

@@ -1,4 +1,4 @@
-# Menu
+#Menu
 Specifies a menu file that contains the menu for the generated documentation. This can be specified only once and takes the following form:
 
     Menu: FILEPATH

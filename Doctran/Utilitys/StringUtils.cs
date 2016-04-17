@@ -12,7 +12,6 @@ namespace Doctran.Utilitys
     using System.Linq;
     using System.Text.RegularExpressions;
     using Helper;
-    using JsLibsForCs.Remarkable;
 
     public static class StringUtils
     {
@@ -20,11 +19,6 @@ namespace Doctran.Utilitys
 
         public static string ConvertFromFileLineList(List<FileLine> lines)
             => string.Concat(lines.Select((line, index) => index == 0 ? line.Text : $"\n{line.Text}"));
-
-        public static string RenderMarkdown(string markdownString)
-        {
-            return new Remarkable(RemarkablePresets.Full, new RemarkableOptions() { XHtmlOut = true, Html = true }).Render(markdownString);
-        }
 
         public static List<FileLine> ConvertToFileLineList(string linesString)
         {

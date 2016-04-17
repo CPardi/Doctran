@@ -83,6 +83,8 @@ namespace Doctran.Utilitys
         /// </returns>
         public static Tuple<string, string> GetMarkUpFile(string relativePath, string filePath)
         {
+            var mdParser = new Markdown();
+
             // Store the file's path and contents in these variables initially, and if its a markdown file then reassign after.
             var htmlPath = filePath;
             var htmlText = string.Empty;
@@ -107,7 +109,7 @@ namespace Doctran.Utilitys
             }
 
             htmlPath = filePath.Remove(filePath.LastIndexOf('.')) + ".html";
-            htmlText = StringUtils.RenderMarkdown(htmlText);
+            htmlText = mdParser.Transform(htmlText);
 
             return new Tuple<string, string>(htmlPath, htmlText);
         }

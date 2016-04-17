@@ -1,7 +1,7 @@
-# Menu Files
+#Menu Files
 A menu file is just a HTML (.html) or markdown (.md or .markdown) file containing a list of links you want to appear in the documentation menu. Items can either be simple links or special macros that will insert lists of links generated from your Fortran source code. Files should should only contain the list in your chosen markup and not any boilerplate tags such as `<html>` or `<body>`.
 
-## Macros
+##Macros
 Macros can be used within your menu files to automatically generate menu links to your source code pages. The following macros are supported:
 
  * `|Name|` - The name of the current block.
@@ -29,7 +29,7 @@ The previous `TYPE_VALUE` values adds menu items that do not change from page to
  * `SubBlocksAndSelf` - Current block as well as it's sub-blocks.
  * `SameType` -Blocks of the same type as the current block.
 
-## Example
+##Example
 An example markdown menu file is shown below.
 
         * [Welcome](index.md)

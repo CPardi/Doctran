@@ -1,4 +1,4 @@
-# UserPage
+#UserPage
 Specifies that a non-source file should be included within the generated documentation. This can be specified multiple times and takes the following form:
 
     UserPage: PATH

@@ -1,4 +1,4 @@
-# CopyAndParse
+#CopyAndParse
 Instructs that the content at a path should be parse and then copied to the output folder. This can be specified multiple times and takes the following form:
 
     CopyAndParse: PATH

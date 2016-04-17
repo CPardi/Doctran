@@ -1,4 +1,4 @@
-# Project Files
+#Project Files
 The project file is simply a plain text file that contains information about your project. You can specify a project file using the `--project_info` option
 
 You can specify a tagline by writing it on the first line of the file. After this you can specify the content to be displayed on the project page by per-appending it with `>`. Markdown is allowed within this section. Next you can add informational elements which must start with `Type:`. The following project information types are supported:

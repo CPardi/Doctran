@@ -1,4 +1,4 @@
-# PATH
+#PATH
 In general a `PATH` value can take the form:
 
     pathToDirectory[/**][/searchPattern]
@@ -23,7 +23,7 @@ The `searchPattern` within the `PATH` can include the wildcard characters `*`, `
 
 The path can optionally include `**` to specify that the preceding directory and all its sub-directories are to be searched for files matching the `searchPattern`.
 
-## Examples
+##Examples
 For the follow examples assume you have the directory structure:
 
     - Root

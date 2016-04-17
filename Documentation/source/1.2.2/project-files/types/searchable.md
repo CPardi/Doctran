@@ -1,4 +1,4 @@
-# Searchable
+#Searchable
 The type of code block that should be indexed and viewable within the documentation search results. This should be specified only once and take the following form:
 
     Searchable:

@@ -1,7 +1,7 @@
-# Author
+#Author
 An author information element is used to specify the person who wrote a block of code. It may be placed within any block of code and the information will be shown on that block's documentation page.
 
-## Sub-Information
+##Sub-Information
 The author information comment supports the following sub-information:
 
 <table>

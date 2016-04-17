@@ -1,20 +1,20 @@
-# System Requirements and Installation
+#System Requirements and Installation
 
-## Hardware Requirements
+##Hardware Requirements
 The minimum hardware requirements for Doctran are as follows:
 
  * 1 GHz processor
  * 512 MB RAM
 
-## Windows Systems
+##Windows Systems
 
-### Requirements
+###Requirements
 Doctran's only prerequisite is the the .Net Framework 4.
 
-### Installation
+###Installation
 The Windows package comes as a self-installing executable, making installation straightforward. Proceed by following the dialogues. You will be asked to download and install any missing prerequisites, and to add a shortcut to Doctran's command prompt. This is recommended, as loading the command prompt using one of these shortcuts is probably the quickest way of getting started using Doctran.
 
-### Testing the Installation
+###Testing the Installation
 Once you have downloaded and run the installation package on you system, it is best to test that the installation has been successful. A test project has been included to allow this.
 
   - Open up a Doctran command prompt.
@@ -25,19 +25,19 @@ Doctran will then be run on a collection of simple source files. If documentatio
 
 If everything finished successfully you are now ready to start creating documentation for you own Fortran projects.
 
-## Linux and Mac OS X Installations
+##Linux and Mac OS X Installations
 
-### Requirements
+###Requirements
 The only prerequisite required is Mono version 2.8, or above. This is the implementation of the .Net framework on non-Windows systems. Installation information can be found on Mono's [website](http://www.mono-project.com/download/)
 
-### Installation
+###Installation
 Installation on Unix based systems are distributed as a [makeself](https://github.com/megastep/makeself) package. To install place DoctranTrial.sh in the directory you would like to install Doctran within. Then, open a terminal within that directory and type
     
     sh ./DoctranTrial.sh
     
 The install package will check and warn you about any missing prerequisites. You will be asked if you want to add a symbolic link from Doctran to your `/usr/bin/` folder. This will allow you to call Doctran from any folder. Confirming will require root access and you will be prompted to enter your root password.
 
-### Testing the Installation
+###Testing the Installation
 Once you have downloaded and run the installation package on you system, it is best to test that the installation has been successful. A test project has been included to allow this.
 
   - Open up a terminal.

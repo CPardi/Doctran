@@ -1,4 +1,4 @@
-# Copy
+#Copy
 Instructs that the content at a path should be copied to the output folder. This can be specified multiple times and takes the following form:
 
     Copy: PATH

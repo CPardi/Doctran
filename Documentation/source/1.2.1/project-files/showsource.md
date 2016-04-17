@@ -1,4 +1,4 @@
-# ShowSource
+#ShowSource
 The type of code block that syntax highlighted source code should be included on its page. This should be specified only once and take the following form:
 
     Markup:
