@@ -50,7 +50,7 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
         </xsl:apply-templates>
     </xsl:template>
 
-    <xsl:template mode="MenuPostProcess" match="li[not(span[@class='subtitle']) and not(a) and not(ul[li]) and not(br)]">
+    <xsl:template mode="MenuPostProcess" match="li[not(span[@class='subtitle']) and not(a) and not(ul[li])]">
     </xsl:template>
 
     <xsl:template mode="MenuPostProcess" match="@* | node()">

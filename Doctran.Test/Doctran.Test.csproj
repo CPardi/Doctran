@@ -72,7 +72,6 @@
     <Compile Include="Parsing\Traversal\AncestorOfTypeTest.cs" />
     <Compile Include="Plugins\DocumentationManager\RequiredThemePartsTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Utilitys\ParsingUtils\ReplaceMacrosTest.cs" />
     <Compile Include="Utilitys\PathUtils\SplitIntoDirectoriesTest.cs" />
     <Compile Include="Utilitys\PathUtils\UniquePathLevelTest.cs" />
     <Compile Include="Utilitys\PathUtils\FilenameAndAncestorDirectoriesTest.cs" />
