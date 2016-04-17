@@ -50,9 +50,11 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
         <xsl:param name="current" as="element()"/>
         <xsl:variable name="lower-local-name" select="lower-case(local-name($current))"/>
         <xsl:if test="$key-all-names=$lower-local-name">
-            <xsl:apply-templates mode="ObjectList" select="key($lower-local-name, '|all|')">
-                <xsl:with-param name="maxDepth" select="if(option[2]='recursive')then -1 else 1"/>
-            </xsl:apply-templates>
+            <ul>
+                <xsl:apply-templates mode="ObjectList" select="key($lower-local-name, '|all|')">
+                    <xsl:with-param name="maxDepth" select="if(option[2]='recursive')then -1 else 1"/>
+                </xsl:apply-templates>
+            </ul>
         </xsl:if>
     </xsl:template>
 
@@ -65,9 +67,25 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
     <!-- Block name macro -->
     <xsl:template mode="MenuRaw_recurse" match="macro[@name='blockname']">
         <xsl:param name="current" as="element()"/>
-        <xsl:apply-templates mode="BlockName" select="$current"/>
+        <span class="title">
+            <xsl:apply-templates mode="BlockName" select="preceding-sibling::text()"/>
+            <xsl:apply-templates mode="BlockName" select="$current"/>
+            <xsl:apply-templates mode="BlockName" select="following-sibling::text()"/>
+        </span>
     </xsl:template>
 
+    <!-- Text nodes grouped with text-replace macros will be processed by the macro matches. -->
+    <xsl:template mode="MenuRaw_recurse" match="text()[parent::li[macro[@name='blockname' or @name='name']]]">
+    </xsl:template>
+
+    <!-- Text nodes with no text-replace macros will be wrapped in a title <span> -->
+    <xsl:template mode="MenuRaw_recurse" match="text()">
+        <span class="title">
+            <xsl:value-of select="."/>
+        </span>
+    </xsl:template>
+
+    <!-- Recurse down for unmatched tags. -->
     <xsl:template mode="MenuRaw_recurse" match="@* | *">
         <xsl:param name="current" as="element()"/>
         <xsl:copy>
@@ -76,54 +94,5 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
             </xsl:apply-templates>
         </xsl:copy>
     </xsl:template>
-
-    <!--<xsl:template mode="MenuRaw_recurse" match="text()">-->
-    <!--<xsl:param name="current" as="element()"/>-->
-    <!--&lt;!&ndash; This should contain a reference to the current a page is being generated for. &ndash;&gt;-->
-
-    <!--<xsl:analyze-string select="normalize-space(.)" regex="(\|\s*list\s*,\s*(\w+?)\s*(,\s*(\w+?)\s*)?\|)" flags="i">-->
-    <!--<xsl:matching-substring>-->
-    <!--<xsl:variable name="type" select="lower-case(regex-group(2))"/>-->
-    <!--<xsl:variable name="option1" select="lower-case(regex-group(4))"/>-->
-
-    <!--<ul>-->
-    <!--&lt;!&ndash; List of sub-objects of the current object. &ndash;&gt;-->
-    <!--<xsl:apply-templates mode="SubObjectList" select="$current[$type='subblocks']">-->
-    <!--<xsl:with-param name="maxDepth" select="if($option1='recursive')then -1 else 2"/>-->
-    <!--</xsl:apply-templates>-->
-
-    <!--&lt;!&ndash; List of current object and its sub-objects. &ndash;&gt;-->
-    <!--<xsl:apply-templates mode="ObjectList" select="$current[$type='subblocksandself']">-->
-    <!--<xsl:with-param name="maxDepth" select="if($option1='recursive')then -1 else 2"/>-->
-    <!--</xsl:apply-templates>-->
-
-    <!--List all objects having the same type as the current object.-->
-    <!--<xsl:apply-templates mode="ObjectList"-->
-    <!--select="$current[$type='sametype'][lower-case(local-name())=tokenize('project,file,program,module,derivedtype,function,subroutine,assignment,operator,overload',',')]-->
-    <!--/key(lower-case(local-name()),'|all|')">-->
-    <!--<xsl:with-param name="maxDepth" select="if($option1='recursive')then -1 else 1"/>-->
-    <!--</xsl:apply-templates>-->
-    <!--</ul>-->
-
-    <!--&lt;!&ndash; List of object of some type. &ndash;&gt;-->
-    <!--<xsl:copy-of select="$staticLists[$type!='subobjects']/Element[@type=$type][@option=$option1]/node()"/>-->
-
-    <!--</xsl:matching-substring>-->
-    <!--<xsl:non-matching-substring>-->
-    <!--<span class="title">-->
-    <!--<xsl:analyze-string select="." regex="(\|blockname\|)|(\|name\|)" flags="i">-->
-    <!--<xsl:matching-substring>-->
-    <!--<xsl:value-of select="doctran:block-name($current)[regex-group(1)!='']"/>-->
-    <!--<xsl:value-of select="doctran:object-name($current)[regex-group(2)!='']"/>-->
-    <!--</xsl:matching-substring>-->
-    <!--<xsl:non-matching-substring>-->
-    <!--<xsl:value-of select="."/>-->
-    <!--</xsl:non-matching-substring>-->
-    <!--</xsl:analyze-string>-->
-    <!--</span>-->
-    <!--</xsl:non-matching-substring>-->
-    <!--</xsl:analyze-string>-->
-
-    <!--</xsl:template>-->
 
 </xsl:stylesheet>
