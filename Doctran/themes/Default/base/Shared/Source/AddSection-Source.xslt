@@ -16,6 +16,10 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
         <xsl:param name="firstLine" as="xs:integer">0</xsl:param>
         <xsl:param name="lastLine" as="xs:integer">0</xsl:param>
 
+        <xsl:variable name="newline">
+            <xsl:text>&#10;</xsl:text>
+        </xsl:variable>
+
         <h2>Source</h2>
         <p>
             <xsl:text>The source code shown below is taken from '</xsl:text>
@@ -24,13 +28,42 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
             </a>
             <xsl:text>'.</xsl:text>
         </p>
-        <div class="fortran code">
-            <code>
-                <ul>
-                    <xsl:copy-of
-                            select="File[Identifier = $file/Identifier]/Lines/div/ul/li[span[@class = 'line-number-span']/text() &gt;= $firstLine][span[@class='line-number-span']/text() &lt;= $lastLine]"/>
-                </ul>
-            </code>
+        <div class="highlight">
+            <table>
+                <tbody>
+                    <tr>
+                        <td class="gutter">
+                            <pre>
+                                <xsl:for-each select="$firstLine to $lastLine">
+                                    <div class="{if(. mod 2 = 0) then 'even' else 'odd'}">
+                                        <xsl:value-of select="."/>
+                                    </div>
+                                </xsl:for-each>
+                            </pre>
+                        </td>
+                        <td>
+                            <pre>
+                                <code class="language-fortran">
+                                    <xsl:apply-templates mode="Source"
+                                                         select="File[Identifier = $file/Identifier]/lines/line[@number &gt;= $firstLine and @number &lt;= $lastLine]"/>
+                                </code>
+                            </pre>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </xsl:template>
+
+    <xsl:template mode="Source" match="line[@number mod 2 = 0]">
+        <div class="even">
+            <xsl:copy-of select="node()"/>
+        </div>
+    </xsl:template>
+
+    <xsl:template mode="Source" match="line[@number mod 2 != 0]">
+        <div class="odd">
+            <xsl:copy-of select="node()"/>
         </div>
     </xsl:template>
 

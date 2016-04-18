@@ -45,8 +45,9 @@
     <RunPostBuildEvent>Always</RunPostBuildEvent>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ColorCode">
-      <HintPath>..\..\colorcodefortran\ColorCode-mono\bin\Release\ColorCode.dll</HintPath>
+    <Reference Include="ColorCode, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\colorcode\ColorCode\bin\Release\ColorCode.dll</HintPath>
     </Reference>
     <Reference Include="CommandLine, Version=1.9.71.2, Culture=neutral, PublicKeyToken=de6f01bd326f8c32, processorArchitecture=MSIL">
       <HintPath>..\packages\CommandLineParser.1.9.71\lib\net40\CommandLine.dll</HintPath>

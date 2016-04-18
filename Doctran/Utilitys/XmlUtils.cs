@@ -61,5 +61,10 @@ namespace Doctran.Utilitys
         {
             return XElement.Parse($"<{name}>{text}</{name}>", LoadOptions.PreserveWhitespace);
         }
+
+        public static XElement WrapAndParse(string name, string attribute, string text)
+        {
+            return XElement.Parse($"<{name} {attribute}>{text}</{name}>", LoadOptions.PreserveWhitespace);
+        }
     }
 }
