@@ -49,7 +49,7 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
             <xsl:text>var tipuesearch={"pages": [</xsl:text>
 
             <xsl:apply-templates mode="TipueContentJson"
-                                 select="/Project//*[local-name() = /Project/Information/Searchable/Type][not(Access) or Access!='Private']
+                                 select="/Project//*[local-name() = /Project/Information/Searchable/Type][not(Access) or Access!='Private'][href]
                                         |/Project/Information/UserPage"/>
 
             <xsl:text>]};</xsl:text>

@@ -6,8 +6,9 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
  file, You can obtain one at http://mozilla.org/MPL/2.0/.
 -->
 
-<xsl:stylesheet version="2.0" exclude-result-prefixes="doctran xsl"
+<xsl:stylesheet version="2.0" exclude-result-prefixes="doctran xs xsl"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:doctran="http://www.doctran.co.uk">
 
     <!-- Return a raw menu with link given relative to index.html. -->
@@ -24,9 +25,10 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
 
     <!-- List of objects of some type. -->
     <xsl:template mode="MenuRaw_recurse" priority="0" match="macro[@name='list']">
-        <xsl:variable name="option1" select="option[1]"/>
-        <xsl:variable name="option2" select="option[2]"/>
-        <xsl:copy-of select="$staticLists/Element[@type=$option1][@option=$option2]/node()"/>
+        <xsl:variable name="type" select="option[1]" as="xs:string"/>
+        <xsl:variable name="isRecursive" select="boolean(option[2]='recursive')" as="xs:boolean"/>
+
+        <xsl:copy-of select="$staticLists/Element[@type=$type][@is-recursive=$isRecursive]/node()"/>
     </xsl:template>
 
     <!-- List of sub-objects of the current object, can be recursive or non-recursive. -->

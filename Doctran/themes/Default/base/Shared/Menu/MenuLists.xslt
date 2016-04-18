@@ -18,14 +18,14 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
         <Elements>
             <xsl:for-each select="tokenize('project,file,program,module,derivedtype,function,subroutine,assignment,overload,operator,variable', ',')">
                 <xsl:variable name="keyName" select="."/>
-                <Element type="{$keyName}" option="">
+                <Element type="{$keyName}" is-recursive="0">
                     <ul>
                         <xsl:apply-templates mode="ObjectList" select="$project/key($keyName,'|all|')">
                             <xsl:with-param name="maxDepth" select="1"/>
                         </xsl:apply-templates>
                     </ul>
                 </Element>
-                <Element type="{$keyName}" option="recursive">
+                <Element type="{$keyName}" is-recursive="1">
                     <ul>
                         <xsl:apply-templates mode="ObjectList" select="$project/key($keyName,'|all|')"/>
                     </ul>
