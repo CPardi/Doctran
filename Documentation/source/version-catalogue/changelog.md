@@ -7,6 +7,8 @@
  * In tables and menu lists one can use `Program` as a `TYPE_VALUE` to output a table or list of Fortran programs.
  * A button to toggle the visibility of the menu has been added to documentation generated.
  * Stopped broken links occurring within search results.
+ * Fixed some problems with the menu's display on the Chrome browser.
+ * Fixed some problems with the menu's display on the Firefox browser on Ubuntu.
 
 ##Version 1.2.4
  * Errors messages are displayed for structural issues in the code.

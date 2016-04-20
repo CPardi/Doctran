@@ -16,7 +16,7 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
     <xsl:template name="Menu-head">
         <!-- Link to the main menu's stylesheet. -->
         <link rel="stylesheet" type="text/css" href="base/Shared/Menu/doctranMenu/doctranmenu.css"/>
-        <script type="text/javascript" src="base/Shared/Menu/doctranMenu/doctranmenu.js"></script>
+        <script type="text/javascript" src="base/Shared/Menu/doctranMenu/doctranmenu.min.js"></script>
 
         <link rel="stylesheet" type="text/css" href="base/Shared/Menu/Menu.css"/>
         <script src="base/Shared/Menu/Menu.js" type="text/javascript"></script>
