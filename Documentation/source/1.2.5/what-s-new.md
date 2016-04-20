@@ -1,5 +1,16 @@
 # What's New
 
+###What's new in Doctran 1.2.5
+
+ * Updated syntax highlighter to be more accurate, aware of more language features and copy-and-paste friendly.
+ * The option `--time-run` has been added to specify that performance timings should be saved within an XML file in the xml directory of the output directory.
+ * Stopped the output of unneeded files when creating static wiki documentation (documentation containing no Fortran source files).
+ * In tables and menu lists one can use `Program` as a `TYPE_VALUE` to output a table or list of Fortran programs.
+ * A button to toggle the visibility of the menu has been added to documentation generated.
+ * Stopped broken links occurring within search results.
+ * Fixed some problems with the menu's display on the Chrome browser.
+ * Fixed some problems with the menu's display on the Firefox browser on Ubuntu.
+
 ###What's new in Doctran 1.2.4
 
  * Errors messages are displayed for structural issues in the code.

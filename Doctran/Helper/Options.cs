@@ -65,7 +65,7 @@ namespace Doctran.Helper
         /// </summary>
         [CommandLine.Option("save-xmls", HelpText = "Specify the intermediary XML documents will be saved int he output directory. By default these documents are not saved.")]
         public bool SaveXmls { get; set; }
-        
+
         /// <summary>
         ///     Gets or sets a value indicating whether the generated XML files should be saved within the output directory.
         /// </summary>

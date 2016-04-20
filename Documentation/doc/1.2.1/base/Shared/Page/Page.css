@@ -14,7 +14,7 @@ body {
   margin: 0;
   position: absolute;
   top: 0;
-  left: 20em;
+  left: 21em;
   bottom: 0;
   right: 0;
   overflow: auto;
@@ -58,6 +58,7 @@ body {
   padding: 0.05em 0.2em;
   background-color: #f7f7f7;
   border-radius: 3px;
+  font-family: Consolas, Monaco, Andale Mono, monospace;
 }
 #Page > .mainContainer > #Article pre code {
   padding: 0;

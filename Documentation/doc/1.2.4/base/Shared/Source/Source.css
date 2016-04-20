@@ -1,276 +1,196 @@
-.fortran.code{
-    overflow-x: auto;
+#Page > .mainContainer > #Article .highlight {
+  overflow-x: auto;
 }
-
-.fortran.code code > ul {
-    margin: 0 !important;
-    padding: 0 !important;
-    border: 0 !important;
-    font: inherit;
-    vertical-align: baseline;
-    list-style: none;
-	display:table;
-    min-width: 150em;
-    font-size: 1.05em;
-    line-height: 1.4 !important;
-    font-family: Consolas, Monaco, Andale Mono, monospace;
+#Page > .mainContainer > #Article .highlight pre,
+#Page > .mainContainer > #Article .highlight code,
+#Page > .mainContainer > #Article .highlight table,
+#Page > .mainContainer > #Article .highlight tbody,
+#Page > .mainContainer > #Article .highlight tr,
+#Page > .mainContainer > #Article .highlight td {
+  margin: 0;
+  padding: 0;
+  border: 0;
 }
-
-.fortran.code code > ul > li {
-    margin: 0 !important;
-    padding: 0 !important;
-    border: 0 !important;
+#Page > .mainContainer > #Article .highlight pre {
+  line-height: 1.4;
+  font-size: 1.05em;
 }
-
-.fortran.code .code {
-    background-color: white;
+#Page > .mainContainer > #Article .highlight code {
+  font: inherit;
+  vertical-align: baseline;
+  list-style: none;
+  display: table;
+  min-width: 150em;
 }
-
-.fortran.code .even
-{
-    background-color: #F6F6F6;
+#Page > .mainContainer > #Article .highlight .odd {
+  background-color: white;
 }
-
-.fortran.code code {
-    border: none !important;
-    padding: 0 !important;
-    margin: 0 !important;
+#Page > .mainContainer > #Article .highlight .even {
+  background-color: #f6f6f6;
 }
-
-.fortran > code > ul {
-    list-style-type : none;
-    display : table;
+#Page > .mainContainer > #Article .highlight div {
+  padding: 0 0.5em 0 1em;
 }
-
-.fortran > code > ul li {
-    margin : 0;
-    padding : 0;
+#Page > .mainContainer > #Article .highlight .gutter {
+  color: #181818;
+  border-right: 3px solid #6ce26c;
+  text-align: right;
 }
-
-.fortran .line-number-span {
-    color : #181818;
-    display : inline-block;
-    width : 2.5em;
-    border-right : 3px solid #6CE26C;
-    padding-right: 0.5em;
-    text-align : right;
+#Page > .mainContainer > #Article .highlight .plainText {
+  background-color: White;
+  color: Black;
 }
-
-.fortran .code-text-span {
-    border-left : 1px solid #E8E8E8 ;
-    padding-left : 2.0em;
-    white-space : pre;
+#Page > .mainContainer > #Article .highlight .htmlServerSideScript {
+  background-color: Yellow;
 }
-
-.fortran .continuation {
-    color : #0000FF;
+#Page > .mainContainer > #Article .highlight .htmlComment {
+  color: Green;
 }
-
-.fortran .specialCharacter {
-    color : Red;
+#Page > .mainContainer > #Article .highlight .htmlTagDelimiter {
+  color: Blue;
 }
-
-.fortran .brackets {
-    color : Red;
+#Page > .mainContainer > #Article .highlight .htmlElementName {
+  color: #a31515;
 }
-
-.fortran .intrinsic {
-    color :#00A000;
-    font-weight: bold;
+#Page > .mainContainer > #Article .highlight .htmlAttributeName {
+  color: Red;
 }
-
-.fortran .plainText {
-    color : Black;
-    background-color : White;
+#Page > .mainContainer > #Article .highlight .htmlAttributeValue {
+  color: Blue;
 }
-
-.fortran .htmlServerSideScript {
-    background-color : Yellow;
+#Page > .mainContainer > #Article .highlight .htmlOperator {
+  color: Blue;
 }
-
-.fortran .htmlComment {
-    color : Green;
+#Page > .mainContainer > #Article .highlight .comment {
+  color: Gray;
 }
-
-.fortran .htmlTagDelimiter {
-    color : Blue;
+#Page > .mainContainer > #Article .highlight .xmlDocTag {
+  color: Gray;
 }
-
-.fortran .htmlElementName {
-    color : #A31515;
+#Page > .mainContainer > #Article .highlight .xmlDocComment {
+  color: Green;
 }
-
-.fortran .htmlAttributeName {
-    color : Red;
+#Page > .mainContainer > #Article .highlight .string {
+  color: #a31515;
 }
-
-.fortran .htmlAttributeValue {
-    color : Blue;
+#Page > .mainContainer > #Article .highlight .stringCSharpVerbatim {
+  color: #a31515;
 }
-
-.fortran .htmlOperator {
-    color : Blue;
+#Page > .mainContainer > #Article .highlight .keyword {
+  color: Blue;
 }
-
-.fortran .comment {
-    color : #A0A0A0;
+#Page > .mainContainer > #Article .highlight .preprocessorKeyword {
+  color: Blue;
 }
-
-.fortran .xmlDocTag {
-    color : Gray;
+#Page > .mainContainer > #Article .highlight .htmlEntity {
+  color: Red;
 }
-
-.fortran .xmlDocComment {
-    color : Green;
+#Page > .mainContainer > #Article .highlight .xmlAttribute {
+  color: Red;
 }
-
-.fortran .string {
-    color : #0000FF;
+#Page > .mainContainer > #Article .highlight .xmlAttributeQuotes {
+  color: Black;
 }
-
-.fortran .stringCSharpVerbatim {
-    color : #A31515;
+#Page > .mainContainer > #Article .highlight .xmlAttributeValue {
+  color: Blue;
 }
-
-.fortran .keyword {
-    color : #0000A0;
-    font-weight: bold;
+#Page > .mainContainer > #Article .highlight .xmlCDataSection {
+  color: Gray;
 }
-
-.fortran .preprocessorKeyword {
-    color : #00A000;
+#Page > .mainContainer > #Article .highlight .xmlComment {
+  color: Green;
 }
-
-.fortran .htmlEntity {
-    color : Red;
+#Page > .mainContainer > #Article .highlight .xmlDelimiter {
+  color: Blue;
 }
-
-.fortran .xmlAttribute {
-    color : Red;
+#Page > .mainContainer > #Article .highlight .xmlName {
+  color: #a31515;
 }
-
-.fortran .xmlAttributeQuotes {
-    color : Black;
+#Page > .mainContainer > #Article .highlight .className {
+  color: MediumTurquoise;
 }
-
-.fortran .xmlAttributeValue {
-    color : Blue;
+#Page > .mainContainer > #Article .highlight .cssSelector {
+  color: #a31515;
 }
-
-.fortran .xmlCDataSection {
-    color : Gray;
+#Page > .mainContainer > #Article .highlight .cssPropertyName {
+  color: Red;
 }
-
-.fortran .xmlComment {
-    color : Green;
+#Page > .mainContainer > #Article .highlight .cssPropertyValue {
+  color: Blue;
 }
-
-.fortran .xmlDelimiter {
-    color : Blue;
+#Page > .mainContainer > #Article .highlight .sqlSystemFunction {
+  color: Magenta;
 }
-
-.fortran .xmlName {
-    color : #A31515;
+#Page > .mainContainer > #Article .highlight .powershellAttribute {
+  color: PowderBlue;
 }
-
-.fortran .className {
-    color : MediumTurquoise;
+#Page > .mainContainer > #Article .highlight .powershellOperator {
+  color: Gray;
 }
-
-.fortran .cssSelector {
-    color : #A31515;
+#Page > .mainContainer > #Article .highlight .powershellType {
+  color: Teal;
 }
-
-.fortran .cssPropertyName {
-    color : Red;
+#Page > .mainContainer > #Article .highlight .powershellVariable {
+  color: OrangeRed;
 }
-
-.fortran .cssPropertyValue {
-    color : Blue;
+#Page > .mainContainer > #Article .highlight .type {
+  color: Teal;
 }
-
-.fortran .sqlSystemFunction {
-    color : Magenta;
+#Page > .mainContainer > #Article .highlight .typeVariable {
+  color: DarkSlateGray;
+  font-style: italic;
 }
-
-.fortran .powershellAttribute {
-    color : PowderBlue;
+#Page > .mainContainer > #Article .highlight .namespace {
+  color: Navy;
 }
-
-.fortran .powershellOperator {
-    color : Gray;
+#Page > .mainContainer > #Article .highlight .constructor {
+  color: Purple;
 }
-
-.fortran .powershellType {
-    color : Teal;
+#Page > .mainContainer > #Article .highlight .predefined {
+  color: Navy;
 }
-
-.fortran .powershellVariable {
-    color : OrangeRed;
+#Page > .mainContainer > #Article .highlight .pseudoKeyword {
+  color: Navy;
 }
-
-.fortran .type {
-    color : Teal;
+#Page > .mainContainer > #Article .highlight .stringEscape {
+  color: Gray;
 }
-
-.fortran .typeVariable {
-    color : Teal;
-    font-style : italic;
+#Page > .mainContainer > #Article .highlight .controlKeyword {
+  color: Blue;
 }
-
-.fortran .namespace {
-    color : Navy;
+#Page > .mainContainer > #Article .highlight .number {
+  color: DarkSlateGray;
 }
-
-.fortran .constructor {
-    color : Purple;
+#Page > .mainContainer > #Article .highlight .operator {
+  color: DarkRed;
 }
-
-.fortran .predefined {
-    color : Navy;
+#Page > .mainContainer > #Article .highlight .markdownHeader {
+  font-weight: bold;
 }
-
-.fortran .pseudoKeyword {
-    color : Navy;
+#Page > .mainContainer > #Article .highlight .markdownCode {
+  color: Teal;
 }
-
-.fortran .stringEscape {
-    color : Gray;
+#Page > .mainContainer > #Article .highlight .markdownListItem {
+  font-weight: bold;
 }
-
-.fortran .controlKeyword {
-    color : Blue;
+#Page > .mainContainer > #Article .highlight .italic {
+  font-style: italic;
 }
-
-.fortran .number 
-{
-    color: #F000F0
+#Page > .mainContainer > #Article .highlight .bold {
+  font-weight: bold;
 }
-
-.fortran .operator 
-{
-    color: #FF0000
+#Page > .mainContainer > #Article .highlight .builtinFunction {
+  font-weight: bold;
+  color: DarkGreen;
 }
-
-.fortran .delimiter {
+#Page > .mainContainer > #Article .highlight .builtinValue {
+  color: DarkGreen;
+  font-style: italic;
 }
-
-.fortran .markdownHeader {
-    font-weight : bold;
+#Page > .mainContainer > #Article .highlight .attribute {
+  color: DarkSlateBlue;
 }
-
-.fortran .markdownCode {
-    color : Teal;
-}
-
-.fortran .markdownListItem {
-    font-weight : bold;
-}
-
-.fortran .italic {
-    font-style : italic;
-}
-
-.fortran .bold {
-    font-weight : bold;
+#Page > .mainContainer > #Article .highlight .specialChar {
+  font-weight: bold;
+  color: Tomato;
 }

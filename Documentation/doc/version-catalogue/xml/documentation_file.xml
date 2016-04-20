@@ -4,7 +4,8 @@
       <ul>
 <li><a href="index.html">Versions</a>
 <ul>
-<li><a href="../1.2.4/index.html">1.2.4 (Latest)</a></li>
+<li><a href="../1.2.5/index.html">1.2.5 (Latest)</a></li>
+<li><a href="../1.2.4/index.html">1.2.4</a></li>
 <li><a href="../1.2.2/index.html">1.2.3 - 1.2.2</a></li>
 <li><a href="../1.2.1/index.html">1.2.1</a></li>
 </ul></li>
@@ -19,7 +20,20 @@
       <Content>
         <h1>Changelog</h1>
 
-<h2>Version 1.2.4 (Latest)</h2>
+<h2>Version 1.2.5 (Latest)</h2>
+
+<ul>
+<li>Updated syntax highlighter to be more accurate, aware of more language features and copy-and-paste friendly.</li>
+<li>The option <code>--time-run</code> has been added to specify that performance timings should be saved within an XML file in the xml directory of the output directory.</li>
+<li>Stopped the output of unneeded files when creating static wiki documentation (documentation containing no Fortran source files).</li>
+<li>In tables and menu lists one can use <code>Program</code> as a <code>TYPE_VALUE</code> to output a table or list of Fortran programs.</li>
+<li>A button to toggle the visibility of the menu has been added to documentation generated.</li>
+<li>Stopped broken links occurring within search results.</li>
+<li>Fixed some problems with the menu's display on the Chrome browser.</li>
+<li>Fixed some problems with the menu's display on the Firefox browser on Ubuntu.</li>
+</ul>
+
+<h2>Version 1.2.4</h2>
 
 <ul>
 <li>Errors messages are displayed for structural issues in the code.</li>
@@ -97,7 +111,8 @@
 Previous versions of Doctran are listed below.</p>
 
 <ul>
-<li><a href="../1.2.4/index.md">1.2.4</a> (Latest)</li>
+<li><a href="../1.2.5/index.md">1.2.5</a> (Latest)</li>
+<li><a href="../1.2.4/index.md">1.2.4</a></li>
 <li><a href="../1.2.2/index.md">1.2.3 - 1.2.2</a></li>
 <li><a href="../1.2.1/index.md">1.2.1</a></li>
 </ul>
@@ -106,7 +121,7 @@ Previous versions of Doctran are listed below.</p>
     <Name>Doctran</Name>
   </Information>
   <DocCreated>
-    <DateTime>2016-03-11T21:05:00.9281095+00:00</DateTime>
+    <DateTime>2016-04-20T15:30:23.5346474+01:00</DateTime>
   </DocCreated>
   <Files />
 </Project>
