@@ -2,42 +2,19 @@
 
     $(".section > h2").each(function () {
 
-        var $this = $(this);
+        var heading = $(this),
+            content = heading.parent().find(".content"),
+            hide = "▼",
+            show = "▶";
 
-        var leave = "▼";
-        var over = "▽";
+        heading.css("padding-left", 0);
 
-        $this.css("padding-left", 0);
-
-        var switcher = $("<span>" + leave + "</span>")
-				.css("display", "inline-block")
-                .css("width", "2em")
-				.css("font-size", (0.6 * parseFloat($this.css("font-size"))).toString() + "px")
-                .css("cursor", "pointer").css("cursor", "hand")
-                .mouseover(function() { $(this).html(over); })
-                .mouseleave(function() { $(this).html(leave); })
+        var switcher = $("<span class='expander'>" + hide + "</span>")
                 .mousedown(function (e) { e.preventDefault(); })
 				.click(function () {
-				    var $switcher = $(this);
-				    var $content = $this.parent().find(".content");
-				    $content.hasClass("folded") ? showSection($switcher, $content) : hideSection($switcher, $content);
+                    $(content).toggleClass("folded");
+                    $(this).text(content.hasClass("folded") ? show : hide);
 				});
-        $this.prepend(switcher);
-
-        function showSection(switcher, content) {
-            over = "▽";
-            leave = "▼";
-
-            $(switcher).text(over);
-            $(content).removeClass("folded").addClass("unfolded")
-        }
-
-        function hideSection(switcher, content) {
-            over = "▷";
-            leave = "▶";
-
-            $(switcher).text(over);
-            $(content).removeClass("unfolded").addClass("folded");
-        }
+        heading.prepend(switcher);
     });
 });
