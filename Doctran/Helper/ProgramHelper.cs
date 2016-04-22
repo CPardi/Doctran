@@ -44,10 +44,9 @@ namespace Doctran.Helper
                 languageList.AddIf(p => languageList.Select(p2 => p2.Identifier).All(i => i != p.Identifier), language);
                 var source = OtherUtils.ReadAllText(path);
                 return language.Parse(path, source);
-            })
-                .ToList();
+            }).ToList();
 
-            var project = new Project(parsedFiles);
+            var project = new Project(parsedFiles, languageList.Select(lang => lang.GlobalScopeFactory) );
             new Traverser("Global post processing", languageList.SelectMany(p => p.GlobalTraverserActions).ToArray()).Go(project);
             return project;
         }

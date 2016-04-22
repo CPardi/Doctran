@@ -14,13 +14,15 @@ namespace Doctran.ParsingElements.FortranObjects
     using System.Xml.Linq;
     using Parsing;
     using Plugins;
+    using Scope;
     using Utilitys;
 
     public class Project : Container
     {
-        public Project(IEnumerable<ISourceFile> parsedFiles)
+        public Project(IEnumerable<ISourceFile> parsedFiles, IEnumerable<Func<IFortranObject, IEnumerable<IHasIdentifier>>> getGlobalItems)
             : base(parsedFiles)
         {
+            this.GlobalScope = new GlobalScope(this, getGlobalItems);
         }
 
         public int SourceNameUniquenessLevel => PathUtils.UniquePathLevel(this.Sources.Select(s => s.AbsolutePath));
@@ -28,6 +30,8 @@ namespace Doctran.ParsingElements.FortranObjects
         public ReadOnlyCollection<ISourceFile> Sources => this.SubObjects.OfType<ISourceFile>().ToList().AsReadOnly();
 
         public XName SourcesXmlHead => "Files";
+
+        public GlobalScope GlobalScope { get; }
 
         public XElement XEle(XElement xmlPassthrough)
         {

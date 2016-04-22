@@ -111,6 +111,10 @@
       <Project>{76ed33a3-5634-4a57-81ad-c8b948e6ff12}</Project>
       <Name>Doctran</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Plugin-Fortran95\Fortran95\Fortran95.csproj">
+      <Project>{58AB1A14-5C38-431C-853D-49A6C8BE6BC9}</Project>
+      <Name>Fortran95</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />

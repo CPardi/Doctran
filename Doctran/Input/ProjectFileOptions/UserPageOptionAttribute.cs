@@ -16,6 +16,7 @@ namespace Doctran.Input.ProjectFileOptions
     using MarkdownSharp;
     using Options;
     using ParsingElements;
+    using ParsingElements.Information;
     using Utilitys;
 
     internal class UserPageOptionAttribute : OptionListAttribute

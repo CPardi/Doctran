@@ -13,6 +13,7 @@ namespace Doctran.Parsing
     using Helper;
     using ParsingElements;
     using ParsingElements.FortranObjects;
+    using ParsingElements.Scope;
     using Reporting;
     using Utilitys;
 

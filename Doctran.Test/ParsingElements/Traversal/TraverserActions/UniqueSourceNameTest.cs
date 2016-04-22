@@ -13,6 +13,7 @@ namespace Doctran.Test.ParsingElements.Traversal.TraverserActions
     using Doctran.Parsing;
     using Doctran.ParsingElements;
     using Doctran.ParsingElements.FortranObjects;
+    using Doctran.ParsingElements.Scope;
     using Doctran.ParsingElements.Traversal;
     using NUnit.Framework;
 
@@ -20,6 +21,8 @@ namespace Doctran.Test.ParsingElements.Traversal.TraverserActions
     [Category("Unit")]
     public class UniqueSourceNameTest
     {
+        private IEnumerable<Func<IFortranObject, IEnumerable<IHasIdentifier>>> _globalScope = new Func<IFortranObject, IEnumerable<IHasIdentifier>>[] { };
+
         [Test]
         [ExpectedException(typeof(InvalidOperationException))]
         public void InvalidNotUnique()
@@ -32,7 +35,7 @@ namespace Doctran.Test.ParsingElements.Traversal.TraverserActions
                 new SourceFile(string.Empty, "project/src/File1", none, string.Empty, empty)
             };
 
-            var project = new Project(sourceList);
+            var project = new Project(sourceList, _globalScope);
 
             ITraverserAction action = TraverserActions.UniqueSourceNames as ITraverserAction<Project>;
             action.Act(project, new StandardErrorListener<TraverserException>());
@@ -49,7 +52,7 @@ namespace Doctran.Test.ParsingElements.Traversal.TraverserActions
                 new SourceFile(string.Empty, "project/src/File2", none, string.Empty, empty)
             };
 
-            var project = new Project(sourceList);
+            var project = new Project(sourceList, _globalScope);
 
             ITraverserAction action = TraverserActions.UniqueSourceNames as ITraverserAction<Project>;
             action.Act(project, new StandardErrorListener<TraverserException>());
@@ -69,7 +72,7 @@ namespace Doctran.Test.ParsingElements.Traversal.TraverserActions
                 new SourceFile(string.Empty, "project/examples/File1", none, string.Empty, empty)
             };
 
-            var project = new Project(sourceList);
+            var project = new Project(sourceList, _globalScope);
 
             ITraverserAction action = TraverserActions.UniqueSourceNames as ITraverserAction<Project>;
             action.Act(project, new StandardErrorListener<TraverserException>());

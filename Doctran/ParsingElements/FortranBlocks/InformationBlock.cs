@@ -14,6 +14,7 @@ namespace Doctran.ParsingElements.FortranBlocks
     using System.Text.RegularExpressions;
     using FortranObjects;
     using Helper;
+    using Information;
     using Parsing;
     using Utilitys;
 
@@ -98,12 +99,12 @@ namespace Doctran.ParsingElements.FortranBlocks
                 case 0:
                     throw new BlockParserException("An information block must contain either a value or sub-information elements.");
                 case 1:
-                    return CollectionUtils.Singlet(new InformationGroup(_depth, typeName, subObjectList, lines));
+                    return new InformationGroup(_depth, typeName, subObjectList, lines).Singlet();
                 case 2:
                     return
                         _factories.ContainsKey(typeName)
                             ? _factories[typeName].Create(_depth, value, subObjectList, lines).Cast<LinedInternal>()
-                            : CollectionUtils.Singlet<IContained>(new InformationValue(_depth, typeName, value, lines));
+                            : new InformationValue(_depth, typeName, value, lines).Singlet<IContained>();
                 case 3:
                     throw new BlockParserException("An information block cannot contain both a value and sub-information elements.");
                 default:

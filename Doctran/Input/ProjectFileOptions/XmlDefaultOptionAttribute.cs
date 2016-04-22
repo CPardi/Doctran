@@ -13,6 +13,7 @@ namespace Doctran.Input.ProjectFileOptions
     using System.Xml.Linq;
     using Options;
     using ParsingElements;
+    using ParsingElements.Information;
 
     /// <summary>
     ///     Defines a property that holds XML data that mirrors a project file's group-value structure.

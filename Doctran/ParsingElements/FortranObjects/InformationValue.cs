@@ -9,6 +9,7 @@ namespace Doctran.ParsingElements.FortranObjects
 {
     using System.Collections.Generic;
     using Helper;
+    using Information;
     using Parsing;
 
     public class InformationValue : IInformationValue, IHasLines

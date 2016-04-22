@@ -7,9 +7,12 @@
 
 namespace Doctran.Plugins
 {
+    using System;
+    using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using Parsing;
     using ParsingElements;
+    using ParsingElements.Scope;
 
     public interface ILanguageParser
     {
@@ -18,6 +21,8 @@ namespace Doctran.Plugins
         ReadOnlyCollection<ITraverserAction> GlobalTraverserActions { get; }
 
         string Identifier { get; }
+
+        Func<IFortranObject, IEnumerable<IHasIdentifier>> GlobalScopeFactory { get; }
 
         ISourceFile Parse(string sourcePath, string lines);
     }

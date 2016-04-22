@@ -1,18 +1,15 @@
-// <copyright file="IInformation.cs" company="Christopher Pardi">
+// <copyright file="IInformationGroup.cs" company="Christopher Pardi">
 //     Copyright © 2015 Christopher Pardi
 //     This Source Code Form is subject to the terms of the Mozilla Public
 //     License, v. 2.0. If a copy of the MPL was not distributed with this
 //     file, You can obtain one at http://mozilla.org/MPL/2.0/.
 // </copyright>
 
-namespace Doctran.ParsingElements
+namespace Doctran.ParsingElements.Information
 {
     using Parsing;
 
-    public interface IInformation : IHasLines, IContained
+    public interface IInformationGroup : IInformation, IContainer
     {
-        int Depth { get; }
-
-        string Name { get; }
     }
 }

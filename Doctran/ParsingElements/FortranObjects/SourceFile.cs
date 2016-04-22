@@ -12,6 +12,7 @@ namespace Doctran.ParsingElements.FortranObjects
     using System.IO;
     using Helper;
     using Parsing;
+    using Scope;
     using Utilitys;
 
     public class SourceFile : LinedInternal, ISourceFile

@@ -135,8 +135,12 @@
     <Compile Include="Input\Options\OptionListBaseAttribute.cs" />
     <Compile Include="Output\Assets\FileIgnorer.cs" />
     <Compile Include="ParsingElements\FortranObjects\InformationValue.cs" />
-    <Compile Include="ParsingElements\IScope.cs" />
+    <Compile Include="ParsingElements\Scope\GlobalScope.cs" />
+    <Compile Include="ParsingElements\Scope\IHasScope.cs" />
+    <Compile Include="ParsingElements\Scope\IScope.cs" />
     <Compile Include="ParsingElements\Names.cs" />
+    <Compile Include="ParsingElements\Scope\LocalScope.cs" />
+    <Compile Include="ParsingElements\Scope\Scope.cs" />
     <Compile Include="ParsingElements\Traversal\TraverserActions.CheckForUnexpected.cs" />
     <Compile Include="ParsingElements\Traversal\TraverserActions.CheckAncestors.cs" />
     <Compile Include="ParsingElements\Traversal\TraverserActions.UniqueSourceNames.cs" />
@@ -144,8 +148,8 @@
     <Compile Include="Parsing\Container.cs" />
     <Compile Include="Parsing\IContained.cs" />
     <Compile Include="Parsing\IContainer.cs" />
-    <Compile Include="ParsingElements\IInformationGroup.cs" />
-    <Compile Include="ParsingElements\IInformationValue.cs" />
+    <Compile Include="ParsingElements\Information\IInformationGroup.cs" />
+    <Compile Include="ParsingElements\Information\IInformationValue.cs" />
     <Compile Include="ParsingElements\Traversal\TraverserActions.AssignDescriptions.cs" />
     <Compile Include="ParsingElements\Traversal\TraverserActions.CheckDescriptionLinkage.cs" />
     <Compile Include="ParsingElements\Traversal\TraverserActions.CheckUniqueness.cs" />
@@ -166,7 +170,7 @@
     <Compile Include="ParsingElements\IHasValidName.cs" />
     <Compile Include="Parsing\BlockParserException.cs" />
     <Compile Include="Parsing\ISource.cs" />
-    <Compile Include="ParsingElements\ISourceFile.cs" />
+    <Compile Include="ParsingElements\Scope\ISourceFile.cs" />
     <Compile Include="ParsingElements\FortranObjects\NamedDescription.cs" />
     <Compile Include="Parsing\ParserTraverser.cs" />
     <Compile Include="Parsing\Traversal.cs" />
@@ -180,8 +184,8 @@
     <Compile Include="Plugins\ParserManager.cs" />
     <Compile Include="ParsingElements\FortranBlocks\DescriptionBlock.cs" />
     <Compile Include="ParsingElements\FortranBlocks\NamedDescriptionBlock.cs" />
-    <Compile Include="ParsingElements\IInformation.cs" />
-    <Compile Include="ParsingElements\IInformationFactory.cs" />
+    <Compile Include="ParsingElements\Information\IInformation.cs" />
+    <Compile Include="ParsingElements\Information\IInformationFactory.cs" />
     <Compile Include="ParsingElements\IHasLines.cs" />
     <Compile Include="ParsingElements\IHasIdentifier.cs" />
     <Compile Include="ParsingElements\IHasName.cs" />

@@ -16,6 +16,7 @@ namespace Doctran.Input.Options
     using Parsing;
     using ParsingElements;
     using ParsingElements.FortranBlocks;
+    using ParsingElements.Information;
     using Utilitys;
 
     /// <summary>

@@ -11,6 +11,7 @@ namespace Doctran.Input.Options
     using System.Collections;
     using System.Collections.Generic;
     using ParsingElements;
+    using ParsingElements.Information;
 
     public enum ListMode
     {

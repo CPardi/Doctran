@@ -7,6 +7,9 @@
 
 namespace Doctran.Parsing
 {
+    using System.Collections.ObjectModel;
+    using System.Linq;
+
     /// <summary>
     /// Provides methods to traverse a project tree.
     /// </summary>
@@ -18,7 +21,7 @@ namespace Doctran.Parsing
         /// <typeparam name="T">The type to search for.</typeparam>
         /// <param name="contained">The instances whose ancestors are to be searched.</param>
         /// <returns>The ancestor of type <typeparamref name="T"/>.</returns>
-        public static T AncestorOfType<T>(IContained contained)
+        public static T AncestorOfType<T>(this IContained contained)
             where T : class, IFortranObject
         {
             if (contained == null)
@@ -36,5 +39,7 @@ namespace Doctran.Parsing
 
             return currentT;
         }
+
+        public static ReadOnlyCollection<T> SubObjectsOfType<T>(this IContainer container) => container.SubObjects.OfType<T>().ToList().AsReadOnly();
     }
 }

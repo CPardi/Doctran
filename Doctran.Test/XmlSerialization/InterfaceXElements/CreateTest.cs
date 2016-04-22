@@ -31,7 +31,7 @@ namespace Doctran.Test.XmlSerialization.InterfaceXElements
         public void CreateFromFunc()
         {
             var testClass = new TestClass();
-            var interfaceXElements = new InterfaceXElements<ITestClass>(tc => CollectionUtils.Singlet(new XElement("Name", "Value")));
+            var interfaceXElements = new InterfaceXElements<ITestClass>(tc => new XElement("Name", "Value").Singlet());
 
             Assert.IsTrue(
                 XNode.DeepEquals(

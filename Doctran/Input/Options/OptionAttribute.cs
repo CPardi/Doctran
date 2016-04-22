@@ -10,6 +10,7 @@ namespace Doctran.Input.Options
     using System;
     using System.Linq;
     using ParsingElements;
+    using ParsingElements.Information;
     using Utilitys;
 
     [AttributeUsage(AttributeTargets.Property)]

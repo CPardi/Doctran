@@ -7,33 +7,28 @@
 
 namespace Doctran.Test.Parsing.Traversal
 {
+    using System;
     using System.Collections.Generic;
     using System.Xml.Linq;
     using Doctran.Helper;
     using Doctran.Parsing;
+    using Doctran.ParsingElements;
     using Doctran.ParsingElements.FortranObjects;
     using NUnit.Framework;
 
     [TestFixture]
     public class AncestorOfTypeTest
     {
-        [Test]
-        public void OneDeepRootAncestor()
-        {
-            var file1 = new SourceFile(string.Empty, @"C:\", new IContained[] { }, string.Empty, new List<FileLine>());
-            var project = new Project(new[] { file1 });
-
-            Assert.AreEqual(project, Traversal.AncestorOfType<Project>(file1));
-        }
+        private readonly IEnumerable<Func<IFortranObject, IEnumerable<IHasIdentifier>>> _globalScope = new Func<IFortranObject, IEnumerable<IHasIdentifier>>[] { };
 
         [Test]
-        public void TwoDeepRootAncestor()
+        public void NoAncestor()
         {
             var desc = new Description(new XElement("Basic"), new XElement("Detail"), new List<FileLine>());
             var file1 = new SourceFile(string.Empty, @"C:\", new[] { desc }, string.Empty, new List<FileLine>());
-            var project = new Project(new[] { file1 });
+            var project = new Project(new[] { file1 }, _globalScope);
 
-            Assert.AreEqual(project, Traversal.AncestorOfType<Project>(desc));
+            Assert.AreEqual(null, desc.AncestorOfType<InformationValue>());
         }
 
         [Test]
@@ -41,19 +36,28 @@ namespace Doctran.Test.Parsing.Traversal
         {
             var desc = new Description(new XElement("Basic"), new XElement("Detail"), new List<FileLine>());
             var file1 = new SourceFile(string.Empty, @"C:\", new[] { desc }, string.Empty, new List<FileLine>());
-            var project = new Project(new[] { file1 });
+            var project = new Project(new[] { file1 }, _globalScope);
 
-            Assert.AreEqual(file1, Traversal.AncestorOfType<SourceFile>(desc));
+            Assert.AreEqual(file1, desc.AncestorOfType<SourceFile>());
         }
 
         [Test]
-        public void NoAncestor()
+        public void OneDeepRootAncestor()
+        {
+            var file1 = new SourceFile(string.Empty, @"C:\", new IContained[] { }, string.Empty, new List<FileLine>());
+            var project = new Project(new[] { file1 }, _globalScope);
+
+            Assert.AreEqual(project, file1.AncestorOfType<Project>());
+        }
+
+        [Test]
+        public void TwoDeepRootAncestor()
         {
             var desc = new Description(new XElement("Basic"), new XElement("Detail"), new List<FileLine>());
             var file1 = new SourceFile(string.Empty, @"C:\", new[] { desc }, string.Empty, new List<FileLine>());
-            var project = new Project(new[] { file1 });
+            var project = new Project(new[] { file1 }, _globalScope);
 
-            Assert.AreEqual(null, Traversal.AncestorOfType<InformationValue>(desc));
+            Assert.AreEqual(project, desc.AncestorOfType<Project>());
         }
     }
 }

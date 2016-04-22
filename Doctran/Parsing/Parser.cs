@@ -14,6 +14,7 @@ namespace Doctran.Parsing
     using ParsingElements;
     using ParsingElements.FortranBlocks;
     using ParsingElements.FortranObjects;
+    using ParsingElements.Scope;
     using Utilitys;
 
     public class Parser

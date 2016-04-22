@@ -9,6 +9,7 @@ namespace Doctran.Input.Options
 {
     using System;
     using ParsingElements;
+    using ParsingElements.Information;
 
     public interface IOptionListAttribute
     {

@@ -10,6 +10,8 @@ namespace Doctran.ParsingElements
     using System;
     using System.Collections.Generic;
     using FortranObjects;
+    using Information;
+    using Scope;
 
     public static class Names
     {

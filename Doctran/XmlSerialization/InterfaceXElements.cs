@@ -36,7 +36,7 @@ namespace Doctran.XmlSerialization
         /// <param name="getValue">The XML node's value.</param>
         /// <param name="predicate">If this condition is met, then the specified XML will be generated.</param>
         public InterfaceXElements(string name, Func<TParsed, string> getValue, Predicate<TParsed> predicate)
-            : this(from => CollectionUtils.Singlet(new XElement(name, getValue(from))), predicate)
+            : this(from => new XElement(name, getValue(@from)).Singlet(), predicate)
         {
         }
 
