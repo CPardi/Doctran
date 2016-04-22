@@ -135,6 +135,7 @@
     <Compile Include="Input\Options\OptionListBaseAttribute.cs" />
     <Compile Include="Output\Assets\FileIgnorer.cs" />
     <Compile Include="ParsingElements\FortranObjects\InformationValue.cs" />
+    <Compile Include="ParsingElements\IScope.cs" />
     <Compile Include="ParsingElements\Names.cs" />
     <Compile Include="ParsingElements\Traversal\TraverserActions.CheckForUnexpected.cs" />
     <Compile Include="ParsingElements\Traversal\TraverserActions.CheckAncestors.cs" />

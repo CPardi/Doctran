@@ -39,6 +39,8 @@ namespace Doctran.ParsingElements
             }
         }
 
+        public static string OfType<T>() => OfType(typeof(T));
+
         public static string OfType(Type type) => TypeNames.ContainsKey(type) ? TypeNames[type] : type.Name;
     }
 }
