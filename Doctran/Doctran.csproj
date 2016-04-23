@@ -42,7 +42,7 @@
     </DocumentationFile>
   </PropertyGroup>
   <PropertyGroup>
-    <RunPostBuildEvent>Always</RunPostBuildEvent>
+    <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ColorCode, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">

@@ -61,7 +61,7 @@ namespace Doctran.Parsing
             var tErrors = tListener.Warnings.Concat(tListener.Errors).ToList();
             if (tErrors.Any())
             {
-                Report.Warnings((pub, e) => CreateTActionPublisher(sourceName, e, pub), tErrors.OrderBy(err => (err.Cause as IHasLines ?? (err.Cause as IContained).AncestorOfType<IHasLines>())?.Lines.FirstOrDefault().Number));
+                Report.Warnings((pub, e) => CreateTActionPublisher(sourceName, e, pub), tErrors.OrderBy(err => (err.Cause as IHasLines ?? (err.Cause as IContained).SelfOrAncestorOfType<IHasLines>())?.Lines.FirstOrDefault().Number));
             }
 
             return sourceFile;
@@ -74,7 +74,7 @@ namespace Doctran.Parsing
 
         private static void CreateTActionPublisher(string sourceName, TraverserException e, ConsolePublisher pub)
         {
-            var lines = (e.Cause as IHasLines ?? (e.Cause as IContained).AncestorOfType<IHasLines>())?.Lines;
+            var lines = (e.Cause as IHasLines ?? (e.Cause as IContained).SelfOrAncestorOfType<IHasLines>())?.Lines;
             if (lines != null)
             {
                 pub.DescriptionReasonLocation(

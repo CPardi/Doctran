@@ -14,12 +14,13 @@ namespace Doctran.Test.Parsing.Traversal
     using Doctran.Parsing;
     using Doctran.ParsingElements;
     using Doctran.ParsingElements.FortranObjects;
+    using Doctran.ParsingElements.Scope;
     using NUnit.Framework;
 
     [TestFixture]
     public class AncestorOfTypeTest
     {
-        private readonly IEnumerable<Func<IFortranObject, IEnumerable<IHasIdentifier>>> _globalScope = new Func<IFortranObject, IEnumerable<IHasIdentifier>>[] { };
+        private readonly IEnumerable<ScopeCalculator> _globalScope = new ScopeCalculator[] { };
 
         [Test]
         public void NoAncestor()
@@ -28,7 +29,7 @@ namespace Doctran.Test.Parsing.Traversal
             var file1 = new SourceFile(string.Empty, @"C:\", new[] { desc }, string.Empty, new List<FileLine>());
             var project = new Project(new[] { file1 }, _globalScope);
 
-            Assert.AreEqual(null, desc.AncestorOfType<InformationValue>());
+            Assert.AreEqual(null, desc.SelfOrAncestorOfType<InformationValue>());
         }
 
         [Test]
@@ -38,7 +39,7 @@ namespace Doctran.Test.Parsing.Traversal
             var file1 = new SourceFile(string.Empty, @"C:\", new[] { desc }, string.Empty, new List<FileLine>());
             var project = new Project(new[] { file1 }, _globalScope);
 
-            Assert.AreEqual(file1, desc.AncestorOfType<SourceFile>());
+            Assert.AreEqual(file1, desc.SelfOrAncestorOfType<SourceFile>());
         }
 
         [Test]
@@ -47,7 +48,7 @@ namespace Doctran.Test.Parsing.Traversal
             var file1 = new SourceFile(string.Empty, @"C:\", new IContained[] { }, string.Empty, new List<FileLine>());
             var project = new Project(new[] { file1 }, _globalScope);
 
-            Assert.AreEqual(project, file1.AncestorOfType<Project>());
+            Assert.AreEqual(project, file1.SelfOrAncestorOfType<Project>());
         }
 
         [Test]
@@ -57,7 +58,7 @@ namespace Doctran.Test.Parsing.Traversal
             var file1 = new SourceFile(string.Empty, @"C:\", new[] { desc }, string.Empty, new List<FileLine>());
             var project = new Project(new[] { file1 }, _globalScope);
 
-            Assert.AreEqual(project, desc.AncestorOfType<Project>());
+            Assert.AreEqual(project, desc.SelfOrAncestorOfType<Project>());
         }
     }
 }

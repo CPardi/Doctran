@@ -6,15 +6,14 @@ namespace Doctran.ParsingElements.Scope
 
     public abstract class LocalScope : Scope
     {
-        protected LocalScope(IFortranObject obj, Func<IFortranObject, IEnumerable<IHasIdentifier>> getScopeItems)
+        protected LocalScope(IFortranObject obj, ScopeCalculator getScopeItems)
             : base(obj, getScopeItems)
         {
-            this.ParentScope = (obj as IContained)?.AncestorOfType<IHasScope>().Scope;
         }
 
-        protected IScope ParentScope { get; }
+        protected IScope ParentScope => (this.Object as IContained)?.AncestorOfType<IHasScope>().Scope;
 
         public override bool GetObjectFromIdentifier(string identifier, out IHasIdentifier obj)
-            => this.ObjectStore.TryGetValue(identifier, out obj) || (this.ParentScope?.GetObjectFromIdentifier(identifier, out obj) ?? false);
+            => this.ObjectsInScope.TryGetValue(identifier, out obj) || (this.ParentScope?.GetObjectFromIdentifier(identifier, out obj) ?? false);
     }
 }

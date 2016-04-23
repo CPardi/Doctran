@@ -1,26 +1,40 @@
 namespace Doctran.ParsingElements.Scope
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using Parsing;
 
+    public class IdentifierObjectPair
+    {
+        public IdentifierObjectPair(string identifier, IHasIdentifier obj)
+        {
+            this.Identifier = identifier;
+            this.Object = obj;
+        }
+
+        public string Identifier { get; }
+
+        public IHasIdentifier Object { get; }
+    }
+
+    public delegate IEnumerable<IdentifierObjectPair> ScopeCalculator(IFortranObject obj);
+
     public abstract class Scope : IScope
     {
-        private readonly IFortranObject _obj;
+        private Dictionary<string, IHasIdentifier> _localIdentifiers;
 
-        private Dictionary<string, IHasIdentifier> _objectStore;
-
-        protected Scope(IFortranObject obj, Func<IFortranObject, IEnumerable<IHasIdentifier>> getScopeItems)
+        protected Scope(IFortranObject obj, ScopeCalculator getScopeItems)
         {
-            _obj = obj;
+            this.Object = obj;
             this.GetScopeItems = getScopeItems;
         }
 
-        protected Dictionary<string, IHasIdentifier> ObjectStore
-            => _objectStore ?? (_objectStore = this.GetScopeItems(_obj).ToDictionary(obj => obj.Identifier, obj => obj));
+        public Dictionary<string, IHasIdentifier> ObjectsInScope
+            => _localIdentifiers ?? (_localIdentifiers = this.GetScopeItems(this.Object).ToDictionary(obj => obj.Identifier, obj => obj.Object));
 
-        private Func<IFortranObject, IEnumerable<IHasIdentifier>> GetScopeItems { get; }
+        protected IFortranObject Object { get; }
+
+        private ScopeCalculator GetScopeItems { get; }
 
         public abstract bool GetObjectFromIdentifier(string identifier, out IHasIdentifier obj);
     }

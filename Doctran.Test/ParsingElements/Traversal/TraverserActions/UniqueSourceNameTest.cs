@@ -21,7 +21,7 @@ namespace Doctran.Test.ParsingElements.Traversal.TraverserActions
     [Category("Unit")]
     public class UniqueSourceNameTest
     {
-        private IEnumerable<Func<IFortranObject, IEnumerable<IHasIdentifier>>> _globalScope = new Func<IFortranObject, IEnumerable<IHasIdentifier>>[] { };
+        private IEnumerable<ScopeCalculator> _globalScope = new ScopeCalculator[] { };
 
         [Test]
         [ExpectedException(typeof(InvalidOperationException))]

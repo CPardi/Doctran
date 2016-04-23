@@ -15,9 +15,9 @@
         {
             var unit1 = new ScopingUnit("Unit1");
             var unit2 = new ScopingUnit("Unit2");
-            var hasIdentifiers = new IHasIdentifier[] { unit1, unit2 };
+            var hasIdentifiers = new [] { new IdentifierObjectPair(unit1.Identifier, unit1), new IdentifierObjectPair(unit2.Identifier, unit2) };
 
-            var getLocalScope = new Func<IFortranObject, IEnumerable<IHasIdentifier>>[] { p => hasIdentifiers };
+            var getLocalScope = new ScopeCalculator[] { p => hasIdentifiers };
 
             var gs = new GlobalScope(null, getLocalScope);
 

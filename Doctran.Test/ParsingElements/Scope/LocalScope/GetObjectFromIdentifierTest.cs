@@ -15,9 +15,9 @@
         {
             var unit1 = new IdentifiableUnit(null, "Unit1");
             var unit2 = new IdentifiableUnit(null, "Unit2");
-            var inScopeArray = new IHasIdentifier[] { unit1, unit2 };
+            var inScopeArray = new[] { new IdentifierObjectPair(unit1.Identifier, unit1), new IdentifierObjectPair(unit2.Identifier, unit2) };
 
-            Func<IFortranObject, IEnumerable<IHasIdentifier>> getLocalScope = p => inScopeArray;
+            ScopeCalculator getLocalScope = p => inScopeArray;
 
             var gs = new MyLocalScope(null, getLocalScope);
 
@@ -37,7 +37,7 @@
             // Set global scope.
             var unit3 = new IdentifiableUnit(unit0, "Unit3");
             var unit4 = new IdentifiableUnit(unit0, "Unit4");
-            unit0.InScope = new[] { unit3, unit4 };
+            unit0.InScope = new[] { new IdentifierObjectPair(unit3.Identifier, unit3), new IdentifierObjectPair(unit4.Identifier, unit4) };
 
             // Set local scope
             var unit1 = new IdentifiableUnit(unit0, "Unit1");
@@ -47,7 +47,7 @@
             unit0.AddSubObjects(new[] { unit1, unit2 });
 
             // Create local scope
-            Func<IFortranObject, IEnumerable<IHasIdentifier>> getLocalScope = p => new IHasIdentifier[] { unit1, unit2 };
+            ScopeCalculator getLocalScope = p => new [] { new IdentifierObjectPair(unit1.Identifier, unit1), new IdentifierObjectPair(unit2.Identifier, unit2) };
             var myLocalScope = new MyLocalScope(unit1, getLocalScope);
 
             // Check object from local scope.
@@ -82,7 +82,7 @@
 
         private class MyLocalScope : LocalScope
         {
-            public MyLocalScope(IFortranObject obj, Func<IFortranObject, IEnumerable<IHasIdentifier>> getScopeItems)
+            public MyLocalScope(IFortranObject obj, ScopeCalculator getScopeItems)
                 : base(obj, getScopeItems)
             {
             }
@@ -95,11 +95,11 @@
             {
             }
 
-            public IEnumerable<IHasIdentifier> InScope { get; set; }
+            public IEnumerable<IdentifierObjectPair> InScope { get; set; }
 
             public IScope Scope => new GlobalScope(
                 this,
-                new Func<IFortranObject, IEnumerable<IHasIdentifier>>[] { unit => this.InScope });
+                new ScopeCalculator[] { unit => this.InScope });
         }
     }
 }

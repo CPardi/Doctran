@@ -17,9 +17,9 @@ namespace Doctran.ParsingElements.FortranObjects
     using Scope;
     using Utilitys;
 
-    public class Project : Container
+    public class Project : Container, IHasScope
     {
-        public Project(IEnumerable<ISourceFile> parsedFiles, IEnumerable<Func<IFortranObject, IEnumerable<IHasIdentifier>>> getGlobalItems)
+        public Project(IEnumerable<ISourceFile> parsedFiles, IEnumerable<ScopeCalculator> getGlobalItems)
             : base(parsedFiles)
         {
             this.GlobalScope = new GlobalScope(this, getGlobalItems);
@@ -32,6 +32,8 @@ namespace Doctran.ParsingElements.FortranObjects
         public XName SourcesXmlHead => "Files";
 
         public GlobalScope GlobalScope { get; }
+
+        public IScope Scope => this.GlobalScope;
 
         public XElement XEle(XElement xmlPassthrough)
         {

@@ -22,7 +22,7 @@ namespace Doctran.Plugins
 
         string Identifier { get; }
 
-        Func<IFortranObject, IEnumerable<IHasIdentifier>> GlobalScopeFactory { get; }
+        ScopeCalculator GlobalScopeFactory { get; }
 
         ISourceFile Parse(string sourcePath, string lines);
     }

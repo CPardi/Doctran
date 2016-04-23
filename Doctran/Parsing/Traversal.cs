@@ -7,23 +7,35 @@
 
 namespace Doctran.Parsing
 {
-    using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Linq;
-    using Utilitys;
 
     /// <summary>
-    /// Provides methods to traverse a project tree.
+    ///     Provides methods to traverse a project tree.
     /// </summary>
     public static class Traversal
     {
         /// <summary>
-        /// Search the ancestors of an instance of <see cref="IContained"/> for an instance of type <typeparamref name="T"/>.
+        ///     Search the ancestors of <paramref name="contained" /> to check if it is an instance of type
+        ///     <typeparamref name="T" />.
         /// </summary>
         /// <typeparam name="T">The type to search for.</typeparam>
-        /// <param name="contained">The instances whose ancestors are to be searched.</param>
-        /// <returns>The ancestor of type <typeparamref name="T"/>.</returns>
+        /// <param name="contained">The instance to be checked.</param>
+        /// <returns>The ancestor of type <typeparamref name="T" />.</returns>
         public static T AncestorOfType<T>(this IContained contained)
+            where T : class, IFortranObject
+        {
+            return SelfOrAncestorOfType<T>(contained.Parent as IContained);
+        }
+
+        /// <summary>
+        ///     Search <paramref name="contained" /> and its the ancestors to check if it is an instance of type
+        ///     <typeparamref name="T" />.
+        /// </summary>
+        /// <typeparam name="T">The type to search for.</typeparam>
+        /// <param name="contained">The instance to be checked.</param>
+        /// <returns>The ancestor of type <typeparamref name="T" />.</returns>
+        public static T SelfOrAncestorOfType<T>(this IContained contained)
             where T : class, IFortranObject
         {
             if (contained == null)
