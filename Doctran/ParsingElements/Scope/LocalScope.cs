@@ -14,7 +14,7 @@ namespace Doctran.ParsingElements.Scope
 
         protected IScope ParentScope { get; }
 
-        public override bool GetObjectFromName(string name, out IHasIdentifier obj)
-            => this.ObjectStore.TryGetValue(name, out obj) || this.ParentScope.GetObjectFromName(name, out obj);
+        public override bool GetObjectFromIdentifier(string identifier, out IHasIdentifier obj)
+            => this.ObjectStore.TryGetValue(identifier, out obj) || (this.ParentScope?.GetObjectFromIdentifier(identifier, out obj) ?? false);
     }
 }

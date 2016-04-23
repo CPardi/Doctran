@@ -22,6 +22,6 @@ namespace Doctran.ParsingElements.Scope
 
         private Func<IFortranObject, IEnumerable<IHasIdentifier>> GetScopeItems { get; }
 
-        public abstract bool GetObjectFromName(string name, out IHasIdentifier obj);
+        public abstract bool GetObjectFromIdentifier(string identifier, out IHasIdentifier obj);
     }
 }

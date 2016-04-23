@@ -2,6 +2,6 @@
 {
     public interface IScope
     {
-        bool GetObjectFromName(string name, out IHasIdentifier obj);
+        bool GetObjectFromIdentifier(string identifier, out IHasIdentifier obj);
     }
 }

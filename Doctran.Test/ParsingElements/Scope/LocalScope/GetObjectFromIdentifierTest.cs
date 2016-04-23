@@ -1,0 +1,105 @@
+﻿namespace Doctran.Test.ParsingElements.Scope.LocalScope
+{
+    using System;
+    using System.Collections.Generic;
+    using Doctran.Parsing;
+    using Doctran.ParsingElements;
+    using Doctran.ParsingElements.Scope;
+    using NUnit.Framework;
+
+    [TestFixture]
+    public class GetObjectFromIdentifierTest
+    {
+        [Test]
+        public void SetAndRetrieve()
+        {
+            var unit1 = new IdentifiableUnit(null, "Unit1");
+            var unit2 = new IdentifiableUnit(null, "Unit2");
+            var inScopeArray = new IHasIdentifier[] { unit1, unit2 };
+
+            Func<IFortranObject, IEnumerable<IHasIdentifier>> getLocalScope = p => inScopeArray;
+
+            var gs = new MyLocalScope(null, getLocalScope);
+
+            IHasIdentifier obj;
+            Assert.IsTrue(gs.GetObjectFromIdentifier("Unit1", out obj), "Cound not find 'Unit1'.");
+            Assert.AreEqual(unit1, obj);
+
+            Assert.IsFalse(gs.GetObjectFromIdentifier("Unit3", out obj), "Found non-existing object 'Unit3'.");
+        }
+
+        [Test]
+        public void SetAndRetrieveFromParentScope()
+        {
+            // Top level object.
+            var unit0 = new ScopingUnit();
+
+            // Set global scope.
+            var unit3 = new IdentifiableUnit(unit0, "Unit3");
+            var unit4 = new IdentifiableUnit(unit0, "Unit4");
+            unit0.InScope = new[] { unit3, unit4 };
+
+            // Set local scope
+            var unit1 = new IdentifiableUnit(unit0, "Unit1");
+            var unit2 = new IdentifiableUnit(unit0, "Unit2");
+
+            // Add subobjects to unit1
+            unit0.AddSubObjects(new[] { unit1, unit2 });
+
+            // Create local scope
+            Func<IFortranObject, IEnumerable<IHasIdentifier>> getLocalScope = p => new IHasIdentifier[] { unit1, unit2 };
+            var myLocalScope = new MyLocalScope(unit1, getLocalScope);
+
+            // Check object from local scope.
+            IHasIdentifier obj1;
+            Assert.IsTrue(myLocalScope.GetObjectFromIdentifier("Unit1", out obj1), "Cound not find 'Unit1'.");
+            Assert.AreEqual(unit1, obj1);
+
+            // Check object from global scope.
+            IHasIdentifier obj3;
+            Assert.IsTrue(myLocalScope.GetObjectFromIdentifier("Unit3", out obj3), "Cound not find 'Unit3'.");
+            Assert.AreEqual(unit3, obj3);
+
+            // Check for non-existant object.
+            IHasIdentifier obj5;
+            Assert.IsFalse(myLocalScope.GetObjectFromIdentifier("Unit5", out obj5), "Found non-existing object 'Unit5'.");
+        }
+
+        private class IdentifiableUnit : IHasIdentifier, IContained
+        {
+            public IdentifiableUnit(IContainer parent, string identifier)
+            {
+                this.Parent = parent;
+                this.Identifier = identifier;
+            }
+
+            public string Identifier { get; }
+
+            public string ObjectName => "Identifiable Unit";
+
+            public IContainer Parent { get; set; }
+        }
+
+        private class MyLocalScope : LocalScope
+        {
+            public MyLocalScope(IFortranObject obj, Func<IFortranObject, IEnumerable<IHasIdentifier>> getScopeItems)
+                : base(obj, getScopeItems)
+            {
+            }
+        }
+
+        private class ScopingUnit : Container, IHasScope
+        {
+            public ScopingUnit()
+                : base(new IContained[] { })
+            {
+            }
+
+            public IEnumerable<IHasIdentifier> InScope { get; set; }
+
+            public IScope Scope => new GlobalScope(
+                this,
+                new Func<IFortranObject, IEnumerable<IHasIdentifier>>[] { unit => this.InScope });
+        }
+    }
+}

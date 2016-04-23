@@ -12,8 +12,8 @@ namespace Doctran.ParsingElements.Scope
         {
         }
 
-        public override bool GetObjectFromName(string name, out IHasIdentifier obj)
-            => this.ObjectStore.TryGetValue(name, out obj);
+        public override bool GetObjectFromIdentifier(string identifier, out IHasIdentifier obj)
+            => this.ObjectStore.TryGetValue(identifier, out obj);
 
         private static Func<IFortranObject, IEnumerable<IHasIdentifier>> GetAllScopeItems(IEnumerable<Func<IFortranObject, IEnumerable<IHasIdentifier>>> getScopeItems)
             => o => getScopeItems.SelectMany(gsi => gsi(o));

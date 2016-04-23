@@ -7,8 +7,10 @@
 
 namespace Doctran.Parsing
 {
+    using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Linq;
+    using Utilitys;
 
     /// <summary>
     /// Provides methods to traverse a project tree.
