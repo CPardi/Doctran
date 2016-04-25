@@ -29,6 +29,17 @@ namespace Doctran.Utilitys
             return thisArray.Single();
         }
 
+        public static T SingleOrThrow<T>(this IEnumerable<T> @this, Func<T, bool> predicate, Exception e)
+        {
+            var thisArray = @this.Where(predicate).ToArray();
+            if (thisArray.Length == 0 || thisArray.Length > 1)
+            {
+                throw e;
+            }
+
+            return thisArray.Single();
+        }
+
         public static T SingleOrThrow<T>(this IEnumerable<T> @this, Exception eForZero, Exception eForGreaterThanOne)
         {
             var thisArray = @this as T[] ?? @this.ToArray();
@@ -54,6 +65,19 @@ namespace Doctran.Utilitys
             }
 
             return thisArray.SingleOrDefault();
+        }
+
+        public static IEnumerable<T> NonZeroOrThrow<T>(this IEnumerable<T> @this, Func<T, bool> predicate, Exception e)
+        {
+            var result = @this
+                .Where(predicate)
+                .ToList();
+            if (!result.Any())
+            {
+                throw e;
+            }
+
+            return result;
         }
 
         public static void ConsoleGotoNewLine()
