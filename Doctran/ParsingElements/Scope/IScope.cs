@@ -7,5 +7,8 @@
         Dictionary<string, IHasIdentifier> ObjectsInScope { get; }
 
         bool GetObjectFromIdentifier(string identifier, out IHasIdentifier obj);
+
+        T GetObjectFromIdentifier<T>(string identifier)
+            where T : class, IHasIdentifier;
     }
 }

@@ -25,7 +25,7 @@ namespace Doctran.Parsing
         public static T AncestorOfType<T>(this IContained contained)
             where T : class, IFortranObject
         {
-            return SelfOrAncestorOfType<T>(contained.Parent as IContained);
+            return SelfOrAncestorOfType<T>(contained.Parent);
         }
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace Doctran.Parsing
         /// <typeparam name="T">The type to search for.</typeparam>
         /// <param name="contained">The instance to be checked.</param>
         /// <returns>The ancestor of type <typeparamref name="T" />.</returns>
-        public static T SelfOrAncestorOfType<T>(this IContained contained)
+        public static T SelfOrAncestorOfType<T>(this IFortranObject contained)
             where T : class, IFortranObject
         {
             if (contained == null)
