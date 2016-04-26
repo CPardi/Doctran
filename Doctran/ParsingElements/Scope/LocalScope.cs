@@ -9,14 +9,7 @@ namespace Doctran.ParsingElements.Scope
         {
         }
 
-        protected IScope ParentScope
-        {
-            get
-            {
-                var parentScope = (this.Object as IContained)?.AncestorOfType<IHasScope>()?.Scope;
-                return parentScope;
-            }
-        }
+        protected IScope ParentScope => (this.Object as IContained)?.AncestorOfType<IHasScope>()?.Scope;
 
         public override bool GetObjectFromIdentifier(string identifier, out IHasIdentifier obj)
             => this.ObjectsInScope.TryGetValue(identifier, out obj) || (this.ParentScope?.GetObjectFromIdentifier(identifier, out obj) ?? false);

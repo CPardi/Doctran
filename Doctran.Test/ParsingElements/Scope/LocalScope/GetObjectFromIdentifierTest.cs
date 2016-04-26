@@ -25,7 +25,7 @@
             Assert.IsTrue(gs.GetObjectFromIdentifier("Unit1", out obj), "Cound not find 'Unit1'.");
             Assert.AreEqual(unit1, obj);
 
-            Assert.IsFalse(gs.GetObjectFromIdentifier("Unit3", out obj), "Found non-existing object 'Unit3'.");
+            Assert.IsFalse(gs.GetObjectFromIdentifier("Unit3", out obj), "Found non-existant object 'Unit3'.");
         }
 
         [Test]
