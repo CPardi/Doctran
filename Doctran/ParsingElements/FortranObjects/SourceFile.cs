@@ -35,7 +35,7 @@ namespace Doctran.ParsingElements.FortranObjects
 
         public string Extension => _info.Extension;
 
-        public string Identifier => this.Name;
+        public IdentifierBase Identifier => new Identifier(this.Name);
 
         public string Language { get; }
 

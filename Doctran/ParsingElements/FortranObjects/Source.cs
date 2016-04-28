@@ -19,7 +19,7 @@ namespace Doctran.ParsingElements.FortranObjects
             this.Language = language;
         }
 
-        public string Identifier => $"{this.Language} source";
+        public IdentifierBase Identifier => new Identifier($"{this.Language} source");
 
         public string Language { get; }
     }

@@ -85,10 +85,10 @@ namespace Doctran.Test.ParsingElements.Traversal.TraverserActions
             public TestClass(string identifier, IEnumerable<IContained> subObjects)
                 : base(subObjects)
             {
-                this.Identifier = identifier;
+                this.Identifier = new Identifier(identifier);
             }
 
-            public string Identifier { get; }
+            public IdentifierBase Identifier { get; }
 
             public IContainer Parent { get; set; }
         }

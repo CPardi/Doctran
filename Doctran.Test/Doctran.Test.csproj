@@ -62,6 +62,7 @@
     <Compile Include="ParsingElements\FortranBlocks\DescriptionBlock\ReturnObjectTest.cs" />
     <Compile Include="ParsingElements\FortranBlocks\TestUtilities\StringUtils.cs" />
     <Compile Include="ParsingElements\FortranBlocks\TestUtilities\TestingUtils.cs" />
+    <Compile Include="ParsingElements\Identifier\EqualsTest.cs" />
     <Compile Include="ParsingElements\Scope\GlobalScope\GetObjectFromIdentifierTest.cs" />
     <Compile Include="ParsingElements\Scope\LocalScope\GetObjectFromIdentifierTest.cs" />
     <Compile Include="ParsingElements\Traversal\TraverserActions\AssignDescriptionsTest.cs" />

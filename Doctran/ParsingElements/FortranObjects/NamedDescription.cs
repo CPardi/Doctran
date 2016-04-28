@@ -16,7 +16,7 @@ namespace Doctran.ParsingElements.FortranObjects
     {
         public NamedDescription(string linkedTo, XElement basic, XElement detailed, List<FileLine> lines)
         {
-            this.LinkedTo = linkedTo;
+            this.LinkedTo = new Identifier(linkedTo);
             this.Basic = basic;
             this.Detailed = detailed;
             this.Lines = lines;
@@ -30,7 +30,7 @@ namespace Doctran.ParsingElements.FortranObjects
 
         public List<FileLine> Lines { get; }
 
-        public string LinkedTo { get; }
+        public Identifier LinkedTo { get; }
 
         public IContainer Parent { get; set; }
     }

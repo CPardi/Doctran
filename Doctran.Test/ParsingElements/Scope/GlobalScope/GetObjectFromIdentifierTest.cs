@@ -22,20 +22,20 @@
             var gs = new GlobalScope(null, getLocalScope);
 
             IHasIdentifier obj;
-            gs.GetObjectFromIdentifier("Unit1", out obj);
+            gs.GetObjectFromIdentifier(new Identifier("Unit1"), out obj);
             Assert.AreEqual(unit1, obj);
 
-            Assert.IsFalse(gs.GetObjectFromIdentifier("Unit3", out obj), "Found non-existing object 'Unit3'.");
+            Assert.IsFalse(gs.GetObjectFromIdentifier(new Identifier("Unit3"), out obj), "Found non-existing object 'Unit3'.");
         }
 
         private class ScopingUnit : IHasIdentifier
         {
             public ScopingUnit(string identifier)
             {
-                this.Identifier = identifier;
+                this.Identifier = new Identifier(identifier);
             }
 
-            public string Identifier { get; }
+            public IdentifierBase Identifier { get; }
 
             public string ObjectName => "Scoping Unit";
         }
