@@ -6,13 +6,13 @@ namespace Doctran.ParsingElements.Scope
 
     public class IdentifierObjectPair
     {
-        public IdentifierObjectPair(IdentifierBase identifier, IHasIdentifier obj)
+        public IdentifierObjectPair(Identifier identifier, IHasIdentifier obj)
         {
             this.Identifier = identifier;
             this.Object = obj;
         }
 
-        public IdentifierBase Identifier { get; }
+        public Identifier Identifier { get; }
 
         public IHasIdentifier Object { get; }
     }
@@ -21,7 +21,7 @@ namespace Doctran.ParsingElements.Scope
 
     public abstract class Scope : IScope
     {
-        private Dictionary<IdentifierBase, IHasIdentifier> _localIdentifiers;
+        private Dictionary<Identifier, IHasIdentifier> _localIdentifiers;
 
         protected Scope(IFortranObject obj, ScopeCalculator getScopeItems)
         {
@@ -29,14 +29,14 @@ namespace Doctran.ParsingElements.Scope
             this.GetScopeItems = getScopeItems;
         }
 
-        public Dictionary<IdentifierBase, IHasIdentifier> ObjectsInScope
+        public Dictionary<Identifier, IHasIdentifier> ObjectsInScope
             => _localIdentifiers ?? (_localIdentifiers = this.GetScopeItems(this.Object).ToDictionary(obj => obj.Identifier, obj => obj.Object));
 
         protected IFortranObject Object { get; }
 
         private ScopeCalculator GetScopeItems { get; }
 
-        public abstract bool GetObjectFromIdentifier(IdentifierBase identifier, out IHasIdentifier obj);
+        public abstract bool GetObjectFromIdentifier(Identifier identifier, out IHasIdentifier obj);
 
         /// <summary>
         /// Given an identifier, returns the corresponding object in the scope. Will return a <see cref="TraverserException"/> if identifier not found or if object not of type <typeparamref name="T"/>.
@@ -46,7 +46,7 @@ namespace Doctran.ParsingElements.Scope
         /// <returns>The object of type <typeparamref name="T"/> that has identifier <paramref name="identifier"/>.</returns>
         /// <exception cref="TraverserException">Thrown if no object with identifier is found.</exception>
         /// <exception cref="TraverserException">Thorwn if the object is not of the expected type.</exception>
-        public T GetObjectFromIdentifier<T>(IdentifierBase identifier)
+        public T GetObjectFromIdentifier<T>(Identifier identifier)
             where T : class, IHasIdentifier
         {
             IHasIdentifier obj;

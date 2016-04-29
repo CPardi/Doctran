@@ -35,7 +35,7 @@ namespace Doctran.ParsingElements.FortranObjects
 
         public string Extension => _info.Extension;
 
-        public IdentifierBase Identifier => new Identifier(this.Name);
+        public Identifier Identifier => new CaseSensitiveId(this.Name);
 
         public string Language { get; }
 

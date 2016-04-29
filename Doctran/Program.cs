@@ -198,7 +198,7 @@ namespace Doctran
             themeOutputter.Output(options.OverwriteExisting, options.OutputDirectory, options.ProjectFilePath, options.ThemeName, options.CopyPaths, options.CopyAndParsePaths);
 
             SaveTiming("theme-output", StageStopwatch.ElapsedMilliseconds);
-            Report.ContinueStatus("Done"); 
+            Report.ContinueStatus("Done");
         }
 
         private static void SaveTiming(string name, long milliseonds)

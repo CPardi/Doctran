@@ -27,7 +27,7 @@ namespace Doctran.Plugins
         private static readonly Dictionary<string, IDocumentationDefinition> DefinitionsByIdentifier = new Dictionary<string, IDocumentationDefinition>();
 
         /// <summary>
-        ///     The name of the part of the theme required for all projects.
+        ///     Gets the name of the part of the theme required for all projects.
         /// </summary>
         public static string BaseThemePart => "base";
 

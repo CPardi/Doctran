@@ -14,12 +14,60 @@ namespace Doctran.Utilitys
 
     public static class CollectionUtils
     {
-        public static IEnumerable<TIn> NotOfType<TIn, TNot>(this IEnumerable<TIn> @this)
-            where TNot : TIn => @this.Where(item => !(item is TNot));
+        public static void AddSubObject(List<IContained> subObjects, IContainer container, IContained contained)
+        {
+            contained.Parent = container;
+            subObjects.Add(contained);
+        }
+
+        public static void AddSubObjects(List<IContained> subObjects, IContainer container, IEnumerable<IContained> containedItems)
+        {
+            var containedItemList = containedItems as IList<IContained> ?? containedItems.ToList();
+            foreach (var item in containedItemList)
+            {
+                item.Parent = container;
+            }
+
+            subObjects.AddRange(containedItemList);
+        }
 
         public static IEnumerable<T> Empty<T>()
         {
             return new List<T>();
+        }
+
+        public static void InsertSubObject(List<IContained> subObjects, IContainer container, int index, IContained contained)
+        {
+            contained.Parent = container;
+            subObjects.Insert(index, contained);
+        }
+
+        public static IEnumerable<TIn> NotOfType<TIn, TNot>(this IEnumerable<TIn> @this)
+            where TNot : TIn => @this.Where(item => !(item is TNot));
+
+        /// <summary>
+        ///     Removes all matching items from a list.
+        /// </summary>
+        /// <typeparam name="T">The list item type.</typeparam>
+        /// <param name="this">The list to remove from.</param>
+        /// <param name="items">The items to remove if found within list.</param>
+        /// <returns>The number of items removed.</returns>
+        public static int RemoveAll<T>(this List<T> @this, IEnumerable<T> items)
+        {
+            return @this.RemoveAll(items.Contains);
+        }
+
+        public static void RemoveSubObject(List<IContained> subObjects, IContainer container, IContained contained)
+        {
+            subObjects.Remove(contained);
+        }
+
+        public static void RemoveSubObjects(IContainer container, IEnumerable<IContained> containeItems)
+        {
+            foreach (var item in containeItems)
+            {
+                container.RemoveSubObject(item);
+            }
         }
 
         public static IEnumerable<T> Repeat<T>(int times, T tIn)
@@ -38,42 +86,6 @@ namespace Doctran.Utilitys
         public static ReadOnlyCollection<T> ToReadOnlyCollection<T>(this IEnumerable<T> @this)
         {
             return @this.ToList().AsReadOnly();
-        }
-
-        public static void AddSubObject(List<IContained> subObjects, IContainer container, IContained contained)
-        {
-            contained.Parent = container;
-            subObjects.Add(contained);
-        }
-
-        public static void InsertSubObject(List<IContained> subObjects, IContainer container, int index, IContained contained)
-        {
-            contained.Parent = container;
-            subObjects.Insert(index, contained);
-        }
-
-        public static void AddSubObjects(List<IContained> subObjects, IContainer container, IEnumerable<IContained> containedItems)
-        {
-            var containedItemList = containedItems as IList<IContained> ?? containedItems.ToList();
-            foreach (var item in containedItemList)
-            {
-                item.Parent = container;
-            }
-
-            subObjects.AddRange(containedItemList);
-        }
-
-        public static void RemoveSubObject(List<IContained> subObjects, IContainer container, IContained contained)
-        {
-            subObjects.Remove(contained);
-        }
-
-        public static void RemoveSubObjects(IContainer container, IEnumerable<IContained> containeItems)
-        {
-            foreach (var item in containeItems)
-            {
-                container.RemoveSubObject(item);
-            }
         }
     }
 }

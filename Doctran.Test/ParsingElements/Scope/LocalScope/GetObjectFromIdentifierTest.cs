@@ -22,10 +22,10 @@
             var gs = new MyLocalScope(null, getLocalScope);
 
             IHasIdentifier obj;
-            Assert.IsTrue(gs.GetObjectFromIdentifier(new Identifier("Unit1"), out obj), "Cound not find 'Unit1'.");
+            Assert.IsTrue(gs.GetObjectFromIdentifier(new CaseSensitiveId("Unit1"), out obj), "Cound not find 'Unit1'.");
             Assert.AreEqual(unit1, obj);
 
-            Assert.IsFalse(gs.GetObjectFromIdentifier(new Identifier("Unit3"), out obj), "Found non-existant object 'Unit3'.");
+            Assert.IsFalse(gs.GetObjectFromIdentifier(new CaseSensitiveId("Unit3"), out obj), "Found non-existant object 'Unit3'.");
         }
 
         [Test]
@@ -52,17 +52,17 @@
 
             // Check object from local scope.
             IHasIdentifier obj1;
-            Assert.IsTrue(myLocalScope.GetObjectFromIdentifier(new Identifier("Unit1"), out obj1), "Cound not find 'Unit1'.");
+            Assert.IsTrue(myLocalScope.GetObjectFromIdentifier(new CaseSensitiveId("Unit1"), out obj1), "Cound not find 'Unit1'.");
             Assert.AreEqual(unit1, obj1);
 
             // Check object from global scope.
             IHasIdentifier obj3;
-            Assert.IsTrue(myLocalScope.GetObjectFromIdentifier(new Identifier("Unit3"), out obj3), "Cound not find 'Unit3'.");
+            Assert.IsTrue(myLocalScope.GetObjectFromIdentifier(new CaseSensitiveId("Unit3"), out obj3), "Cound not find 'Unit3'.");
             Assert.AreEqual(unit3, obj3);
 
             // Check for non-existant object.
             IHasIdentifier obj5;
-            Assert.IsFalse(myLocalScope.GetObjectFromIdentifier(new Identifier("Unit5"), out obj5), "Found non-existing object 'Unit5'.");
+            Assert.IsFalse(myLocalScope.GetObjectFromIdentifier(new CaseSensitiveId("Unit5"), out obj5), "Found non-existing object 'Unit5'.");
         }
 
         private class IdentifiableUnit : IHasIdentifier, IContained
@@ -70,10 +70,10 @@
             public IdentifiableUnit(IContainer parent, string identifier)
             {
                 this.Parent = parent;
-                this.Identifier = new Identifier(identifier);
+                this.Identifier = new CaseSensitiveId(identifier);
             }
 
-            public IdentifierBase Identifier { get; }
+            public Identifier Identifier { get; }
 
             public string ObjectName => "Identifiable Unit";
 

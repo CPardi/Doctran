@@ -4,11 +4,11 @@
 
     public interface IScope
     {
-        Dictionary<IdentifierBase, IHasIdentifier> ObjectsInScope { get; }
+        Dictionary<Identifier, IHasIdentifier> ObjectsInScope { get; }
 
-        bool GetObjectFromIdentifier(IdentifierBase identifier, out IHasIdentifier obj);
+        bool GetObjectFromIdentifier(Identifier identifier, out IHasIdentifier obj);
 
-        T GetObjectFromIdentifier<T>(IdentifierBase identifier)
+        T GetObjectFromIdentifier<T>(Identifier identifier)
             where T : class, IHasIdentifier;
     }
 }

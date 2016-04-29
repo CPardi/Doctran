@@ -1,22 +1,29 @@
-namespace Doctran.ParsingElements
+﻿namespace Doctran.ParsingElements
 {
-    /// <summary>
-    ///     Default implementation of <see cref="IdentifierBase" />.
-    /// </summary>
-    public class Identifier : IdentifierBase
+    public abstract class Identifier
     {
-        public Identifier(string identifier)
-            : base(identifier)
+        protected Identifier(string originalString)
         {
+            this.OriginalString = originalString;
         }
 
-        public override bool Equals(object obj)
+        public string OriginalString { get; }
+
+        public static bool operator ==(Identifier obj1, Identifier obj2)
         {
-            return this.OriginalString.Equals((obj as IdentifierBase)?.OriginalString);
+            return obj1?.Equals(obj2) ?? false;
         }
 
-        public override int GetHashCode() => this.OriginalString.GetHashCode();
+        public static bool operator !=(Identifier obj1, Identifier obj2)
 
-        public override string ToString() => this.OriginalString;
+        {
+            return !obj1?.Equals(obj2) ?? false;
+        }
+
+        public abstract override bool Equals(object obj);
+
+        public abstract override int GetHashCode();
+
+        public abstract override string ToString();
     }
 }

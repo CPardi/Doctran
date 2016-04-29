@@ -106,6 +106,38 @@ namespace Doctran.Helper
         }
 
         /// <summary>
+        ///     Determines when <paramref name="pathList" /> is a single path (does not contain wildcards).
+        /// </summary>
+        /// <param name="pathList">The path to check.</param>
+        /// <returns>If true, then <paramref name="pathList" />is a single path.</returns>
+        private static bool IsSinglePath(string pathList)
+        {
+            string path, searchPattern;
+            SearchOption searchOption;
+
+            AnalysePath(pathList, out path, out searchPattern, out searchOption);
+
+            return searchPattern == string.Empty;
+        }
+
+        /// <summary>
+        ///     Normalizes a string representing a path by making the directory seperator operating system invariant and removing
+        ///     uneeded parts.
+        /// </summary>
+        /// <param name="path">The path to normalize.</param>
+        /// <returns>The normalized path.</returns>
+        private static string NormalizePath(string path)
+        {
+            // Change all directory seperators to the current operating systems directory seperator.
+            var opSysSlash = path
+                .Trim()
+                .Replace('/', EnvVar.Slash)
+                .Replace('\\', EnvVar.Slash);
+
+            return opSysSlash;
+        }
+
+        /// <summary>
         ///     Expands <paramref name="pathList" /> to an <see cref="IEnumerable{String}" /> containing the expanded path.
         /// </summary>
         /// <param name="pathList">A path containing wildcards.</param>
@@ -141,37 +173,6 @@ namespace Doctran.Helper
                 default:
                     throw new ArgumentOutOfRangeException();
             }
-        }
-
-        /// <summary>
-        ///     Determines when <paramref name="pathList" /> is a single path (does not contain wildcards).
-        /// </summary>
-        /// <param name="pathList">The path to check.</param>
-        /// <returns>If true, then <paramref name="pathList" />is a single path.</returns>
-        private static bool IsSinglePath(string pathList)
-        {
-            string path, searchPattern;
-            SearchOption searchOption;
-
-            AnalysePath(pathList, out path, out searchPattern, out searchOption);
-
-            return searchPattern == string.Empty;
-        }
-
-        /// <summary>
-        /// Normalizes a string representing a path by making the directory seperator operating system invariant and removing uneeded parts.
-        /// </summary>
-        /// <param name="path">The path to normalize.</param>
-        /// <returns>The normalized path.</returns>
-        private static string NormalizePath(string path)
-        {
-            // Change all directory seperators to the current operating systems directory seperator.
-            var opSysSlash = path
-                .Trim()
-                .Replace('/', EnvVar.Slash)
-                .Replace('\\', EnvVar.Slash);
-
-            return opSysSlash;
         }
     }
 }

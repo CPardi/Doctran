@@ -135,8 +135,8 @@
     <Compile Include="Input\Options\OptionListBaseAttribute.cs" />
     <Compile Include="Output\Assets\FileIgnorer.cs" />
     <Compile Include="ParsingElements\FortranObjects\InformationValue.cs" />
+    <Compile Include="ParsingElements\CaseSensitiveId.cs" />
     <Compile Include="ParsingElements\Identifier.cs" />
-    <Compile Include="ParsingElements\IdentifierBase.cs" />
     <Compile Include="ParsingElements\IErrorProne.cs" />
     <Compile Include="ParsingElements\Scope\GlobalScope.cs" />
     <Compile Include="ParsingElements\Scope\IHasScope.cs" />
