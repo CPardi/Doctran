@@ -21,7 +21,7 @@
 
             var gs = new MyLocalScope(null, getLocalScope);
 
-            IHasIdentifier obj;
+            IdentifiableUnit obj;
             Assert.IsTrue(gs.GetObjectFromIdentifier(new CaseSensitiveId("Unit1"), out obj), "Cound not find 'Unit1'.");
             Assert.AreEqual(unit1, obj);
 

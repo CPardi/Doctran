@@ -139,11 +139,13 @@
     <Compile Include="ParsingElements\Identifier.cs" />
     <Compile Include="ParsingElements\IErrorProne.cs" />
     <Compile Include="ParsingElements\Scope\GlobalScope.cs" />
+    <Compile Include="ParsingElements\Scope\IdentifierObjectPair.cs" />
     <Compile Include="ParsingElements\Scope\IHasScope.cs" />
     <Compile Include="ParsingElements\Scope\IScope.cs" />
     <Compile Include="ParsingElements\Names.cs" />
     <Compile Include="ParsingElements\Scope\LocalScope.cs" />
     <Compile Include="ParsingElements\Scope\Scope.cs" />
+    <Compile Include="ParsingElements\Scope\ScopeCalculator.cs" />
     <Compile Include="ParsingElements\Traversal\TraverserActions.CheckForUnexpected.cs" />
     <Compile Include="ParsingElements\Traversal\TraverserActions.CheckAncestors.cs" />
     <Compile Include="ParsingElements\Traversal\TraverserActions.UniqueSourceNames.cs" />

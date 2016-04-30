@@ -12,8 +12,7 @@ namespace Doctran.ParsingElements.Scope
         {
         }
 
-        public override bool GetObjectFromIdentifier(Identifier identifier, out IHasIdentifier obj)
-            => this.ObjectsInScope.TryGetValue(identifier, out obj);
+        public override bool GetObjectFromIdentifier<T>(Identifier identifier, out T obj) => this.GetObjectFromLocalStorage(identifier, out obj);
 
         private static ScopeCalculator CombineGlobalScopeCalculators(IEnumerable<ScopeCalculator> getScopeItems)
             => o => getScopeItems.SelectMany(gsi => gsi(o));
