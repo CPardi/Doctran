@@ -1,5 +1,6 @@
 namespace Doctran.ParsingElements.Scope
 {
+    using System;
     using Parsing;
 
     public abstract class LocalScope : Scope
@@ -11,7 +12,10 @@ namespace Doctran.ParsingElements.Scope
 
         protected IScope ParentScope => (this.Object as IContained)?.AncestorOfType<IHasScope>()?.Scope;
 
-        public override bool GetObjectFromIdentifier<T>(Identifier identifier, out T obj) 
-            => this.GetObjectFromLocalStorage<T>(identifier, out obj) || (this.ParentScope?.GetObjectFromIdentifier(identifier, out obj) ?? false);
+        public override bool Exists<T>(Identifier identifier)
+         => this.ExistsInLocalStorage<T>(identifier) || (this.ParentScope?.Exists<T>(identifier) ?? false);
+
+        public override bool GetObjectByIdentifier<T>(Identifier identifier, out T obj)
+            => this.GetObjectFromLocalStorage(identifier, out obj) || (this.ParentScope?.GetObjectByIdentifier(identifier, out obj) ?? false);
     }
 }

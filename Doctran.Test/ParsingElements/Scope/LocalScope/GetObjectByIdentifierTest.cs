@@ -1,6 +1,5 @@
 ﻿namespace Doctran.Test.ParsingElements.Scope.LocalScope
 {
-    using System;
     using System.Collections.Generic;
     using Doctran.Parsing;
     using Doctran.ParsingElements;
@@ -8,24 +7,31 @@
     using NUnit.Framework;
 
     [TestFixture]
-    public class GetObjectFromIdentifierTest
+    public class GetObjectByIdentifierTest
     {
+        private static readonly IdentifiableUnit Unit1 = new IdentifiableUnit(null, "Unit1");
+
+        private static readonly IdentifiableUnit Unit2 = new IdentifiableUnit(null, "Unit2");
+
+        private static readonly IEnumerable<IdentifierObjectPair> InScopeArray = new[] { new IdentifierObjectPair(Unit1.Identifier, Unit1), new IdentifierObjectPair(Unit2.Identifier, Unit2) };
+
+        private static readonly ScopeCalculator GetLocalScope = p => InScopeArray;
+
+        private static readonly MyLocalScope Gs = new MyLocalScope(null, GetLocalScope);
+
         [Test]
-        public void SetAndRetrieve()
+        public void InvalidRetrieve_WithExceptionThrowOverload()
         {
-            var unit1 = new IdentifiableUnit(null, "Unit1");
-            var unit2 = new IdentifiableUnit(null, "Unit2");
-            var inScopeArray = new[] { new IdentifierObjectPair(unit1.Identifier, unit1), new IdentifierObjectPair(unit2.Identifier, unit2) };
+            IdentifiableUnit obj = null;
+            Assert.Throws(typeof(TraverserException), () => obj = Gs.GetObjectByIdentifier<IdentifiableUnit>(new CaseSensitiveId("Unit3")), "Found non-existant object 'Unit3'.");
+        }
 
-            ScopeCalculator getLocalScope = p => inScopeArray;
-
-            var gs = new MyLocalScope(null, getLocalScope);
-
+        [Test]
+        public void InvalidRetrieve_WithTryGetOverload()
+        {
             IdentifiableUnit obj;
-            Assert.IsTrue(gs.GetObjectFromIdentifier(new CaseSensitiveId("Unit1"), out obj), "Cound not find 'Unit1'.");
-            Assert.AreEqual(unit1, obj);
-
-            Assert.IsFalse(gs.GetObjectFromIdentifier(new CaseSensitiveId("Unit3"), out obj), "Found non-existant object 'Unit3'.");
+            Assert.IsFalse(Gs.GetObjectByIdentifier(new CaseSensitiveId("Unit3"), out obj), "Found non-existant object 'Unit3'.");
+            Assert.IsNull(obj);
         }
 
         [Test]
@@ -47,22 +53,38 @@
             unit0.AddSubObjects(new[] { unit1, unit2 });
 
             // Create local scope
-            ScopeCalculator getLocalScope = p => new [] { new IdentifierObjectPair(unit1.Identifier, unit1), new IdentifierObjectPair(unit2.Identifier, unit2) };
+            ScopeCalculator getLocalScope = p => new[] { new IdentifierObjectPair(unit1.Identifier, unit1), new IdentifierObjectPair(unit2.Identifier, unit2) };
             var myLocalScope = new MyLocalScope(unit1, getLocalScope);
 
             // Check object from local scope.
             IHasIdentifier obj1;
-            Assert.IsTrue(myLocalScope.GetObjectFromIdentifier(new CaseSensitiveId("Unit1"), out obj1), "Cound not find 'Unit1'.");
+            Assert.IsTrue(myLocalScope.GetObjectByIdentifier(new CaseSensitiveId("Unit1"), out obj1), "Cound not find 'Unit1'.");
             Assert.AreEqual(unit1, obj1);
 
             // Check object from global scope.
             IHasIdentifier obj3;
-            Assert.IsTrue(myLocalScope.GetObjectFromIdentifier(new CaseSensitiveId("Unit3"), out obj3), "Cound not find 'Unit3'.");
+            Assert.IsTrue(myLocalScope.GetObjectByIdentifier(new CaseSensitiveId("Unit3"), out obj3), "Cound not find 'Unit3'.");
             Assert.AreEqual(unit3, obj3);
 
             // Check for non-existant object.
             IHasIdentifier obj5;
-            Assert.IsFalse(myLocalScope.GetObjectFromIdentifier(new CaseSensitiveId("Unit5"), out obj5), "Found non-existing object 'Unit5'.");
+            Assert.IsFalse(myLocalScope.GetObjectByIdentifier(new CaseSensitiveId("Unit5"), out obj5), "Found non-existing object 'Unit5'.");
+        }
+
+        [Test]
+        public void ValidRetrieve_WithExceptionThrowOverload()
+        {
+            IdentifiableUnit obj = null;
+            Assert.DoesNotThrow(() => obj = Gs.GetObjectByIdentifier<IdentifiableUnit>(new CaseSensitiveId("Unit1")), "Cound not find 'Unit1'.");
+            Assert.AreEqual(Unit1, obj);
+        }
+
+        [Test]
+        public void ValidRetrieve_WithTryGetOverload()
+        {
+            IdentifiableUnit obj;
+            Assert.IsTrue(Gs.GetObjectByIdentifier(new CaseSensitiveId("Unit1"), out obj), "Cound not find 'Unit1'.");
+            Assert.AreEqual(Unit1, obj);
         }
 
         private class IdentifiableUnit : IHasIdentifier, IContained

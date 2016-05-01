@@ -64,7 +64,7 @@
     <Compile Include="ParsingElements\FortranBlocks\TestUtilities\TestingUtils.cs" />
     <Compile Include="ParsingElements\Identifier\EqualsTest.cs" />
     <Compile Include="ParsingElements\Scope\GlobalScope\GetObjectFromIdentifierTest.cs" />
-    <Compile Include="ParsingElements\Scope\LocalScope\GetObjectFromIdentifierTest.cs" />
+    <Compile Include="ParsingElements\Scope\LocalScope\GetObjectByIdentifierTest.cs" />
     <Compile Include="ParsingElements\Traversal\TraverserActions\AssignDescriptionsTest.cs" />
     <Compile Include="ParsingElements\Traversal\TraverserActions\CheckAncestorTest.cs" />
     <Compile Include="ParsingElements\Traversal\TraverserActions\CheckParentTest.cs" />
