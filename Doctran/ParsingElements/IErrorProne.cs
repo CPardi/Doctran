@@ -5,6 +5,6 @@ namespace Doctran.ParsingElements
 
     public interface IErrorProne
     {
-        void ForceValidity(out IList<Exception> fixedErrors);
+        void ForceValidity(IList<Exception> fixedErrors);
     }
 }
