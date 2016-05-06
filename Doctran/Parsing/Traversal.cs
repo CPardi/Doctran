@@ -7,8 +7,13 @@
 
 namespace Doctran.Parsing
 {
+    using System;
+    using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Linq;
+    using Helper;
+    using ParsingElements;
+    using ParsingElements.FortranObjects;
 
     /// <summary>
     ///     Provides methods to traverse a project tree.
@@ -28,6 +33,24 @@ namespace Doctran.Parsing
             return SelfOrAncestorOfType<T>(contained.Parent);
         }
 
+        public static IEnumerable<T> Find<T>(this Project project, Identifier identifier)
+            where T : IHasIdentifier
+        {
+            var result = new List<T>();
+            Action<T, IErrorListener<TraverserException>> func = (o, e) =>
+            {
+                if (o.Identifier == identifier)
+                {
+                    result.Add(o);
+                }
+            };
+
+            new Traverser("Find", new TraverserAction<T>(func))
+                .Go(project);
+
+            return result;
+        }
+
         /// <summary>
         ///     Search <paramref name="contained" /> and its the ancestors to check if it is an instance of type
         ///     <typeparamref name="T" />.
@@ -43,7 +66,7 @@ namespace Doctran.Parsing
                 return null;
             }
 
-            IFortranObject current = contained;
+            var current = contained;
             var currentT = contained as T;
             while (current != null && currentT == null)
             {

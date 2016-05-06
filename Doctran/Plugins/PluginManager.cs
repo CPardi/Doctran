@@ -9,6 +9,7 @@ namespace Doctran.Plugins
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Text;
     using Helper;
@@ -16,7 +17,7 @@ namespace Doctran.Plugins
 
     public static class PluginManager
     {
-        public static AssemblyLoader AssemblyLoader { get; } = new AssemblyLoader(EnvVar.ExecPath + @"plugins");
+        public static AssemblyLoader AssemblyLoader { get; } = new AssemblyLoader(Path.Combine(EnvVar.ExecPath, @"plugins"));
 
         public static string InformationString
         {
@@ -40,7 +41,7 @@ namespace Doctran.Plugins
         public static void Initialize()
         {
             // Initialize plugins.
-            Plugins = AssemblyLoader.GetClassInstances<IPlugin>();
+            PluginManager.Plugins = AssemblyLoader.GetClassInstances<IPlugin>();
             foreach (var plugin in Plugins.OrderBy(p => p.LoadOrder()))
             {
                 plugin.Initialize();

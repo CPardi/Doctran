@@ -57,6 +57,10 @@
       <HintPath>..\packages\dotless.1.5.1\lib\dotless.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Functional.Maybe, Version=1.0.7.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Functional.Maybe.1.0.8\lib\portable-net40+win+MonoAndroid10+xamarinios10+MonoTouch10\Functional.Maybe.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="IKVM.OpenJDK.Charsets, Version=7.2.4630.5, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\..\Program Files\Saxonica\SaxonHE9.6N\bin\IKVM.OpenJDK.Charsets.dll</HintPath>

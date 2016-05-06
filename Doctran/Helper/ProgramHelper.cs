@@ -18,11 +18,11 @@ namespace Doctran.Helper
     using Utilitys;
     using Z.Collections.Extensions;
 
-    internal static class ProgramHelper
+    public static class ProgramHelper
     {
-        public static Project ParseProject(IEnumerable<string> sourceFiles, bool runInSerial)
+        public static Project ParseProject(IEnumerable<string> sourceFilePaths, bool runInSerial)
         {
-            var files = runInSerial ? sourceFiles : sourceFiles.AsParallel();
+            var files = runInSerial ? sourceFilePaths : sourceFilePaths.AsParallel();
             var languageList = new List<ILanguageParser>();
 
             var parsedFiles = files.Select(path =>

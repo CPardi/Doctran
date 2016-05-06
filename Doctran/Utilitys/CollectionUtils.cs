@@ -14,6 +14,18 @@ namespace Doctran.Utilitys
 
     public static class CollectionUtils
     {
+        /// <summary>
+        /// Return the differnce between two enumerations.
+        /// </summary>
+        /// <typeparam name="T">The type of objects in the enumerations.</typeparam>
+        /// <param name="this">A list of objects.</param>
+        /// <param name="that">A list of objects to remove from from <paramref name="this"/>.</param>
+        /// <returns>The list <paramref name="this"/> without items appearing in <paramref name="that"/>.</returns>
+        public static IEnumerable<T> Difference<T>(this IEnumerable<T> @this, IEnumerable<T> that)
+        {
+            return @this.Where(item => !that.Contains(item));
+        }
+
         public static void AddSubObject(List<IContained> subObjects, IContainer container, IContained contained)
         {
             contained.Parent = container;
