@@ -13,6 +13,7 @@ namespace Doctran.Helper
     using System.Linq;
     using System.Reflection;
     using Parsing;
+    using ParsingElements;
     using Reporting;
 
     public class AssemblyLoader

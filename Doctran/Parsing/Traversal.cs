@@ -37,7 +37,7 @@ namespace Doctran.Parsing
             where T : IHasIdentifier
         {
             var result = new List<T>();
-            Action<T, IErrorListener<TraverserException>> func = (o, e) =>
+            Action<T, IErrorListener<TraverserException>> subObjectSearch = (o, e) =>
             {
                 if (o.Identifier == identifier)
                 {
@@ -45,7 +45,22 @@ namespace Doctran.Parsing
                 }
             };
 
-            new Traverser("Find", new TraverserAction<T>(func))
+            Action<IQuasiContainer, IErrorListener<TraverserException>> quasiObjectSearch = (qo, e) =>
+            {
+                try
+                {
+                    result.AddRange(qo.QuasiObjects.OfType<T>().Where(o => o.Identifier == identifier));
+                }
+                catch (TraverserException)
+                {
+                    // Ignore any error if searching.
+                }
+            };
+
+            new Traverser(
+                "Find",
+                new TraverserAction<T>(subObjectSearch),
+                new TraverserAction<IQuasiContainer>(quasiObjectSearch))
                 .Go(project);
 
             return result;

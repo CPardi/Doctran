@@ -2,6 +2,7 @@ namespace Doctran.Test.XmlSerialization
 {
     using System.Collections.Generic;
     using Doctran.Parsing;
+    using Doctran.ParsingElements;
 
     internal class TestContainer : Container, ITestClass
     {

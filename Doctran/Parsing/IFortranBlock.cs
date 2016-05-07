@@ -9,6 +9,7 @@ namespace Doctran.Parsing
 {
     using System.Collections.Generic;
     using Helper;
+    using ParsingElements;
 
     public interface IFortranBlock
     {

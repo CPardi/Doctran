@@ -5,11 +5,11 @@
 //     file, You can obtain one at http://mozilla.org/MPL/2.0/.
 // </copyright>
 
-namespace Doctran.Parsing
+namespace Doctran.ParsingElements
 {
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
-    using ParsingElements;
+    using Parsing;
     using Utilitys;
 
     public abstract class Container : IContainer

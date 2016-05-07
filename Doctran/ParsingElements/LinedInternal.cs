@@ -5,11 +5,11 @@
 //     file, You can obtain one at http://mozilla.org/MPL/2.0/.
 // </copyright>
 
-namespace Doctran.Parsing
+namespace Doctran.ParsingElements
 {
     using System.Collections.Generic;
     using Helper;
-    using ParsingElements;
+    using Parsing;
 
     public abstract class LinedInternal : Container, IContained, IHasLines
     {

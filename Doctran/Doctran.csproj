@@ -154,7 +154,7 @@
     <Compile Include="ParsingElements\Traversal\TraverserActions.CheckAncestors.cs" />
     <Compile Include="ParsingElements\Traversal\TraverserActions.UniqueSourceNames.cs" />
     <Compile Include="ParsingElements\Traversal\TraverserActions.CheckParent.cs" />
-    <Compile Include="Parsing\Container.cs" />
+    <Compile Include="ParsingElements\Container.cs" />
     <Compile Include="Parsing\IContained.cs" />
     <Compile Include="Parsing\IContainer.cs" />
     <Compile Include="ParsingElements\Information\IInformationGroup.cs" />
@@ -162,6 +162,8 @@
     <Compile Include="ParsingElements\Traversal\TraverserActions.AssignDescriptions.cs" />
     <Compile Include="ParsingElements\Traversal\TraverserActions.CheckDescriptionLinkage.cs" />
     <Compile Include="ParsingElements\Traversal\TraverserActions.CheckUniqueness.cs" />
+    <Compile Include="ParsingElements\IUseCache.cs" />
+    <Compile Include="Parsing\IQuasiContainer.cs" />
     <Compile Include="Parsing\ParserException.cs" />
     <Compile Include="Input\ProjectFileOptions\UserPageOptionAttribute.cs" />
     <Compile Include="Input\ProjectFileOptions\MenuOptionAttribute.cs" />
@@ -202,7 +204,7 @@
     <Compile Include="ParsingElements\FortranObjects\InformationGroup.cs" />
     <Compile Include="ParsingElements\Traversal\TraverserActions.CheckValidity.cs" />
     <Compile Include="Parsing\IFortranBlock.cs" />
-    <Compile Include="Parsing\LinedInternal.cs" />
+    <Compile Include="ParsingElements\LinedInternal.cs" />
     <Compile Include="Plugins\IPlugin.cs" />
     <Compile Include="Helper\CompareRootTypes.cs" />
     <Compile Include="XmlSerialization\IGroupXElement.cs" />
