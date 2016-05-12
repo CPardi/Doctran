@@ -58,7 +58,7 @@ namespace Doctran.Test.ParsingElements.Traversal.TraverserActions
             public TestClass(string identifier, IEnumerable<IContained> subObjects)
                 : base(subObjects)
             {
-                this.Identifier = new CaseSensitiveId(identifier);
+                this.Identifier = new Identifier(identifier);
             }
 
             public IIdentifier Identifier { get; }

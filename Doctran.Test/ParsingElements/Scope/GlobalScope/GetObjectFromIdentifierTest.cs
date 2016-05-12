@@ -29,7 +29,7 @@
         public void RetrieveByInheritedType()
         {
             IHasIdentifier obj;
-            Assert.IsTrue(Gs.GetObjectByIdentifier(new CaseSensitiveId("Unit1"), out obj));
+            Assert.IsTrue(Gs.GetObjectByIdentifier(new Identifier("Unit1"), out obj));
             Assert.AreEqual(Unit1, obj);
         }
 
@@ -37,7 +37,7 @@
         public void RetrieveByTypeDifference()
         {
             ScopingUnit2 obj;
-            Assert.IsTrue(Gs.GetObjectByIdentifier(new CaseSensitiveId("Unit2"), out obj));
+            Assert.IsTrue(Gs.GetObjectByIdentifier(new Identifier("Unit2"), out obj));
             Assert.AreEqual(Unit2Dash, obj);
         }
 
@@ -45,7 +45,7 @@
         public void RetrieveExisting()
         {
             ScopingUnit obj;
-            Assert.IsTrue(Gs.GetObjectByIdentifier(new CaseSensitiveId("Unit1"), out obj));
+            Assert.IsTrue(Gs.GetObjectByIdentifier(new Identifier("Unit1"), out obj));
             Assert.AreEqual(Unit1, obj);
         }
 
@@ -53,14 +53,14 @@
         public void TryToRetrieveNonExisting()
         {
             ScopingUnit obj;
-            Assert.IsFalse(Gs.GetObjectByIdentifier(new CaseSensitiveId("Unit3"), out obj), "Found non-existing object 'Unit3'.");
+            Assert.IsFalse(Gs.GetObjectByIdentifier(new Identifier("Unit3"), out obj), "Found non-existing object 'Unit3'.");
         }
 
         private class ScopingUnit : IHasIdentifier
         {
             public ScopingUnit(string identifier)
             {
-                this.Identifier = new CaseSensitiveId(identifier);
+                this.Identifier = new Identifier(identifier);
             }
 
             public IIdentifier Identifier { get; }
@@ -72,7 +72,7 @@
         {
             public ScopingUnit2(string identifier)
             {
-                this.Identifier = new CaseSensitiveId(identifier);
+                this.Identifier = new Identifier(identifier);
             }
 
             public IIdentifier Identifier { get; }

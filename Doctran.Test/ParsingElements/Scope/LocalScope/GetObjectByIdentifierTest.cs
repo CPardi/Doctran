@@ -23,14 +23,14 @@
         public void InvalidRetrieve_WithExceptionThrowOverload()
         {
             IdentifiableUnit obj = null;
-            Assert.Throws(typeof(TraverserException), () => obj = Gs.GetObjectByIdentifier<IdentifiableUnit>(new CaseSensitiveId("Unit3")), "Found non-existant object 'Unit3'.");
+            Assert.Throws(typeof(TraverserException), () => obj = Gs.GetObjectByIdentifier<IdentifiableUnit>(new Identifier("Unit3")), "Found non-existant object 'Unit3'.");
         }
 
         [Test]
         public void InvalidRetrieve_WithTryGetOverload()
         {
             IdentifiableUnit obj;
-            Assert.IsFalse(Gs.GetObjectByIdentifier(new CaseSensitiveId("Unit3"), out obj), "Found non-existant object 'Unit3'.");
+            Assert.IsFalse(Gs.GetObjectByIdentifier(new Identifier("Unit3"), out obj), "Found non-existant object 'Unit3'.");
             Assert.IsNull(obj);
         }
 
@@ -58,24 +58,24 @@
 
             // Check object from local scope.
             IHasIdentifier obj1;
-            Assert.IsTrue(myLocalScope.GetObjectByIdentifier(new CaseSensitiveId("Unit1"), out obj1), "Cound not find 'Unit1'.");
+            Assert.IsTrue(myLocalScope.GetObjectByIdentifier(new Identifier("Unit1"), out obj1), "Cound not find 'Unit1'.");
             Assert.AreEqual(unit1, obj1);
 
             // Check object from global scope.
             IHasIdentifier obj3;
-            Assert.IsTrue(myLocalScope.GetObjectByIdentifier(new CaseSensitiveId("Unit3"), out obj3), "Cound not find 'Unit3'.");
+            Assert.IsTrue(myLocalScope.GetObjectByIdentifier(new Identifier("Unit3"), out obj3), "Cound not find 'Unit3'.");
             Assert.AreEqual(unit3, obj3);
 
             // Check for non-existant object.
             IHasIdentifier obj5;
-            Assert.IsFalse(myLocalScope.GetObjectByIdentifier(new CaseSensitiveId("Unit5"), out obj5), "Found non-existing object 'Unit5'.");
+            Assert.IsFalse(myLocalScope.GetObjectByIdentifier(new Identifier("Unit5"), out obj5), "Found non-existing object 'Unit5'.");
         }
 
         [Test]
         public void ValidRetrieve_WithExceptionThrowOverload()
         {
             IdentifiableUnit obj = null;
-            Assert.DoesNotThrow(() => obj = Gs.GetObjectByIdentifier<IdentifiableUnit>(new CaseSensitiveId("Unit1")), "Cound not find 'Unit1'.");
+            Assert.DoesNotThrow(() => obj = Gs.GetObjectByIdentifier<IdentifiableUnit>(new Identifier("Unit1")), "Cound not find 'Unit1'.");
             Assert.AreEqual(Unit1, obj);
         }
 
@@ -83,7 +83,7 @@
         public void ValidRetrieve_WithTryGetOverload()
         {
             IdentifiableUnit obj;
-            Assert.IsTrue(Gs.GetObjectByIdentifier(new CaseSensitiveId("Unit1"), out obj), "Cound not find 'Unit1'.");
+            Assert.IsTrue(Gs.GetObjectByIdentifier(new Identifier("Unit1"), out obj), "Cound not find 'Unit1'.");
             Assert.AreEqual(Unit1, obj);
         }
 
@@ -92,7 +92,7 @@
             public IdentifiableUnit(IContainer parent, string identifier)
             {
                 this.Parent = parent;
-                this.Identifier = new CaseSensitiveId(identifier);
+                this.Identifier = new Identifier(identifier);
             }
 
             public IIdentifier Identifier { get; }
