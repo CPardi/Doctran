@@ -1,29 +1,41 @@
-﻿namespace Doctran.ParsingElements
+namespace Doctran.ParsingElements
 {
-    public abstract class Identifier
+    /// <summary>
+    ///     Default implementation of <see cref="IIdentifier" />.
+    /// </summary>
+    public class Identifier : IIdentifier
     {
-        protected Identifier(string originalString)
+        public Identifier(string identifier)
         {
-            this.OriginalString = originalString;
+            this.OriginalString = identifier;
         }
 
         public string OriginalString { get; }
 
-        public static bool operator ==(Identifier obj1, Identifier obj2)
+        public static bool operator ==(Identifier obj1, IIdentifier obj2)
         {
             return obj1?.Equals(obj2) ?? false;
         }
 
-        public static bool operator !=(Identifier obj1, Identifier obj2)
-
+        public static bool operator !=(Identifier obj1, IIdentifier obj2)
         {
             return !obj1?.Equals(obj2) ?? false;
         }
 
-        public abstract override bool Equals(object obj);
+        public Identifier CreateAlias(string newIdentifier)
+        {
+            return new Identifier(newIdentifier);
+        }
 
-        public abstract override int GetHashCode();
+        public override bool Equals(object obj)
+        {
+            return this.OriginalString.Equals((obj as IIdentifier)?.OriginalString);
+        }
 
-        public abstract override string ToString();
+        public override int GetHashCode() => this.OriginalString.GetHashCode();
+
+        public override string ToString() => this.OriginalString;
+
+        IIdentifier IIdentifier.CreateAlias(string newIdentifier) => this.CreateAlias(newIdentifier);
     }
 }

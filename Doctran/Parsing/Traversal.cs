@@ -33,13 +33,13 @@ namespace Doctran.Parsing
             return SelfOrAncestorOfType<T>(contained.Parent);
         }
 
-        public static IEnumerable<T> Find<T>(this Project project, Identifier identifier)
+        public static IEnumerable<T> Find<T>(this Project project, IIdentifier identifier)
             where T : IHasIdentifier
         {
             var result = new List<T>();
             Action<T, IErrorListener<TraverserException>> subObjectSearch = (o, e) =>
             {
-                if (o.Identifier == identifier)
+                if (Equals(o.Identifier, identifier))
                 {
                     result.Add(o);
                 }
@@ -49,7 +49,7 @@ namespace Doctran.Parsing
             {
                 try
                 {
-                    result.AddRange(qo.QuasiObjects.OfType<T>().Where(o => o.Identifier == identifier));
+                    result.AddRange(qo.QuasiObjects.OfType<T>().Where(o => Equals(o.Identifier, identifier)));
                 }
                 catch (TraverserException)
                 {

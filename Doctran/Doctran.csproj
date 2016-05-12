@@ -142,6 +142,7 @@
     <Compile Include="ParsingElements\CaseSensitiveId.cs" />
     <Compile Include="ParsingElements\Identifier.cs" />
     <Compile Include="ParsingElements\IErrorProne.cs" />
+    <Compile Include="ParsingElements\IIdentifier.cs" />
     <Compile Include="ParsingElements\Scope\GlobalScope.cs" />
     <Compile Include="ParsingElements\Scope\IdentifierObjectPair.cs" />
     <Compile Include="ParsingElements\Scope\IHasScope.cs" />

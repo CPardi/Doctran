@@ -6,13 +6,13 @@
     {
         IEnumerable<IdentifierObjectPair> EntireScope { get; }
 
-        bool Exists<T>(Identifier identifier)
+        bool Exists<T>(IIdentifier identifier)
             where T : IHasIdentifier;
 
-        bool GetObjectByIdentifier<T>(Identifier identifier, out T obj)
+        bool GetObjectByIdentifier<T>(IIdentifier identifier, out T obj)
             where T : IHasIdentifier;
 
-        T GetObjectByIdentifier<T>(Identifier identifier)
+        T GetObjectByIdentifier<T>(IIdentifier identifier)
             where T : IHasIdentifier;
     }
 }

@@ -89,7 +89,7 @@ namespace Doctran.Test.ParsingElements.Traversal.TraverserActions
                 this.Identifier = new CaseSensitiveId(identifier);
             }
 
-            public Identifier Identifier { get; }
+            public IIdentifier Identifier { get; }
 
             public IContainer Parent { get; set; }
         }

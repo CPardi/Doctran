@@ -20,7 +20,7 @@ namespace Doctran.ParsingElements.Traversal
                     (obj, errLis) =>
                     {
                         // Return if OK.
-                        if ((obj.Parent as IHasIdentifier)?.Identifier == obj.LinkedTo)
+                        if (Equals((obj.Parent as IHasIdentifier)?.Identifier, obj.LinkedTo))
                         {
                             return;
                         }

@@ -20,7 +20,7 @@ namespace Doctran.ParsingElements.Scope
 
         private ScopeCalculator GetScopeItems { get; }
 
-        public abstract bool Exists<T>(Identifier identifier)
+        public abstract bool Exists<T>(IIdentifier identifier)
             where T : IHasIdentifier;
 
         /// <summary>
@@ -35,10 +35,10 @@ namespace Doctran.ParsingElements.Scope
         /// </param>
         /// <returns>The object of type <typeparamref name="T" /> that has identifier <paramref name="identifier" />.</returns>
         /// <exception cref="TraverserException">Thrown if no object with identifier is found.</exception>
-        public abstract bool GetObjectByIdentifier<T>(Identifier identifier, out T obj)
+        public abstract bool GetObjectByIdentifier<T>(IIdentifier identifier, out T obj)
             where T : IHasIdentifier;
 
-        public T GetObjectByIdentifier<T>(Identifier identifier)
+        public T GetObjectByIdentifier<T>(IIdentifier identifier)
             where T : IHasIdentifier
         {
             T obj;
@@ -50,17 +50,17 @@ namespace Doctran.ParsingElements.Scope
             return obj;
         }
 
-        protected bool ExistsInLocalStorage<T>(Identifier identifier)
+        protected bool ExistsInLocalStorage<T>(IIdentifier identifier)
             where T : IHasIdentifier
         {
             return this.EntireScope
-                .Any(pair => pair.Identifier == identifier && pair.Object is T);
+                .Any(pair => Equals(pair.Identifier, identifier) && pair.Object is T);
         }
 
-        protected bool GetObjectFromLocalStorage<T>(Identifier identifier, out T obj)
+        protected bool GetObjectFromLocalStorage<T>(IIdentifier identifier, out T obj)
         {
             obj = this.EntireScope
-                .Where(pair => pair.Identifier == identifier)
+                .Where(pair => Equals(pair.Identifier, identifier))
                 .Select(pair => pair.Object)
                 .OfType<T>()
                 .SingleOrDefault();

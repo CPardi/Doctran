@@ -11,6 +11,6 @@ namespace Doctran.ParsingElements
 
     public interface IHasIdentifier : IFortranObject
     {
-        Identifier Identifier { get; }
+        IIdentifier Identifier { get; }
     }
 }

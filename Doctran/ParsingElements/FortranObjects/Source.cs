@@ -19,7 +19,7 @@ namespace Doctran.ParsingElements.FortranObjects
             this.Language = language;
         }
 
-        public Identifier Identifier => new CaseSensitiveId($"{this.Language} source");
+        public IIdentifier Identifier => new CaseSensitiveId($"{this.Language} source");
 
         public string Language { get; }
     }

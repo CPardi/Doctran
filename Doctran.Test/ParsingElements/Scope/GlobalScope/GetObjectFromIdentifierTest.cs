@@ -63,7 +63,7 @@
                 this.Identifier = new CaseSensitiveId(identifier);
             }
 
-            public Identifier Identifier { get; }
+            public IIdentifier Identifier { get; }
 
             public string ObjectName => "Scoping Unit";
         }
@@ -75,7 +75,7 @@
                 this.Identifier = new CaseSensitiveId(identifier);
             }
 
-            public Identifier Identifier { get; }
+            public IIdentifier Identifier { get; }
 
             public string ObjectName => "Scoping Unit";
         }

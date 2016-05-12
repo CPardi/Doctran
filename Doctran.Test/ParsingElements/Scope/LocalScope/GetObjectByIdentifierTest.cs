@@ -95,7 +95,7 @@
                 this.Identifier = new CaseSensitiveId(identifier);
             }
 
-            public Identifier Identifier { get; }
+            public IIdentifier Identifier { get; }
 
             public string ObjectName => "Identifiable Unit";
 
