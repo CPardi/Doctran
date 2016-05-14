@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using Doctran.ParsingElements;
     using Doctran.ParsingElements.Scope;
+    using Doctran.Utilitys;
     using NUnit.Framework;
 
     [TestFixture]
@@ -63,6 +64,8 @@
                 this.Identifier = new Identifier(identifier);
             }
 
+            public string Guid { get; } = OtherUtils.GenerateGuid();
+
             public IIdentifier Identifier { get; }
 
             public string ObjectName => "Scoping Unit";
@@ -74,6 +77,8 @@
             {
                 this.Identifier = new Identifier(identifier);
             }
+
+            public string Guid { get; } = OtherUtils.GenerateGuid();
 
             public IIdentifier Identifier { get; }
 

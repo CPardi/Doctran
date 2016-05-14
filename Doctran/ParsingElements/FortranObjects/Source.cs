@@ -10,6 +10,7 @@ namespace Doctran.ParsingElements.FortranObjects
     using System.Collections.Generic;
     using Helper;
     using Parsing;
+    using Utilitys;
 
     public class Source : LinedInternal, ISource
     {
@@ -18,6 +19,8 @@ namespace Doctran.ParsingElements.FortranObjects
         {
             this.Language = language;
         }
+
+        public string Guid { get; } = OtherUtils.GenerateGuid();
 
         public IIdentifier Identifier => new Identifier($"{this.Language} source");
 

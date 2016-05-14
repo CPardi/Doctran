@@ -37,6 +37,8 @@ namespace Doctran.ParsingElements.FortranObjects
 
         public IIdentifier Identifier => new Identifier(this.Name);
 
+        public string Guid { get; } = OtherUtils.GenerateGuid();
+
         public string Language { get; }
 
         public DateTime LastModified => _info.LastWriteTime;

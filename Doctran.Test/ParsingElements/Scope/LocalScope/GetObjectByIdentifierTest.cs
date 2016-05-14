@@ -4,6 +4,7 @@
     using Doctran.Parsing;
     using Doctran.ParsingElements;
     using Doctran.ParsingElements.Scope;
+    using Doctran.Utilitys;
     using NUnit.Framework;
 
     [TestFixture]
@@ -94,6 +95,8 @@
                 this.Parent = parent;
                 this.Identifier = new Identifier(identifier);
             }
+
+            public string Guid { get; } = OtherUtils.GenerateGuid();
 
             public IIdentifier Identifier { get; }
 

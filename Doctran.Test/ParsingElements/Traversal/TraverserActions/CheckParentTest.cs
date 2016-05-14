@@ -14,6 +14,7 @@ namespace Doctran.Test.ParsingElements.Traversal.TraverserActions
     using Doctran.ParsingElements;
     using Doctran.ParsingElements.FortranObjects;
     using Doctran.ParsingElements.Traversal;
+    using Doctran.Utilitys;
     using NUnit.Framework;
     using Parsing;
 
@@ -88,6 +89,8 @@ namespace Doctran.Test.ParsingElements.Traversal.TraverserActions
             {
                 this.Identifier = new Identifier(identifier);
             }
+
+            public string Guid { get; } = OtherUtils.GenerateGuid();
 
             public IIdentifier Identifier { get; }
 
