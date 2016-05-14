@@ -1,7 +1,7 @@
 namespace Doctran.ParsingElements
 {
     /// <summary>
-    ///     Default implementation of <see cref="IIdentifier" />.
+    ///     Default implementation of <see cref="IIdentifier" />. It defines a case-sensitive identifier.
     /// </summary>
     public class Identifier : IIdentifier
     {
@@ -11,16 +11,6 @@ namespace Doctran.ParsingElements
         }
 
         public string OriginalString { get; }
-
-        public static bool operator ==(Identifier obj1, IIdentifier obj2)
-        {
-            return obj1?.Equals(obj2) ?? false;
-        }
-
-        public static bool operator !=(Identifier obj1, IIdentifier obj2)
-        {
-            return !obj1?.Equals(obj2) ?? false;
-        }
 
         public Identifier CreateAlias(string newIdentifier)
         {

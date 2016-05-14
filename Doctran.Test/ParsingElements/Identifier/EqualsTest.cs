@@ -14,7 +14,6 @@
 
             Assert.IsTrue(Equals(ident1, ident1Dash));
             Assert.IsTrue(ident1.Equals(ident1Dash));
-            Assert.IsTrue(ident1 == ident1Dash);
         }
 
         [Test]
@@ -25,7 +24,6 @@
 
             Assert.IsFalse(Equals(ident1, ident2));
             Assert.IsFalse(ident1.Equals(ident2));
-            Assert.IsFalse(ident1 == ident2);
         }
 
         [Test]
@@ -36,7 +34,6 @@
 
             Assert.IsFalse(Equals(ident1, ident2));
             Assert.IsFalse(ident1.Equals(ident2));
-            Assert.IsFalse(ident1 == ident2);
         }
     }
 }

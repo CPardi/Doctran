@@ -77,7 +77,7 @@ namespace Doctran.Helper
             var pathList = paths as IList<string> ?? paths.ToList();
             var distinctPaths = pathList.Distinct().ToList();
 
-            if (distinctPaths.Count != pathList.Count())
+            if (distinctPaths.Count != pathList.Count)
             {
                 Report.Warning(p => p.DescriptionReason(ReportGenre.FileRead, "Duplicate source file paths have been removed."));
             }

@@ -83,7 +83,7 @@ namespace Doctran.Utilitys
                     prevIndex = currentIndex + 1;
                 }
 
-                if (currentIndex == text.Count() - 1)
+                if (currentIndex == text.Length - 1)
                 {
                     delimiteredText.Add(text.Substring(prevIndex, currentIndex - prevIndex + 1).Trim());
                 }
