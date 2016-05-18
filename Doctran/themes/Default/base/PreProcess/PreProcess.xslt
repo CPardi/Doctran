@@ -28,7 +28,7 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
                 <xsl:value-of select="doctran:prefix-from-path(Path)"/>
             </Prefix>
             <href>
-                <xsl:value-of select="doctran:normalize-path(Path)"/>
+                <xsl:value-of select="doctran:normalize-uri(Path)"/>
             </href>
             <xsl:apply-templates mode="AddNavigation" select="@* | node()"/>
         </xsl:copy>
@@ -67,7 +67,7 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
 
         <xsl:value-of>
             <xsl:text></xsl:text>
-            <xsl:for-each select="tokenize(doctran:normalize-path($path), '[\\ /]')[position() > 1]">
+            <xsl:for-each select="tokenize(doctran:normalize-uri($path), '[\\ /]')[position() > 1]">
                 <xsl:text>../</xsl:text>
             </xsl:for-each>
         </xsl:value-of>

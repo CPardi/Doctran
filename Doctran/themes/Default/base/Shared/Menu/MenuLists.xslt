@@ -47,7 +47,7 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
         <!-- The maximum depth of sub-objects that should be listed. -->
 
         <li>
-            <a data-parent="{../../doctran:object-name(.)}" data-type="{doctran:block-name(.)}" href="{href}">
+            <a data-parent="{../../doctran:object-name(.)}" data-type="{doctran:block-name(.)}" href="{doctran:object-uri(.)}">
                 <xsl:apply-templates mode="Name" select="."/>
             </a>
             <ul>

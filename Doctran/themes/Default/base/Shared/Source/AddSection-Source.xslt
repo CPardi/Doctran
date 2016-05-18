@@ -23,7 +23,7 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
         <h2>Source</h2>
         <p>
             <xsl:text>The source code shown below is taken from '</xsl:text>
-            <a href="{$file/href}">
+            <a href="{doctran:object-uri($file)}">
                 <xsl:value-of select="doctran:object-name($file)"/>
             </a>
             <xsl:text>'.</xsl:text>

@@ -18,7 +18,7 @@ namespace Doctran.XmlSerialization
 
         bool ShouldCreate(object from);
 
-        IEnumerable<XElement> Create(object from);
+        IEnumerable<XObject> Create(object from);
     }
 
     public interface IInterfaceXElements<in TParsed>
@@ -28,6 +28,6 @@ namespace Doctran.XmlSerialization
 
         bool ShouldCreate(TParsed from);
 
-        IEnumerable<XElement> Create(TParsed from);
+        IEnumerable<XObject> Create(TParsed from);
     }
 }

@@ -20,7 +20,7 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
             <h1>Breadcrumbs</h1>
             <ul>
                 <li>
-                    <a href="{'index.html'}">
+                    <a href="index.html">
                         <xsl:value-of select="doctran:object-name(/Project)"/>
                     </a>
                 </li>
@@ -56,7 +56,7 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
                 <xsl:choose>
                     <xsl:when test="not($active) and (Access!='Private' or not(Access))">
                         <a>
-                            <xsl:attribute name="href" select="href"/>
+                            <xsl:attribute name="href" select="doctran:object-uri(.)"/>
                             <xsl:apply-templates mode="Name" select="."/>
                         </a>
                     </xsl:when>

@@ -6,14 +6,17 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
  file, You can obtain one at http://mozilla.org/MPL/2.0/.
 -->
 
-<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:stylesheet version="2.0" exclude-result-prefixes="doctran xs xsl"
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                xmlns:doctran="http://www.doctran.co.uk">
 
     <xsl:template mode="TableCell" match="*">
         <xsl:value-of select="node()"/>
     </xsl:template>
 
     <xsl:template mode="TableCell" match="Name">
-        <a href="{../href}">
+        <a href="{doctran:object-uri(..)}">
             <xsl:apply-templates mode="Name" select=".."/>
         </a>
     </xsl:template>

@@ -56,9 +56,11 @@ namespace Doctran
             var project = GetProject(options.SourceFilePaths, options.RunInSerial);
 
             var xmlOutputter = GetXmlOutputter(project, new XElement("Information", options.XmlInformation));
+            var sourceDocument = CreateSourceXml(project);
             if (options.SaveXmls)
             {
                 xmlOutputter.SaveToDisk(EnvVar.XmlOutputPath(options.OutputDirectory, "project.xml"));
+                sourceDocument.Save(EnvVar.XmlOutputPath(options.OutputDirectory, "source.xml"), SaveOptions.DisableFormatting);
             }
 
             if (options.NoOutput)
@@ -67,7 +69,7 @@ namespace Doctran
             }
 
             OutputTheme(options);
-            OutputHtml(project, xmlOutputter, options);
+            OutputHtml(xmlOutputter, sourceDocument, options);
 
             SaveTiming("total", TotalStopwatch.ElapsedMilliseconds);
             if (options.TimeOutput)
@@ -81,7 +83,7 @@ namespace Doctran
             return 0;
         }
 
-        private static XmlReader CreateSourceXml(Project project, Options options)
+        private static XDocument CreateSourceXml(Project project)
         {
             var xElements =
                 from source in project.Sources
@@ -90,13 +92,9 @@ namespace Doctran
                     "File",
                     new XElement("Identifier", source.Identifier),
                     highlighter.HighlightLines(source.OriginalLines));
-            var reader = new XDocument(new XElement("Source", xElements)).CreateReader();
-            if (options.SaveXmls)
-            {
-                new XDocument(new XElement("Source", xElements)).Save(EnvVar.XmlOutputPath(options.OutputDirectory, "source.xml"));
-            }
-
-            return reader;
+            var sourceDocument = new XDocument(new XElement("Source", xElements));
+            
+            return sourceDocument;
         }
 
         private static void GetCommandLineOptions(string[] args, Options options)
@@ -162,28 +160,18 @@ namespace Doctran
             return xmlOutputter;
         }
 
-        private static void OutputHtml(Project project, XmlOutputter xmlOutputter, Options options)
+        private static void OutputHtml(XmlOutputter xmlOutputter, XDocument sourceDocument, Options options)
         {
             StageStopwatch.Restart();
             Report.NewStatus("Generating htmls... ");
 
-            var reader = CreateSourceXml(project, options);
-
-            var preProcess = new XsltRunner(Path.Combine(EnvVar.ExecPath, "themes", options.ThemeName, "main_pre.xslt"));
-            var preProcessResult = preProcess.Run(xmlOutputter.XDocument, Path.GetFullPath(options.OutputDirectory));
-
-            if (options.SaveXmls)
-            {
-                preProcessResult.Save(EnvVar.XmlOutputPath(options.OutputDirectory, "documentation_file.xml"));
-            }
-
             var htmlOutputter = new XsltRunner(Path.Combine(EnvVar.ExecPath, "themes", options.ThemeName, "main.xslt"));
 
             htmlOutputter.Run(
-                preProcessResult.ToXDocument(),
+                xmlOutputter.XDocument,
                 Path.GetFullPath(options.OutputDirectory) + EnvVar.Slash,
                 new KeyValuePair<string, object>("verbose", Report.Verbose),
-                new KeyValuePair<string, object>("source", reader));
+                new KeyValuePair<string, object>("source", sourceDocument.CreateReader()));
 
             SaveTiming("html-output", StageStopwatch.ElapsedMilliseconds);
             Report.ContinueStatus("Done");

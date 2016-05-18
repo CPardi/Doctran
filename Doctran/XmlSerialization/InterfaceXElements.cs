@@ -45,7 +45,7 @@ namespace Doctran.XmlSerialization
         ///     Specifies that an interface should generate an enumeration of nodes as specified by <paramref name="func" />.
         /// </summary>
         /// <param name="func">Maps an interface to an enumeration of XML nodes.</param>
-        public InterfaceXElements(Func<TParsed, IEnumerable<XElement>> func)
+        public InterfaceXElements(Func<TParsed, IEnumerable<XObject>> func)
             : this(func, parsed => true)
         {
         }
@@ -57,7 +57,7 @@ namespace Doctran.XmlSerialization
         /// </summary>
         /// <param name="func">Maps an interface to an enumeration of XML nodes.</param>
         /// <param name="predicate">If this condition is met, then the specified XML will be generated.</param>
-        public InterfaceXElements(Func<TParsed, IEnumerable<XElement>> func, Predicate<TParsed> predicate)
+        public InterfaceXElements(Func<TParsed, IEnumerable<XObject>> func, Predicate<TParsed> predicate)
         {
             if (!typeof(TParsed).IsInterface)
             {
@@ -71,15 +71,15 @@ namespace Doctran.XmlSerialization
 
         public Type ForType => typeof(TParsed);
 
-        private Func<TParsed, IEnumerable<XElement>> Func { get; }
+        private Func<TParsed, IEnumerable<XObject>> Func { get; }
 
         private Predicate<TParsed> Predicate { get; }
 
-        public IEnumerable<XElement> Create(TParsed from) => this.Func(@from);
+        public IEnumerable<XObject> Create(TParsed from) => this.Func(@from);
 
         public bool ShouldCreate(TParsed from) => this.Predicate(@from);
 
-        IEnumerable<XElement> IInterfaceXElements.Create(object from) => this.Create((TParsed)from);
+        IEnumerable<XObject> IInterfaceXElements.Create(object from) => this.Create((TParsed)from);
 
         bool IInterfaceXElements.ShouldCreate(object from) => this.Predicate((TParsed)from);
     }

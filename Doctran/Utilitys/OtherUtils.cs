@@ -81,6 +81,8 @@ namespace Doctran.Utilitys
             return new Tuple<string, string>(htmlPath, htmlText);
         }
 
+
+
         public static IEnumerable<T> NonZeroOrThrow<T>(this IEnumerable<T> @this, Func<T, bool> predicate, Exception e)
         {
             var result = @this
@@ -89,6 +91,20 @@ namespace Doctran.Utilitys
             if (!result.Any())
             {
                 throw e;
+            }
+
+            return result;
+        }
+
+        public static IEnumerable<T> NonZeroOrDo<T>(this IEnumerable<T> @this, Func<T, bool> predicate, Action action)
+        {
+            var result = @this
+                .Where(predicate)
+                .ToList();
+
+            if (!result.Any())
+            {
+                action();
             }
 
             return result;

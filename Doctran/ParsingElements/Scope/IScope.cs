@@ -1,10 +1,14 @@
 ﻿namespace Doctran.ParsingElements.Scope
 {
     using System.Collections.Generic;
+    using Helper;
+    using Parsing;
 
     public interface IScope
     {
         IEnumerable<IdentifierObjectPair> EntireScope { get; }
+
+        IErrorListener<TraverserException> ErrorListener { get; set; }
 
         bool Exists<T>(IIdentifier identifier)
             where T : IHasIdentifier;

@@ -6,7 +6,9 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
  file, You can obtain one at http://mozilla.org/MPL/2.0/.
 -->
 
-<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                xmlns:doctran="http://www.doctran.co.uk">
 
     <xsl:template name="EachObject">
         <xsl:param name="Object"/>
@@ -24,7 +26,7 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
         <xsl:param name="AdditionalContent-head"/>
         <xsl:param name="AdditionalContent-body"/>
 
-        <xsl:result-document href="{href}">
+        <xsl:result-document href="{doctran:object-uri(.)}">
             <xsl:call-template name="Page">
 
                 <xsl:with-param name="title">

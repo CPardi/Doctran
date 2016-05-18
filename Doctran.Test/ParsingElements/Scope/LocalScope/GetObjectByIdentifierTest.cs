@@ -108,9 +108,12 @@
         private class MyLocalScope : LocalScope
         {
             public MyLocalScope(IFortranObject obj, ScopeCalculator getScopeItems)
-                : base(obj, getScopeItems)
+                : base(obj)
             {
+                this.GetScopeItems = getScopeItems;
             }
+
+            public override ScopeCalculator GetScopeItems { get; }
         }
 
         private class ScopingUnit : Container, IHasScope

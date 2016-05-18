@@ -5,8 +5,8 @@ namespace Doctran.ParsingElements.Scope
 
     public abstract class LocalScope : Scope
     {
-        protected LocalScope(IFortranObject obj, ScopeCalculator getScopeItems)
-            : base(obj, getScopeItems)
+        protected LocalScope(IFortranObject obj)
+            : base(obj)
         {
         }
 

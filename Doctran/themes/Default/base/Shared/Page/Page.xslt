@@ -15,10 +15,10 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
         <xsl:param name="Content-head"/>
         <xsl:param name="Content-body"/>
         <xsl:param name="title"/>
-        <xsl:param name="prefix" select="Prefix"/>
+        <xsl:param name="prefix" select="doctran:root-uri(.)"/>
 
         <xsl:if test="$verbose >= 3">
-            <xsl:message select="concat('Outputting: ',href)"/>
+            <xsl:message select="concat('Outputting: ',doctran:object-uri(.))"/>
         </xsl:if>
 
         <xsl:call-template name="PostProcessLinks">

@@ -22,7 +22,7 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
     <xsl:template mode="MenuPostProcess" match="a">
         <xsl:param name="href"/>
 
-        <xsl:variable name="normalPath" select="doctran:normalize-path(@href)"/>
+        <xsl:variable name="normalPath" select="doctran:normalize-uri(@href)"/>
 
         <xsl:copy>
             <!-- If the current page path is the same as this link, then add the "active" class. -->
