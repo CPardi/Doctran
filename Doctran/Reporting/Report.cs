@@ -158,6 +158,23 @@ namespace Doctran.Reporting
             }
         }
 
+        public static void Warning(Action<ConsolePublisher> publish, Exception e)
+        {
+            if (Verbose < 2)
+            {
+                return;
+            }
+
+            var publisher = new ConsolePublisher();
+            publish(publisher);
+            publisher.Publish(ReportSeverity.Warning);
+
+            if (ReportMode == ReportMode.Debug)
+            {
+                throw e;
+            }
+        }
+
         public static void Warnings<TException>(Action<ConsolePublisher, TException> publish, IEnumerable<TException> warnings)
             where TException : Exception
         {

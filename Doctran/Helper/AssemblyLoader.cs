@@ -30,7 +30,7 @@ namespace Doctran.Helper
             }
             catch (IOException e)
             {
-                Report.Warning(pub => pub.DescriptionReasonLocation(ReportGenre.Plugin, $"Plugin directory is invalid. {e.Message}", pluginPath));
+                Report.Warning(pub => pub.DescriptionReasonLocation(ReportGenre.Plugin, $"Plugin directory is invalid. {e.Message}", pluginPath), e);
                 return;
             }
 
@@ -43,7 +43,7 @@ namespace Doctran.Helper
                 }
                 catch (IOException e)
                 {
-                    Report.Warning(pub => pub.DescriptionReasonLocation(ReportGenre.Plugin, $"Could not load plugin. {e.Message}", pluginPath));
+                    Report.Warning(pub => pub.DescriptionReasonLocation(ReportGenre.Plugin, $"Could not load plugin. {e.Message}", pluginPath), e);
                     return;
                 }
             }

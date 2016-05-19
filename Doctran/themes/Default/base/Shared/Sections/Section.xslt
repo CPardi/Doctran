@@ -22,7 +22,7 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
 				<xsl:attribute name="class" select="concat('section ', $class)"/>
 			</xsl:if>
 			<h2>
-				<xsl:value-of select="$name"/>
+				<xsl:copy-of select="$name/node()"/>
 			</h2>
 			<div class="content unfolded">
 				<xsl:copy-of select="$content"/>

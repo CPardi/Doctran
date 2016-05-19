@@ -19,21 +19,23 @@ namespace Doctran.ParsingElements.Scope
         public void Error(TraverserException exception)
         {
             var lines = GetLines(exception);
-            var firstLine = lines?.First().Number ?? -1;
-            var lastLine = lines?.Last().Number ?? -1;
+            var firstLine = lines?.FirstOrDefault().Number ?? -1;
+            var lastLine = lines?.LastOrDefault().Number ?? -1;
             var filePath = GetFilePath(exception);
             Report.Warning(
-                p => { p.DescriptionReasonLocation(ReportGenre.Traversal, exception.Message, StringUtils.LocationString(firstLine, lastLine, filePath)); });
+                p => { p.DescriptionReasonLocation(ReportGenre.Traversal, exception.Message, StringUtils.LocationString(firstLine, lastLine, filePath)); },
+                exception);
         }
 
         public void Warning(TraverserException exception)
         {
             var lines = GetLines(exception);
-            var firstLine = lines?.First().Number ?? -1;
-            var lastLine = lines?.Last().Number ?? -1;
+            var firstLine = lines?.FirstOrDefault().Number ?? -1;
+            var lastLine = lines?.LastOrDefault().Number ?? -1;
             var filePath = GetFilePath(exception);
             Report.Warning(
-                p => { p.DescriptionReasonLocation(ReportGenre.Traversal, exception.Message, StringUtils.LocationString(firstLine, lastLine, filePath)); });
+                p => { p.DescriptionReasonLocation(ReportGenre.Traversal, exception.Message, StringUtils.LocationString(firstLine, lastLine, filePath)); },
+                exception);
         }
 
         private static string GetFilePath(TraverserException exception)
@@ -42,8 +44,7 @@ namespace Doctran.ParsingElements.Scope
         }
 
         private static List<FileLine> GetLines(TraverserException exception)
-        {
-            return (exception.Cause as IHasLines)?.Lines ?? ((exception.Cause as IContained)?.Parent as IHasLines)?.Lines;
-        }
+            => (exception.Cause as IHasLines)?.Lines
+               ?? ((exception.Cause as IContained)?.Parent as IHasLines)?.Lines;
     }
 }

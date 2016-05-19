@@ -18,16 +18,16 @@ namespace Doctran.ParsingElements.Scope
 
         public IErrorListener<TraverserException> ErrorListener { get; set; } = new StandardErrorListener<TraverserException>();
 
-        protected IFortranObject Object { get; }
-
         public abstract ScopeCalculator GetScopeItems { get; }
+
+        protected IFortranObject Object { get; }
 
         public abstract bool Exists<T>(IIdentifier identifier)
             where T : IHasIdentifier;
 
         /// <summary>
         ///     Given an identifier, returns the corresponding object in the scope. Will pass a <see cref="TraverserException" />
-        ///     to the <see cref="ErrorListener"/> if identifier not found or if object not of type <typeparamref name="T" />.
+        ///     to the <see cref="ErrorListener" /> if identifier not found or if object not of type <typeparamref name="T" />.
         /// </summary>
         /// <typeparam name="T">The expected type of the object.</typeparam>
         /// <param name="identifier">The identifier of the object.</param>

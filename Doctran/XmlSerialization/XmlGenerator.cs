@@ -113,7 +113,10 @@ namespace Doctran.XmlSerialization
                     // Try to get the interface XElement creator. If it exists and instructed by it to create the XElements, then do it.
                     IInterfaceXElements interfaceXElements;
                     _interfaceXmlDictionary.TryGetValue(inter, out interfaceXElements);
-                    return interfaceXElements != null && interfaceXElements.ShouldCreate(obj) ? interfaceXElements.Create(obj) : CollectionUtils.Empty<XElement>();
+                    IEnumerable<XObject> xObjectsFromInterface;
+                    return interfaceXElements != null && interfaceXElements.ShouldCreate(obj) && (xObjectsFromInterface = interfaceXElements.Create(obj)) != null
+                        ? xObjectsFromInterface
+                        : CollectionUtils.Empty<XElement>();
                 }));
 
                 xElement.Add(this.Navigate(obj));

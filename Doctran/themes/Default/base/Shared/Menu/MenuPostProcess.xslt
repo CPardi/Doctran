@@ -15,25 +15,25 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
         <xsl:param name="menu"/>
 
         <xsl:apply-templates mode="MenuPostProcess" select="$menu">
-            <xsl:with-param name="href" select="href"/>
+            <xsl:with-param name="uri" select="doctran:object-uri(.)"/>
         </xsl:apply-templates>
     </xsl:template>
 
     <xsl:template mode="MenuPostProcess" match="a">
-        <xsl:param name="href"/>
+        <xsl:param name="uri"/>
 
         <xsl:variable name="normalPath" select="doctran:normalize-uri(@href)"/>
 
         <xsl:copy>
             <!-- If the current page path is the same as this link, then add the "active" class. -->
-            <xsl:attribute name="class" select="if ($normalPath=$href) then 'active' else ''"/>
+            <xsl:attribute name="class" select="if ($normalPath=$uri) then 'active' else ''"/>
 
             <!-- Add the prefix to make link relative to the index page. -->
             <xsl:attribute name="href" select="$normalPath"/>
 
             <!-- And recurse... -->
             <xsl:apply-templates mode="MenuPostProcess" select="@*[local-name()!='href'] | node()">
-                <xsl:with-param name="href" select="$href"/>
+                <xsl:with-param name="uri" select="$uri"/>
             </xsl:apply-templates>
         </xsl:copy>
 
@@ -43,10 +43,10 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
     </xsl:template>
 
     <xsl:template mode="MenuPostProcess" match="ul[parent::ul]">
-        <xsl:param name="href"/>
+        <xsl:param name="uri"/>
 
         <xsl:apply-templates mode="MenuPostProcess" select="@* | node()">
-            <xsl:with-param name="href" select="$href"/>
+            <xsl:with-param name="uri" select="$uri"/>
         </xsl:apply-templates>
     </xsl:template>
 
@@ -54,11 +54,11 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
     </xsl:template>
 
     <xsl:template mode="MenuPostProcess" match="@* | node()">
-        <xsl:param name="href"/>
+        <xsl:param name="uri"/>
 
         <xsl:copy>
             <xsl:apply-templates mode="MenuPostProcess" select="@* | node()">
-                <xsl:with-param name="href" select="$href"/>
+                <xsl:with-param name="uri" select="$uri"/>
             </xsl:apply-templates>
         </xsl:copy>
     </xsl:template>
