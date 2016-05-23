@@ -21,11 +21,9 @@ namespace Doctran.XmlSerialization
         IEnumerable<XObject> Create(object from);
     }
 
-    public interface IInterfaceXElements<in TParsed>
+    public interface IInterfaceXElements<in TParsed> : IInterfaceXElements
         where TParsed : IFortranObject
     {
-        Type ForType { get; }
-
         bool ShouldCreate(TParsed from);
 
         IEnumerable<XObject> Create(TParsed from);

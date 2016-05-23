@@ -13,7 +13,7 @@ namespace Doctran.XmlSerialization
     using Parsing;
     using Utilitys;
 
-    public class InterfaceXElements<TParsed> : IInterfaceXElements, IInterfaceXElements<TParsed>
+    public class InterfaceXElements<TParsed> : IInterfaceXElements<TParsed>
         where TParsed : IFortranObject
     {
         /// <summary>
@@ -22,8 +22,9 @@ namespace Doctran.XmlSerialization
         /// </summary>
         /// <param name="name">The XML node's name.</param>
         /// <param name="getValue">The XML node's value.</param>
-        public InterfaceXElements(string name, Func<TParsed, string> getValue)
-            : this(name, getValue, parsed => true)
+        /// <param name="xmlTraversalType">The type fo object to traverse when create the XML.</param>
+        public InterfaceXElements(string name, Func<TParsed, string> getValue, XmlTraversalType xmlTraversalType = XmlTraversalType.HeadOrSubObjects)
+            : this(name, getValue, parsed => true, xmlTraversalType)
         {
         }
 
@@ -35,8 +36,9 @@ namespace Doctran.XmlSerialization
         /// <param name="name">The XML node's name.</param>
         /// <param name="getValue">The XML node's value.</param>
         /// <param name="predicate">If this condition is met, then the specified XML will be generated.</param>
-        public InterfaceXElements(string name, Func<TParsed, string> getValue, Predicate<TParsed> predicate)
-            : this(from => new XElement(name, getValue(@from)).Singlet(), predicate)
+        /// <param name="xmlTraversalType">The type fo object to traverse when create the XML.</param>
+        public InterfaceXElements(string name, Func<TParsed, string> getValue, Predicate<TParsed> predicate, XmlTraversalType xmlTraversalType = XmlTraversalType.HeadOrSubObjects)
+            : this(from => new XElement(name, getValue(@from)).Singlet(), predicate, xmlTraversalType)
         {
         }
 
@@ -45,8 +47,9 @@ namespace Doctran.XmlSerialization
         ///     Specifies that an interface should generate an enumeration of nodes as specified by <paramref name="func" />.
         /// </summary>
         /// <param name="func">Maps an interface to an enumeration of XML nodes.</param>
-        public InterfaceXElements(Func<TParsed, IEnumerable<XObject>> func)
-            : this(func, parsed => true)
+        /// <param name="xmlTraversalType">The type fo object to traverse when create the XML.</param>
+        public InterfaceXElements(Func<TParsed, IEnumerable<XObject>> func, XmlTraversalType xmlTraversalType = XmlTraversalType.HeadOrSubObjects)
+            : this(func, parsed => true, xmlTraversalType)
         {
         }
 
@@ -57,7 +60,8 @@ namespace Doctran.XmlSerialization
         /// </summary>
         /// <param name="func">Maps an interface to an enumeration of XML nodes.</param>
         /// <param name="predicate">If this condition is met, then the specified XML will be generated.</param>
-        public InterfaceXElements(Func<TParsed, IEnumerable<XObject>> func, Predicate<TParsed> predicate)
+        /// <param name="xmlTraversalType">The type fo object to traverse when create the XML.</param>
+        public InterfaceXElements(Func<TParsed, IEnumerable<XObject>> func, Predicate<TParsed> predicate, XmlTraversalType xmlTraversalType = XmlTraversalType.HeadOrSubObjects)
         {
             if (!typeof(TParsed).IsInterface)
             {
@@ -67,7 +71,10 @@ namespace Doctran.XmlSerialization
 
             this.Func = func;
             this.Predicate = predicate;
+            this.XmlTraversalType = xmlTraversalType;
         }
+
+        public XmlTraversalType XmlTraversalType { get; }
 
         public Type ForType => typeof(TParsed);
 

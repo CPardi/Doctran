@@ -11,24 +11,29 @@ namespace Doctran.XmlSerialization
     using System.Xml.Linq;
     using Parsing;
 
-    public class ObjectXElement<TParsed> : IObjectXElement, IObjectXElement<TParsed>
+    public class ObjectXElement<TParsed> : IObjectXElement<TParsed>
         where TParsed : IFortranObject
     {
-        public ObjectXElement(string name)
+        public ObjectXElement(string name, XmlTraversalType xmlTraversalType = XmlTraversalType.HeadOrSubObjects)
         {
+            this.XmlTraversalType = xmlTraversalType;
             this.Func = from => new XElement(name);
         }
 
-        public ObjectXElement(Func<TParsed, XElement> func)
+        public ObjectXElement(Func<TParsed, XElement> func, XmlTraversalType xmlTraversalType = XmlTraversalType.HeadOrSubObjects)
         {
             this.Func = func;
+            this.XmlTraversalType = xmlTraversalType;
         }
 
-        public ObjectXElement(Func<TParsed, XElement> func, Predicate<TParsed> predicate)
+        public ObjectXElement(Func<TParsed, XElement> func, Predicate<TParsed> predicate, XmlTraversalType xmlTraversalType = XmlTraversalType.HeadOrSubObjects)
         {
             this.Func = func;
             this.Predicate = predicate;
+            this.XmlTraversalType = xmlTraversalType;
         }
+
+        public XmlTraversalType XmlTraversalType { get; }
 
         public Type ForType => typeof(TParsed);
 

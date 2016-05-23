@@ -15,15 +15,19 @@ namespace Doctran.XmlSerialization
     public class GroupXElement<TParsed> : IGroupXElement
         where TParsed : IFortranObject
     {
-        public GroupXElement(string name)
+        public GroupXElement(string name, XmlTraversalType xmlTraversalType = XmlTraversalType.HeadOrSubObjects)
         {
+            this.XmlTraversalType = xmlTraversalType;
             this.Func = xElements => new XElement(name, xElements);
         }
 
-        public GroupXElement(Func<IEnumerable<XElement>, XElement> func)
+        public GroupXElement(Func<IEnumerable<XElement>, XElement> func, XmlTraversalType xmlTraversalType)
         {
             this.Func = func;
+            this.XmlTraversalType = xmlTraversalType;
         }
+
+        public XmlTraversalType XmlTraversalType { get; }
 
         public Type ForType => typeof(TParsed);
 

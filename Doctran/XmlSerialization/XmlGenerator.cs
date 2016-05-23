@@ -15,13 +15,63 @@ namespace Doctran.XmlSerialization
     using Parsing;
     using Utilitys;
 
+    public enum XmlTraversalType
+    {
+        HeadOrSubObjects,
+        QuasiObjects
+    }
+
+    internal class XmlGeneratorKey
+    {
+        public XmlGeneratorKey(Type type, XmlTraversalType xmlTraversalType)
+        {
+            this.Type = type;
+            this.XmlTraversalType = xmlTraversalType;
+        }
+
+        public Type Type { get; }
+
+        public XmlTraversalType XmlTraversalType { get; }
+    }
+
+    internal class KeyComparer : EqualityComparer<XmlGeneratorKey>
+    {
+        private readonly CompareRootTypes _compareRootTypes;
+
+        public KeyComparer(IEnumerable<Type> types)
+        {
+             _compareRootTypes = new CompareRootTypes(types);
+        }
+
+        public override bool Equals(XmlGeneratorKey x, XmlGeneratorKey y)
+        {
+            return Equals(x.XmlTraversalType, y.XmlTraversalType) && _compareRootTypes.Equals(x.Type, y.Type);
+        }
+
+        public override int GetHashCode(XmlGeneratorKey obj)
+        {
+            if (obj == null)
+            {
+                return 0;
+            }
+
+            unchecked
+            {
+                var hash = 17;
+                hash = (hash * 31) + _compareRootTypes.GetHashCode(obj.Type);
+                hash = (hash * 31) + obj.XmlTraversalType.GetHashCode();
+                return hash;
+            }
+        }
+    }
+
     public class XmlGenerator
     {
         private readonly Dictionary<Type, IInterfaceXElements> _interfaceXmlDictionary;
 
         private readonly Dictionary<Type, Func<IEnumerable<XElement>, XElement>> _toGroupXmlDictionary;
 
-        private readonly Dictionary<Type, Func<IFortranObject, XElement>> _toXmlDictionary;
+        private readonly Dictionary<XmlGeneratorKey, Func<IFortranObject, XElement>> _toXmlDictionary;
 
         public XmlGenerator(
             IEnumerable<IInterfaceXElements> interfaceXElements,
@@ -32,9 +82,9 @@ namespace Doctran.XmlSerialization
 
             var objectXElementsList = objectXElements as IObjectXElement[] ?? objectXElements.ToArray();
             _toXmlDictionary = objectXElementsList.ToDictionary(
-                obj => obj.ForType,
+                obj => new XmlGeneratorKey(obj.ForType, obj.XmlTraversalType),
                 obj => new Func<IFortranObject, XElement>(obj.Create),
-                new CompareRootTypes(objectXElementsList.Select(oxe => oxe.ForType)));
+                new KeyComparer(objectXElementsList.Select(oxe => oxe.ForType)));
 
             var groupXElementsArray = toGroupXElements as IGroupXElement[] ?? toGroupXElements.ToArray();
             _toGroupXmlDictionary = groupXElementsArray.ToDictionary(
@@ -44,7 +94,7 @@ namespace Doctran.XmlSerialization
 
             var keys =
                 from groupType in _toGroupXmlDictionary.Keys
-                where !_toXmlDictionary.Keys.Any(objectType => IsParentOrThis(groupType, objectType))
+                where !_toXmlDictionary.Keys.Any(objectType => IsParentOrThis(groupType, objectType.Type))
                 select groupType;
 
             var str = string.Concat(keys.Select((k, i) => i == 0 ? $"'{k.Name}'" : $", '{k.Name}'"));
@@ -54,7 +104,7 @@ namespace Doctran.XmlSerialization
             }
         }
 
-        public XElement CreateForObject(IFortranObject obj) => this.GetXmlValue(new[] { obj }).Single();
+        public XElement CreateForObject(IFortranObject obj) => this.GetXmlValue(new[] { obj }, XmlTraversalType.HeadOrSubObjects).Single();
 
         private static bool IsParentOrThis(Type ofThisType, Type type)
         {
@@ -73,7 +123,7 @@ namespace Doctran.XmlSerialization
                 || type.GetInterfaces().Count(i => IsParentOrThis(ofThisType, i)) > 0;
         }
 
-        private IEnumerable<XElement> GetValue(Type groupType, IEnumerable<IFortranObject> objsOfType)
+        private IEnumerable<XElement> GetValue(Type groupType, IEnumerable<IFortranObject> objsOfType, XmlTraversalType xmlTraversalType)
         {
             Func<IEnumerable<XElement>, XElement> toGroupXml;
             _toGroupXmlDictionary.TryGetValue(groupType, out toGroupXml);
@@ -83,17 +133,18 @@ namespace Doctran.XmlSerialization
             var objHasXml =
                 (from obj in objsOfTypeList
                     let objType = obj.GetType()
-                    where _toXmlDictionary.ContainsKey(objType) || objType.GetInterfaces().Any(inter => _toXmlDictionary.ContainsKey(inter))
+                    where _toXmlDictionary.ContainsKey(new XmlGeneratorKey(objType, xmlTraversalType))
+                          || objType.GetInterfaces().Any(inter => _toXmlDictionary.ContainsKey(new XmlGeneratorKey(inter, xmlTraversalType)))
                     select objsOfTypeList).Any();
 
             return objHasXml
                 ? toGroupXml != null
-                    ? CollectionUtils.Singlet(toGroupXml(this.GetXmlValue(objsOfTypeList)))
-                    : this.GetXmlValue(objsOfTypeList)
+                    ? CollectionUtils.Singlet(toGroupXml(this.GetXmlValue(objsOfTypeList, xmlTraversalType)))
+                    : this.GetXmlValue(objsOfTypeList, xmlTraversalType)
                 : this.SkipLevel(objsOfTypeList);
         }
 
-        private IEnumerable<XElement> GetXmlValue(IEnumerable<IFortranObject> objsOfType)
+        private IEnumerable<XElement> GetXmlValue(IEnumerable<IFortranObject> objsOfType, XmlTraversalType xmlTraversalType)
         {
             var xElements = new List<XElement>();
             foreach (var obj in objsOfType)
@@ -102,7 +153,7 @@ namespace Doctran.XmlSerialization
 
                 Func<IFortranObject, XElement> toXml;
 
-                if (!_toXmlDictionary.TryGetValue(objType, out toXml))
+                if (!_toXmlDictionary.TryGetValue(new XmlGeneratorKey(objType, xmlTraversalType), out toXml))
                 {
                     continue;
                 }
@@ -126,17 +177,32 @@ namespace Doctran.XmlSerialization
             return xElements.Where(xElement => xElement != null);
         }
 
-        private Type KeySelector(IFortranObject obj)
-        {
-            var objType = obj.GetType();
-            return objType.GetInterfaces().SingleOrDefault(inter => _toGroupXmlDictionary.ContainsKey(inter)) ?? objType;
-        }
+        //private XmlGeneratorKey KeySelector(IFortranObject obj, XmlTraversalType xmlTraversalType)
+        //{
+        //    var objType = obj.GetType();
+        //    return new XmlGeneratorKey(objType.GetInterfaces().SingleOrDefault(inter => _toGroupXmlDictionary.ContainsKey(new XmlGeneratorKey(inter, xmlTraversalType))) ?? objType, xmlTraversalType);
+        //}
 
         private IEnumerable<XElement> Navigate(IFortranObject obj)
-            => (obj as IContainer)?.SubObjects.GroupBy(this.KeySelector).SelectMany(objsOfType => this.GetValue(objsOfType.Key, objsOfType)) ?? new XElement[] { };
+        {
+            var xElementList = new List<XElement>();
+            xElementList.AddRange(
+                (obj as IContainer)
+                    ?.SubObjects
+                    .GroupBy(obj1 => obj1.GetType())
+                    .SelectMany(objsOfType => this.GetValue(objsOfType.Key, objsOfType, XmlTraversalType.HeadOrSubObjects))
+                ?? new XElement[] { });
+
+            xElementList.AddRange(
+                (obj as IQuasiContainer)
+                    ?.QuasiObjects
+                    .GroupBy(obj1 => obj1.GetType())
+                    .SelectMany(objsOfType => this.GetValue(objsOfType.Key, objsOfType, XmlTraversalType.QuasiObjects))
+                ?? new XElement[] { });
+
+            return xElementList;
+        }
 
         private IEnumerable<XElement> SkipLevel(IEnumerable<IFortranObject> objsOfType) => objsOfType.SelectMany(this.Navigate);
-
-        
     }
 }
