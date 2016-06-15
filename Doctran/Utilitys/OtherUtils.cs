@@ -110,6 +110,20 @@ namespace Doctran.Utilitys
             return result;
         }
 
+        public static T SingleOrDefaultOrDo<T>(this IEnumerable<T> @this, Action action)
+            where T : class
+        {
+            var result = @this.ToList();
+
+            if (result.Count > 1)
+            {
+                action();
+                return null;
+            }
+
+            return result.SingleOrDefault();
+        }
+
         public static string ReadAllText(string path)
         {
             try

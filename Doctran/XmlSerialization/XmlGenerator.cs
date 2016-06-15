@@ -21,7 +21,7 @@ namespace Doctran.XmlSerialization
 
         private readonly Dictionary<Type, Func<IEnumerable<XElement>, XElement>> _toGroupXmlDictionary;
 
-        private readonly Dictionary<XmlGeneratorKey, Func<IFortranObject, XElement>> _toXmlDictionary;
+        private readonly Dictionary<XmlGeneratorKey, XmlGeneratorValue> _toXmlDictionary;
 
         public XmlGenerator(
             IEnumerable<IInterfaceXElements> interfaceXElements,
@@ -33,7 +33,7 @@ namespace Doctran.XmlSerialization
             var objectXElementsList = objectXElements as IObjectXElement[] ?? objectXElements.ToArray();
             _toXmlDictionary = objectXElementsList.ToDictionary(
                 obj => new XmlGeneratorKey(obj.ForType, obj.XmlTraversalType),
-                obj => new Func<IFortranObject, XElement>(obj.Create),
+                obj => new XmlGeneratorValue(obj.GetXmlCreationType, obj.Create),
                 new KeyComparer(objectXElementsList.Select(oxe => oxe.ForType)));
 
             var groupXElementsArray = toGroupXElements as IGroupXElement[] ?? toGroupXElements.ToArray();
@@ -92,7 +92,7 @@ namespace Doctran.XmlSerialization
                 ? toGroupXml != null && xmlValue != null && xmlValue.Any()
                     ? CollectionUtils.Singlet(toGroupXml(xmlValue))
                     : xmlValue
-                : this.SkipLevel(objsOfTypeList);
+                : CollectionUtils.Empty<XElement>();
         }
 
         private IEnumerable<XElement> GetXmlValue(IEnumerable<IFortranObject> objsOfType, XmlTraversalType xmlTraversalType)
@@ -102,26 +102,29 @@ namespace Doctran.XmlSerialization
             {
                 var objType = obj.GetType();
 
-                Func<IFortranObject, XElement> toXml;
+                XmlGeneratorValue xmlGeneratorValue;
 
-                if (!_toXmlDictionary.TryGetValue(new XmlGeneratorKey(objType, xmlTraversalType), out toXml))
+                if (!_toXmlDictionary.TryGetValue(new XmlGeneratorKey(objType, xmlTraversalType), out xmlGeneratorValue))
                 {
                     continue;
                 }
 
-                var xElement = toXml(obj);
-                xElement?.Add(objType.GetInterfaces().Select(inter =>
+                var xElement = xmlGeneratorValue.Create(obj);
+                if (xmlGeneratorValue.GetXmlCreationType(obj) == XmlCreationType.All)
                 {
-                    // Try to get the interface XElement creator. If it exists and instructed by it to create the XElements, then do it.
-                    IInterfaceXElements interfaceXElements;
-                    _interfaceXmlDictionary.TryGetValue(inter, out interfaceXElements);
-                    IEnumerable<XObject> xObjectsFromInterface;
-                    return interfaceXElements != null && interfaceXElements.ShouldCreate(obj) && (xObjectsFromInterface = interfaceXElements.Create(obj)) != null
-                        ? xObjectsFromInterface
-                        : CollectionUtils.Empty<XElement>();
-                }));
+                    xElement?.Add(objType.GetInterfaces().Select(inter =>
+                    {
+                        // Try to get the interface XElement creator. If it exists and instructed by it to create the XElements, then do it.
+                        IInterfaceXElements interfaceXElements;
+                        _interfaceXmlDictionary.TryGetValue(inter, out interfaceXElements);
+                        IEnumerable<XObject> xObjectsFromInterface;
+                        return interfaceXElements != null && interfaceXElements.ShouldCreate(obj) && (xObjectsFromInterface = interfaceXElements.Create(obj)) != null
+                            ? xObjectsFromInterface
+                            : CollectionUtils.Empty<XElement>();
+                    }));
+                    xElement?.Add(this.Navigate(obj));
+                }
 
-                xElement?.Add(this.Navigate(obj));
                 xElements.Add(xElement);
             }
 

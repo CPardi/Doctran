@@ -4,6 +4,7 @@ namespace Doctran.ParsingElements.Scope
     using System.Linq;
     using Helper;
     using Parsing;
+    using Doctran.Utilitys;
 
     public abstract class Scope : IScope
     {
@@ -23,7 +24,7 @@ namespace Doctran.ParsingElements.Scope
         protected IFortranObject Object { get; }
 
         public abstract bool Exists<T>(IIdentifier identifier)
-            where T : IHasIdentifier;
+            where T : class, IHasIdentifier;
 
         /// <summary>
         ///     Given an identifier, returns the corresponding object in the scope. Will pass a <see cref="TraverserException" />
@@ -37,15 +38,15 @@ namespace Doctran.ParsingElements.Scope
         /// </param>
         /// <returns>The object of type <typeparamref name="T" /> that has identifier <paramref name="identifier" />.</returns>
         public abstract bool GetObjectByIdentifier<T>(IIdentifier identifier, out T obj)
-            where T : IHasIdentifier;
+            where T : class, IHasIdentifier;
 
         public T GetObjectByIdentifier<T>(IIdentifier identifier)
-            where T : IHasIdentifier
+            where T : class, IHasIdentifier
         {
             T obj;
             if (!this.GetObjectByIdentifier(identifier, out obj))
             {
-                this.ErrorListener.Error(new TraverserException(this.Object, $"Could not find identifier '{identifier}' in scope."));
+                this.ErrorListener.Error(new TraverserException(this.Object, $"Could not find identifier '{identifier}' in scope of '{(this.Object as IHasIdentifier)?.Identifier}'."));
             }
 
             return obj;
@@ -59,12 +60,13 @@ namespace Doctran.ParsingElements.Scope
         }
 
         protected bool GetObjectFromLocalStorage<T>(IIdentifier identifier, out T obj)
+            where T : class
         {
             obj = this.EntireScope
                 .Where(pair => Equals(pair.Identifier, identifier))
                 .Select(pair => pair.Object)
                 .OfType<T>()
-                .SingleOrDefault();
+                .SingleOrDefaultOrDo(() => this.ErrorListener.Error(new TraverserException(this.Object, $"Multiple definitions of '{identifier}' found.")));
             return obj != null;
         }
     }

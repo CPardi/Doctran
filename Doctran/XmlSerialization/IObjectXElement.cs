@@ -13,16 +13,20 @@ namespace Doctran.XmlSerialization
 
     public interface IObjectXElement
     {
-        XmlTraversalType XmlTraversalType { get; }
-
         Type ForType { get; }
 
+        XmlTraversalType XmlTraversalType { get; }
+
         XElement Create(object from);
+
+        XmlCreationType GetXmlCreationType(object from);
     }
 
     public interface IObjectXElement<in TParsed> : IObjectXElement
         where TParsed : IFortranObject
     {
         XElement Create(TParsed from);
+
+        XmlCreationType GetXmlCreationType(TParsed from);
     }
 }

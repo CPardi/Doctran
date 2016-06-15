@@ -10,6 +10,7 @@ namespace Doctran.ParsingElements.Traversal
     using System.Linq;
     using FortranObjects;
     using Parsing;
+    using Scope;
 
     /// <summary>
     /// Contains a number of <see cref="ITraverserAction"/> for use with <see cref="Traverser"/>.
@@ -42,14 +43,12 @@ namespace Doctran.ParsingElements.Traversal
                         }
 
                         var objsForDescription =
-                            obj.Parent.SubObjects
-                                .Where(sObjs => Equals((sObjs as IHasIdentifier)?.Identifier, linkedTo));
+                            obj.SelfOrAncestorOfType<IHasScope>()
+                                .Scope
+                                .GetObjectByIdentifier<IHasIdentifier>(linkedTo);
 
                         obj.Parent.RemoveSubObject(obj);
-                        foreach (var match in objsForDescription.OfType<IContainer>())
-                        {
-                            match.AddSubObject(new Description(obj.Basic, obj.Detailed, obj.Lines));
-                        }
+                        (objsForDescription as IContainer)?.AddSubObject(new Description(obj.Basic, obj.Detailed, obj.Lines));
                     });
             }
         }

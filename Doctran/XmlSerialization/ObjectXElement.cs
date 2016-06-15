@@ -33,9 +33,11 @@ namespace Doctran.XmlSerialization
             this.XmlTraversalType = xmlTraversalType;
         }
 
-        public XmlTraversalType XmlTraversalType { get; }
-
         public Type ForType => typeof(TParsed);
+
+        public Func<TParsed, XmlCreationType> XmlCreationType { get; set; } = from => XmlSerialization.XmlCreationType.All;
+
+        public XmlTraversalType XmlTraversalType { get; }
 
         private Func<TParsed, XElement> Func { get; }
 
@@ -51,6 +53,13 @@ namespace Doctran.XmlSerialization
             return this.Func(from);
         }
 
+        public XmlCreationType GetXmlCreationType(TParsed from)
+        {
+            return this.XmlCreationType(from);
+        }
+
         XElement IObjectXElement.Create(object from) => this.Create((TParsed)from);
+
+        XmlCreationType IObjectXElement.GetXmlCreationType(object from) => this.GetXmlCreationType((TParsed)from);
     }
 }

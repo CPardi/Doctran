@@ -220,6 +220,7 @@
     <Compile Include="Parsing\TraverserAction.cs" />
     <Compile Include="Parsing\Traverser.cs" />
     <Compile Include="XmlSerialization\TypeParameterException.cs" />
+    <Compile Include="XmlSerialization\XmlCreationType.cs" />
     <Compile Include="XmlSerialization\XmlGenerator.cs" />
     <Compile Include="Plugins\DocumentationManager.cs" />
     <Compile Include="Utilitys\CollectionUtils.cs" />
@@ -252,6 +253,7 @@
     <Compile Include="Utilitys\StringUtils.cs" />
     <Compile Include="Utilitys\XmlUtils.cs" />
     <Compile Include="XmlSerialization\XmlGeneratorKey.cs" />
+    <Compile Include="XmlSerialization\XmlGeneratorValue.cs" />
     <Compile Include="XmlSerialization\XmlTraversalType.cs" />
   </ItemGroup>
   <ItemGroup>

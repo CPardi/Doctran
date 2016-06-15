@@ -11,12 +11,12 @@
         IErrorListener<TraverserException> ErrorListener { get; set; }
 
         bool Exists<T>(IIdentifier identifier)
-            where T : IHasIdentifier;
+            where T : class, IHasIdentifier;
 
         bool GetObjectByIdentifier<T>(IIdentifier identifier, out T obj)
-            where T : IHasIdentifier;
+            where T : class, IHasIdentifier;
 
         T GetObjectByIdentifier<T>(IIdentifier identifier)
-            where T : IHasIdentifier;
+            where T : class, IHasIdentifier;
     }
 }
