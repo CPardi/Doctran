@@ -12,15 +12,9 @@ namespace Doctran.ParsingElements
 
         public string OriginalString { get; }
 
-        public Identifier CreateAlias(string newIdentifier)
-        {
-            return new Identifier(newIdentifier);
-        }
+        public Identifier CreateAlias(string newIdentifier) => new Identifier(newIdentifier);
 
-        public override bool Equals(object obj)
-        {
-            return this.OriginalString.Equals((obj as IIdentifier)?.OriginalString);
-        }
+        public override bool Equals(object obj) => this.OriginalString.Equals((obj as IIdentifier)?.OriginalString);
 
         public override int GetHashCode() => this.OriginalString.GetHashCode();
 

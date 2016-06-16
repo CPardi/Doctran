@@ -53,11 +53,7 @@ namespace Doctran.ParsingElements.Scope
         }
 
         protected bool ExistsInLocalStorage<T>(IIdentifier identifier)
-            where T : IHasIdentifier
-        {
-            return this.EntireScope
-                .Any(pair => Equals(pair.Identifier, identifier) && pair.Object is T);
-        }
+            where T : IHasIdentifier => this.EntireScope.Any(pair => Equals(pair.Identifier, identifier) && pair.Object is T);
 
         protected bool GetObjectFromLocalStorage<T>(IIdentifier identifier, out T obj)
             where T : class

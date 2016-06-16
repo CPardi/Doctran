@@ -18,6 +18,12 @@ namespace Doctran.Parsing
             this.Cause = cause;
         }
 
+        public TraverserException(object cause, string message, Exception innerException)
+            : base(message, innerException)
+        {
+            this.Cause = cause;
+        }
+
         public object Cause { get; }
     }
 }

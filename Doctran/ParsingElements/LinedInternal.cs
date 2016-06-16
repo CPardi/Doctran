@@ -8,10 +8,14 @@
 namespace Doctran.ParsingElements
 {
     using System.Collections.Generic;
+    using System.Linq;
+    using FortranObjects;
+    using Functional.Maybe;
     using Helper;
     using Parsing;
+    using Scope;
 
-    public abstract class LinedInternal : Container, IContained, IHasLines
+    public abstract class LinedInternal : Container, IContained, IHasDescription, IHasLines
     {
         protected LinedInternal(IEnumerable<IContained> subObjects, List<FileLine> lines)
             : base(subObjects)
@@ -22,5 +26,14 @@ namespace Doctran.ParsingElements
         public List<FileLine> Lines { get; }
 
         public IContainer Parent { get; set; }
+
+        public virtual Maybe<IDescription> Description
+            => this.SubObjectsOfType<Description>().Cast<IDescription>().FirstMaybe()
+                .Or(() =>
+                {
+                    NamedDescription obj = null;
+                    (this as IHasScope)?.Scope.GetObjectByIdentifier((this as IHasIdentifier)?.Identifier, out obj);
+                    return (obj as IDescription)?.ToMaybe() ?? Maybe<IDescription>.Nothing;
+                });
     }
 }

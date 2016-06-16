@@ -11,8 +11,9 @@ namespace Doctran.ParsingElements.FortranObjects
     using System.Xml.Linq;
     using Helper;
     using Parsing;
+    using Utilitys;
 
-    public class NamedDescription : IDescription
+    public class NamedDescription : IDescription, IHasIdentifier
     {
         public NamedDescription(string linkedTo, XElement basic, XElement detailed, List<FileLine> lines)
         {
@@ -33,5 +34,9 @@ namespace Doctran.ParsingElements.FortranObjects
         public Identifier LinkedTo { get; }
 
         public IContainer Parent { get; set; }
+
+        public IIdentifier Identifier => this.LinkedTo;
+
+        public string Guid { get; } = OtherUtils.GenerateGuid();
     }
 }

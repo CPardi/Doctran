@@ -123,6 +123,7 @@
     <Compile Include="Helper\PathStorageMode.cs" />
     <Compile Include="Helper\ReportException.cs" />
     <Compile Include="Helper\ListenerAndAggregater.cs" />
+    <Compile Include="ParsingElements\IHasDescription.cs" />
     <Compile Include="ParsingElements\Scope\ScopeErrorReporter.cs" />
     <Compile Include="Helper\StandardErrorListener.cs" />
     <Compile Include="Helper\TypeSwitch.cs" />
