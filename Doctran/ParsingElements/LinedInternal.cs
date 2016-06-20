@@ -36,8 +36,8 @@ namespace Doctran.ParsingElements
                         return Maybe<IDescription>.Nothing;
                     }
 
-                    var d = (IDescription)this.SubObjectsOfType<NamedDescription>().FirstOrDefault(nd => Equals(nd.LinkedTo, objectIdentifier))
-                        ?? (IDescription)this.Parent.SubObjectsOfType<NamedDescription>().LastOrDefault(nd => Equals(nd.LinkedTo, objectIdentifier));
+                    var d = (IDescription)this.SubObjectsOfType<NamedDescription>().FirstOrDefault(nd => Equals(objectIdentifier, nd.LinkedTo))
+                        ?? (IDescription)this.Parent.SubObjectsOfType<NamedDescription>().LastOrDefault(nd => Equals(objectIdentifier, nd.LinkedTo));
                     return d.ToMaybe();
                 });
     }

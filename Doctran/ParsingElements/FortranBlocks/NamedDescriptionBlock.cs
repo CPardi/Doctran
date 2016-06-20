@@ -67,7 +67,7 @@ namespace Doctran.ParsingElements.FortranBlocks
             try
             {
                 var detailed = XmlUtils.WrapAndParse("Detailed", detailText);
-                return new NamedDescription(name.ToLower(), basic, detailed, lines).Singlet();
+                return new NamedDescription(name, basic, detailed, lines).Singlet();
             }
             catch (XmlException e)
             {
