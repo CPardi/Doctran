@@ -92,7 +92,7 @@ namespace Doctran.XmlSerialization
                 ? toGroupXml != null && xmlValue != null && xmlValue.Any()
                     ? CollectionUtils.Singlet(toGroupXml(xmlValue))
                     : xmlValue
-                : CollectionUtils.Empty<XElement>();
+                : this.SkipLevel(objsOfTypeList);
         }
 
         private IEnumerable<XElement> GetXmlValue(IEnumerable<IFortranObject> objsOfType, XmlTraversalType xmlTraversalType)

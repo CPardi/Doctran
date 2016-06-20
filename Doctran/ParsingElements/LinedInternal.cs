@@ -13,7 +13,6 @@ namespace Doctran.ParsingElements
     using Functional.Maybe;
     using Helper;
     using Parsing;
-    using Scope;
 
     public abstract class LinedInternal : Container, IContained, IHasDescription, IHasLines
     {
@@ -31,9 +30,15 @@ namespace Doctran.ParsingElements
             => this.SubObjectsOfType<Description>().Cast<IDescription>().FirstMaybe()
                 .Or(() =>
                 {
-                    NamedDescription obj = null;
-                    (this as IHasScope)?.Scope.GetObjectByIdentifier((this as IHasIdentifier)?.Identifier, out obj);
-                    return (obj as IDescription)?.ToMaybe() ?? Maybe<IDescription>.Nothing;
+                    var objectIdentifier = (this as IHasIdentifier)?.Identifier;
+                    if (objectIdentifier == null)
+                    {
+                        return Maybe<IDescription>.Nothing;
+                    }
+
+                    var d = (IDescription)this.SubObjectsOfType<NamedDescription>().FirstOrDefault(nd => Equals(nd.LinkedTo, objectIdentifier))
+                        ?? (IDescription)this.Parent.SubObjectsOfType<NamedDescription>().LastOrDefault(nd => Equals(nd.LinkedTo, objectIdentifier));
+                    return d.ToMaybe();
                 });
     }
 }

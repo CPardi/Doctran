@@ -13,7 +13,7 @@ namespace Doctran.ParsingElements.FortranObjects
     using Parsing;
     using Utilitys;
 
-    public class NamedDescription : IDescription, IHasIdentifier
+    public class NamedDescription : IDescription
     {
         public NamedDescription(string linkedTo, XElement basic, XElement detailed, List<FileLine> lines)
         {
@@ -34,8 +34,6 @@ namespace Doctran.ParsingElements.FortranObjects
         public Identifier LinkedTo { get; }
 
         public IContainer Parent { get; set; }
-
-        public IIdentifier Identifier => this.LinkedTo;
 
         public string Guid { get; } = OtherUtils.GenerateGuid();
     }

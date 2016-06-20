@@ -62,7 +62,7 @@ namespace Doctran.ParsingElements.Scope
                 .Where(pair => Equals(pair.Identifier, identifier))
                 .Select(pair => pair.Object)
                 .OfType<T>()
-                .SingleOrDefaultOrDo(() => this.ErrorListener.Error(new TraverserException(this.Object, $"Multiple definitions of '{identifier}' found.")));
+                .SingleOrDefaultOrDo(() => this.ErrorListener.Error(new TraverserException(this.Object, $"Multiple definitions of '{Names.OfType<T>()}::{identifier}' found.")));
             return obj != null;
         }
     }
