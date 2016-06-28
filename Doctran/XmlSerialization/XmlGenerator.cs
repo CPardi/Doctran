@@ -21,11 +21,11 @@ namespace Doctran.XmlSerialization
 
         private readonly Dictionary<Type, Func<IEnumerable<XElement>, XElement>> _toGroupXmlDictionary;
 
-        private readonly Dictionary<XmlGeneratorKey, XmlGeneratorValue> _toXmlDictionary;
+        private readonly Dictionary<XmlGeneratorKey, IObjectXBase> _toXmlDictionary;
 
         public XmlGenerator(
             IEnumerable<IInterfaceXElements> interfaceXElements,
-            IEnumerable<IObjectXElement> objectXElements,
+            IEnumerable<IObjectXBase> objectXElements,
             IEnumerable<IGroupXElement> toGroupXElements)
         {
             _interfaceXmlDictionary = interfaceXElements.ToDictionary(obj => obj.ForType);
@@ -33,7 +33,6 @@ namespace Doctran.XmlSerialization
             var objectXElementsList = objectXElements as IObjectXElement[] ?? objectXElements.ToArray();
             _toXmlDictionary = objectXElementsList.ToDictionary(
                 obj => new XmlGeneratorKey(obj.ForType, obj.XmlTraversalType),
-                obj => new XmlGeneratorValue(obj.GetXmlCreationType, obj.Create),
                 new KeyComparer(objectXElementsList.Select(oxe => oxe.ForType)));
 
             var groupXElementsArray = toGroupXElements as IGroupXElement[] ?? toGroupXElements.ToArray();
@@ -92,7 +91,8 @@ namespace Doctran.XmlSerialization
                 ? toGroupXml != null && xmlValue != null && xmlValue.Any()
                     ? CollectionUtils.Singlet(toGroupXml(xmlValue))
                     : xmlValue
-                : this.SkipLevel(objsOfTypeList);
+                : CollectionUtils.Empty<XElement>();
+            //: this.SkipLevel(objsOfTypeList);
         }
 
         private IEnumerable<XElement> GetXmlValue(IEnumerable<IFortranObject> objsOfType, XmlTraversalType xmlTraversalType)
@@ -102,15 +102,23 @@ namespace Doctran.XmlSerialization
             {
                 var objType = obj.GetType();
 
-                XmlGeneratorValue xmlGeneratorValue;
+                IObjectXBase objectXBase;
 
-                if (!_toXmlDictionary.TryGetValue(new XmlGeneratorKey(objType, xmlTraversalType), out xmlGeneratorValue))
+                if (!_toXmlDictionary.TryGetValue(new XmlGeneratorKey(objType, xmlTraversalType), out objectXBase))
                 {
                     continue;
                 }
 
-                var xElement = xmlGeneratorValue.Create(obj);
-                if (xmlGeneratorValue.GetXmlCreationType(obj) == XmlCreationType.All)
+                var objectXElement = objectXBase as IObjectXElement;
+
+                if (objectXElement == null)
+                {
+                    xElements.AddRange(this.Navigate(obj));
+                    continue;
+                }
+
+                var xElement = objectXElement.Create(obj);
+                if (objectXElement.GetXmlCreationType(obj) == XmlCreationType.All)
                 {
                     xElement?.Add(objType.GetInterfaces().Select(inter =>
                     {
@@ -148,7 +156,10 @@ namespace Doctran.XmlSerialization
                     .SelectMany(objsOfType => this.GetValue(objsOfType.Key, objsOfType, XmlTraversalType.QuasiObjects))
                 ?? new XElement[] { });
 
-            return xElementList;
+            // Combine any elements with the same name.
+            return xElementList
+                .GroupBy(nodes => nodes.Name)
+                .Select(group => new XElement(group.Key, group.SelectMany(item => item.Elements())));
         }
 
         private IEnumerable<XElement> SkipLevel(IEnumerable<IFortranObject> objsOfType) => objsOfType.SelectMany(this.Navigate);

@@ -92,6 +92,6 @@ namespace Doctran.Parsing
             return currentT;
         }
 
-        public static ReadOnlyCollection<T> SubObjectsOfType<T>(this IContainer container) => container.SubObjects.OfType<T>().ToList().AsReadOnly();
+        public static IEnumerable<T> SubObjectsOfType<T>(this IContainer container) => container.SubObjects.OfType<T>().ToList().AsReadOnly();
     }
 }

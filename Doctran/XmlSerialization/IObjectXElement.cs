@@ -7,16 +7,11 @@
 
 namespace Doctran.XmlSerialization
 {
-    using System;
     using System.Xml.Linq;
     using Parsing;
 
-    public interface IObjectXElement
+    public interface IObjectXElement : IObjectXBase
     {
-        Type ForType { get; }
-
-        XmlTraversalType XmlTraversalType { get; }
-
         XElement Create(object from);
 
         XmlCreationType GetXmlCreationType(object from);

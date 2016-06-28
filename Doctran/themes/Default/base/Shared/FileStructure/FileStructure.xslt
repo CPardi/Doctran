@@ -11,6 +11,14 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:doctran="http://www.doctran.co.uk">
 
+    <xsl:function name="doctran:anchor-link" as="element()">
+        <xsl:param name="uri" as="xs:string"/>
+        <xsl:param name="content" as="item()*"/>
+        <a href="{$uri}">
+            <xsl:sequence select="$content"/>
+        </a>
+    </xsl:function>
+
     <!--Convert a general uri to a form normalized for use with this stylesheet.  -->
     <xsl:function name="doctran:normalize-uri" as="xs:string">
         <!--The path to normalize-->
@@ -23,6 +31,16 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
                                 else if(starts-with($toForwardSlash, '.\'))then
                                     substring-after($toForwardSlash, '.\')
                                 else $toForwardSlash"/>
+
+    </xsl:function>
+
+    <xsl:function name="doctran:object-by-guid" as="element()*">
+        <xsl:param name="project" as="element()"/>
+        <xsl:param name="guid" as="xs:string+"/>
+
+        <xsl:if test="$project and $guid!=''">
+            <xsl:sequence select="$project/key('object-by-guid', $guid)"/>
+        </xsl:if>
 
     </xsl:function>
 
@@ -50,6 +68,8 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
             <xsl:apply-templates mode="RootUri" select="$item"/>
         </xsl:value-of>
     </xsl:function>
+
+    <xsl:key name="object-by-guid" use="@guid" match="/Project//.[@guid]"/>
 
     <xsl:template mode="ObjectUri" match="Project" as="xs:string">
         <xsl:text>html</xsl:text>

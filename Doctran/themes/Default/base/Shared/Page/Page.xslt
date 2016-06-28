@@ -67,7 +67,14 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
                             </div>
                             <xsl:call-template name="Menu-body"/>
                         </div>
-                        <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+
+                        <!--Load mathjax last as it may causes delays. -->
+                        <script>
+                            var theScript = document.createElement("script");
+                            theScript.setAttribute("type","text/javascript");
+                            theScript.setAttribute("src","https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML");
+                            document.getElementsByTagName("head")[0].appendChild(theScript);
+                        </script>
                     </body>
                 </html>
             </xsl:with-param>

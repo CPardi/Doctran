@@ -53,10 +53,7 @@ namespace Doctran.XmlSerialization
             return this.Func(from);
         }
 
-        public XmlCreationType GetXmlCreationType(TParsed from)
-        {
-            return this.XmlCreationType(from);
-        }
+        public XmlCreationType GetXmlCreationType(TParsed from) => this.XmlCreationType(@from);
 
         XElement IObjectXElement.Create(object from) => this.Create((TParsed)from);
 

@@ -212,6 +212,7 @@
     <Compile Include="XmlSerialization\IGroupXElement.cs" />
     <Compile Include="XmlSerialization\IInterfaceXElements.cs" />
     <Compile Include="XmlSerialization\InterfaceXElements.cs" />
+    <Compile Include="XmlSerialization\IObjectXBase.cs" />
     <Compile Include="XmlSerialization\IObjectXElement.cs" />
     <Compile Include="Parsing\ITraverserAction.cs" />
     <Compile Include="XmlSerialization\GroupXElement.cs" />
@@ -220,6 +221,7 @@
     <Compile Include="Parsing\Parser.cs" />
     <Compile Include="Parsing\TraverserAction.cs" />
     <Compile Include="Parsing\Traverser.cs" />
+    <Compile Include="XmlSerialization\ObjectXPassthrough.cs" />
     <Compile Include="XmlSerialization\TypeParameterException.cs" />
     <Compile Include="XmlSerialization\XmlCreationType.cs" />
     <Compile Include="XmlSerialization\XmlGenerator.cs" />
@@ -254,7 +256,6 @@
     <Compile Include="Utilitys\StringUtils.cs" />
     <Compile Include="Utilitys\XmlUtils.cs" />
     <Compile Include="XmlSerialization\XmlGeneratorKey.cs" />
-    <Compile Include="XmlSerialization\XmlGeneratorValue.cs" />
     <Compile Include="XmlSerialization\XmlTraversalType.cs" />
   </ItemGroup>
   <ItemGroup>
