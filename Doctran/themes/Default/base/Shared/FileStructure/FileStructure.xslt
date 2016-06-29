@@ -11,6 +11,11 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:doctran="http://www.doctran.co.uk">
 
+    <xsl:function name="doctran:object-anchor-link" as="item()*">
+        <xsl:param name="object" as="element()" />
+        <xsl:apply-templates mode="ObjectAnchorLink" select="$object" />
+    </xsl:function>
+
     <xsl:function name="doctran:anchor-link" as="element()">
         <xsl:param name="uri" as="xs:string"/>
         <xsl:param name="content" as="item()*"/>
@@ -70,6 +75,10 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
     </xsl:function>
 
     <xsl:key name="object-by-guid" use="@guid" match="/Project//.[@guid]"/>
+
+    <xsl:template mode="ObjectAnchorLink" match="*" as="item()*">
+        <xsl:sequence select="doctran:anchor-link(doctran:object-uri(.), Name)" />
+    </xsl:template>
 
     <xsl:template mode="ObjectUri" match="Project" as="xs:string">
         <xsl:text>html</xsl:text>
