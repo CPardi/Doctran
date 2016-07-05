@@ -14,6 +14,7 @@ namespace Doctran.Test.ParsingElements.FortranBlocks.NamedDescriptionBlock
     using System.Xml.Linq;
     using Doctran.Parsing;
     using Doctran.ParsingElements.FortranObjects;
+    using Fortran95.ParsingElements;
     using NUnit.Framework;
 
     public class NamedDescriptionStrings
@@ -91,7 +92,7 @@ namespace Doctran.Test.ParsingElements.FortranBlocks.NamedDescriptionBlock
             {
                 var nl = Environment.NewLine;
                 var desc = (NamedDescription)objs.Single();
-                Assert.AreEqual(linkedTo, desc.LinkedTo.ToString());
+                Assert.AreEqual(new FortranIdentifier(linkedTo), desc.LinkedTo);
                 Assert.IsTrue(XNode.DeepEquals(desc.Basic, basic), $"{nl}{nl}Expected: '{basic.Value}'{nl}Actual: '{desc.Basic.Value}'");
                 Assert.IsTrue(XNode.DeepEquals(desc.Detailed, detailed), $"{nl}Expected: '{detailed.ToString().Replace("\n", @"\n")}'{nl}Actual:   '{desc.Detailed.ToString().Replace("\n", @"\n")}'{nl}{nl}");
             };
