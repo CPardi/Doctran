@@ -159,7 +159,7 @@ namespace Doctran.XmlSerialization
             // Combine any elements with the same name.
             return xElementList
                 .GroupBy(nodes => nodes.Name)
-                .Select(group => new XElement(group.Key, group.SelectMany(item => item.Elements())));
+                .Select(group => new XElement(group.Key, group.SelectMany(item => item.Nodes())));
         }
 
         private IEnumerable<XElement> SkipLevel(IEnumerable<IFortranObject> objsOfType) => objsOfType.SelectMany(this.Navigate);
