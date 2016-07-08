@@ -84,12 +84,12 @@
 //            public TestClass(string identifier, IEnumerable<IContained> subObjects)
 //                : base(subObjects)
 //            {
-//                this.Identifier = new Identifier(identifier);
+//                this.LocalIdentifier = new LocalIdentifier(identifier);
 //            }
 
 //            public string Guid { get; } = OtherUtils.GenerateGuid();
 
-//            public IIdentifier Identifier { get; }
+//            public IIdentifier LocalIdentifier { get; }
 
 //            public IContainer Parent { get; set; }
 //        }

@@ -11,6 +11,7 @@ namespace Doctran.Parsing
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Linq;
+    using Functional.Maybe;
     using Helper;
     using ParsingElements;
     using ParsingElements.FortranObjects;
@@ -27,7 +28,7 @@ namespace Doctran.Parsing
         /// <typeparam name="T">The type to search for.</typeparam>
         /// <param name="contained">The instance to be checked.</param>
         /// <returns>The ancestor of type <typeparamref name="T" />.</returns>
-        public static T AncestorOfType<T>(this IContained contained)
+        public static Maybe<T> AncestorOfType<T>(this IContained contained)
             where T : class, IFortranObject
         {
             return SelfOrAncestorOfType<T>(contained.Parent);
@@ -73,12 +74,12 @@ namespace Doctran.Parsing
         /// <typeparam name="T">The type to search for.</typeparam>
         /// <param name="contained">The instance to be checked.</param>
         /// <returns>The ancestor of type <typeparamref name="T" />.</returns>
-        public static T SelfOrAncestorOfType<T>(this IFortranObject contained)
+        public static Maybe<T> SelfOrAncestorOfType<T>(this IFortranObject contained)
             where T : class, IFortranObject
         {
             if (contained == null)
             {
-                return null;
+                return Maybe<T>.Nothing;
             }
 
             var current = contained;
@@ -89,7 +90,7 @@ namespace Doctran.Parsing
                 currentT = current as T;
             }
 
-            return currentT;
+            return currentT.ToMaybe();
         }
 
         public static IEnumerable<T> SubObjectsOfType<T>(this IContainer container) => container.SubObjects.OfType<T>().ToList().AsReadOnly();

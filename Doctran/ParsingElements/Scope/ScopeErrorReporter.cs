@@ -9,6 +9,7 @@ namespace Doctran.ParsingElements.Scope
 {
     using System.Collections.Generic;
     using System.Linq;
+    using Functional.Maybe;
     using Helper;
     using Parsing;
     using Reporting;
@@ -40,7 +41,7 @@ namespace Doctran.ParsingElements.Scope
 
         private static string GetFilePath(TraverserException exception)
         {
-            return (exception.Cause as IFortranObject).SelfOrAncestorOfType<ISourceFile>()?.AbsolutePath;
+            return (exception.Cause as IFortranObject).SelfOrAncestorOfType<ISourceFile>().Select(isf => isf.AbsolutePath).OrElse("#Undefined source path");
         }
 
         private static List<FileLine> GetLines(TraverserException exception)
