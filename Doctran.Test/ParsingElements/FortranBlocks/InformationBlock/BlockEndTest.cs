@@ -12,7 +12,7 @@ namespace Doctran.Test.ParsingElements.FortranBlocks.InformationBlock
     using Doctran.Parsing;
     using Doctran.ParsingElements.FortranBlocks;
     using NUnit.Framework;
-    using TestUtilities;
+    using TestingUtilities;
 
     [TestFixture]
     public class BlockEndTest

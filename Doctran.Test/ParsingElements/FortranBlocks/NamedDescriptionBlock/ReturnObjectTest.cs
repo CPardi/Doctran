@@ -9,11 +9,10 @@ namespace Doctran.Test.ParsingElements.FortranBlocks.NamedDescriptionBlock
 {
     using System;
     using System.Collections.Generic;
-    using DescriptionBlock;
     using Doctran.Parsing;
     using Doctran.ParsingElements.FortranBlocks;
     using NUnit.Framework;
-    using TestUtilities;
+    using TestingUtilities;
 
     [TestFixture]
     public class ReturnObjectTest
@@ -25,6 +24,6 @@ namespace Doctran.Test.ParsingElements.FortranBlocks.NamedDescriptionBlock
         [Category("Descriptions")]
         [TestCaseSource(typeof(NamedDescriptionStrings), nameof(NamedDescriptionStrings.TestCases))]
         public void ValidDeclarations(string linesString, Action<IEnumerable<IFortranObject>> makeAssertions)
-            => TestingUtils.ReturnObjectCheck(Block, linesString, makeAssertions);
+            => TestingUtils.ReturnObjectCheck(Block, linesString, makeAssertions, TestOptions.ShouldBeCaseSensitive);
     }
 }

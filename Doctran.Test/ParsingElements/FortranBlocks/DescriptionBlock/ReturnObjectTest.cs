@@ -12,7 +12,7 @@ namespace Doctran.Test.ParsingElements.FortranBlocks.DescriptionBlock
     using Doctran.Parsing;
     using Doctran.ParsingElements.FortranBlocks;
     using NUnit.Framework;
-    using TestUtilities;
+    using TestingUtilities;
 
     [TestFixture]
     public class ReturnObjectTest
@@ -24,6 +24,6 @@ namespace Doctran.Test.ParsingElements.FortranBlocks.DescriptionBlock
         [Category("Descriptions")]
         [TestCaseSource(typeof(DescriptionStrings), nameof(DescriptionStrings.TestCases))]
         public void ValidDeclarations(string linesString, Action<IEnumerable<IFortranObject>> makeAssertions)
-            => TestingUtils.ReturnObjectCheck(Block, linesString, makeAssertions);
+            => TestingUtils.ReturnObjectCheck(Block, linesString, makeAssertions, TestOptions.ShouldBeCaseSensitive);
     }
 }

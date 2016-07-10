@@ -15,6 +15,7 @@ namespace Doctran.Test.Parsing.Traversal
     using Doctran.ParsingElements;
     using Doctran.ParsingElements.FortranObjects;
     using Doctran.ParsingElements.Scope;
+    using Functional.Maybe;
     using NUnit.Framework;
 
     [TestFixture]
@@ -29,7 +30,7 @@ namespace Doctran.Test.Parsing.Traversal
             var file1 = new SourceFile(string.Empty, @"C:\", new[] { desc }, string.Empty, new List<FileLine>());
             var project = new Project(new[] { file1 }, _globalScope);
 
-            Assert.AreEqual(null, desc.SelfOrAncestorOfType<InformationValue>());
+            Assert.AreEqual(Maybe<InformationValue>.Nothing, desc.SelfOrAncestorOfType<InformationValue>());
         }
 
         [Test]
@@ -39,7 +40,7 @@ namespace Doctran.Test.Parsing.Traversal
             var file1 = new SourceFile(string.Empty, @"C:\", new[] { desc }, string.Empty, new List<FileLine>());
             var project = new Project(new[] { file1 }, _globalScope);
 
-            Assert.AreEqual(file1, desc.SelfOrAncestorOfType<SourceFile>());
+            Assert.AreEqual(file1.ToMaybe(), desc.SelfOrAncestorOfType<SourceFile>());
         }
 
         [Test]
@@ -48,7 +49,7 @@ namespace Doctran.Test.Parsing.Traversal
             var file1 = new SourceFile(string.Empty, @"C:\", new IContained[] { }, string.Empty, new List<FileLine>());
             var project = new Project(new[] { file1 }, _globalScope);
 
-            Assert.AreEqual(project, file1.SelfOrAncestorOfType<Project>());
+            Assert.AreEqual(project.ToMaybe(), file1.SelfOrAncestorOfType<Project>());
         }
 
         [Test]
@@ -58,7 +59,7 @@ namespace Doctran.Test.Parsing.Traversal
             var file1 = new SourceFile(string.Empty, @"C:\", new[] { desc }, string.Empty, new List<FileLine>());
             var project = new Project(new[] { file1 }, _globalScope);
 
-            Assert.AreEqual(project, desc.SelfOrAncestorOfType<Project>());
+            Assert.AreEqual(project.ToMaybe(), desc.SelfOrAncestorOfType<Project>());
         }
     }
 }

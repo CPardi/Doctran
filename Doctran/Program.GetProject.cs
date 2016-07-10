@@ -1,11 +1,4 @@
-﻿// <copyright file="ProgramHelper.cs" company="Christopher Pardi">
-//     Copyright © 2015 Christopher Pardi
-//     This Source Code Form is subject to the terms of the Mozilla Public
-//     License, v. 2.0. If a copy of the MPL was not distributed with this
-//     file, You can obtain one at http://mozilla.org/MPL/2.0/.
-// </copyright>
-
-namespace Doctran.Helper
+﻿namespace Doctran
 {
     using System;
     using System.Collections.Generic;
@@ -18,11 +11,14 @@ namespace Doctran.Helper
     using Utilitys;
     using Z.Collections.Extensions;
 
-    public static class ProgramHelper
+    public partial class Program
     {
-        public static Project ParseProject(IEnumerable<string> sourceFilePaths, bool runInSerial)
+        private static Project GetProject(IEnumerable<string> sourceFiles, bool runInSerial)
         {
-            var files = runInSerial ? sourceFilePaths : sourceFilePaths.AsParallel();
+            StageStopwatch.Restart();
+            Report.NewStatus("Analysing project block structure... ");
+
+            var files = runInSerial ? sourceFiles : sourceFiles.AsParallel();
             var languageList = new List<ILanguageParser>();
 
             var parsedFiles = files.Select(path =>
@@ -46,8 +42,11 @@ namespace Doctran.Helper
                 return language.Parse(path, source);
             }).ToList();
 
-            var project = new Project(parsedFiles, languageList.Select(lang => lang.GlobalScopeFactory) );
+            var project = new Project(parsedFiles, languageList.Select(lang => lang.GlobalScopeFactory));
             new Traverser("Global post processing", languageList.SelectMany(p => p.GlobalTraverserActions).ToArray()).Go(project);
+
+            SaveTiming("project-parsing", StageStopwatch.ElapsedMilliseconds);
+            Report.ContinueStatus("Done");
             return project;
         }
     }

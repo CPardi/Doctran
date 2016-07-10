@@ -13,8 +13,8 @@ namespace Doctran.Test.ParsingElements.FortranBlocks.NamedDescriptionBlock
     using System.Linq;
     using System.Xml.Linq;
     using Doctran.Parsing;
+    using Doctran.ParsingElements;
     using Doctran.ParsingElements.FortranObjects;
-    using Fortran95.ParsingElements;
     using NUnit.Framework;
 
     public class NamedDescriptionStrings
@@ -24,20 +24,20 @@ namespace Doctran.Test.ParsingElements.FortranBlocks.NamedDescriptionBlock
             get
             {
                 yield return new TestCaseData(
-                    "!> Name - A basic description",
+                    "!> name - A basic description",
                     MakeAssertions("name", new XElement("Basic", new XCData("A basic description")), new XElement("Detailed", string.Empty))).SetName("A single line basic description.");
 
                 yield return new TestCaseData(
-                    "!> Name - A basic description - with a minus sign.",
+                    "!> name - A basic description - with a minus sign.",
                     MakeAssertions("name", new XElement("Basic", new XCData("A basic description - with a minus sign.")), new XElement("Detailed", string.Empty))).SetName("A single line basic description with special character.");
 
                 yield return new TestCaseData(
-                    "!> Name - A basic \n" +
+                    "!> name - A basic \n" +
                     "!> description",
                     MakeAssertions("name", new XElement("Basic", new XCData("A basic description")), new XElement("Detailed", string.Empty))).SetName("A multi line basic description.");
 
                 yield return new TestCaseData(
-                    "!>>Name - A detailed description",
+                    "!>>name - A detailed description",
                     MakeAssertions(
                         "name",
                         new XElement("Basic", new XCData(string.Empty)),
@@ -45,7 +45,7 @@ namespace Doctran.Test.ParsingElements.FortranBlocks.NamedDescriptionBlock
                     .SetName("A detailed description.");
 
                 yield return new TestCaseData(
-                    "!>> Name - A detailed \n" +
+                    "!>> name - A detailed \n" +
                     "!>>description",
                     MakeAssertions(
                         "name",
@@ -54,7 +54,7 @@ namespace Doctran.Test.ParsingElements.FortranBlocks.NamedDescriptionBlock
                     .SetName("A multiline detailed description.");
 
                 yield return new TestCaseData(
-                    "!>  Name - A basic description\n" +
+                    "!>  name - A basic description\n" +
                     "!>>A detailed description",
                     MakeAssertions(
                         "name",
@@ -63,7 +63,7 @@ namespace Doctran.Test.ParsingElements.FortranBlocks.NamedDescriptionBlock
                     .SetName("A basic description with a detailed description.");
 
                 yield return new TestCaseData(
-                    "!>  Name - A basic \n" +
+                    "!>  name - A basic \n" +
                     "!>description\n" +
                     "!>>A detailed\n" +
                     "!>> description",
@@ -74,7 +74,7 @@ namespace Doctran.Test.ParsingElements.FortranBlocks.NamedDescriptionBlock
                     .SetName("A multiline basic description with a multiline detailed description.");
 
                 yield return new TestCaseData(
-                    "!> Name - A basic \n" +
+                    "!> name - A basic \n" +
                     "!>>A detailed\n" +
                     "!>description\n" +
                     "!>> description",
@@ -92,7 +92,7 @@ namespace Doctran.Test.ParsingElements.FortranBlocks.NamedDescriptionBlock
             {
                 var nl = Environment.NewLine;
                 var desc = (NamedDescription)objs.Single();
-                Assert.AreEqual(new FortranIdentifier(linkedTo), desc.LinkedTo);
+                Assert.IsTrue(Equals(new Identifier(linkedTo), desc.LinkedTo));
                 Assert.IsTrue(XNode.DeepEquals(desc.Basic, basic), $"{nl}{nl}Expected: '{basic.Value}'{nl}Actual: '{desc.Basic.Value}'");
                 Assert.IsTrue(XNode.DeepEquals(desc.Detailed, detailed), $"{nl}Expected: '{detailed.ToString().Replace("\n", @"\n")}'{nl}Actual:   '{desc.Detailed.ToString().Replace("\n", @"\n")}'{nl}{nl}");
             };
