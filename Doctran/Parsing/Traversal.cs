@@ -34,7 +34,7 @@ namespace Doctran.Parsing
             return SelfOrAncestorOfType<T>(contained.Parent);
         }
 
-        public static IEnumerable<T> Find<T>(this Project project, IIdentifier identifier)
+        public static IEnumerable<T> Find<T>(this IContainer project, IIdentifier identifier)
             where T : IHasIdentifier
         {
             var result = new List<T>();

@@ -33,7 +33,7 @@ namespace Doctran.Parsing
 
         public IEnumerable<ITraverserAction> TraverserActions => _actions.SelectMany(a => a);
 
-        public void Go(Project source)
+        public void Go(IContainer source)
         {
             var project = source;
             Report.Message("Post processing", $"Applying '{this.Name}' on '{project.ObjectName}'");
