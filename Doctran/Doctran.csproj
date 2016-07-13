@@ -168,6 +168,7 @@
     <Compile Include="Helper\ReportException.cs" />
     <Compile Include="Helper\ListenerAndAggregater.cs" />
     <Compile Include="ParsingElements\IHasDescription.cs" />
+    <Compile Include="ParsingElements\IWord.cs" />
     <Compile Include="ParsingElements\Scope\ScopeErrorReporter.cs" />
     <Compile Include="Helper\StandardErrorListener.cs" />
     <Compile Include="Helper\TypeSwitch.cs" />
@@ -205,7 +206,6 @@
     <Compile Include="Parsing\IContainer.cs" />
     <Compile Include="ParsingElements\Information\IInformationGroup.cs" />
     <Compile Include="ParsingElements\Information\IInformationValue.cs" />
-    <Compile Include="ParsingElements\Traversal\TraverserActions.AssignDescriptions.cs" />
     <Compile Include="ParsingElements\Traversal\TraverserActions.CheckDescriptionLinkage.cs" />
     <Compile Include="ParsingElements\Traversal\TraverserActions.CheckUniqueness.cs" />
     <Compile Include="ParsingElements\IUseCache.cs" />
@@ -244,7 +244,7 @@
     <Compile Include="Reporting\ReportSeverity.cs" />
     <Compile Include="Utilitys\ParsingUtils.cs" />
     <Compile Include="Parsing\IFortranObject.cs" />
-    <Compile Include="Plugins\IXmlSerializer.cs" />
+    <Compile Include="Plugins\IDocumentationDefinition.cs" />
     <Compile Include="Plugins\ILanguageParser.cs" />
     <Compile Include="Plugins\ParserManager.cs" />
     <Compile Include="ParsingElements\FortranBlocks\DescriptionBlock.cs" />

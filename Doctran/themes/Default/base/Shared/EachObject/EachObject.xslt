@@ -67,7 +67,7 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
 
                     <xsl:if test="local-name() = /Project/Information/ShowSource/Type">
                         <xsl:apply-templates mode="AddSection" select="$source">
-                                                        <xsl:with-param name="file" select=".[local-name()='File']|ancestor::File"/>
+                            <xsl:with-param name="file" select=".[local-name()='File']|ancestor::File"/>
                             <xsl:with-param name="firstLine" select="Lines/First"/>
                             <xsl:with-param name="lastLine" select="Lines/Last"/>
                         </xsl:apply-templates>

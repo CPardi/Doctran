@@ -81,8 +81,6 @@ namespace Doctran.Utilitys
             return new Tuple<string, string>(htmlPath, htmlText);
         }
 
-
-
         public static IEnumerable<T> NonZeroOrThrow<T>(this IEnumerable<T> @this, Func<T, bool> predicate, Exception e)
         {
             var result = @this

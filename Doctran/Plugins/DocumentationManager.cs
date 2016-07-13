@@ -21,6 +21,7 @@ namespace Doctran.Plugins
         ///     Internal storage of documentation definitions, keyed by file extension.
         /// </summary>
         private static readonly Dictionary<string, IDocumentationDefinition> DefinitionsByExtension = new Dictionary<string, IDocumentationDefinition>();
+
         /// <summary>
         ///     Internal storage of documentation definitions, keyed by identifier.
         /// </summary>

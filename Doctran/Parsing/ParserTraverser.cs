@@ -10,12 +10,12 @@ namespace Doctran.Parsing
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using Functional.Maybe;
     using Helper;
     using ParsingElements;
     using ParsingElements.Scope;
     using Reporting;
     using Utilitys;
-    using Functional.Maybe;
 
     public class ParserTraverser
     {
