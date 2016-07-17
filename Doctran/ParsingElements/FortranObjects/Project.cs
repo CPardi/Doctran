@@ -21,7 +21,7 @@ namespace Doctran.ParsingElements.FortranObjects
         public Project(IEnumerable<ISourceFile> parsedFiles, IEnumerable<ScopeCalculator> getGlobalItems)
             : base(parsedFiles)
         {
-            this.GlobalScope = new GlobalScope(this, getGlobalItems);
+            this.GlobalScope = new GlobalScope(this, getGlobalItems) { ErrorListener = new ScopeErrorReporter() };
         }
 
         public GlobalScope GlobalScope { get; }

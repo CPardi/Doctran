@@ -28,7 +28,7 @@ namespace Doctran
         public static int Main(string[] args)
         {
 #if DEBUG
-            Report.SetDebugProfile();
+            Report.SetReleaseProfile();
 #endif
 
 #if !DEBUG
