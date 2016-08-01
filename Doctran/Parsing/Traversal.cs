@@ -9,12 +9,10 @@ namespace Doctran.Parsing
 {
     using System;
     using System.Collections.Generic;
-    using System.Collections.ObjectModel;
     using System.Linq;
     using Functional.Maybe;
     using Helper;
     using ParsingElements;
-    using ParsingElements.FortranObjects;
 
     /// <summary>
     ///     Provides methods to traverse a project tree.
