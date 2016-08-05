@@ -8,7 +8,6 @@
 namespace Doctran.ParsingElements.Traversal
 {
     using System;
-    using System.Diagnostics;
     using System.Linq;
     using Parsing;
     using Utilitys;
