@@ -44,11 +44,11 @@ namespace Doctran.Parsing
                 }
             };
 
-            Action<IQuasiContainer, IErrorListener<TraverserException>> quasiObjectSearch = (qo, e) =>
+            Action<IQuasiContainer, IErrorListener<TraverserException>> quasiObjectSearch = (qc, e) =>
             {
                 try
                 {
-                    result.AddRange(qo.QuasiObjects.OfType<T>().Where(o => Equals(o.Identifier, identifier)));
+                    result.AddRange(qc.QuasiObjects.OfType<T>().Where(o => Equals(o.Identifier, identifier)));
                 }
                 catch (TraverserException)
                 {

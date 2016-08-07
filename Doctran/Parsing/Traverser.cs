@@ -35,15 +35,13 @@ namespace Doctran.Parsing
 
         public void Go(IContainer source)
         {
-            var project = source;
-            Report.Message("Post processing", $"Applying '{this.Name}' on '{project.ObjectName}'");
+            Report.Message("Post processing", $"Applying '{this.Name}' on '{source.ObjectName}'");
             this.Navigate(source);
         }
 
         public void Go(ISourceFile source)
         {
-            var file = source;
-            Report.Message("Post processing", $"Applying '{this.Name}' on '{file.AbsolutePath}'");
+            Report.Message("Post processing", $"Applying '{this.Name}' on '{source.AbsolutePath}'");
             this.Navigate(source);
         }
 
