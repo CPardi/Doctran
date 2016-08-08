@@ -12,7 +12,7 @@ namespace Doctran.Parsing
     /// <summary>
     ///     Exposes members that do not appear in <see cref="IContainer.SubObjects" />, but are generated dynamically. Used to
     ///     allow generic searching of project structure , such as in
-    ///     <see cref="Traversal.Find{T}(ParsingElements.FortranObjects.Project, ParsingElements.Identifier)" />.
+    ///     <see cref="Traversal.Find{T}(IContainer, ParsingElements.IIdentifier)" />.
     /// </summary>
     public interface IQuasiContainer : IFortranObject
     {

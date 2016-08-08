@@ -58,8 +58,17 @@ namespace Doctran.Parsing
 
             new Traverser(
                 "Find",
-                new TraverserAction<T>(subObjectSearch),
                 new TraverserAction<IQuasiContainer>(quasiObjectSearch))
+                .Go(project);
+
+            if (result.Count != 0)
+            {
+                return result;
+            }
+
+            new Traverser(
+                "Find",
+                new TraverserAction<T>(subObjectSearch))
                 .Go(project);
 
             return result;
